@@ -2,6 +2,12 @@ import 'package:appwidgetflutter/WeatherResponse.dart';
 import 'package:appwidgetflutter/weather.dart';
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:intl/intl.dart';
+//import 'package:spectrum/spectrum.dart';
+
+import 'nuptials.dart';
+
+DateFormat dateFormat = DateFormat("yyyy-MM-dd");
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,15 +17,19 @@ void main() {
 
 // Called when Doing Background Work initiated from Widget
 Future<void> backgroundCallback(Uri? uri) async {
-  if (uri?.host == 'updatecounter') {
-    int _counter = 0;
-    HomeWidget.getWidgetData<int>('_counter', defaultValue: 0).then((value) {
-      _counter = value!;
-      _counter++;
+  print("backgroundCallback: uri=" + uri.toString());
+  if (uri?.host == 'updateweather') {
+    int _percentage = 0;
+    HomeWidget.getWidgetData<int>('_percentage', defaultValue: _percentage)
+        .then((value) {
+      _percentage = value!; // Don't do anything for now
+      print("backgroundCallback: value=" + value.toString());
+      print("backgroundCallback: _percentage=" + _percentage.toString());
+      HomeWidget.saveWidgetData<int>('_percentage', _percentage);
+      HomeWidget.updateWidget(
+          name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
     });
-    await HomeWidget.saveWidgetData<int>('_counter', _counter);
-    await HomeWidget.updateWidget(
-        name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
+    //print("backgroundCallback: _percentage=" + _percentage.toString());
   }
 }
 
@@ -28,7 +38,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Nuptial Flight Predictor',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -39,9 +49,9 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Nuptial Flight Predictor'),
     );
   }
 }
@@ -67,46 +77,39 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late Future<WeatherResponse>? _futureWeather;
   WeatherResponse? _weather;
-  int _counter = 0;
+  int _percentage = 0;
 
   @override
   void initState() {
     super.initState();
     HomeWidget.widgetClicked.listen((Uri? uri) => loadData());
     loadData(); // This will load data from widget every time app is opened
-    _futureWeather = fetchWeather();
-    _futureWeather!.then((value) => updateWeather(value));
   }
 
   void loadData() async {
-    await HomeWidget.getWidgetData<int>('_counter', defaultValue: 0)
+    await HomeWidget.getWidgetData<int>('_percentage', defaultValue: 0)
         .then((value) {
-      _counter = value!;
+      _futureWeather = fetchWeather();
+      _futureWeather!.then((weather) => _updateWeather(weather));
+      print("loadData: _percentage=" + _percentage.toString());
     });
     setState(() {});
+    updateAppWidget();
   }
 
   Future<void> updateAppWidget() async {
-    await HomeWidget.saveWidgetData<int>('_counter', _counter);
+    await HomeWidget.saveWidgetData<int>('_percentage', _percentage);
     await HomeWidget.updateWidget(
         name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
   }
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-    updateAppWidget();
-  }
+  void _foundNuptialFlight() {}
 
-  void updateWeather(WeatherResponse value) {
+  void _updateWeather(WeatherResponse value) {
     setState(() {
       _weather = value;
+      _percentage = (nuptialPercentage(value.daily!.first) * 100.0).toInt();
+      print("_updateWeather: _percentage=" + _percentage.toString());
     });
     updateAppWidget();
   }
@@ -124,6 +127,8 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title!),
+        centerTitle: true,
+        toolbarHeight: 40,
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -146,29 +151,182 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:',
+              'Likehood of Nuptial Flight',
+              style: Theme.of(context).textTheme.headline6,
             ),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              '$_percentage%',
+              style: Theme.of(context).textTheme.headline3?.merge(TextStyle(
+                  color: (_percentage < 50
+                      ? Colors.red
+                      : (_percentage < 75
+                          ? Colors.deepOrange
+                          : Colors.green)))),
             ),
             Text(
-              'Direct weather variable:',
+              '',
             ),
             Text(
-              '${_weather?.daily?.first.temp?.day}',
-              style: Theme.of(context).textTheme.headline4,
+              'Weather Date',
+              style: Theme.of(context).textTheme.bodyText1,
             ),
             Text(
-              'The current temperature is:',
+              (_weather == null
+                  ? ""
+                  : dateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                      (_weather!.daily!.first.dt! + _weather!.timezoneOffset!) *
+                          1000,
+                      isUtc: true))),
+              style: Theme.of(context).textTheme.bodyText2,
             ),
-            weatherText(),
+            Text(
+              '',
+            ),
+            Text(
+              'Weather Description',
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            Text(
+              '${_weather?.daily?.first.weather?.first.description}',
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
+            Text(
+              '',
+            ),
+            Text(
+              'Temperature',
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            Text(
+              (_weather == null
+                      ? ""
+                      : (_weather?.daily?.first.temp?.eve!)!
+                          .toStringAsFixed(0)) +
+                  "°C",
+              style: Theme.of(context).textTheme.headline5,
+            ),
+            Text(
+              (_weather == null
+                  ? ""
+                  : "Suitability: " +
+                      (temperatureContribution(_weather!.daily!.first) * 100)
+                          .toStringAsFixed(0) +
+                      "%"),
+              style: Theme.of(context).textTheme.caption,
+            ),
+            Text(
+              '',
+            ),
+            Text(
+              'Humidity',
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            Text(
+              '${_weather?.daily?.first.humidity}%',
+              style: Theme.of(context).textTheme.headline5,
+            ),
+            Text(
+              (_weather == null
+                  ? ""
+                  : "Suitability: " +
+                      (humidityContribution(_weather!.daily!.first) * 100)
+                          .toStringAsFixed(0) +
+                      "%"),
+              style: Theme.of(context).textTheme.caption,
+            ),
+            Text(
+              '',
+            ),
+            Text(
+              'Wind Speed',
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            Text(
+              '${_weather?.daily?.first.windSpeed} m/s',
+              style: Theme.of(context).textTheme.headline5,
+            ),
+            Text(
+              (_weather == null
+                  ? ""
+                  : "Suitability: " +
+                      (windContribution(_weather!.daily!.first) * 100)
+                          .toStringAsFixed(0) +
+                      "%"),
+              style: Theme.of(context).textTheme.caption,
+            ),
+            Text(
+              '',
+            ),
+            Text(
+              'Probability of Precipitation',
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            Text(
+              (_weather == null
+                      ? ""
+                      : (_weather!.daily!.first.pop! * 100)
+                          .toStringAsFixed(0)) +
+                  "%",
+              style: Theme.of(context).textTheme.headline5,
+            ),
+            Text(
+              (_weather == null
+                  ? ""
+                  : "Suitability: " +
+                      (rainContribution(_weather!.daily!.first) * 100)
+                          .toStringAsFixed(0) +
+                      "%"),
+              style: Theme.of(context).textTheme.caption,
+            ),
+            Text(
+              '',
+            ),
+            Text(
+              'Cloudiness',
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            Text(
+              '${_weather?.daily?.first.clouds}%',
+              style: Theme.of(context).textTheme.headline5,
+            ),
+            Text(
+              (_weather == null
+                  ? ""
+                  : "Suitability: " +
+                      (cloudinessContribution(_weather!.daily!.first) * 100)
+                          .toStringAsFixed(0) +
+                      "%"),
+              style: Theme.of(context).textTheme.caption,
+            ),
+            Text(
+              '',
+            ),
+            Text(
+              'Dew Point',
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            Text(
+              (_weather == null
+                      ? ""
+                      : (_weather!.daily!.first.dewPoint!).toStringAsFixed(0)) +
+                  "°C",
+              style: Theme.of(context).textTheme.headline5,
+            ),
+            Text(
+              (_weather == null
+                  ? ""
+                  : "Suitability: " +
+                      (dewPointContribution(_weather!.daily!.first) * 100)
+                          .toStringAsFixed(0) +
+                      "%"),
+              style: Theme.of(context).textTheme.caption,
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        onPressed: _foundNuptialFlight,
+        tooltip: 'Found Nuptial Flight',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
@@ -195,5 +353,4 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
   }
-
 }

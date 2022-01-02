@@ -62,7 +62,7 @@ void main() {
     });
 
     test('Wind', () {
-      expect(windContribution(daily), 0.0);
+      expect(windContribution(daily), 0.01);
     });
 
     test('Rain', () {
@@ -78,7 +78,7 @@ void main() {
     });
 
     test('Total', () {
-      expect(nuptialPercentage(daily), 0.0);
+      expect(nuptialPercentage(daily), 0.01);
     });
   });
 
@@ -194,7 +194,7 @@ void main() {
     });
 
     test('Wind', () {
-      expect(windContribution(daily), 0.0);
+      expect(windContribution(daily), 0.01);
     });
 
     test('Rain', () {
@@ -210,7 +210,7 @@ void main() {
     });
 
     test('Total', () {
-      expect(nuptialPercentage(daily), 0.0);
+      expect(nuptialPercentage(daily), 0.01);
     });
   });
 }

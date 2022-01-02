@@ -19,19 +19,19 @@ class AppWidgetProvider : HomeWidgetProvider() {
                         MainActivity::class.java)
                 setOnClickPendingIntent(R.id.widget_root, pendingIntent)
 
-                val counter = widgetData.getInt("_counter", 0)
+                val counter = widgetData.getInt("_percentage", 0)
 
-                var counterText = "Your counter value is: $counter"
+                var counterText = "Likehood of Nuptial Flight Today: $counter%"
 
                 if (counter == 0) {
-                    counterText = "You have not pressed the counter button"
+                    counterText = "Downloading weather data..."
                 }
 
                 setTextViewText(R.id.tv_counter, counterText)
 
                 // Pending intent to update counter on button click
                 val backgroundIntent = HomeWidgetBackgroundIntent.getBroadcast(context,
-                        Uri.parse("myAppWidget://updatecounter"))
+                        Uri.parse("myAppWidget://updateweather"))
                 setOnClickPendingIntent(R.id.bt_update, backgroundIntent)
             }
             appWidgetManager.updateAppWidget(widgetId, views)
