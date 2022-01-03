@@ -124,7 +124,7 @@ void main() {
     });
 
     test('Total', () {
-      expect(nuptialPercentage(daily), closeTo(0.77, 0.01));
+      expect(nuptialPercentage(daily), closeTo(0.69, 0.01));
     });
   });
 
@@ -169,7 +169,7 @@ void main() {
     });
 
     test('Total', () {
-      expect(nuptialPercentage(daily), closeTo(0.71, 0.01));
+      expect(nuptialPercentage(daily), closeTo(0.60, 0.01));
     });
   });
 

@@ -31,8 +31,8 @@ const double RADIATION_STD = 19.5; // SE not SD
 double nuptialPercentage(Daily daily) {
   double temp = temperatureContribution(daily);
   double wind = windContribution(daily);
-  double humid = humidityContribution(daily);
   double rain = rainContribution(daily);
+  double humid = humidityContribution(daily);
   double cloud = cloudinessContribution(daily);
   double press = pressureContribution(daily);
   developer.log("dt=" + daily.dt.toString(), name: 'nuptialPercentage');
@@ -43,11 +43,10 @@ double nuptialPercentage(Daily daily) {
   developer.log("cloud=$cloud", name: 'nuptialPercentage');
   developer.log("press=$press", name: 'nuptialPercentage');
   var values = [
-    {'percentage': temp * wind,  'weighting': 5},
-    {'percentage': temp * rain,  'weighting': 4},
-    {'percentage': wind * humid, 'weighting': 3},
-    {'percentage': temp * cloud, 'weighting': 2},
-    {'percentage': wind * press, 'weighting': 1},
+    {'percentage': temp * wind * rain,  'weighting': 1},
+    {'percentage': temp * wind * humid, 'weighting': 1},
+    {'percentage': temp * wind * cloud, 'weighting': 1},
+    {'percentage': temp * wind * press, 'weighting': 1},
   ];
   var sum = values.map((m) => m['percentage']! * m['weighting']!).reduce((a, b) => a + b);
   var count = values.map((e) => e['weighting']!).reduce((a, b) => a + b);

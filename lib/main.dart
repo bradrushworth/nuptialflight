@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'nuptials.dart';
 
 DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+DateFormat weekdayFormat = DateFormat("E");
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -143,260 +144,64 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title!),
         centerTitle: true,
-        toolbarHeight: 40,
+        toolbarHeight: 50,
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Likelihood of Nuptial Flight',
-              style: Theme.of(context).textTheme.headline6,
-            ),
-            Text(
-              '${_percentage[0]}%',
-              style: Theme.of(context).textTheme.headline3?.merge(TextStyle(
-                  color: (_percentage[0] < 50
-                      ? Colors.red
-                      : (_percentage[0] < 75
-                          ? Colors.deepOrange
-                          : Colors.green)))),
-            ),
-            Text(
-              '',
-            ),
-            Text(
-              (_weather == null ? '' : 'Today\'s Weather'
-              // + dateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-              //     (_weather!.daily!.first.dt! + _weather!.timezoneOffset!) *
-              //         1000,
-              //     isUtc: true)) + ''
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          return Column(
+            //mainAxisAlignment: MainAxisAlignment.end,
+            //crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Spacer(flex: 1),
+              GridView.count(
+                crossAxisCount: orientation == Orientation.portrait ? 1 : 3,
+                childAspectRatio: orientation == Orientation.portrait ? 5 : 5,
+                padding: orientation == Orientation.portrait
+                    ? const EdgeInsets.symmetric(horizontal: 0, vertical: 0)
+                    : const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                mainAxisSpacing: 0,
+                crossAxisSpacing: 0,
+                shrinkWrap: true,
+                children: [
+                  Text(
+                    'Likelihood of Nuptial Flight Today',
+                    style: Theme.of(context).textTheme.headline6,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                  ),
+                  _buildTodayPercentage(),
+                  _buildTodayWeather(),
+                ],
               ),
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            Text(
-              '${_weather?.daily?.first.weather?.first.description}',
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
-            Text(
-              '',
-            ),
-            Text(
-              'Temperature',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            Text(
-              (_weather == null
-                      ? ""
-                      : (_weather?.daily?.first.temp?.eve!)!
-                          .toStringAsFixed(1)) +
-                  "°C",
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            Text(
-              (_weather == null
-                  ? ""
-                  : "Suitability: " +
-                      (temperatureContribution(_weather!.daily!.first) * 100)
-                          .toStringAsFixed(0) +
-                      "%"),
-              style: Theme.of(context).textTheme.caption,
-            ),
-            Text(
-              '',
-            ),
-            Text(
-              'Wind Speed',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            Text(
-              '${_weather?.daily?.first.windSpeed} m/s',
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            Text(
-              (_weather == null
-                  ? ""
-                  : "Suitability: " +
-                      (windContribution(_weather!.daily!.first) * 100)
-                          .toStringAsFixed(0) +
-                      "%"),
-              style: Theme.of(context).textTheme.caption,
-            ),
-            Text(
-              '',
-            ),
-            Text(
-              'Humidity',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            Text(
-              '${_weather?.daily?.first.humidity}%',
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            Text(
-              (_weather == null
-                  ? ""
-                  : "Suitability: " +
-                  (humidityContribution(_weather!.daily!.first) * 100)
-                      .toStringAsFixed(0) +
-                  "%"),
-              style: Theme.of(context).textTheme.caption,
-            ),
-            Text(
-              '',
-            ),
-            Text(
-              'Probability of Precipitation',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            Text(
-              (_weather == null
-                      ? ""
-                      : (_weather!.daily!.first.pop! * 100)
-                          .toStringAsFixed(0)) +
-                  "%",
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            Text(
-              (_weather == null
-                  ? ""
-                  : "Suitability: " +
-                      (rainContribution(_weather!.daily!.first) * 100)
-                          .toStringAsFixed(0) +
-                      "%"),
-              style: Theme.of(context).textTheme.caption,
-            ),
-            Text(
-              '',
-            ),
-            Text(
-              'Cloudiness',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            Text(
-              '${_weather?.daily?.first.clouds}%',
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            Text(
-              (_weather == null
-                  ? ""
-                  : "Suitability: " +
-                      (cloudinessContribution(_weather!.daily!.first) * 100)
-                          .toStringAsFixed(0) +
-                      "%"),
-              style: Theme.of(context).textTheme.caption,
-            ),
-            Text(
-              '',
-            ),
-            Text(
-              'Air Pressure',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            Text(
-              (_weather == null
-                      ? ""
-                      : (_weather!.daily!.first.pressure!).toStringAsFixed(0)) +
-                  " hPa",
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            Text(
-              (_weather == null
-                  ? ""
-                  : "Suitability: " +
-                      (pressureContribution(_weather!.daily!.first) * 100)
-                          .toStringAsFixed(0) +
-                      "%"),
-              style: Theme.of(context).textTheme.caption,
-            ),
-            Text(
-              '',
-            ),
-            Text(
-              'Upcoming Week',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  (_weather == null ? "" : '${_percentage[1]}%'),
-                  style: getColorGradient(_percentage[1]),
-                ),
-                Text(
-                  '  ',
-                ),
-                Text(
-                  (_weather == null ? "" : '${_percentage[2]}%'),
-                  style: getColorGradient(_percentage[2]),
-                ),
-                Text(
-                  '  ',
-                ),
-                Text(
-                  (_weather == null ? "" : '${_percentage[3]}%'),
-                  style: getColorGradient(_percentage[3]),
-                ),
-                Text(
-                  '  ',
-                ),
-                Text(
-                  (_weather == null ? "" : '${_percentage[4]}%'),
-                  style: getColorGradient(_percentage[4]),
-                ),
-                Text(
-                  '  ',
-                ),
-                Text(
-                  (_weather == null ? "" : '${_percentage[5]}%'),
-                  style: getColorGradient(_percentage[5]),
-                ),
-                Text(
-                  '  ',
-                ),
-                Text(
-                  (_weather == null ? "" : '${_percentage[6]}%'),
-                  style: getColorGradient(_percentage[6]),
-                ),
-                Text(
-                  '  ',
-                ),
-                Text(
-                  (_weather == null ? "" : '${_percentage[7]}%'),
-                  style: getColorGradient(_percentage[7]),
-                ),
-              ],
-            ),
-            Text( // Push up the text away from the button
-              '',
-            ),
-            Text( // Push up the text away from the button
-              '',
-            ),
-          ],
-        ),
+              Spacer(flex: 1),
+              GridView.count(
+                crossAxisCount: orientation == Orientation.portrait ? 3 : 6,
+                childAspectRatio: 1.6,
+                padding: orientation == Orientation.portrait
+                    ? const EdgeInsets.symmetric(vertical: 4)
+                    : const EdgeInsets.symmetric(horizontal: 4),
+                shrinkWrap: true,
+                children: [
+                  _buildTemperature(),
+                  _buildWindSpeed(),
+                  _buildPrecipitation(),
+                  _buildHumidity(),
+                  _buildCloudiness(),
+                  _buildAirPressure(),
+                ],
+              ),
+              Spacer(flex: 1),
+              _buildUpcomingWeek(orientation),
+              Spacer(flex: 10),
+            ],
+          );
+        },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _foundNuptialFlight,
-        tooltip: 'Found Nuptial Flight',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _foundNuptialFlight,
+      //   tooltip: 'Found Nuptial Flight',
+      //   child: Icon(Icons.add),
+      //), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
@@ -405,6 +210,291 @@ class _MyHomePageState extends State<MyHomePage> {
         color: (percentage < 50
             ? Colors.red
             : (percentage < 75 ? Colors.orange : Colors.green))));
+  }
+
+  Widget _buildTodayPercentage() {
+    return Text(
+      '${_percentage[0]}%',
+      style: Theme.of(context).textTheme.headline3!.merge(TextStyle(
+          color: (_percentage[0] < 50
+              ? Colors.red
+              : (_percentage[0] < 75 ? Colors.deepOrange : Colors.green)))),
+      textAlign: TextAlign.center,
+    );
+  }
+
+  Widget _buildTodayWeather() {
+    return SizedBox(
+      child: Column(
+        children: [
+          Text(
+            (_weather == null ? '' : 'Today\'s Weather'),
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          // Text(
+          //   dateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+          //       (_weather!.daily!.first.dt! + _weather!.timezoneOffset!) * 1000,
+          //       isUtc: true)),
+          //   style: Theme.of(context).textTheme.bodyText2,
+          // ),
+          Text(
+            '${_weather?.daily?.first.weather?.first.description}',
+            style: Theme.of(context)
+                .textTheme
+                .bodyText2!
+                .merge(TextStyle(fontSize: 18)),
+            maxLines: 1,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTemperature() {
+    return SizedBox(
+      child: Column(
+        children: [
+          Text(
+            'Temperature',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          Text(
+            (_weather == null
+                    ? ""
+                    : (_weather?.daily?.first.temp?.eve!)!.toStringAsFixed(1)) +
+                "°C",
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          Text(
+            (_weather == null
+                ? ""
+                : "Suitability: " +
+                    (temperatureContribution(_weather!.daily!.first) * 100)
+                        .toStringAsFixed(0) +
+                    "%"),
+            style: Theme.of(context).textTheme.caption,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWindSpeed() {
+    return SizedBox(
+      child: Column(
+        children: [
+          Text(
+            'Wind Speed',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          Text(
+            '${_weather?.daily?.first.windSpeed!.toStringAsFixed(1)} m/s',
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          Text(
+            (_weather == null
+                ? ""
+                : "Suitability: " +
+                    (windContribution(_weather!.daily!.first) * 100)
+                        .toStringAsFixed(0) +
+                    "%"),
+            style: Theme.of(context).textTheme.caption,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPrecipitation() {
+    return SizedBox(
+      child: Column(
+        children: [
+          Text(
+            'Precipitation',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          Text(
+            (_weather == null
+                    ? ""
+                    : (_weather!.daily!.first.pop! * 100).toStringAsFixed(0)) +
+                "%",
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          Text(
+            (_weather == null
+                ? ""
+                : "Suitability: " +
+                    (rainContribution(_weather!.daily!.first) * 100)
+                        .toStringAsFixed(0) +
+                    "%"),
+            style: Theme.of(context).textTheme.caption,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHumidity() {
+    return SizedBox(
+      child: Column(
+        children: [
+          Text(
+            'Humidity',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          Text(
+            '${_weather?.daily?.first.humidity}%',
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          Text(
+            (_weather == null
+                ? ""
+                : "Suitability: " +
+                    (humidityContribution(_weather!.daily!.first) * 100)
+                        .toStringAsFixed(0) +
+                    "%"),
+            style: Theme.of(context).textTheme.caption,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCloudiness() {
+    return SizedBox(
+      child: Column(
+        children: [
+          Text(
+            'Cloudiness',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          Text(
+            '${_weather?.daily?.first.clouds}%',
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          Text(
+            (_weather == null
+                ? ""
+                : "Suitability: " +
+                    (cloudinessContribution(_weather!.daily!.first) * 100)
+                        .toStringAsFixed(0) +
+                    "%"),
+            style: Theme.of(context).textTheme.caption,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAirPressure() {
+    return SizedBox(
+      child: Column(
+        children: [
+          Text(
+            'Air Pressure',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          Text(
+            (_weather == null
+                    ? ""
+                    : (_weather!.daily!.first.pressure!).toStringAsFixed(0)) +
+                " hPa",
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          Text(
+            (_weather == null
+                ? ""
+                : "Suitability: " +
+                    (pressureContribution(_weather!.daily!.first) * 100)
+                        .toStringAsFixed(0) +
+                    "%"),
+            style: Theme.of(context).textTheme.caption,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUpcomingWeek(Orientation orientation) {
+    return Column(
+      children: [
+        Text(
+          'Upcoming Week',
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+        DataTable(
+          headingRowHeight: 19,
+          dataRowHeight: 19,
+          horizontalMargin: 19,
+          columnSpacing: 20,
+          dividerThickness: 0,
+          columns: [
+            DataColumn(label: Text('Day')),
+            DataColumn(label: Text('Temperature'), numeric: true),
+            DataColumn(label: Text('Wind Speed'), numeric: true),
+            DataColumn(label: Text('Likelihood'), numeric: true),
+          ],
+          rows: [
+            _buildFuturePercentage(1),
+            _buildFuturePercentage(2),
+            _buildFuturePercentage(3),
+            _buildFuturePercentage(4),
+            _buildFuturePercentage(5),
+            _buildFuturePercentage(6),
+            _buildFuturePercentage(7),
+          ],
+        ),
+      ],
+    );
+  }
+
+  DataRow _buildFuturePercentage(int i) {
+    return DataRow(
+      cells: [
+        DataCell(
+          Container(
+            child: Text(
+              (_weather == null
+                  ? ''
+                  : weekdayFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                      (_weather!.daily!.elementAt(i).dt! +
+                              _weather!.timezoneOffset!) *
+                          1000,
+                      isUtc: true))),
+              style: getColorGradient(_percentage[i]),
+            ),
+          ),
+        ),
+        DataCell(
+          Container(
+            child: Text(
+              (_weather == null
+                  ? ''
+                  : ' ${_weather!.daily!.elementAt(i).temp!.eve!.toStringAsFixed(1)}°C'),
+              style: getColorGradient(_percentage[i]),
+            ),
+          ),
+        ),
+        DataCell(
+          Container(
+            child: Text(
+              (_weather == null
+                  ? ''
+                  : ' ${_weather!.daily!.elementAt(i).windSpeed!.toStringAsFixed(1)} m/s'),
+              style: getColorGradient(_percentage[i]),
+            ),
+          ),
+        ),
+        DataCell(
+          Container(
+            child: Text(
+              (_weather == null ? '' : ' ${_percentage[i]}%'),
+              style: getColorGradient(_percentage[i]),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
 /*
