@@ -21,7 +21,7 @@ class AppWidgetProvider : HomeWidgetProvider() {
 
                 val counter = widgetData.getInt("_percentage", 0)
 
-                var counterText = "Likehood of Nuptial Flight Today: $counter%"
+                var counterText = "Nuptial Likelihood: $counter%"
 
                 if (counter == 0) {
                     counterText = "Downloading weather data..."

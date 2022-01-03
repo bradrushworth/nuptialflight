@@ -6,40 +6,40 @@ import 'package:appwidgetflutter/nuptials.dart';
 void main() {
   group('Perfect day', () {
     Daily daily = Daily();
-    daily.temp = Temp(
-        day: 30.0, min: 30.0, max: 30.0, night: 30.0, eve: 30.0, morn: 30.0);
-    daily.humidity = 100;
-    daily.windSpeed = 0.0;
+    daily.temp = Temp(eve: TEMP_AVG);
+    daily.humidity = HUMIDITY_AVG.round();
+    daily.windSpeed = WIND_AVG;
     daily.pop = 0.0;
     daily.dewPoint = 18.43;
     daily.clouds = 0;
+    daily.pressure = PRESSURE_AVG.round();
 
     test('Temperature', () {
-      expect(temperatureContribution(daily), 1.0);
+      expect(temperatureContribution(daily), closeTo(1.00, 0.01));
     });
 
     test('Humidity', () {
-      expect(humidityContribution(daily), 1.0);
+      expect(humidityContribution(daily), closeTo(1.00, 0.01));
     });
 
     test('Wind', () {
-      expect(windContribution(daily), 1.0);
+      expect(windContribution(daily), closeTo(1.00, 0.01));
     });
 
     test('Rain', () {
-      expect(rainContribution(daily), 1.0);
-    });
-
-    test('Dew Point', () {
-      expect(dewPointContribution(daily), 1.0);
+      expect(rainContribution(daily), closeTo(1.00, 0.01));
     });
 
     test('Cloud Coverage', () {
-      expect(cloudinessContribution(daily), 1.0);
+      expect(cloudinessContribution(daily), closeTo(1.00, 0.01));
+    });
+
+    test('Pressure', () {
+      expect(pressureContribution(daily), closeTo(1.00, 0.01));
     });
 
     test('Total', () {
-      expect(nuptialPercentage(daily), 1.0);
+      expect(nuptialPercentage(daily), closeTo(1.00, 0.01));
     });
   });
 
@@ -52,33 +52,34 @@ void main() {
     daily.pop = 1.0;
     daily.dewPoint = 35;
     daily.clouds = 100;
+    daily.pressure = 970;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily), 0.0);
+      expect(temperatureContribution(daily), closeTo(0.00, 0.01));
     });
 
     test('Humidity', () {
-      expect(humidityContribution(daily), 0.0);
+      expect(humidityContribution(daily), closeTo(0.00, 0.01));
     });
 
     test('Wind', () {
-      expect(windContribution(daily), 0.01);
+      expect(windContribution(daily), closeTo(0.00, 0.01));
     });
 
     test('Rain', () {
-      expect(rainContribution(daily), 0.0);
-    });
-
-    test('Dew Point', () {
-      expect(dewPointContribution(daily), 0.0);
+      expect(rainContribution(daily), closeTo(0.00, 0.01));
     });
 
     test('Cloud Coverage', () {
-      expect(cloudinessContribution(daily), 0.0);
+      expect(cloudinessContribution(daily), closeTo(0.00, 0.01));
+    });
+
+    test('Pressure', () {
+      expect(pressureContribution(daily), closeTo(0.00, 0.01));
     });
 
     test('Total', () {
-      expect(nuptialPercentage(daily), 0.01);
+      expect(nuptialPercentage(daily), closeTo(0.00, 0.01));
     });
   });
 
@@ -89,40 +90,41 @@ void main() {
         min: 16.97,
         max: 29.84,
         night: 21.53,
-        eve: 29.65,
+        eve: 23.65,
         morn: 18.54);
-    daily.humidity = 85;
+    daily.humidity = 55;
     daily.windSpeed = 0.37;
     daily.pop = 0.05;
     daily.dewPoint = 15;
     daily.clouds = 20;
+    daily.pressure = 1023;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily), 1.0);
+      expect(temperatureContribution(daily), closeTo(0.93, 0.01));
     });
 
     test('Humidity', () {
-      expect(humidityContribution(daily), 0.85);
+      expect(humidityContribution(daily), closeTo(0.38, 0.01));
     });
 
     test('Wind', () {
-      expect(windContribution(daily), 0.8766666666666666);
+      expect(windContribution(daily), closeTo(1.00, 0.01));
     });
 
     test('Rain', () {
-      expect(rainContribution(daily), 0.95);
-    });
-
-    test('Dew Point', () {
-      expect(dewPointContribution(daily), 1.0);
+      expect(rainContribution(daily), closeTo(0.95, 0.01));
     });
 
     test('Cloud Coverage', () {
-      expect(cloudinessContribution(daily), 0.8);
+      expect(cloudinessContribution(daily), closeTo(0.80, 0.01));
+    });
+
+    test('Pressure', () {
+      expect(pressureContribution(daily), closeTo(0.84, 0.01));
     });
 
     test('Total', () {
-      expect(nuptialPercentage(daily), 0.5663266666666665);
+      expect(nuptialPercentage(daily), closeTo(0.77, 0.01));
     });
   });
 
@@ -135,38 +137,39 @@ void main() {
         night: 21.53,
         eve: 25.65,
         morn: 18.54);
-    daily.humidity = 61;
+    daily.humidity = 51;
     daily.windSpeed = 1.37;
     daily.pop = 0.30;
     daily.dewPoint = 15;
     daily.clouds = 20;
+    daily.pressure = 1015;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily), 1.0);
+      expect(temperatureContribution(daily), closeTo(1.00, 0.01));
     });
 
     test('Humidity', () {
-      expect(humidityContribution(daily), 0.61);
+      expect(humidityContribution(daily), closeTo(0.17, 0.01));
     });
 
     test('Wind', () {
-      expect(windContribution(daily), 0.5433333333333333);
+      expect(windContribution(daily), closeTo(1.00, 0.01));
     });
 
     test('Rain', () {
-      expect(rainContribution(daily), 0.7);
-    });
-
-    test('Dew Point', () {
-      expect(dewPointContribution(daily), 1.0);
+      expect(rainContribution(daily), closeTo(0.70, 0.01));
     });
 
     test('Cloud Coverage', () {
-      expect(cloudinessContribution(daily), 0.8);
+      expect(cloudinessContribution(daily), closeTo(0.80, 0.01));
+    });
+
+    test('Pressure', () {
+      expect(pressureContribution(daily), closeTo(0.74, 0.01));
     });
 
     test('Total', () {
-      expect(nuptialPercentage(daily), 0.18560266666666664);
+      expect(nuptialPercentage(daily), closeTo(0.71, 0.01));
     });
   });
 
@@ -179,38 +182,39 @@ void main() {
         night: 11.53,
         eve: 15.65,
         morn: 8.54);
-    daily.humidity = 11;
+    daily.humidity = 25;
     daily.windSpeed = 6.37;
     daily.pop = 0.70;
     daily.dewPoint = 25;
     daily.clouds = 65;
+    daily.pressure = 1005;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily), 0.06500000000000003);
+      expect(temperatureContribution(daily), closeTo(0.03, 0.01));
     });
 
     test('Humidity', () {
-      expect(humidityContribution(daily), 0.11);
+      expect(humidityContribution(daily), closeTo(0.00, 0.01));
     });
 
     test('Wind', () {
-      expect(windContribution(daily), 0.01);
+      expect(windContribution(daily), closeTo(0.01, 0.01));
     });
 
     test('Rain', () {
-      expect(rainContribution(daily), 0.30000000000000004);
-    });
-
-    test('Dew Point', () {
-      expect(dewPointContribution(daily), 0.0);
+      expect(rainContribution(daily), closeTo(0.30, 0.01));
     });
 
     test('Cloud Coverage', () {
-      expect(cloudinessContribution(daily), 0.35);
+      expect(cloudinessContribution(daily), closeTo(0.35, 0.01));
+    });
+
+    test('Pressure', () {
+      expect(pressureContribution(daily), closeTo(0.31, 0.01));
     });
 
     test('Total', () {
-      expect(nuptialPercentage(daily), 0.01);
+      expect(nuptialPercentage(daily), closeTo(0.01, 0.01));
     });
   });
 }

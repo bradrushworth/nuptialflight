@@ -33,6 +33,7 @@ dependencies:
   http: ^0.13.4
   intl: ^0.17.0
   #spectrum: ^0.2.1+1
+  normal: ^0.6.0
 
 dev_dependencies:
   flutter_test:

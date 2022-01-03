@@ -77,7 +77,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late Future<WeatherResponse>? _futureWeather;
   WeatherResponse? _weather;
-  int _percentage = 0;
+  List<int> _percentage = [0, 0, 0, 0, 0, 0, 0, 0];
 
   @override
   void initState() {
@@ -98,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> updateAppWidget() async {
-    await HomeWidget.saveWidgetData<int>('_percentage', _percentage);
+    await HomeWidget.saveWidgetData<int>('_percentage', _percentage[0]);
     await HomeWidget.updateWidget(
         name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
   }
@@ -108,7 +108,22 @@ class _MyHomePageState extends State<MyHomePage> {
   void _updateWeather(WeatherResponse value) {
     setState(() {
       _weather = value;
-      _percentage = (nuptialPercentage(value.daily!.first) * 100.0).toInt();
+      _percentage[0] =
+          (nuptialPercentage(value.daily!.elementAt(0)) * 100.0).toInt();
+      _percentage[1] =
+          (nuptialPercentage(value.daily!.elementAt(1)) * 100.0).toInt();
+      _percentage[2] =
+          (nuptialPercentage(value.daily!.elementAt(2)) * 100.0).toInt();
+      _percentage[3] =
+          (nuptialPercentage(value.daily!.elementAt(3)) * 100.0).toInt();
+      _percentage[4] =
+          (nuptialPercentage(value.daily!.elementAt(4)) * 100.0).toInt();
+      _percentage[5] =
+          (nuptialPercentage(value.daily!.elementAt(5)) * 100.0).toInt();
+      _percentage[6] =
+          (nuptialPercentage(value.daily!.elementAt(6)) * 100.0).toInt();
+      _percentage[7] =
+          (nuptialPercentage(value.daily!.elementAt(7)) * 100.0).toInt();
       print("_updateWeather: _percentage=" + _percentage.toString());
     });
     updateAppWidget();
@@ -151,15 +166,15 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Likehood of Nuptial Flight',
+              'Likelihood of Nuptial Flight',
               style: Theme.of(context).textTheme.headline6,
             ),
             Text(
-              '$_percentage%',
+              '${_percentage[0]}%',
               style: Theme.of(context).textTheme.headline3?.merge(TextStyle(
-                  color: (_percentage < 50
+                  color: (_percentage[0] < 50
                       ? Colors.red
-                      : (_percentage < 75
+                      : (_percentage[0] < 75
                           ? Colors.deepOrange
                           : Colors.green)))),
             ),
@@ -167,23 +182,12 @@ class _MyHomePageState extends State<MyHomePage> {
               '',
             ),
             Text(
-              'Weather Date',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            Text(
-              (_weather == null
-                  ? ""
-                  : dateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                      (_weather!.daily!.first.dt! + _weather!.timezoneOffset!) *
-                          1000,
-                      isUtc: true))),
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
-            Text(
-              '',
-            ),
-            Text(
-              'Weather Description',
+              (_weather == null ? '' : 'Today\'s Weather'
+              // + dateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+              //     (_weather!.daily!.first.dt! + _weather!.timezoneOffset!) *
+              //         1000,
+              //     isUtc: true)) + ''
+              ),
               style: Theme.of(context).textTheme.bodyText1,
             ),
             Text(
@@ -201,7 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
               (_weather == null
                       ? ""
                       : (_weather?.daily?.first.temp?.eve!)!
-                          .toStringAsFixed(0)) +
+                          .toStringAsFixed(1)) +
                   "°C",
               style: Theme.of(context).textTheme.headline5,
             ),
@@ -210,26 +214,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   ? ""
                   : "Suitability: " +
                       (temperatureContribution(_weather!.daily!.first) * 100)
-                          .toStringAsFixed(0) +
-                      "%"),
-              style: Theme.of(context).textTheme.caption,
-            ),
-            Text(
-              '',
-            ),
-            Text(
-              'Humidity',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            Text(
-              '${_weather?.daily?.first.humidity}%',
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            Text(
-              (_weather == null
-                  ? ""
-                  : "Suitability: " +
-                      (humidityContribution(_weather!.daily!.first) * 100)
                           .toStringAsFixed(0) +
                       "%"),
               style: Theme.of(context).textTheme.caption,
@@ -252,6 +236,26 @@ class _MyHomePageState extends State<MyHomePage> {
                       (windContribution(_weather!.daily!.first) * 100)
                           .toStringAsFixed(0) +
                       "%"),
+              style: Theme.of(context).textTheme.caption,
+            ),
+            Text(
+              '',
+            ),
+            Text(
+              'Humidity',
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            Text(
+              '${_weather?.daily?.first.humidity}%',
+              style: Theme.of(context).textTheme.headline5,
+            ),
+            Text(
+              (_weather == null
+                  ? ""
+                  : "Suitability: " +
+                  (humidityContribution(_weather!.daily!.first) * 100)
+                      .toStringAsFixed(0) +
+                  "%"),
               style: Theme.of(context).textTheme.caption,
             ),
             Text(
@@ -302,24 +306,88 @@ class _MyHomePageState extends State<MyHomePage> {
               '',
             ),
             Text(
-              'Dew Point',
+              'Air Pressure',
               style: Theme.of(context).textTheme.bodyText1,
             ),
             Text(
               (_weather == null
                       ? ""
-                      : (_weather!.daily!.first.dewPoint!).toStringAsFixed(0)) +
-                  "°C",
+                      : (_weather!.daily!.first.pressure!).toStringAsFixed(0)) +
+                  " hPa",
               style: Theme.of(context).textTheme.headline5,
             ),
             Text(
               (_weather == null
                   ? ""
                   : "Suitability: " +
-                      (dewPointContribution(_weather!.daily!.first) * 100)
+                      (pressureContribution(_weather!.daily!.first) * 100)
                           .toStringAsFixed(0) +
                       "%"),
               style: Theme.of(context).textTheme.caption,
+            ),
+            Text(
+              '',
+            ),
+            Text(
+              'Upcoming Week',
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  (_weather == null ? "" : '${_percentage[1]}%'),
+                  style: getColorGradient(_percentage[1]),
+                ),
+                Text(
+                  '  ',
+                ),
+                Text(
+                  (_weather == null ? "" : '${_percentage[2]}%'),
+                  style: getColorGradient(_percentage[2]),
+                ),
+                Text(
+                  '  ',
+                ),
+                Text(
+                  (_weather == null ? "" : '${_percentage[3]}%'),
+                  style: getColorGradient(_percentage[3]),
+                ),
+                Text(
+                  '  ',
+                ),
+                Text(
+                  (_weather == null ? "" : '${_percentage[4]}%'),
+                  style: getColorGradient(_percentage[4]),
+                ),
+                Text(
+                  '  ',
+                ),
+                Text(
+                  (_weather == null ? "" : '${_percentage[5]}%'),
+                  style: getColorGradient(_percentage[5]),
+                ),
+                Text(
+                  '  ',
+                ),
+                Text(
+                  (_weather == null ? "" : '${_percentage[6]}%'),
+                  style: getColorGradient(_percentage[6]),
+                ),
+                Text(
+                  '  ',
+                ),
+                Text(
+                  (_weather == null ? "" : '${_percentage[7]}%'),
+                  style: getColorGradient(_percentage[7]),
+                ),
+              ],
+            ),
+            Text( // Push up the text away from the button
+              '',
+            ),
+            Text( // Push up the text away from the button
+              '',
             ),
           ],
         ),
@@ -332,6 +400,14 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  TextStyle? getColorGradient(int percentage) {
+    return Theme.of(context).textTheme.subtitle1?.merge(TextStyle(
+        color: (percentage < 50
+            ? Colors.red
+            : (percentage < 75 ? Colors.orange : Colors.green))));
+  }
+
+/*
   FutureBuilder<WeatherResponse> weatherText() {
     return FutureBuilder<WeatherResponse>(
       future: _futureWeather,
@@ -353,4 +429,5 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
   }
+*/
 }
