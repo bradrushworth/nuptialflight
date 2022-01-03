@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:appwidgetflutter/WeatherResponse.dart';
 import 'package:appwidgetflutter/weather.dart';
 import 'package:flutter/material.dart';
@@ -78,6 +80,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late Future<WeatherResponse>? _futureWeather;
   WeatherResponse? _weather;
+  bool loaded = false;
   List<int> _percentage = [0, 0, 0, 0, 0, 0, 0, 0];
 
   @override
@@ -125,6 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
           (nuptialPercentage(value.daily!.elementAt(6)) * 100.0).toInt();
       _percentage[7] =
           (nuptialPercentage(value.daily!.elementAt(7)) * 100.0).toInt();
+      loaded = true;
       print("_updateWeather: _percentage=" + _percentage.toString());
     });
     updateAppWidget();
@@ -148,53 +152,59 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: OrientationBuilder(
         builder: (context, orientation) {
-          return Column(
-            //mainAxisAlignment: MainAxisAlignment.end,
-            //crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Spacer(flex: 1),
-              GridView.count(
-                crossAxisCount: orientation == Orientation.portrait ? 1 : 3,
-                childAspectRatio: orientation == Orientation.portrait ? 5 : 5,
-                padding: orientation == Orientation.portrait
-                    ? const EdgeInsets.symmetric(horizontal: 0, vertical: 0)
-                    : const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                mainAxisSpacing: 0,
-                crossAxisSpacing: 0,
-                shrinkWrap: true,
-                children: [
-                  Text(
-                    'Likelihood of Nuptial Flight Today',
-                    style: Theme.of(context).textTheme.headline6,
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                  ),
-                  _buildTodayPercentage(),
-                  _buildTodayWeather(),
-                ],
-              ),
-              Spacer(flex: 1),
-              GridView.count(
-                crossAxisCount: orientation == Orientation.portrait ? 3 : 6,
-                childAspectRatio: 1.6,
-                padding: orientation == Orientation.portrait
-                    ? const EdgeInsets.symmetric(vertical: 4)
-                    : const EdgeInsets.symmetric(horizontal: 4),
-                shrinkWrap: true,
-                children: [
-                  _buildTemperature(),
-                  _buildWindSpeed(),
-                  _buildPrecipitation(),
-                  _buildHumidity(),
-                  _buildCloudiness(),
-                  _buildAirPressure(),
-                ],
-              ),
-              Spacer(flex: 1),
-              _buildUpcomingWeek(orientation),
-              Spacer(flex: 10),
-            ],
-          );
+          return loaded
+              ? Column(
+                  //mainAxisAlignment: MainAxisAlignment.end,
+                  //crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Spacer(flex: 1),
+                    GridView.count(
+                      crossAxisCount:
+                          orientation == Orientation.portrait ? 1 : 3,
+                      childAspectRatio:
+                          orientation == Orientation.portrait ? 5 : 5,
+                      padding: orientation == Orientation.portrait
+                          ? const EdgeInsets.symmetric(
+                              horizontal: 0, vertical: 0)
+                          : const EdgeInsets.symmetric(
+                              horizontal: 0, vertical: 0),
+                      mainAxisSpacing: 0,
+                      crossAxisSpacing: 0,
+                      shrinkWrap: true,
+                      children: [
+                        _buildNuptialHeading(orientation),
+                        _buildTodayPercentage(orientation),
+                        _buildTodayWeather(),
+                      ],
+                    ),
+                    Spacer(flex: 1),
+                    GridView.count(
+                      crossAxisCount:
+                          orientation == Orientation.portrait ? 3 : 6,
+                      childAspectRatio: 1.6,
+                      padding: orientation == Orientation.portrait
+                          ? const EdgeInsets.symmetric(vertical: 4)
+                          : const EdgeInsets.symmetric(horizontal: 4),
+                      shrinkWrap: true,
+                      children: [
+                        _buildTemperature(),
+                        _buildWindSpeed(),
+                        _buildPrecipitation(),
+                        _buildHumidity(),
+                        _buildCloudiness(),
+                        _buildAirPressure(),
+                      ],
+                    ),
+                    Spacer(flex: 1),
+                    _buildUpcomingWeek(orientation),
+                    Spacer(flex: 3),
+                  ],
+                )
+              : Center(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [CircularProgressIndicator()]));
         },
       ),
       // floatingActionButton: FloatingActionButton(
@@ -212,41 +222,55 @@ class _MyHomePageState extends State<MyHomePage> {
             : (percentage < 75 ? Colors.orange : Colors.green))));
   }
 
-  Widget _buildTodayPercentage() {
+  Widget _buildNuptialHeading(Orientation orientation) {
+    return Text(
+      'Likelihood of Nuptial Flight Today',
+      style: Theme.of(context).textTheme.headline6!.merge(TextStyle(
+            height: orientation == Orientation.portrait ? 3 : 1,
+          )),
+      textAlign: TextAlign.center,
+      softWrap: true,
+      maxLines: 2,
+    );
+  }
+
+  Widget _buildTodayPercentage(Orientation orientation) {
     return Text(
       '${_percentage[0]}%',
       style: Theme.of(context).textTheme.headline3!.merge(TextStyle(
-          color: (_percentage[0] < 50
-              ? Colors.red
-              : (_percentage[0] < 75 ? Colors.deepOrange : Colors.green)))),
+            color: (_percentage[0] < 50
+                ? Colors.red
+                : (_percentage[0] < 75 ? Colors.deepOrange : Colors.green)),
+            height: orientation == Orientation.portrait ? 0.75 : 1,
+          )),
       textAlign: TextAlign.center,
     );
   }
 
   Widget _buildTodayWeather() {
-    return SizedBox(
-      child: Column(
-        children: [
-          Text(
-            (_weather == null ? '' : 'Today\'s Weather'),
-            style: Theme.of(context).textTheme.bodyText1,
-          ),
-          // Text(
-          //   dateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-          //       (_weather!.daily!.first.dt! + _weather!.timezoneOffset!) * 1000,
-          //       isUtc: true)),
-          //   style: Theme.of(context).textTheme.bodyText2,
-          // ),
-          Text(
-            '${_weather?.daily?.first.weather?.first.description}',
-            style: Theme.of(context)
-                .textTheme
-                .bodyText2!
-                .merge(TextStyle(fontSize: 18)),
-            maxLines: 1,
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        Text(
+          (_weather == null ? '' : 'Today\'s Weather'),
+          style: Theme.of(context).textTheme.bodyText1!.merge(TextStyle(
+                height: 1.5,
+              )),
+        ),
+        // Text(
+        //   dateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+        //       (_weather!.daily!.first.dt! + _weather!.timezoneOffset!) * 1000,
+        //       isUtc: true)),
+        //   style: Theme.of(context).textTheme.bodyText2,
+        // ),
+        Text(
+          '${_weather?.daily?.first.weather?.first.description}',
+          style: Theme.of(context)
+              .textTheme
+              .bodyText2!
+              .merge(TextStyle(fontSize: 18)),
+          maxLines: 1,
+        ),
+      ],
     );
   }
 
@@ -423,13 +447,13 @@ class _MyHomePageState extends State<MyHomePage> {
           style: Theme.of(context).textTheme.bodyText1,
         ),
         DataTable(
-          headingRowHeight: 19,
-          dataRowHeight: 19,
-          horizontalMargin: 19,
-          columnSpacing: 20,
+          headingRowHeight: 22,
+          dataRowHeight: 22,
+          horizontalMargin: 22,
+          columnSpacing: 22,
           dividerThickness: 0,
           columns: [
-            DataColumn(label: Text('Day')),
+            DataColumn(label: Text('Day'), numeric: true),
             DataColumn(label: Text('Temperature'), numeric: true),
             DataColumn(label: Text('Wind Speed'), numeric: true),
             DataColumn(label: Text('Likelihood'), numeric: true),
