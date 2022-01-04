@@ -1,4 +1,4 @@
-package com.appwidgetflutter
+package au.com.bitbot.nuptialflight
 
 import android.appwidget.AppWidgetManager
 import android.content.Context

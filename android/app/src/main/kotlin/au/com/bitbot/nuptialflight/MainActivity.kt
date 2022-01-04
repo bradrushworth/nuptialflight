@@ -1,4 +1,4 @@
-package com.appwidgetflutter
+package au.com.bitbot.nuptialflight
 
 import io.flutter.embedding.android.FlutterActivity
 
