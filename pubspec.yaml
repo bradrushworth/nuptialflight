@@ -40,6 +40,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   test: any
+  flutter_automation: any
+  flutter_launcher_icons: ^0.9.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -82,3 +84,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/app_icon2.jpg"
+  adaptive_icon_background: #ffffff
+  #adaptive_icon_foreground: #ffffff
