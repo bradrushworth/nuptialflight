@@ -1,11 +1,10 @@
 import 'dart:ui';
 
-import 'package:appwidgetflutter/WeatherResponse.dart';
+import 'package:appwidgetflutter/weather_response.dart';
 import 'package:appwidgetflutter/weather.dart';
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
-//import 'package:spectrum/spectrum.dart';
 
 import 'nuptials.dart';
 
@@ -107,6 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
         name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
   }
 
+  /// Future feature to record user saw a nuptial flight
   void _foundNuptialFlight() {}
 
   void _updateWeather(WeatherResponse value) {
@@ -207,6 +207,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       children: [CircularProgressIndicator()]));
         },
       ),
+
+      /// Future feature to record that the user saw a nuptial flight today
       // floatingActionButton: FloatingActionButton(
       //   onPressed: _foundNuptialFlight,
       //   tooltip: 'Found Nuptial Flight',

@@ -1,4 +1,4 @@
-import 'package:appwidgetflutter/WeatherResponse.dart';
+import 'package:appwidgetflutter/weather_response.dart';
 import 'dart:math';
 import 'dart:developer' as developer;
 import 'package:normal/normal.dart';

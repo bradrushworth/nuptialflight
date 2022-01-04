@@ -1,5 +1,4 @@
-// Import the test package and Counter class
-import 'package:appwidgetflutter/WeatherResponse.dart';
+import 'package:appwidgetflutter/weather_response.dart';
 import 'package:test/test.dart';
 import 'package:appwidgetflutter/nuptials.dart';
 
