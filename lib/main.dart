@@ -1,9 +1,7 @@
 //import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
 //import 'dart:developer' as developer;
 
-import 'dart:io';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
@@ -21,8 +19,7 @@ DateFormat weekdayFormat = DateFormat("E");
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initialiseWidget();
-  await dotenv.load(
-      fileName: 'assets/.env', mergeWith: kIsWeb ? {} : Platform.environment);
+  await dotenv.load(fileName: 'assets/.env');
   runApp(MyApp());
 }
 

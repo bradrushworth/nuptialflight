@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('Download', () {
-    dotenv.testLoad(fileInput: File('assets/.env').readAsStringSync(), mergeWith: Platform.environment);
+    dotenv.testLoad(fileInput: File('assets/.env').readAsStringSync());
     WeatherFetcher weatherFetcher = WeatherFetcher(mockLocation: true);
     weatherFetcher.getLocation();
 
