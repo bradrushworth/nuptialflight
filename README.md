@@ -19,9 +19,9 @@ The following commands were useful:
 flutter pub pub run flutter_automation --android-sign flutter packages pub run
 flutter_launcher_icons:main flutter --no-color build appbundle
 
-You'll need to create a file at assets/.env with a line for free 
-your https://home.openweathermap.org/api_keys key:
+You'll need to create a file at assets/.env with a line:
 OPENWEATHERMAP_API_KEY=<your secret key>
+setting your free https://home.openweathermap.org/api_keys key.
 
 ## Attribution
 
