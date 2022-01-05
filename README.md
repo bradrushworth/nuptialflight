@@ -1,27 +1,25 @@
-# appwidgetflutter
+# Ant Nuptial Flight Predictor
 
-A basic Flutter application with home screen app widget.
+A basic Flutter application with a home screen app widget. Works fine but probably needs some more TLC.
 
-A modified version of basic counter app in flutter to create the home screen app widget that will show your counter's current value and get updated every time you increase your counter from the app. Also, you can update the counter from outside of the app using your widget.
+Works on Android, IOS and (hopefully) Web.
 
-![](https://github.com/ashgarg143/AppWidgetFlutter/blob/master/ezgif.com-gif-maker_11.gif)
+![](https://github.com/bradrushworth/nuptialflight/assets/Screenshot_1641349717.png)
+
+![](https://github.com/bradrushworth/nuptialflight/assets/Screenshot_1641349723.png)
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Build in Android Studio.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The following commands were useful:
 
 flutter pub pub run flutter_automation --android-sign
 flutter packages pub run flutter_launcher_icons:main
 flutter --no-color build appbundle
 
+## Attribution
+
+https://github.com/ashgarg143/AppWidgetFlutter
 
 <a href="https://iconscout.com/icons/ant" target="_blank">Ant Icon</a> by <a href="https://iconscout.com/contributors/vladyslav-severyn">Vladyslav Severyn</a> on <a href="https://iconscout.com">Iconscout</a>
