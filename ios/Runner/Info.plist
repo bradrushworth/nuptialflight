@@ -45,5 +45,7 @@
     <string>The app downloads weather information for your location.</string>
     <key>NSLocationAlwaysUsageDescription</key>
     <string>The app downloads weather information for your location.</string>
+    <key>ITSAppUsesNonExemptEncryption</key>
+    <string>YES</string>
 </dict>
 </plist>
