@@ -216,11 +216,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildErrorMessage() {
-    return Text(
+    return Center(
+        child: Text(
       '$errorMessage',
-      style: Theme.of(context).textTheme.headline1,
+      style: Theme.of(context).textTheme.headline3,
       textAlign: TextAlign.center,
-    );
+    ));
   }
 
   Widget _buildCircularProgressIndicator() {
