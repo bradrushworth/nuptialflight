@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:appwidgetflutter/responses/reverse_geocoding_response.dart';
+//import 'package:appwidgetflutter/responses/reverse_geocoding_response.dart';
 import 'package:appwidgetflutter/responses/weather_response.dart';
 import 'package:appwidgetflutter/weather_fetcher.dart';
 import 'package:flutter/material.dart';
