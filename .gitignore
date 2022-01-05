@@ -30,6 +30,7 @@
 .pub-cache/
 .pub/
 /build/
+/assets/.env
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -48,5 +49,3 @@ app.*.map.json
 /gradle/wrapper/
 /gradlew
 /gradlew.bat
-/assets/.env
-/assets/.env
