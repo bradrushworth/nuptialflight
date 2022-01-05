@@ -22,3 +22,6 @@ samples, guidance on mobile development, and a full API reference.
 flutter pub pub run flutter_automation --android-sign
 flutter packages pub run flutter_launcher_icons:main
 flutter --no-color build appbundle
+
+
+<a href="https://iconscout.com/icons/ant" target="_blank">Ant Icon</a> by <a href="https://iconscout.com/contributors/vladyslav-severyn">Vladyslav Severyn</a> on <a href="https://iconscout.com">Iconscout</a>

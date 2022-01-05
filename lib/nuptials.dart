@@ -1,4 +1,4 @@
-import 'package:appwidgetflutter/weather_response.dart';
+import 'package:appwidgetflutter/responses/weather_response.dart';
 import 'dart:math';
 import 'dart:developer' as developer;
 import 'package:normal/normal.dart';
@@ -35,13 +35,13 @@ double nuptialPercentage(Daily daily) {
   double humid = humidityContribution(daily);
   double cloud = cloudinessContribution(daily);
   double press = pressureContribution(daily);
-  developer.log("dt=" + daily.dt.toString(), name: 'nuptialPercentage');
-  developer.log("temp=$temp", name: 'nuptialPercentage');
-  developer.log("wind=$wind", name: 'nuptialPercentage');
-  developer.log("humid=$humid", name: 'nuptialPercentage');
-  developer.log("rain=$rain", name: 'nuptialPercentage');
-  developer.log("cloud=$cloud", name: 'nuptialPercentage');
-  developer.log("press=$press", name: 'nuptialPercentage');
+  // developer.log("dt=" + daily.dt.toString(), name: 'nuptialPercentage');
+  // developer.log("temp=$temp", name: 'nuptialPercentage');
+  // developer.log("wind=$wind", name: 'nuptialPercentage');
+  // developer.log("humid=$humid", name: 'nuptialPercentage');
+  // developer.log("rain=$rain", name: 'nuptialPercentage');
+  // developer.log("cloud=$cloud", name: 'nuptialPercentage');
+  // developer.log("press=$press", name: 'nuptialPercentage');
   var values = [
     {'percentage': temp * wind * rain,  'weighting': 1},
     {'percentage': temp * wind * humid, 'weighting': 1},
@@ -51,9 +51,9 @@ double nuptialPercentage(Daily daily) {
   var sum = values.map((m) => m['percentage']! * m['weighting']!).reduce((a, b) => a + b);
   var count = values.map((e) => e['weighting']!).reduce((a, b) => a + b);
   var result = sum / count;
-  developer.log("sum=$sum", name: 'nuptialPercentage');
-  developer.log("count=$count", name: 'nuptialPercentage');
-  developer.log("result=$result", name: 'nuptialPercentage');
+  // developer.log("sum=$sum", name: 'nuptialPercentage');
+  // developer.log("count=$count", name: 'nuptialPercentage');
+  // developer.log("result=$result", name: 'nuptialPercentage');
   return max(0.01, min(1.0, result));
 }
 

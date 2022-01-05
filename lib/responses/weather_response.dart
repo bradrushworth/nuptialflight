@@ -1,7 +1,6 @@
 ///
 /// https://javiercbk.github.io/json_to_dart/
 ///
-///
 class WeatherResponse {
   num? lat;
   num? lon;

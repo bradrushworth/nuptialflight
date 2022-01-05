@@ -1,6 +1,6 @@
-import 'package:appwidgetflutter/weather_response.dart';
-import 'package:test/test.dart';
+import 'package:appwidgetflutter/responses/weather_response.dart';
 import 'package:appwidgetflutter/nuptials.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('Perfect day', () {

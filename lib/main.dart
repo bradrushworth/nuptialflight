@@ -1,7 +1,8 @@
 import 'dart:ui';
 
-import 'package:appwidgetflutter/weather_response.dart';
-import 'package:appwidgetflutter/weather.dart';
+import 'package:appwidgetflutter/responses/reverse_geocoding_response.dart';
+import 'package:appwidgetflutter/responses/weather_response.dart';
+import 'package:appwidgetflutter/weather_fetcher.dart';
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
@@ -77,7 +78,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late Future<WeatherResponse>? _futureWeather;
+  ReverseGeocodingResponse? _geocoding;
   WeatherResponse? _weather;
   bool loaded = false;
   List<int> _percentage = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -92,25 +93,24 @@ class _MyHomePageState extends State<MyHomePage> {
   void loadData() async {
     await HomeWidget.getWidgetData<int>('_percentage', defaultValue: 0)
         .then((value) {
-      _futureWeather = fetchWeather();
-      _futureWeather!.then((weather) => _updateWeather(weather));
+      WeatherFetcher weatherFetcher = WeatherFetcher();
+      weatherFetcher.getLocation().then((o) => Future.wait([
+            weatherFetcher.fetchReverseGeocoding(),
+            weatherFetcher.fetchWeather()
+          ])
+              .then((List responses) =>
+                  _updateWeather(responses[0], responses[1]))
+              .catchError((e) => handleError(e)));
       print("loadData: _percentage=" + _percentage.toString());
     });
     setState(() {});
     updateAppWidget();
   }
 
-  Future<void> updateAppWidget() async {
-    await HomeWidget.saveWidgetData<int>('_percentage', _percentage[0]);
-    await HomeWidget.updateWidget(
-        name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
-  }
-
-  /// Future feature to record user saw a nuptial flight
-  void _foundNuptialFlight() {}
-
-  void _updateWeather(WeatherResponse value) {
+  void _updateWeather(
+      ReverseGeocodingResponse geocoding, WeatherResponse value) {
     setState(() {
+      _geocoding = geocoding;
       _weather = value;
       _percentage[0] =
           (nuptialPercentage(value.daily!.elementAt(0)) * 100.0).toInt();
@@ -133,6 +133,15 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     updateAppWidget();
   }
+
+  Future<void> updateAppWidget() async {
+    await HomeWidget.saveWidgetData<int>('_percentage', _percentage[0]);
+    await HomeWidget.updateWidget(
+        name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
+  }
+
+  /// Future feature to record user saw a nuptial flight
+  void _foundNuptialFlight() {}
 
   @override
   Widget build(BuildContext context) {
@@ -253,7 +262,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return Column(
       children: [
         Text(
-          (_weather == null ? '' : 'Today\'s Weather'),
+          (_geocoding == null
+              ? 'Today\'s Weather'
+              : '${_geocoding!.name} Weather'),
           style: Theme.of(context).textTheme.bodyText1!.merge(TextStyle(
                 height: 1.5,
               )),
@@ -521,6 +532,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ],
     );
+  }
+
+  handleError(e) {
+    // Not implemented yet!
+    throw e;
   }
 
 /*
