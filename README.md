@@ -2,6 +2,8 @@
 
 A basic Flutter application with an Android home screen app widget. Works on Android, IOS and Web.
 
+Demo: https://nuptialflight.codemagic.app/
+
 [![Codemagic build status](https://api.codemagic.io/apps/61d52f9fd1be809cfdf62648/61d52f9fd1be809cfdf62647/status_badge.svg)](https://codemagic.io/apps/61d52f9fd1be809cfdf62648/61d52f9fd1be809cfdf62647/latest_build)
 
 Ant Nuptial Flight Predictor downloads the weather in your current location and gives you the rough
