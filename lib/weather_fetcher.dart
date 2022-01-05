@@ -23,9 +23,19 @@ class WeatherFetcher {
       LocationPermission permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.whileInUse ||
           permission == LocationPermission.always) {
-        Position? position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
-        _lat = position.latitude.toStringAsFixed(3);
-        _lon = position.longitude.toStringAsFixed(3);
+        Position? position;
+        try {
+          position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.low,
+              timeLimit: Duration(seconds: 5));
+        } catch (exception) {
+          developer.log("Can't get current position: exception=$exception", name: 'WeatherFetcher');
+          position = await Geolocator.getLastKnownPosition();
+        }
+        if (position != null) {
+          _lat = position.latitude.toStringAsFixed(4);
+          _lon = position.longitude.toStringAsFixed(4);
+        }
       }
     } else {
       _lat = '-35.7600';
@@ -60,10 +70,33 @@ class WeatherFetcher {
     }
   }
 
+  Future<String> fetchNearestWeatherLocation() async {
+    String url =
+        'https://api.openweathermap.org/data/2.5/weather?lat=$_lat&lon=$_lon&appid=23237726d847507a463472930ed2a5d8&units=metric&mode=json';
+    developer.log("url=$url", name: 'WeatherFetcher');
+    stdout.writeln("url=$url");
+
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      Map json = jsonDecode(response.body);
+      if (!json.containsKey('name')) {
+        throw Exception('Unexpected reverse geocoding response');
+      }
+      return json['name'];
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load reverse geocoding');
+    }
+  }
+
   Future<WeatherResponse> fetchWeather() async {
     String url =
         'https://api.openweathermap.org/data/2.5/onecall?lat=$_lat&lon=$_lon&appid=23237726d847507a463472930ed2a5d8&units=metric&exclude=minutely,hourly,current';
-    developer.log("url=$url", name: 'weather');
+    developer.log("url=$url", name: 'WeatherFetcher');
     stdout.writeln("url=$url");
 
     final response = await http.get(Uri.parse(url));

@@ -21,10 +21,10 @@ class AppWidgetProvider : HomeWidgetProvider() {
 
                 val counter = widgetData.getInt("_percentage", 0)
 
-                var counterText = "Nuptial Likelihood: $counter%"
+                var counterText = "Flight: $counter%"
 
                 if (counter == 0) {
-                    counterText = "Downloading weather data..."
+                    counterText = "Downloading"
                 }
 
                 setTextViewText(R.id.tv_counter, counterText)
@@ -32,7 +32,7 @@ class AppWidgetProvider : HomeWidgetProvider() {
                 // Pending intent to update counter on button click
                 val backgroundIntent = HomeWidgetBackgroundIntent.getBroadcast(context,
                         Uri.parse("myAppWidget://updateweather"))
-                setOnClickPendingIntent(R.id.bt_update, backgroundIntent)
+                //setOnClickPendingIntent(R.id.bt_update, backgroundIntent)
             }
             appWidgetManager.updateAppWidget(widgetId, views)
         }

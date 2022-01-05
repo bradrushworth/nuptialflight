@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Nuptial Flight Predictor',
+      title: 'Ant Nuptial Flight Predictor',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blueGrey,
       ),
-      home: MyHomePage(title: 'Nuptial Flight Predictor'),
+      home: MyHomePage(title: 'Ant Nuptial Flight Predictor'),
     );
   }
 }
@@ -78,7 +78,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  ReverseGeocodingResponse? _geocoding;
+  String? _geocoding;
   WeatherResponse? _weather;
   bool loaded = false;
   List<int> _percentage = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -95,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
         .then((value) {
       WeatherFetcher weatherFetcher = WeatherFetcher();
       weatherFetcher.getLocation().then((o) => Future.wait([
-            weatherFetcher.fetchReverseGeocoding(),
+            weatherFetcher.fetchNearestWeatherLocation(),
             weatherFetcher.fetchWeather()
           ])
               .then((List responses) =>
@@ -108,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _updateWeather(
-      ReverseGeocodingResponse geocoding, WeatherResponse value) {
+      String geocoding, WeatherResponse value) {
     setState(() {
       _geocoding = geocoding;
       _weather = value;
@@ -157,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title!),
         centerTitle: true,
-        toolbarHeight: 50,
+        toolbarHeight: 45,
       ),
       body: OrientationBuilder(
         builder: (context, orientation) {
@@ -237,7 +237,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Text(
       'Likelihood of Nuptial Flight Today',
       style: Theme.of(context).textTheme.headline6!.merge(TextStyle(
-            height: orientation == Orientation.portrait ? 3 : 1,
+            height: orientation == Orientation.portrait ? 3 : 1.1,
           )),
       textAlign: TextAlign.center,
       softWrap: true,
@@ -252,7 +252,7 @@ class _MyHomePageState extends State<MyHomePage> {
             color: (_percentage[0] < 50
                 ? Colors.red
                 : (_percentage[0] < 75 ? Colors.deepOrange : Colors.green)),
-            height: orientation == Orientation.portrait ? 0.75 : 1,
+            height: orientation == Orientation.portrait ? 0.75 : 1.1,
           )),
       textAlign: TextAlign.center,
     );
@@ -264,10 +264,12 @@ class _MyHomePageState extends State<MyHomePage> {
         Text(
           (_geocoding == null
               ? 'Today\'s Weather'
-              : '${_geocoding!.name} Weather'),
+              : '$_geocoding Weather'),
           style: Theme.of(context).textTheme.bodyText1!.merge(TextStyle(
                 height: 1.5,
-              )),
+          )),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
         // Text(
         //   dateFormat.format(DateTime.fromMillisecondsSinceEpoch(

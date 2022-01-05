@@ -6,7 +6,7 @@
 
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="Nuptial Flight Predictor">
+        android:label="Ant Flight">
 
         <activity
             android:name=".MainActivity"

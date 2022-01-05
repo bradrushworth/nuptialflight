@@ -17,6 +17,11 @@ void main() {
       expect(response.country, 'AU');
     });
 
+    test('Fetch Weather Location', () async {
+      String response = await weatherFetcher.fetchNearestWeatherLocation();
+      expect(response, 'AU');
+    });
+
     test('Fetch Weather', () async {
       WeatherResponse response = await weatherFetcher.fetchWeather();
       expect(response, isNotNull);
