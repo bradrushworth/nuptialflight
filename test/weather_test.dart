@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
 import 'package:nuptialflight/responses/weather_response.dart';
 import 'package:nuptialflight/weather_fetcher.dart';
@@ -5,6 +8,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('Download', () {
+    dotenv.testLoad(fileInput: File('assets/.env').readAsStringSync());
     WeatherFetcher weatherFetcher = WeatherFetcher(mockLocation: true);
     weatherFetcher.getLocation();
 
