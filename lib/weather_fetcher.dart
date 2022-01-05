@@ -11,8 +11,8 @@ import 'dart:developer' as developer;
 
 class WeatherFetcher {
   late bool _mockLocation;
-  String? _lat;
-  String? _lon;
+  late String _lat;
+  late String _lon;
 
   WeatherFetcher({bool mockLocation = false}) {
     _mockLocation = mockLocation;
@@ -35,15 +35,13 @@ class WeatherFetcher {
         if (position != null) {
           _lat = position.latitude.toStringAsFixed(4);
           _lon = position.longitude.toStringAsFixed(4);
+        } else {
+          throw Exception('Failed to get location');
         }
       }
     } else {
       _lat = '-35.7600';
       _lon = '150.2053';
-    }
-
-    if (_lat == null || _lon == null) {
-      throw Exception('Failed to get location');
     }
   }
 

@@ -6,6 +6,7 @@ import 'package:test/test.dart';
 void main() {
   group('Download', () {
     WeatherFetcher weatherFetcher = WeatherFetcher(mockLocation: true);
+    weatherFetcher.getLocation();
 
     test('Fetch Geocoding', () async {
       ReverseGeocodingResponse response = await weatherFetcher.fetchReverseGeocoding();
@@ -19,7 +20,7 @@ void main() {
 
     test('Fetch Weather Location', () async {
       String response = await weatherFetcher.fetchNearestWeatherLocation();
-      expect(response, 'AU');
+      expect(response, 'Batemans Bay');
     });
 
     test('Fetch Weather', () async {
