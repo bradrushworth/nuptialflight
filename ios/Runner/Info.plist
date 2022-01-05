@@ -43,5 +43,7 @@
 	<false/>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>The app downloads weather information for your location.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>The app downloads weather information for your location.</string>
 </dict>
 </plist>

@@ -1,6 +1,6 @@
-import 'package:appwidgetflutter/responses/reverse_geocoding_response.dart';
-import 'package:appwidgetflutter/responses/weather_response.dart';
-import 'package:appwidgetflutter/weather_fetcher.dart';
+import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
+import 'package:nuptialflight/responses/weather_response.dart';
+import 'package:nuptialflight/weather_fetcher.dart';
 import 'package:test/test.dart';
 
 void main() {

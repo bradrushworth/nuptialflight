@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:appwidgetflutter/responses/reverse_geocoding_response.dart';
-import 'package:appwidgetflutter/responses/weather_response.dart';
+import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
+import 'package:nuptialflight/responses/weather_response.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:geolocator/geolocator.dart';
