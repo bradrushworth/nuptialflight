@@ -5,14 +5,15 @@ import 'dart:io';
 import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
 import 'package:nuptialflight/responses/weather_response.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:geolocator/geolocator.dart';
 import 'dart:developer' as developer;
 
 class WeatherFetcher {
   late bool _mockLocation;
-  late String _lat;
-  late String _lon;
+  String? _lat;
+  String? _lon;
 
   WeatherFetcher({bool mockLocation = false}) {
     _mockLocation = mockLocation;
@@ -29,8 +30,9 @@ class WeatherFetcher {
               desiredAccuracy: LocationAccuracy.low,
               timeLimit: Duration(seconds: 5));
         } catch (exception) {
-          developer.log("Can't get current position: exception=$exception", name: 'WeatherFetcher');
-          position = await Geolocator.getLastKnownPosition();
+          developer.log("Can't get current position: exception=$exception",
+              name: 'WeatherFetcher');
+          if (!kIsWeb) position = await Geolocator.getLastKnownPosition();
         }
         if (position != null) {
           _lat = position.latitude.toStringAsFixed(4);
@@ -46,10 +48,12 @@ class WeatherFetcher {
   }
 
   Future<ReverseGeocodingResponse> fetchReverseGeocoding() async {
+    if (_lat == null || _lon == null) throw Exception('Failed to get location');
+
     String url =
         'https://api.openweathermap.org/geo/1.0/reverse?lat=$_lat&lon=$_lon&appid=23237726d847507a463472930ed2a5d8&limit=1';
     developer.log("url=$url", name: 'weather');
-    stdout.writeln("url=$url");
+    if (!kIsWeb) stdout.writeln("url=$url");
 
     final response = await http.get(Uri.parse(url));
 
@@ -69,10 +73,12 @@ class WeatherFetcher {
   }
 
   Future<String> fetchNearestWeatherLocation() async {
+    if (_lat == null || _lon == null) throw Exception('Failed to get location');
+
     String url =
         'https://api.openweathermap.org/data/2.5/weather?lat=$_lat&lon=$_lon&appid=23237726d847507a463472930ed2a5d8&units=metric&mode=json';
     developer.log("url=$url", name: 'WeatherFetcher');
-    stdout.writeln("url=$url");
+    if (!kIsWeb) stdout.writeln("url=$url");
 
     final response = await http.get(Uri.parse(url));
 
@@ -82,7 +88,8 @@ class WeatherFetcher {
       Map json = jsonDecode(response.body);
       if (!json.containsKey('name')) {
         //throw Exception('Unexpected reverse geocoding response');
-        developer.log("Unexpected reverse geocoding response", name: 'WeatherFetcher');
+        developer.log("Unexpected reverse geocoding response",
+            name: 'WeatherFetcher');
         return "Unknown Location";
       }
       return json['name'];
@@ -96,10 +103,12 @@ class WeatherFetcher {
   }
 
   Future<WeatherResponse> fetchWeather() async {
+    if (_lat == null || _lon == null) throw Exception('Failed to get location');
+
     String url =
         'https://api.openweathermap.org/data/2.5/onecall?lat=$_lat&lon=$_lon&appid=23237726d847507a463472930ed2a5d8&units=metric&exclude=minutely,hourly,current';
     developer.log("url=$url", name: 'WeatherFetcher');
-    stdout.writeln("url=$url");
+    if (!kIsWeb) stdout.writeln("url=$url");
 
     final response = await http.get(Uri.parse(url));
 

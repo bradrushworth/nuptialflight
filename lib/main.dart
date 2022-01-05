@@ -1,9 +1,13 @@
 //import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
+//import 'dart:developer' as developer;
+
 import 'package:nuptialflight/responses/weather_response.dart';
 import 'package:nuptialflight/weather_fetcher.dart';
 import 'package:flutter/material.dart';
-import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
+import 'package:nuptialflight/widgets_other.dart'
+    if (dart.library.io) 'package:nuptialflight/widgets_mobile.dart'
+    if (dart.library.js) 'package:nuptialflight/widgets_other.dart';
 
 import 'nuptials.dart';
 
@@ -12,26 +16,8 @@ DateFormat weekdayFormat = DateFormat("E");
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  HomeWidget.registerBackgroundCallback(backgroundCallback);
+  initialiseWidget();
   runApp(MyApp());
-}
-
-// Called when Doing Background Work initiated from Widget
-Future<void> backgroundCallback(Uri? uri) async {
-  print("backgroundCallback: uri=" + uri.toString());
-  if (uri?.host == 'updateweather') {
-    int _percentage = 0;
-    HomeWidget.getWidgetData<int>('_percentage', defaultValue: _percentage)
-        .then((value) {
-      _percentage = value!; // Don't do anything for now
-      print("backgroundCallback: value=" + value.toString());
-      print("backgroundCallback: _percentage=" + _percentage.toString());
-      HomeWidget.saveWidgetData<int>('_percentage', _percentage);
-      HomeWidget.updateWidget(
-          name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
-    });
-    //print("backgroundCallback: _percentage=" + _percentage.toString());
-  }
 }
 
 class MyApp extends StatelessWidget {
@@ -79,34 +65,34 @@ class _MyHomePageState extends State<MyHomePage> {
   String? _geocoding;
   WeatherResponse? _weather;
   bool loaded = false;
+  String? errorMessage;
   List<int> _percentage = [0, 0, 0, 0, 0, 0, 0, 0];
 
   @override
   void initState() {
     super.initState();
-    HomeWidget.widgetClicked.listen((Uri? uri) => loadData());
+    widgetInitState(loadData);
     loadData(); // This will load data from widget every time app is opened
   }
 
   void loadData() async {
-    await HomeWidget.getWidgetData<int>('_percentage', defaultValue: 0)
-        .then((value) {
-      WeatherFetcher weatherFetcher = WeatherFetcher();
-      weatherFetcher.getLocation().then((o) => Future.wait([
-            weatherFetcher.fetchNearestWeatherLocation(),
-            weatherFetcher.fetchWeather()
-          ])
-              .then((List responses) =>
-                  _updateWeather(responses[0], responses[1]))
-              .catchError((e) => handleError(e)));
-      print("loadData: _percentage=" + _percentage.toString());
-    });
+    WeatherFetcher weatherFetcher = WeatherFetcher();
+    await weatherFetcher
+        .getLocation()
+        .then((o) => Future.wait([
+              weatherFetcher.fetchNearestWeatherLocation(),
+              weatherFetcher.fetchWeather()
+            ])
+                .then((List responses) =>
+                    _updateWeather(responses[0], responses[1]))
+                .catchError((e) => handleError(e)))
+        .catchError((e) => handleError(e));
+    print("loadData: _percentage=" + _percentage.toString());
     setState(() {});
-    updateAppWidget();
+    updateAppWidget(_percentage);
   }
 
-  void _updateWeather(
-      String geocoding, WeatherResponse value) {
+  void _updateWeather(String geocoding, WeatherResponse value) {
     setState(() {
       _geocoding = geocoding;
       _weather = value;
@@ -129,13 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
       loaded = true;
       print("_updateWeather: _percentage=" + _percentage.toString());
     });
-    updateAppWidget();
-  }
-
-  Future<void> updateAppWidget() async {
-    await HomeWidget.saveWidgetData<int>('_percentage', _percentage[0]);
-    await HomeWidget.updateWidget(
-        name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
+    updateAppWidget(_percentage);
   }
 
   /// Future feature to record user saw a nuptial flight
@@ -159,59 +139,57 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: OrientationBuilder(
         builder: (context, orientation) {
-          return loaded
-              ? Column(
-                  //mainAxisAlignment: MainAxisAlignment.end,
-                  //crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Spacer(flex: 1),
-                    GridView.count(
-                      crossAxisCount:
-                          orientation == Orientation.portrait ? 1 : 3,
-                      childAspectRatio:
-                          orientation == Orientation.portrait ? 5 : 5,
-                      padding: orientation == Orientation.portrait
-                          ? const EdgeInsets.symmetric(
-                              horizontal: 0, vertical: 0)
-                          : const EdgeInsets.symmetric(
-                              horizontal: 0, vertical: 0),
-                      mainAxisSpacing: 0,
-                      crossAxisSpacing: 0,
-                      shrinkWrap: true,
-                      children: [
-                        _buildNuptialHeading(orientation),
-                        _buildTodayPercentage(orientation),
-                        _buildTodayWeather(),
+          return errorMessage != null
+              ? _buildErrorMessage()
+              : !loaded
+                  ? _buildCircularProgressIndicator()
+                  : Column(
+                      //mainAxisAlignment: MainAxisAlignment.end,
+                      //crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Spacer(flex: 1),
+                        GridView.count(
+                          crossAxisCount:
+                              orientation == Orientation.portrait ? 1 : 3,
+                          childAspectRatio:
+                              orientation == Orientation.portrait ? 5 : 5,
+                          padding: orientation == Orientation.portrait
+                              ? const EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 0)
+                              : const EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 0),
+                          mainAxisSpacing: 0,
+                          crossAxisSpacing: 0,
+                          shrinkWrap: true,
+                          children: [
+                            _buildNuptialHeading(orientation),
+                            _buildTodayPercentage(orientation),
+                            _buildTodayWeather(),
+                          ],
+                        ),
+                        Spacer(flex: 1),
+                        GridView.count(
+                          crossAxisCount:
+                              orientation == Orientation.portrait ? 3 : 6,
+                          childAspectRatio: 1.6,
+                          padding: orientation == Orientation.portrait
+                              ? const EdgeInsets.symmetric(vertical: 4)
+                              : const EdgeInsets.symmetric(horizontal: 4),
+                          shrinkWrap: true,
+                          children: [
+                            _buildTemperature(),
+                            _buildWindSpeed(),
+                            _buildPrecipitation(),
+                            _buildHumidity(),
+                            _buildCloudiness(),
+                            _buildAirPressure(),
+                          ],
+                        ),
+                        Spacer(flex: 1),
+                        _buildUpcomingWeek(orientation),
+                        Spacer(flex: 3),
                       ],
-                    ),
-                    Spacer(flex: 1),
-                    GridView.count(
-                      crossAxisCount:
-                          orientation == Orientation.portrait ? 3 : 6,
-                      childAspectRatio: 1.6,
-                      padding: orientation == Orientation.portrait
-                          ? const EdgeInsets.symmetric(vertical: 4)
-                          : const EdgeInsets.symmetric(horizontal: 4),
-                      shrinkWrap: true,
-                      children: [
-                        _buildTemperature(),
-                        _buildWindSpeed(),
-                        _buildPrecipitation(),
-                        _buildHumidity(),
-                        _buildCloudiness(),
-                        _buildAirPressure(),
-                      ],
-                    ),
-                    Spacer(flex: 1),
-                    _buildUpcomingWeek(orientation),
-                    Spacer(flex: 3),
-                  ],
-                )
-              : Center(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [CircularProgressIndicator()]));
+                    );
         },
       ),
 
@@ -231,11 +209,28 @@ class _MyHomePageState extends State<MyHomePage> {
             : (percentage < 75 ? Colors.orange : Colors.green))));
   }
 
+  Widget _buildErrorMessage() {
+    return Text(
+      '$errorMessage',
+      style: Theme.of(context).textTheme.headline1,
+      textAlign: TextAlign.center,
+    );
+  }
+
+  Widget _buildCircularProgressIndicator() {
+    return Center(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [CircularProgressIndicator()]));
+  }
+
   Widget _buildNuptialHeading(Orientation orientation) {
     return Text(
-      'Likelihood of Nuptial Flight Today',
+      'Likelihood of Ant Nuptial Flight Today',
       style: Theme.of(context).textTheme.headline6!.merge(TextStyle(
-            height: orientation == Orientation.portrait ? 3 : 1.1,
+            height: orientation == Orientation.portrait ? 3 : 1.3,
+            fontSize: 18,
           )),
       textAlign: TextAlign.center,
       softWrap: true,
@@ -260,12 +255,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return Column(
       children: [
         Text(
-          (_geocoding == null
-              ? 'Today\'s Weather'
-              : '$_geocoding Weather'),
+          (_geocoding == null ? 'Today\'s Weather' : '$_geocoding Weather'),
           style: Theme.of(context).textTheme.bodyText1!.merge(TextStyle(
                 height: 1.5,
-          )),
+              )),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -535,8 +528,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   handleError(e) {
-    // Not implemented yet!
-    throw e;
+    errorMessage = e.toString();
   }
 
 /*

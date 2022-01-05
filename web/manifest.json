@@ -1,11 +1,11 @@
 {
-    "name": "nuptial_flight",
-    "short_name": "nuptial_flight",
+    "name": "Ant Nuptial Flight Predictor",
+    "short_name": "Ant Nuptial Flight Predictor",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Predict when queen ants are flying near you!",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
