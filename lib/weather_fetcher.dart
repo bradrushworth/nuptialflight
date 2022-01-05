@@ -81,13 +81,17 @@ class WeatherFetcher {
       // then parse the JSON.
       Map json = jsonDecode(response.body);
       if (!json.containsKey('name')) {
-        throw Exception('Unexpected reverse geocoding response');
+        //throw Exception('Unexpected reverse geocoding response');
+        developer.log("Unexpected reverse geocoding response", name: 'WeatherFetcher');
+        return "Unknown Location";
       }
       return json['name'];
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to load reverse geocoding');
+      //throw Exception('Failed to load reverse geocoding');
+      developer.log("Failed to load reverse geocoding", name: 'WeatherFetcher');
+      return "Unknown Location";
     }
   }
 
