@@ -4,9 +4,7 @@ A basic Flutter application with a home screen app widget. Works fine but probab
 
 Works on Android, IOS and (hopefully) Web.
 
-![](https://github.com/bradrushworth/nuptialflight/assets/Screenshot_1641349717.png)
-
-![](https://github.com/bradrushworth/nuptialflight/assets/Screenshot_1641349723.png)
+<img src="https://raw.githubusercontent.com/bradrushworth/nuptialflight/master/assets/Screenshot_1641349717.png" height="540" /> <img src="https://raw.githubusercontent.com/bradrushworth/nuptialflight/master/assets/Screenshot_1641349723.png" width="540" />
 
 ## Getting Started
 
@@ -20,6 +18,6 @@ flutter --no-color build appbundle
 
 ## Attribution
 
-https://github.com/ashgarg143/AppWidgetFlutter
+Code forked from https://github.com/ashgarg143/AppWidgetFlutter
 
 <a href="https://iconscout.com/icons/ant" target="_blank">Ant Icon</a> by <a href="https://iconscout.com/contributors/vladyslav-severyn">Vladyslav Severyn</a> on <a href="https://iconscout.com">Iconscout</a>
