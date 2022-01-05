@@ -1,7 +1,7 @@
 //import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
 //import 'dart:developer' as developer;
 
-
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
@@ -16,10 +16,15 @@ import 'nuptials.dart';
 DateFormat dateFormat = DateFormat("yyyy-MM-dd");
 DateFormat weekdayFormat = DateFormat("E");
 
+String path(String str) {
+  // https://stackoverflow.com/questions/61301598/how-can-i-display-asset-images-on-flutter-web
+  return (!kIsWeb) ? 'assets/$str' : str;
+}
+
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initialiseWidget();
-  await dotenv.load(fileName: 'assets/.env');
+  await dotenv.load(fileName: path('.env'));
   runApp(MyApp());
 }
 
