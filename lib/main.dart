@@ -602,6 +602,10 @@ class Choice {
 
 const List<Choice> choices = const <Choice>[
   const Choice(
+      title: 'Report Issue',
+      url: 'mailto:bitbot@bitbot.com.au?subject=Help with Ant Flight',
+      icon: Icons.email),
+  const Choice(
       title: 'Web App',
       url: 'https://nuptialflight.codemagic.app/#/',
       icon: Icons.web),
