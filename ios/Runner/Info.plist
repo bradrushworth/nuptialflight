@@ -47,5 +47,10 @@
     <string>The app downloads weather information for your location.</string>
     <key>ITSAppUsesNonExemptEncryption</key>
     <string>NO</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>https</string>
+      <string>http</string>
+    </array>
 </dict>
 </plist>

@@ -11,6 +11,7 @@ import 'package:nuptialflight/widgets_other.dart'
     if (dart.library.js) 'package:nuptialflight/widgets_other.dart';
 
 import 'nuptials.dart';
+import 'utils.dart';
 
 DateFormat dateFormat = DateFormat("yyyy-MM-dd");
 DateFormat weekdayFormat = DateFormat("E");
@@ -140,6 +141,26 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title!),
         centerTitle: true,
         toolbarHeight: 45,
+        actions: <Widget>[
+          // overflow menu
+          PopupMenuButton<Choice>(
+            onSelected: (Choice c) {
+              Utils.launchURL('${c.url}');
+            },
+            itemBuilder: (BuildContext context) {
+              return choices.map((Choice choice) {
+                return PopupMenuItem<Choice>(
+                  value: choice,
+                  child: Row(children: [
+                    Icon(choice.icon, size: 20, color: Theme.of(context).primaryColor),
+                    Text('    '),
+                    Text('${choice.title}'),
+                  ]),
+                );
+              }).toList();
+            },
+          ),
+        ],
       ),
       body: OrientationBuilder(
         builder: (context, orientation) {
@@ -570,3 +591,36 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 */
 }
+
+class Choice {
+  const Choice({required this.title, required this.url, required this.icon});
+
+  final String title;
+  final String url;
+  final IconData icon;
+}
+
+const List<Choice> choices = const <Choice>[
+  const Choice(
+      title: 'Web App',
+      url: 'https://nuptialflight.codemagic.app/#/',
+      icon: Icons.web),
+  const Choice(
+      title: 'Android',
+      url:
+          'https://play.google.com/store/apps/details?id=au.com.bitbot.nuptialflight',
+      icon: Icons.android),
+  const Choice(
+      title: 'IOS',
+      url:
+          'https://apps.apple.com/us/app/ant-nuptial-flight-predictor/id1603373687',
+      icon: Icons.phone_iphone),
+  const Choice(
+      title: 'Source Code',
+      url: 'https://github.com/bradrushworth/nuptialflight',
+      icon: Icons.source),
+  const Choice(
+      title: 'Buy Brad Coffee',
+      url: 'https://www.buymeacoffee.com/bitbot',
+      icon: Icons.coffee),
+];
