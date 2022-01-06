@@ -40,6 +40,8 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blueGrey,
       ),
+      darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.system,
       home: MyHomePage(title: 'Ant Nuptial Flight Predictor'),
     );
   }
@@ -149,34 +151,30 @@ class _MyHomePageState extends State<MyHomePage> {
                       //mainAxisAlignment: MainAxisAlignment.end,
                       //crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
-                        Spacer(flex: 1),
+                        Spacer(flex: 2),
                         GridView.count(
                           crossAxisCount:
                               orientation == Orientation.portrait ? 1 : 3,
                           childAspectRatio:
-                              orientation == Orientation.portrait ? 5 : 5,
+                              orientation == Orientation.portrait ? 8 : 6,
                           padding: orientation == Orientation.portrait
-                              ? const EdgeInsets.symmetric(
-                                  horizontal: 0, vertical: 0)
-                              : const EdgeInsets.symmetric(
-                                  horizontal: 0, vertical: 0),
-                          mainAxisSpacing: 0,
-                          crossAxisSpacing: 0,
+                              ? const EdgeInsets.symmetric(vertical: 0)
+                              : const EdgeInsets.symmetric(horizontal: 0),
                           shrinkWrap: true,
                           children: [
                             _buildNuptialHeading(orientation),
                             _buildTodayPercentage(orientation),
-                            _buildTodayWeather(),
+                            _buildTodayWeather(orientation),
                           ],
                         ),
-                        Spacer(flex: 1),
+                        Spacer(flex: 2),
                         GridView.count(
                           crossAxisCount:
                               orientation == Orientation.portrait ? 3 : 6,
                           childAspectRatio: 1.6,
                           padding: orientation == Orientation.portrait
-                              ? const EdgeInsets.symmetric(vertical: 4)
-                              : const EdgeInsets.symmetric(horizontal: 4),
+                              ? const EdgeInsets.symmetric(vertical: 0)
+                              : const EdgeInsets.symmetric(horizontal: 0),
                           shrinkWrap: true,
                           children: [
                             _buildTemperature(),
@@ -189,7 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         Spacer(flex: 1),
                         _buildUpcomingWeek(orientation),
-                        Spacer(flex: 3),
+                        Spacer(flex: 2),
                       ],
                     );
         },
@@ -205,17 +203,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   TextStyle? getColorGradient(int percentage) {
-    return Theme.of(context).textTheme.subtitle1?.merge(TextStyle(
+    return TextStyle(
         color: (percentage < 50
             ? Colors.red
-            : (percentage < 75 ? Colors.orange : Colors.green))));
+            : (percentage < 75 ? Colors.orange : Colors.green)));
   }
 
   Widget _buildErrorMessage() {
     return Center(
         child: Text(
       '$errorMessage',
-      style: Theme.of(context).textTheme.headline3,
+      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
       textAlign: TextAlign.center,
     ));
   }
@@ -231,10 +229,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildNuptialHeading(Orientation orientation) {
     return Text(
       'Likelihood of Ant Nuptial Flight Today',
-      style: Theme.of(context).textTheme.headline6!.merge(TextStyle(
-            height: orientation == Orientation.portrait ? 3 : 1.3,
-            fontSize: 18,
-          )),
+      style: TextStyle(
+        height: orientation == Orientation.portrait ? 2.0 : 1.0,
+        fontSize: 21,
+        fontWeight: FontWeight.w600,
+      ),
       textAlign: TextAlign.center,
       softWrap: true,
       maxLines: 2,
@@ -244,24 +243,28 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildTodayPercentage(Orientation orientation) {
     return Text(
       '${_percentage[0]}%',
-      style: Theme.of(context).textTheme.headline3!.merge(TextStyle(
-            color: (_percentage[0] < 50
-                ? Colors.red
-                : (_percentage[0] < 75 ? Colors.deepOrange : Colors.green)),
-            height: orientation == Orientation.portrait ? 0.75 : 1.1,
-          )),
+      style: TextStyle(
+        color: (_percentage[0] < 50
+            ? Colors.red
+            : (_percentage[0] < 75 ? Colors.deepOrange : Colors.green)),
+        height: orientation == Orientation.portrait ? 1.1 : 1.0,
+        fontSize: 37,
+        fontWeight: FontWeight.w900,
+      ),
       textAlign: TextAlign.center,
     );
   }
 
-  Widget _buildTodayWeather() {
+  Widget _buildTodayWeather(Orientation orientation) {
     return Column(
       children: [
         Text(
           (_geocoding == null ? 'Today\'s Weather' : '$_geocoding Weather'),
-          style: Theme.of(context).textTheme.bodyText1!.merge(TextStyle(
-                height: 1.5,
-              )),
+          style: TextStyle(
+            height: orientation == Orientation.portrait ? 1.6 : 1.0,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -269,14 +272,11 @@ class _MyHomePageState extends State<MyHomePage> {
         //   dateFormat.format(DateTime.fromMillisecondsSinceEpoch(
         //       (_weather!.daily!.first.dt! + _weather!.timezoneOffset!) * 1000,
         //       isUtc: true)),
-        //   style: Theme.of(context).textTheme.bodyText2,
+        //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         // ),
         Text(
           '${_weather?.daily?.first.weather?.first.description}',
-          style: Theme.of(context)
-              .textTheme
-              .bodyText2!
-              .merge(TextStyle(fontSize: 18)),
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
           maxLines: 1,
         ),
       ],
@@ -289,14 +289,14 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           Text(
             'Temperature',
-            style: Theme.of(context).textTheme.bodyText1,
+            style: TextStyle(fontSize: 14),
           ),
           Text(
             (_weather == null
                     ? ""
                     : (_weather?.daily?.first.temp?.eve!)!.toStringAsFixed(1)) +
                 "°C",
-            style: Theme.of(context).textTheme.headline5,
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
           ),
           Text(
             (_weather == null
@@ -305,7 +305,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     (temperatureContribution(_weather!.daily!.first) * 100)
                         .toStringAsFixed(0) +
                     "%"),
-            style: Theme.of(context).textTheme.caption,
+            style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).textTheme.caption!.color),
           ),
         ],
       ),
@@ -318,11 +320,11 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           Text(
             'Wind Speed',
-            style: Theme.of(context).textTheme.bodyText1,
+            style: TextStyle(fontSize: 14),
           ),
           Text(
-            '${_weather?.daily?.first.windSpeed!.toStringAsFixed(1)} m/s',
-            style: Theme.of(context).textTheme.headline5,
+            '${_weather?.daily?.first.windSpeed!.toStringAsFixed(1)}\u{00A0}m/s',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
           ),
           Text(
             (_weather == null
@@ -331,7 +333,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     (windContribution(_weather!.daily!.first) * 100)
                         .toStringAsFixed(0) +
                     "%"),
-            style: Theme.of(context).textTheme.caption,
+            style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).textTheme.caption!.color),
           ),
         ],
       ),
@@ -344,14 +348,14 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           Text(
             'Precipitation',
-            style: Theme.of(context).textTheme.bodyText1,
+            style: TextStyle(fontSize: 14),
           ),
           Text(
             (_weather == null
                     ? ""
                     : (_weather!.daily!.first.pop! * 100).toStringAsFixed(0)) +
                 "%",
-            style: Theme.of(context).textTheme.headline5,
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
           ),
           Text(
             (_weather == null
@@ -360,7 +364,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     (rainContribution(_weather!.daily!.first) * 100)
                         .toStringAsFixed(0) +
                     "%"),
-            style: Theme.of(context).textTheme.caption,
+            style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).textTheme.caption!.color),
           ),
         ],
       ),
@@ -373,11 +379,11 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           Text(
             'Humidity',
-            style: Theme.of(context).textTheme.bodyText1,
+            style: TextStyle(fontSize: 14),
           ),
           Text(
             '${_weather?.daily?.first.humidity}%',
-            style: Theme.of(context).textTheme.headline5,
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
           ),
           Text(
             (_weather == null
@@ -386,7 +392,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     (humidityContribution(_weather!.daily!.first) * 100)
                         .toStringAsFixed(0) +
                     "%"),
-            style: Theme.of(context).textTheme.caption,
+            style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).textTheme.caption!.color),
           ),
         ],
       ),
@@ -399,11 +407,11 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           Text(
             'Cloudiness',
-            style: Theme.of(context).textTheme.bodyText1,
+            style: TextStyle(fontSize: 14),
           ),
           Text(
             '${_weather?.daily?.first.clouds}%',
-            style: Theme.of(context).textTheme.headline5,
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
           ),
           Text(
             (_weather == null
@@ -412,7 +420,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     (cloudinessContribution(_weather!.daily!.first) * 100)
                         .toStringAsFixed(0) +
                     "%"),
-            style: Theme.of(context).textTheme.caption,
+            style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).textTheme.caption!.color),
           ),
         ],
       ),
@@ -425,14 +435,14 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           Text(
             'Air Pressure',
-            style: Theme.of(context).textTheme.bodyText1,
+            style: TextStyle(fontSize: 14),
           ),
           Text(
             (_weather == null
                     ? ""
                     : (_weather!.daily!.first.pressure!).toStringAsFixed(0)) +
-                " hPa",
-            style: Theme.of(context).textTheme.headline5,
+                "\u{00A0}hPa",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
           ),
           Text(
             (_weather == null
@@ -441,7 +451,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     (pressureContribution(_weather!.daily!.first) * 100)
                         .toStringAsFixed(0) +
                     "%"),
-            style: Theme.of(context).textTheme.caption,
+            style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).textTheme.caption!.color),
           ),
         ],
       ),
@@ -453,7 +465,7 @@ class _MyHomePageState extends State<MyHomePage> {
       children: [
         Text(
           'Upcoming Week',
-          style: Theme.of(context).textTheme.bodyText1,
+          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
         ),
         DataTable(
           headingRowHeight: 22,
@@ -513,7 +525,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Text(
               (_weather == null
                   ? ''
-                  : ' ${_weather!.daily!.elementAt(i).windSpeed!.toStringAsFixed(1)} m/s'),
+                  : ' ${_weather!.daily!.elementAt(i).windSpeed!.toStringAsFixed(1)}\u{00A0}m/s'),
               style: getColorGradient(_percentage[i]),
             ),
           ),
