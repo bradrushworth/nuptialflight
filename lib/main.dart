@@ -178,9 +178,6 @@ class _MyHomePageState extends State<MyHomePage> {
                               orientation == Orientation.portrait ? 1 : 3,
                           childAspectRatio:
                               orientation == Orientation.portrait ? 8 : 6,
-                          padding: orientation == Orientation.portrait
-                              ? const EdgeInsets.symmetric(vertical: 0)
-                              : const EdgeInsets.symmetric(horizontal: 0),
                           shrinkWrap: true,
                           children: [
                             _buildNuptialHeading(orientation),
@@ -231,6 +228,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildErrorMessage() {
+    //                  return AlertDialog(
+    //                     title: const Text('That is correct!'),
+    //                     content: const Text('13 is the right answer.'),
+    //                     actions: <Widget>[
+    //                       TextButton(
+    //                         onPressed: () {
+    //                           Navigator.pop(context);
+    //                         },
+    //                         child: const Text('OK'),
+    //                       ),
+    //                     ],
     return Center(
         child: Text(
       '$errorMessage',
@@ -249,7 +257,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildNuptialHeading(Orientation orientation) {
     return Text(
-      'Likelihood of Ant Nuptial Flight Today',
+      orientation == Orientation.portrait ? 'Likelihood of Ant Nuptial Flight Today' : 'Likelihood of Ant\nNuptial Flight Today',
       style: TextStyle(
         height: orientation == Orientation.portrait ? 2.0 : 1.0,
         fontSize: 21,

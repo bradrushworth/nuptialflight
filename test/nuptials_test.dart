@@ -1,11 +1,11 @@
-import 'package:nuptialflight/responses/weather_response.dart';
 import 'package:nuptialflight/nuptials.dart';
+import 'package:nuptialflight/responses/weather_response.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('Perfect day', () {
     Daily daily = Daily();
-    daily.temp = Temp(eve: TEMP_AVG);
+    daily.temp = Temp(max: TEMP_AVG);
     daily.humidity = HUMIDITY_AVG.round();
     daily.windSpeed = WIND_AVG;
     daily.pop = 0.0;
@@ -85,11 +85,11 @@ void main() {
   group('Great day', () {
     Daily daily = Daily();
     daily.temp = Temp(
-        day: 29.84,
+        day: 23.65,
         min: 16.97,
-        max: 29.84,
+        max: 23.65,
         night: 21.53,
-        eve: 23.65,
+        eve: 22.65,
         morn: 18.54);
     daily.humidity = 55;
     daily.windSpeed = 0.37;
@@ -189,7 +189,7 @@ void main() {
     daily.pressure = 1005;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily), closeTo(0.03, 0.01));
+      expect(temperatureContribution(daily), closeTo(0.07, 0.01));
     });
 
     test('Humidity', () {

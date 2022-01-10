@@ -1,7 +1,8 @@
-import 'package:nuptialflight/responses/weather_response.dart';
 import 'dart:math';
+
 //import 'dart:developer' as developer;
 import 'package:normal/normal.dart';
+import 'package:nuptialflight/responses/weather_response.dart';
 //import 'package:collection/collection.dart';
 
 ///
@@ -61,8 +62,8 @@ double nuptialPercentage(Daily daily) {
 double temperatureContribution(Daily daily) {
   //return max(0, min(10, daily.temp!.eve! - 15) / 10.0);
   // z = (x – μ (mean)) / σ (standard deviation)
-  if (daily.temp!.eve! > TEMP_AVG) return 1.0;
-  return max(0, min(0.5, Normal.cdf(-(daily.temp!.eve! - TEMP_AVG).abs() / TEMP_STD))) * 2;
+  if (daily.temp!.max! > TEMP_AVG) return 1.0;
+  return max(0, min(0.5, Normal.cdf(-(daily.temp!.max! - TEMP_AVG).abs() / TEMP_STD))) * 2;
 }
 
 /// Humidity, %
