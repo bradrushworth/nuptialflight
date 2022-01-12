@@ -1,6 +1,7 @@
 //import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
 //import 'dart:developer' as developer;
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Ant Nuptial Flight Predictor',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -256,8 +258,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildNuptialHeading(Orientation orientation) {
-    return Text(
-      orientation == Orientation.portrait ? 'Likelihood of Ant Nuptial Flight Today' : 'Likelihood of Ant\nNuptial Flight Today',
+    return AutoSizeText(
+      orientation == Orientation.portrait
+          ? 'Likelihood of Ant Nuptial Flight Today'
+          : 'Likelihood of Ant\nNuptial Flight Today',
       style: TextStyle(
         height: orientation == Orientation.portrait ? 2.0 : 1.0,
         fontSize: 21,
@@ -270,7 +274,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildTodayPercentage(Orientation orientation) {
-    return Text(
+    return AutoSizeText(
       '${_percentage[0]}%',
       style: TextStyle(
         color: (_percentage[0] < 50
@@ -287,7 +291,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildTodayWeather(Orientation orientation) {
     return Column(
       children: [
-        Text(
+        AutoSizeText(
           (_geocoding == null ? 'Today\'s Weather' : '$_geocoding Weather'),
           style: TextStyle(
             height: orientation == Orientation.portrait ? 1.6 : 1.0,
@@ -297,13 +301,13 @@ class _MyHomePageState extends State<MyHomePage> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        // Text(
+        // AutoSizeText(
         //   dateFormat.format(DateTime.fromMillisecondsSinceEpoch(
         //       (_weather!.daily!.first.dt! + _weather!.timezoneOffset!) * 1000,
         //       isUtc: true)),
         //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         // ),
-        Text(
+        AutoSizeText(
           '${_weather?.daily?.first.weather?.first.description}',
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
           maxLines: 1,
@@ -492,7 +496,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildUpcomingWeek(Orientation orientation) {
     return Column(
       children: [
-        Text(
+        AutoSizeText(
           'Upcoming Week',
           style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
         ),

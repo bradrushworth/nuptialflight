@@ -38,7 +38,8 @@ class WeatherFetcher {
           _lat = position.latitude.toStringAsFixed(4);
           _lon = position.longitude.toStringAsFixed(4);
         } else {
-          throw Exception('Failed to get user\'s location!');
+          throw Exception(
+              'Failed to get your location! You could try:\nRefreshing page.\nOpening in Chrome or another browser.\nDownloading from the app store.');
         }
       }
     } else {
@@ -48,7 +49,9 @@ class WeatherFetcher {
   }
 
   Future<ReverseGeocodingResponse> fetchReverseGeocoding() async {
-    if (_lat == null || _lon == null) throw Exception('Location is unknown!');
+    if (_lat == null || _lon == null)
+      throw Exception(
+          'Location is unknown! Perhaps you didn\'t allow location permissions?');
 
     String url =
         'https://api.openweathermap.org/geo/1.0/reverse?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&limit=1';
@@ -73,7 +76,9 @@ class WeatherFetcher {
   }
 
   Future<String> fetchNearestWeatherLocation() async {
-    if (_lat == null || _lon == null) throw Exception('Location is unknown!');
+    if (_lat == null || _lon == null)
+      throw Exception(
+          'Location is unknown! Perhaps you didn\'t allow location permissions?');
 
     String url =
         'https://api.openweathermap.org/data/2.5/weather?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&mode=json';
@@ -103,7 +108,9 @@ class WeatherFetcher {
   }
 
   Future<WeatherResponse> fetchWeather() async {
-    if (_lat == null || _lon == null) throw Exception('Location is unknown!');
+    if (_lat == null || _lon == null)
+      throw Exception(
+          'Location is unknown! Perhaps you didn\'t allow location permissions?');
 
     String url =
         'https://api.openweathermap.org/data/2.5/onecall?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&exclude=minutely,hourly,current';
