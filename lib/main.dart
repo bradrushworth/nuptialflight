@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:nuptialflight/responses/weather_response.dart';
-import 'package:nuptialflight/screenshots.dart';
+import 'package:nuptialflight/screenshots_mobile.dart'
+    if (dart.library.io) 'package:nuptialflight/screenshots_mobile.dart'
+    if (dart.library.js) 'package:nuptialflight/screenshots_other.dart';
 import 'package:nuptialflight/weather_fetcher.dart';
 import 'package:nuptialflight/widgets_other.dart'
     if (dart.library.io) 'package:nuptialflight/widgets_mobile.dart'
@@ -28,7 +30,9 @@ void main() {
     DevicePreview(
       enabled: !kReleaseMode && kIsWeb,
       builder: (context) => MyApp(), // Wrap your app
-      tools: [...DevicePreview.defaultTools, simpleScreenShotModesPlugin],
+      tools: kIsWeb
+          ? [...DevicePreview.defaultTools, simpleScreenShotModesPlugin]
+          : [],
     ),
   );
 }
@@ -39,12 +43,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Ant Nuptial Flight Predictor',
-      debugShowCheckedModeBanner: false,
-      // Hide the dev banner
+      // Create space for camera cut-outs etc
       useInheritedMediaQuery: true,
+      // Hide the dev banner
+      debugShowCheckedModeBanner: false,
       // For DevicePreview
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
+
       theme: ThemeData(
         // This is the theme of your application.
         primarySwatch: Colors.blueGrey,
@@ -179,11 +185,11 @@ class _MyHomePageState extends State<MyHomePage> {
           return errorMessage != null
               ? _buildErrorMessage()
               : !loaded
-              ? _buildCircularProgressIndicator()
-              : Column(
-            //mainAxisAlignment: MainAxisAlignment.end,
-            //crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
+                  ? _buildCircularProgressIndicator()
+                  : Column(
+                      //mainAxisAlignment: MainAxisAlignment.end,
+                      //crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
                         Spacer(flex: 1),
                         GridView.count(
                           crossAxisCount:
@@ -224,7 +230,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     TextStyle(fontSize: 8, color: Colors.grey))
                             : Container(), // Not enough room, unnecessary
                       ],
-          );
+                    );
         },
       ),
 
@@ -258,10 +264,10 @@ class _MyHomePageState extends State<MyHomePage> {
     //                     ],
     return Center(
         child: Text(
-          '$errorMessage',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-          textAlign: TextAlign.center,
-        ));
+      '$errorMessage',
+      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+      textAlign: TextAlign.center,
+    ));
   }
 
   Widget _buildCircularProgressIndicator() {

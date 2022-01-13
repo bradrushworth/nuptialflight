@@ -1,5 +1,4 @@
 import 'dart:html' as html;
-import 'dart:ui';
 
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/widgets.dart';
@@ -20,12 +19,12 @@ final simpleScreenShotModesPlugin = SimpleScreenShot(
     Devices.ios.iPad.identifier,
     Devices.ios.iPhone13ProMax.identifier,
   ],
-  lang: [Locale('en_AU')],
+  lang: const [Locale('en_AU')],
   useToggleDarkMode: true,
 );
 
 final listPush = [
-  ItemScreenMode(function: pushFirstScreenshot, label: 'home'),
+  const ItemScreenMode(function: pushFirstScreenshot, label: 'home'),
 ];
 
 Future pushFirstScreenshot(BuildContext context) async {
@@ -62,5 +61,5 @@ Future<String> saveScreenShot(DeviceScreenshotWithLabel screen) async {
   html.document.body!.children.remove(anchor);
   html.Url.revokeObjectUrl(url);
 
-  return '${screen.deviceScreenshot.device.name}';
+  return screen.deviceScreenshot.device.name;
 }
