@@ -49,3 +49,4 @@ app.*.map.json
 /gradle/wrapper/
 /gradlew
 /gradlew.bat
+/screenshots/resized/
