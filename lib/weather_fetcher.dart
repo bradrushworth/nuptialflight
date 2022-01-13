@@ -39,7 +39,7 @@ class WeatherFetcher {
           _lon = position.longitude.toStringAsFixed(4);
         } else {
           throw Exception(
-              'Failed to get your location! You could try:\nRefreshing page.\nOpening in Chrome or another browser.\nDownloading from the app store.');
+              'Failed to get your location! You could try:\n\nRefreshing page.\n\nOpening in Chrome or another browser.\n\nDownloading from the app store.');
         }
       }
     } else {

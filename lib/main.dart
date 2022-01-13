@@ -2,26 +2,35 @@
 //import 'dart:developer' as developer;
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:nuptialflight/responses/weather_response.dart';
+import 'package:nuptialflight/screenshots.dart';
 import 'package:nuptialflight/weather_fetcher.dart';
 import 'package:nuptialflight/widgets_other.dart'
     if (dart.library.io) 'package:nuptialflight/widgets_mobile.dart'
     if (dart.library.js) 'package:nuptialflight/widgets_other.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'nuptials.dart';
 import 'utils.dart';
 
-DateFormat dateFormat = DateFormat("yyyy-MM-dd");
-DateFormat weekdayFormat = DateFormat("E");
+final DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+final DateFormat weekdayFormat = DateFormat("E");
 
-Future main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
   initialiseWidget();
-  await dotenv.load(fileName: 'assets/.env');
-  runApp(MyApp());
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode && kIsWeb,
+      builder: (context) => MyApp(), // Wrap your app
+      tools: [...DevicePreview.defaultTools, simpleScreenShotModesPlugin],
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -31,16 +40,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Ant Nuptial Flight Predictor',
       debugShowCheckedModeBanner: false,
+      // Hide the dev banner
+      useInheritedMediaQuery: true,
+      // For DevicePreview
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
       theme: ThemeData(
         // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blueGrey,
       ),
       darkTheme: ThemeData.dark(),
@@ -53,15 +59,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String? title;
 
   @override
@@ -69,6 +66,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String? appName, packageName, version, buildNumber;
   String? _geocoding;
   WeatherResponse? _weather;
   bool loaded = false;
@@ -79,10 +77,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     widgetInitState(loadData);
-    loadData(); // This will load data from widget every time app is opened
+    loadData(); // This will load data every time app is opened
   }
 
   void loadData() async {
+    await dotenv.load(fileName: 'assets/.env');
+
     WeatherFetcher weatherFetcher = WeatherFetcher();
     await weatherFetcher
         .getLocation()
@@ -95,8 +95,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 .catchError((e) => handleError(e)))
         .catchError((e) => handleError(e));
     print("loadData: _percentage=" + _percentage.toString());
-    setState(() {});
-    updateAppWidget(_percentage);
+    setState(() {
+      updateAppWidget(_percentage);
+    });
+
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      appName = packageInfo.appName;
+      packageName = packageInfo.packageName;
+      version = packageInfo.version;
+      buildNumber = packageInfo.buildNumber;
+    });
   }
 
   void _updateWeather(String geocoding, WeatherResponse value) {
@@ -154,7 +163,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 return PopupMenuItem<Choice>(
                   value: choice,
                   child: Row(children: [
-                    Icon(choice.icon, size: 20, color: Theme.of(context).primaryColor),
+                    Icon(choice.icon,
+                        size: 20, color: Theme.of(context).primaryColor),
                     Text('    '),
                     Text('${choice.title}'),
                   ]),
@@ -169,12 +179,12 @@ class _MyHomePageState extends State<MyHomePage> {
           return errorMessage != null
               ? _buildErrorMessage()
               : !loaded
-                  ? _buildCircularProgressIndicator()
-                  : Column(
-                      //mainAxisAlignment: MainAxisAlignment.end,
-                      //crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        Spacer(flex: 2),
+              ? _buildCircularProgressIndicator()
+              : Column(
+            //mainAxisAlignment: MainAxisAlignment.end,
+            //crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+                        Spacer(flex: 1),
                         GridView.count(
                           crossAxisCount:
                               orientation == Orientation.portrait ? 1 : 3,
@@ -187,11 +197,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             _buildTodayWeather(orientation),
                           ],
                         ),
-                        Spacer(flex: 2),
+                        Spacer(flex: 1),
                         GridView.count(
                           crossAxisCount:
                               orientation == Orientation.portrait ? 3 : 6,
-                          childAspectRatio: 1.6,
+                          childAspectRatio: 2.0,
                           padding: orientation == Orientation.portrait
                               ? const EdgeInsets.symmetric(vertical: 0)
                               : const EdgeInsets.symmetric(horizontal: 0),
@@ -207,9 +217,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         Spacer(flex: 1),
                         _buildUpcomingWeek(orientation),
-                        Spacer(flex: 2),
+                        Spacer(flex: 1),
+                        orientation == Orientation.portrait
+                            ? Text('Version $version+$buildNumber',
+                                style:
+                                    TextStyle(fontSize: 8, color: Colors.grey))
+                            : Container(), // Not enough room, unnecessary
                       ],
-                    );
+          );
         },
       ),
 
@@ -243,10 +258,10 @@ class _MyHomePageState extends State<MyHomePage> {
     //                     ],
     return Center(
         child: Text(
-      '$errorMessage',
-      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-      textAlign: TextAlign.center,
-    ));
+          '$errorMessage',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+          textAlign: TextAlign.center,
+        ));
   }
 
   Widget _buildCircularProgressIndicator() {
@@ -308,7 +323,7 @@ class _MyHomePageState extends State<MyHomePage> {
         //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         // ),
         AutoSizeText(
-          '${_weather?.daily?.first.weather?.first.description}',
+          '${_weather!.daily!.first.weather!.first.description}',
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
           maxLines: 1,
         ),
@@ -325,19 +340,14 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextStyle(fontSize: 14),
           ),
           Text(
-            (_weather == null
-                    ? ""
-                    : (_weather?.daily?.first.temp?.eve!)!.toStringAsFixed(1)) +
-                "°C",
+            (_weather!.daily!.first.temp!.eve!).toStringAsFixed(1) + "°C",
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
           ),
           Text(
-            (_weather == null
-                ? ""
-                : "Suitability: " +
-                    (temperatureContribution(_weather!.daily!.first) * 100)
-                        .toStringAsFixed(0) +
-                    "%"),
+            "Suitability: " +
+                (temperatureContribution(_weather!.daily!.first) * 100)
+                    .toStringAsFixed(0) +
+                "%",
             style: TextStyle(
                 fontSize: 12,
                 color: Theme.of(context).textTheme.caption!.color),
@@ -356,16 +366,14 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextStyle(fontSize: 14),
           ),
           Text(
-            '${_weather?.daily?.first.windSpeed!.toStringAsFixed(1)}\u{00A0}m/s',
+            '${_weather!.daily!.first.windSpeed!.toStringAsFixed(1)}\u{00A0}m/s',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
           ),
           Text(
-            (_weather == null
-                ? ""
-                : "Suitability: " +
-                    (windContribution(_weather!.daily!.first) * 100)
-                        .toStringAsFixed(0) +
-                    "%"),
+            "Suitability: " +
+                (windContribution(_weather!.daily!.first) * 100)
+                    .toStringAsFixed(0) +
+                "%",
             style: TextStyle(
                 fontSize: 12,
                 color: Theme.of(context).textTheme.caption!.color),
@@ -384,19 +392,14 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextStyle(fontSize: 14),
           ),
           Text(
-            (_weather == null
-                    ? ""
-                    : (_weather!.daily!.first.pop! * 100).toStringAsFixed(0)) +
-                "%",
+            (_weather!.daily!.first.pop! * 100).toStringAsFixed(0) + "%",
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
           ),
           Text(
-            (_weather == null
-                ? ""
-                : "Suitability: " +
-                    (rainContribution(_weather!.daily!.first) * 100)
-                        .toStringAsFixed(0) +
-                    "%"),
+            "Suitability: " +
+                (rainContribution(_weather!.daily!.first) * 100)
+                    .toStringAsFixed(0) +
+                "%",
             style: TextStyle(
                 fontSize: 12,
                 color: Theme.of(context).textTheme.caption!.color),
@@ -415,16 +418,14 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextStyle(fontSize: 14),
           ),
           Text(
-            '${_weather?.daily?.first.humidity}%',
+            '${_weather!.daily!.first.humidity}%',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
           ),
           Text(
-            (_weather == null
-                ? ""
-                : "Suitability: " +
-                    (humidityContribution(_weather!.daily!.first) * 100)
-                        .toStringAsFixed(0) +
-                    "%"),
+            "Suitability: " +
+                (humidityContribution(_weather!.daily!.first) * 100)
+                    .toStringAsFixed(0) +
+                "%",
             style: TextStyle(
                 fontSize: 12,
                 color: Theme.of(context).textTheme.caption!.color),
@@ -443,16 +444,14 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextStyle(fontSize: 14),
           ),
           Text(
-            '${_weather?.daily?.first.clouds}%',
+            '${_weather!.daily!.first.clouds}%',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
           ),
           Text(
-            (_weather == null
-                ? ""
-                : "Suitability: " +
-                    (cloudinessContribution(_weather!.daily!.first) * 100)
-                        .toStringAsFixed(0) +
-                    "%"),
+            "Suitability: " +
+                (cloudinessContribution(_weather!.daily!.first) * 100)
+                    .toStringAsFixed(0) +
+                "%",
             style: TextStyle(
                 fontSize: 12,
                 color: Theme.of(context).textTheme.caption!.color),
@@ -471,19 +470,15 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextStyle(fontSize: 14),
           ),
           Text(
-            (_weather == null
-                    ? ""
-                    : (_weather!.daily!.first.pressure!).toStringAsFixed(0)) +
+            (_weather!.daily!.first.pressure!).toStringAsFixed(0) +
                 "\u{00A0}hPa",
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
           ),
           Text(
-            (_weather == null
-                ? ""
-                : "Suitability: " +
-                    (pressureContribution(_weather!.daily!.first) * 100)
-                        .toStringAsFixed(0) +
-                    "%"),
+            "Suitability: " +
+                (pressureContribution(_weather!.daily!.first) * 100)
+                    .toStringAsFixed(0) +
+                "%",
             style: TextStyle(
                 fontSize: 12,
                 color: Theme.of(context).textTheme.caption!.color),
@@ -532,13 +527,11 @@ class _MyHomePageState extends State<MyHomePage> {
         DataCell(
           Container(
             child: Text(
-              (_weather == null
-                  ? ''
-                  : weekdayFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                      (_weather!.daily!.elementAt(i).dt! +
-                              _weather!.timezoneOffset!) *
-                          1000,
-                      isUtc: true))),
+              weekdayFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                  (_weather!.daily!.elementAt(i).dt! +
+                          _weather!.timezoneOffset!) *
+                      1000,
+                  isUtc: true)),
               style: getColorGradient(_percentage[i]),
             ),
           ),
@@ -546,9 +539,7 @@ class _MyHomePageState extends State<MyHomePage> {
         DataCell(
           Container(
             child: Text(
-              (_weather == null
-                  ? ''
-                  : ' ${_weather!.daily!.elementAt(i).temp!.eve!.toStringAsFixed(1)}°C'),
+              ' ${_weather!.daily!.elementAt(i).temp!.eve!.toStringAsFixed(1)}°C',
               style: getColorGradient(_percentage[i]),
             ),
           ),
@@ -556,9 +547,7 @@ class _MyHomePageState extends State<MyHomePage> {
         DataCell(
           Container(
             child: Text(
-              (_weather == null
-                  ? ''
-                  : ' ${_weather!.daily!.elementAt(i).windSpeed!.toStringAsFixed(1)}\u{00A0}m/s'),
+              ' ${_weather!.daily!.elementAt(i).windSpeed!.toStringAsFixed(1)}\u{00A0}m/s',
               style: getColorGradient(_percentage[i]),
             ),
           ),
@@ -566,7 +555,7 @@ class _MyHomePageState extends State<MyHomePage> {
         DataCell(
           Container(
             child: Text(
-              (_weather == null ? '' : ' ${_percentage[i]}%'),
+              ' ${_percentage[i]}%',
               style: getColorGradient(_percentage[i]),
             ),
           ),
@@ -604,6 +593,9 @@ class _MyHomePageState extends State<MyHomePage> {
 */
 }
 
+///
+/// Menu on the top left hand side
+///
 class Choice {
   const Choice({required this.title, required this.url, required this.icon});
 
