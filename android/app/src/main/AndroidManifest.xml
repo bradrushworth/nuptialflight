@@ -74,6 +74,7 @@
             android:name="es.antonborri.home_widget.HomeWidgetBackgroundService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
