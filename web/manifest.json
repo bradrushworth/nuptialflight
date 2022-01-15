@@ -1,49 +1,50 @@
 {
   "name": "Ant Nuptial Flight Predictor",
   "short_name": "Ant Flight",
+  "categories": [
+    "ant",
+    "queen",
+    "nuptial",
+    "flight",
+    "flying",
+    "weather",
+    "climate",
+    "formicarium",
+    "predictor",
+    "predict",
+    "insect",
+    "nature",
+    "outdoors"
+  ],
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#546E7A",
-  "theme_color": "#37474F",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "description": "Predict when queen ants are flying near you!",
-  "orientation": "portrait-primary",
+  "orientation": "any",
+  "iarc_rating_id": "1eb7c53e-ae3d-4eaa-b1b0-69099ca94bf5",
   "prefer_related_applications": false,
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=au.com.bitbot.nuptialflight",
+      "id": "au.com.bitbot.nuptialflight"
+    },
+    {
+      "platform": "itunes",
+      "url": "https://apps.apple.com/us/app/ant-nuptial-flight-predictor/id1603373687"
+    }
+  ],
   "icons": [
     {
-      "src": "icons\/android-icon-36x36.png",
-      "sizes": "36x36",
-      "type": "image\/png",
-      "density": "0.75"
-    },
-    {
-      "src": "icons/android-icon-48x48.png",
-      "sizes": "48x48",
-      "type": "image\/png",
-      "density": "1.0"
-    },
-    {
-      "src": "icons/android-icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image\/png",
-      "density": "1.5"
-    },
-    {
-      "src": "icons/android-icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image\/png",
-      "density": "2.0"
-    },
-    {
-      "src": "icons/android-icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image\/png",
-      "density": "3.0"
-    },
-    {
-      "src": "icons/android-icon-192x192.png",
+      "src": "icons/android-chrome-192x192.png",
       "sizes": "192x192",
-      "type": "image\/png",
-      "density": "4.0"
+      "type": "image/png"
+    },
+    {
+      "src": "icons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }
