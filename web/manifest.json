@@ -19,7 +19,7 @@
   "start_url": ".",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "theme_color": "#607D8B",
   "description": "Predict when queen ants are flying near you!",
   "orientation": "any",
   "iarc_rating_id": "1eb7c53e-ae3d-4eaa-b1b0-69099ca94bf5",
