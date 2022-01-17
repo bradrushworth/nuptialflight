@@ -1,6 +1,8 @@
 //import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
 //import 'dart:developer' as developer;
 
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
@@ -23,13 +25,16 @@ import 'utils.dart';
 final DateFormat dateFormat = DateFormat("yyyy-MM-dd");
 final DateFormat weekdayFormat = DateFormat("E");
 
+final int greenThreshold = 75;
+final int amberThreshold = 50;
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   initialiseWidget();
   runApp(
     DevicePreview(
       enabled: !kReleaseMode && kIsWeb,
-      builder: (context) => MyApp(), // Wrap your app
+      builder: (context) => MyHomePage(), // Wrap your app
       tools: kIsWeb
           ? [...DevicePreview.defaultTools, simpleScreenShotModesPlugin]
           : [],
@@ -37,35 +42,8 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Ant Nuptial Flight Predictor',
-      // Create space for camera cut-outs etc
-      useInheritedMediaQuery: true,
-      // Hide the dev banner
-      debugShowCheckedModeBanner: false,
-      // For DevicePreview
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
-
-      theme: ThemeData(
-        // This is the theme of your application.
-        primarySwatch: Colors.blueGrey,
-      ),
-      darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.system,
-      home: MyHomePage(title: 'Ant Nuptial Flight Predictor'),
-    );
-  }
-}
-
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, this.title}) : super(key: key);
-
-  final String? title;
+  MyHomePage({Key? key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -78,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool loaded = false;
   String? errorMessage;
   List<int> _percentage = [0, 0, 0, 0, 0, 0, 0, 0];
+  MaterialColor primarySwatch = Colors.blueGrey;
 
   @override
   void initState() {
@@ -134,6 +113,13 @@ class _MyHomePageState extends State<MyHomePage> {
           (nuptialPercentage(value.daily!.elementAt(6)) * 100.0).toInt();
       _percentage[7] =
           (nuptialPercentage(value.daily!.elementAt(7)) * 100.0).toInt();
+      if (_percentage[0] >= greenThreshold) {
+        primarySwatch = Colors.lightGreen;
+      } else if (_percentage[0] >= 50) {
+        primarySwatch = Colors.amber;
+      } else {
+        primarySwatch = Colors.red;
+      }
       loaded = true;
       print("_updateWeather: _percentage=" + _percentage.toString());
     });
@@ -151,11 +137,32 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+    return MaterialApp(
+      title: 'Ant Nuptial Flight Predictor',
+      // Create space for camera cut-outs etc
+      useInheritedMediaQuery: true,
+      // Hide the dev banner
+      debugShowCheckedModeBanner: false,
+      // For DevicePreview
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
+
+      theme: ThemeData(
+        // This is the theme of your application.
+        primarySwatch: primarySwatch,
+      ),
+      darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.system,
+      home: buildUI('Ant Nuptial Flight Predictor'),
+    );
+  }
+
+  Widget buildUI(String title) {
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title!),
+        title: Text(title),
         centerTitle: true,
         toolbarHeight: 45,
         actions: <Widget>[
@@ -185,52 +192,57 @@ class _MyHomePageState extends State<MyHomePage> {
           return errorMessage != null
               ? _buildErrorMessage()
               : !loaded
-                  ? _buildCircularProgressIndicator()
-                  : Column(
-                      //mainAxisAlignment: MainAxisAlignment.end,
-                      //crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        Spacer(flex: 1),
-                        GridView.count(
-                          crossAxisCount:
-                              orientation == Orientation.portrait ? 1 : 3,
-                          childAspectRatio:
-                              orientation == Orientation.portrait ? 8 : 6,
-                          shrinkWrap: true,
-                          children: [
-                            _buildNuptialHeading(orientation),
-                            _buildTodayPercentage(orientation),
-                            _buildTodayWeather(orientation),
-                          ],
-                        ),
-                        Spacer(flex: 1),
-                        GridView.count(
-                          crossAxisCount:
-                              orientation == Orientation.portrait ? 3 : 6,
-                          childAspectRatio: 2.0,
-                          padding: orientation == Orientation.portrait
-                              ? const EdgeInsets.symmetric(vertical: 0)
-                              : const EdgeInsets.symmetric(horizontal: 0),
-                          shrinkWrap: true,
-                          children: [
-                            _buildTemperature(),
-                            _buildWindSpeed(),
-                            _buildPrecipitation(),
-                            _buildHumidity(),
-                            _buildCloudiness(),
-                            _buildAirPressure(),
-                          ],
-                        ),
-                        Spacer(flex: 1),
-                        _buildUpcomingWeek(orientation),
-                        Spacer(flex: 1),
-                        orientation == Orientation.portrait
-                            ? Text('Version $version+$buildNumber',
+              ? _buildCircularProgressIndicator()
+              : Column(
+            //mainAxisAlignment: MainAxisAlignment.end,
+            //crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Spacer(flex: 1),
+              GridView.count(
+                crossAxisCount:
+                orientation == Orientation.portrait ? 1 : 3,
+                childAspectRatio:
+                orientation == Orientation.portrait ? 8 : 6,
+                shrinkWrap: true,
+                children: [
+                  _buildNuptialHeading(orientation),
+                  _buildTodayPercentage(orientation),
+                  _buildTodayWeather(orientation),
+                ],
+              ),
+              Spacer(flex: 1),
+              GridView.count(
+                crossAxisCount:
+                orientation == Orientation.portrait ? 3 : 6,
+                childAspectRatio: 2.0,
+                padding: orientation == Orientation.portrait
+                    ? const EdgeInsets.symmetric(vertical: 0)
+                    : const EdgeInsets.symmetric(horizontal: 0),
+                shrinkWrap: true,
+                children: [
+                  _buildTemperature(),
+                  _buildWindSpeed(),
+                  _buildPrecipitation(),
+                  _buildHumidity(),
+                  _buildCloudiness(),
+                  _buildAirPressure(),
+                ],
+              ),
+              Spacer(flex: 1),
+              _buildUpcomingWeek(orientation),
+              Spacer(flex: 1),
+              orientation == Orientation.portrait
+                            ? Text(
+                                (kIsWeb
+                                        ? 'Web'
+                                        : toBeginningOfSentenceCase(
+                                            Platform.operatingSystem)!) +
+                                    ' Version $version+$buildNumber',
                                 style:
                                     TextStyle(fontSize: 8, color: Colors.grey))
                             : Container(), // Not enough room, unnecessary
-                      ],
-                    );
+            ],
+          );
         },
       ),
 
@@ -245,9 +257,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   TextStyle? getColorGradient(int percentage) {
     return TextStyle(
-        color: (percentage < 50
+        color: (percentage < amberThreshold
             ? Colors.red
-            : (percentage < 75 ? Colors.orange : Colors.green)));
+            : (percentage < greenThreshold
+                ? Colors.deepOrange
+                : Colors.green)));
   }
 
   Widget _buildErrorMessage() {
@@ -298,9 +312,11 @@ class _MyHomePageState extends State<MyHomePage> {
     return AutoSizeText(
       '${_percentage[0]}%',
       style: TextStyle(
-        color: (_percentage[0] < 50
+        color: (_percentage[0] < amberThreshold
             ? Colors.red
-            : (_percentage[0] < 75 ? Colors.deepOrange : Colors.green)),
+            : (_percentage[0] < greenThreshold
+                ? Colors.deepOrange
+                : Colors.green)),
         height: orientation == Orientation.portrait ? 1.1 : 1.0,
         fontSize: 37,
         fontWeight: FontWeight.w900,
@@ -329,7 +345,8 @@ class _MyHomePageState extends State<MyHomePage> {
         //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         // ),
         AutoSizeText(
-          '${_weather!.daily!.first.weather!.first.description}',
+          toBeginningOfSentenceCase(
+              _weather!.daily!.first.weather!.first.description)!,
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
           maxLines: 1,
         ),
