@@ -10,7 +10,7 @@
         android:background="#1f303d">
 
         <TextView
-            android:id="@+id/tv_counter"
+            android:id="@+id/tv_percentage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"

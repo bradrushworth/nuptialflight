@@ -192,46 +192,46 @@ class _MyHomePageState extends State<MyHomePage> {
           return errorMessage != null
               ? _buildErrorMessage()
               : !loaded
-              ? _buildCircularProgressIndicator()
-              : Column(
-            //mainAxisAlignment: MainAxisAlignment.end,
-            //crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Spacer(flex: 1),
-              GridView.count(
-                crossAxisCount:
-                orientation == Orientation.portrait ? 1 : 3,
-                childAspectRatio:
-                orientation == Orientation.portrait ? 8 : 6,
-                shrinkWrap: true,
-                children: [
-                  _buildNuptialHeading(orientation),
-                  _buildTodayPercentage(orientation),
-                  _buildTodayWeather(orientation),
-                ],
-              ),
-              Spacer(flex: 1),
-              GridView.count(
-                crossAxisCount:
-                orientation == Orientation.portrait ? 3 : 6,
-                childAspectRatio: 2.0,
-                padding: orientation == Orientation.portrait
-                    ? const EdgeInsets.symmetric(vertical: 0)
-                    : const EdgeInsets.symmetric(horizontal: 0),
-                shrinkWrap: true,
-                children: [
-                  _buildTemperature(),
-                  _buildWindSpeed(),
-                  _buildPrecipitation(),
-                  _buildHumidity(),
-                  _buildCloudiness(),
-                  _buildAirPressure(),
-                ],
-              ),
-              Spacer(flex: 1),
-              _buildUpcomingWeek(orientation),
-              Spacer(flex: 1),
-              orientation == Orientation.portrait
+                  ? _buildCircularProgressIndicator()
+                  : Column(
+                      //mainAxisAlignment: MainAxisAlignment.end,
+                      //crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Spacer(flex: 1),
+                        GridView.count(
+                          crossAxisCount:
+                              orientation == Orientation.portrait ? 1 : 3,
+                          childAspectRatio:
+                              orientation == Orientation.portrait ? 8 : 6,
+                          shrinkWrap: true,
+                          children: [
+                            _buildNuptialHeading(orientation),
+                            _buildTodayPercentage(orientation),
+                            _buildTodayWeather(orientation),
+                          ],
+                        ),
+                        Spacer(flex: 1),
+                        GridView.count(
+                          crossAxisCount:
+                              orientation == Orientation.portrait ? 3 : 6,
+                          childAspectRatio: 2.0,
+                          padding: orientation == Orientation.portrait
+                              ? const EdgeInsets.symmetric(vertical: 0)
+                              : const EdgeInsets.symmetric(horizontal: 0),
+                          shrinkWrap: true,
+                          children: [
+                            _buildTemperature(),
+                            _buildWindSpeed(),
+                            _buildPrecipitation(),
+                            _buildHumidity(),
+                            _buildCloudiness(),
+                            _buildAirPressure(),
+                          ],
+                        ),
+                        Spacer(flex: 1),
+                        _buildUpcomingWeek(orientation),
+                        Spacer(flex: 1),
+                        orientation == Orientation.portrait
                             ? Text(
                                 (kIsWeb
                                         ? 'Web'
@@ -241,8 +241,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 style:
                                     TextStyle(fontSize: 8, color: Colors.grey))
                             : Container(), // Not enough room, unnecessary
-            ],
-          );
+                      ],
+                    );
         },
       ),
 
@@ -372,8 +372,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     .toStringAsFixed(0) +
                 "%",
             style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).textTheme.caption!.color),
+              fontSize: 12,
+            ),
           ),
         ],
       ),
@@ -398,8 +398,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     .toStringAsFixed(0) +
                 "%",
             style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).textTheme.caption!.color),
+              fontSize: 12,
+            ),
           ),
         ],
       ),
@@ -424,8 +424,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     .toStringAsFixed(0) +
                 "%",
             style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).textTheme.caption!.color),
+              fontSize: 12,
+            ),
           ),
         ],
       ),
@@ -450,8 +450,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     .toStringAsFixed(0) +
                 "%",
             style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).textTheme.caption!.color),
+              fontSize: 12,
+            ),
           ),
         ],
       ),
@@ -475,9 +475,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 (cloudinessContribution(_weather!.daily!.first) * 100)
                     .toStringAsFixed(0) +
                 "%",
-            style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).textTheme.caption!.color),
+            style: TextStyle(fontSize: 12),
           ),
         ],
       ),
@@ -503,8 +501,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     .toStringAsFixed(0) +
                 "%",
             style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).textTheme.caption!.color),
+              fontSize: 12,
+            ),
           ),
         ],
       ),

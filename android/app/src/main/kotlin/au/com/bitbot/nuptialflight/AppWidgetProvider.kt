@@ -3,13 +3,19 @@ package au.com.bitbot.nuptialflight
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.net.Uri
 import android.widget.RemoteViews
+import android.widget.TextView
 import es.antonborri.home_widget.HomeWidgetBackgroundIntent
 import es.antonborri.home_widget.HomeWidgetLaunchIntent
 import es.antonborri.home_widget.HomeWidgetProvider
 
 class AppWidgetProvider : HomeWidgetProvider() {
+
+    val greenThreshold = 75
+    val amberThreshold = 50
+
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray, widgetData: SharedPreferences) {
         appWidgetIds.forEach { widgetId ->
             val views = RemoteViews(context.packageName, R.layout.widget_layout).apply {
@@ -19,15 +25,25 @@ class AppWidgetProvider : HomeWidgetProvider() {
                         MainActivity::class.java)
                 setOnClickPendingIntent(R.id.widget_root, pendingIntent)
 
-                val counter = widgetData.getInt("_percentage", 0)
+                val percentage = widgetData.getInt("_percentage", 0)
 
-                var counterText = "Flight: $counter%"
+                var percentageText = "Flight: $percentage%"
 
-                if (counter == 0) {
-                    counterText = "Downloading"
+                if (percentage == 0) {
+                    percentageText = "Downloading"
                 }
 
-                setTextViewText(R.id.tv_counter, counterText)
+                setTextViewText(R.id.tv_percentage, percentageText)
+                if (percentage < amberThreshold) {
+                    setTextColor(R.id.tv_percentage, Color.BLACK)
+                    setInt(R.id.tv_percentage, "setBackgroundColor", Color.RED)
+                } else if (percentage < greenThreshold) {
+                    setTextColor(R.id.tv_percentage, Color.BLACK)
+                    setInt(R.id.tv_percentage, "setBackgroundColor", Color.YELLOW)
+                } else {
+                    setTextColor(R.id.tv_percentage, Color.BLACK)
+                    setInt(R.id.tv_percentage, "setBackgroundColor", Color.GREEN)
+                }
 
                 // Pending intent to update counter on button click
                 val backgroundIntent = HomeWidgetBackgroundIntent.getBroadcast(context,
