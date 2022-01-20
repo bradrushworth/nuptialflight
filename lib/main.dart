@@ -8,6 +8,8 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_webservice/places.dart';
 import 'package:intl/intl.dart';
 import 'package:nuptialflight/responses/weather_response.dart';
 import 'package:nuptialflight/screenshots_mobile.dart'
@@ -34,7 +36,7 @@ void main() {
   runApp(
     DevicePreview(
       enabled: !kReleaseMode && kIsWeb,
-      builder: (context) => MyHomePage(), // Wrap your app
+      builder: (context) => MyMaterialApp(), // Wrap your app
       tools: kIsWeb
           ? [...DevicePreview.defaultTools, simpleScreenShotModesPlugin]
           : [],
@@ -42,33 +44,78 @@ void main() {
   );
 }
 
+class MyMaterialApp extends StatefulWidget {
+  MyMaterialApp({Key? key}) : super(key: key);
+
+  @override
+  _MyMaterialAppState createState() => _MyMaterialAppState();
+}
+
+class _MyMaterialAppState extends State<MyMaterialApp> {
+  MaterialColor primarySwatch = Colors.blueGrey;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        title: 'Ant Nuptial Flight Predictor',
+        // Create space for camera cut-outs etc
+        useInheritedMediaQuery: true,
+        // Hide the dev banner
+        debugShowCheckedModeBanner: false,
+        // For DevicePreview
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
+        theme: ThemeData(
+            brightness: Brightness.light, primarySwatch: primarySwatch),
+        darkTheme: ThemeData(
+            brightness: Brightness.dark, primarySwatch: primarySwatch),
+        themeMode: ThemeMode.system,
+        home: MyHomePage(primarySwatch: setPrimarySwatch));
+  }
+
+  void setPrimarySwatch(MaterialColor s) {
+    setState(() {
+      primarySwatch = s;
+    });
+  }
+}
+
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
+  final void Function(MaterialColor s) primarySwatch;
+
+  MyHomePage(
+      {Key? key, required void Function(MaterialColor s) this.primarySwatch})
+      : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
+
+  void setPrimarySwatch(MaterialColor swatch) {
+    primarySwatch(swatch);
+  }
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final String kGoogleApiKey = 'AIzaSyDNaPQ01hKnTmVRQoT_FM1ZTTxDnw6GoOU';
+
   String? appName, packageName, version, buildNumber;
+  WeatherFetcher weatherFetcher = WeatherFetcher();
   String? _geocoding;
   WeatherResponse? _weather;
   bool loaded = false;
   String? errorMessage;
   List<int> _percentage = [0, 0, 0, 0, 0, 0, 0, 0];
-  MaterialColor primarySwatch = Colors.blueGrey;
 
   @override
   void initState() {
     super.initState();
-    widgetInitState(loadData);
-    loadData(); // This will load data every time app is opened
+    widgetInitState(_loadData);
+    _loadData(); // This will load data every time app is opened
   }
 
-  void loadData() async {
+  void _loadData() async {
     await dotenv.load(fileName: 'assets/.env');
 
-    WeatherFetcher weatherFetcher = WeatherFetcher();
     await weatherFetcher
         .getLocation()
         .then((o) => Future.wait([
@@ -79,10 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     _updateWeather(responses[0], responses[1]))
                 .catchError((e) => handleError(e)))
         .catchError((e) => handleError(e));
-    print("loadData: _percentage=" + _percentage.toString());
-    setState(() {
-      updateAppWidget(_percentage);
-    });
+    print("_loadData: _percentage=" + _percentage.toString());
 
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     setState(() {
@@ -93,7 +137,43 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<void> _findPlaceName() async {
+    PlacesDetailsResponse? place = await PlacesAutocomplete.show(
+      context: context,
+      //location: weatherFetcher.getLatLng(),
+      apiKey: kGoogleApiKey,
+      //proxyBaseUrl: 'https://cors-anywhere.herokuapp.com',
+      mode: Mode.fullscreen,
+      components: [],
+      types: [],
+      strictbounds: false,
+    ).then((prediction) => _lookupPlace(prediction));
+
+    if (place != null) {
+      weatherFetcher.setLocation(place);
+      Future.wait([
+        weatherFetcher.fetchNearestWeatherLocation(),
+        weatherFetcher.fetchWeather()
+      ])
+          .then((List responses) => _updateWeather(responses[0], responses[1]))
+          .catchError((e) => handleError(e));
+      print('_findPlaceName: _percentage=' + _percentage.toString());
+    } else {
+      print('_findPlaceName: User cancelled search!');
+    }
+  }
+
+  Future<PlacesDetailsResponse?> _lookupPlace(prediction) async {
+    if (prediction != null) {
+      return GoogleMapsPlaces(
+        apiKey: kGoogleApiKey,
+      ).getDetailsByPlaceId(prediction!.placeId!);
+    }
+    return null;
+  }
+
   void _updateWeather(String geocoding, WeatherResponse value) {
+    print('_updateWeather: geocoding=$geocoding value=${value.daily}');
     setState(() {
       _geocoding = geocoding;
       _weather = value;
@@ -114,11 +194,11 @@ class _MyHomePageState extends State<MyHomePage> {
       _percentage[7] =
           (nuptialPercentage(value.daily!.elementAt(7)) * 100.0).toInt();
       if (_percentage[0] >= greenThreshold) {
-        primarySwatch = Colors.lightGreen;
+        widget.setPrimarySwatch(Colors.lightGreen);
       } else if (_percentage[0] >= 50) {
-        primarySwatch = Colors.amber;
+        widget.setPrimarySwatch(Colors.amber);
       } else {
-        primarySwatch = Colors.red;
+        widget.setPrimarySwatch(Colors.red);
       }
       loaded = true;
       print("_updateWeather: _percentage=" + _percentage.toString());
@@ -137,24 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return MaterialApp(
-      title: 'Ant Nuptial Flight Predictor',
-      // Create space for camera cut-outs etc
-      useInheritedMediaQuery: true,
-      // Hide the dev banner
-      debugShowCheckedModeBanner: false,
-      // For DevicePreview
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
-
-      theme: ThemeData(
-        // This is the theme of your application.
-        primarySwatch: primarySwatch,
-      ),
-      darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.system,
-      home: buildUI('Ant Nuptial Flight Predictor'),
-    );
+    return buildUI('Ant Nuptial Flight Predictor');
   }
 
   Widget buildUI(String title) {
@@ -169,7 +232,11 @@ class _MyHomePageState extends State<MyHomePage> {
           // overflow menu
           PopupMenuButton<Choice>(
             onSelected: (Choice c) {
-              Utils.launchURL('${c.url}');
+              if (c.icon == Icons.add_location_alt) {
+                _findPlaceName();
+              } else {
+                Utils.launchURL('${c.url}');
+              }
             },
             itemBuilder: (BuildContext context) {
               return choices.map((Choice choice) {
@@ -181,6 +248,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Text('    '),
                     Text('${choice.title}'),
                   ]),
+                  enabled: !(kIsWeb && choice.icon == Icons.add_location_alt),
                 );
               }).toList();
             },
@@ -192,57 +260,57 @@ class _MyHomePageState extends State<MyHomePage> {
           return errorMessage != null
               ? _buildErrorMessage()
               : !loaded
-                  ? _buildCircularProgressIndicator()
-                  : Column(
-                      //mainAxisAlignment: MainAxisAlignment.end,
-                      //crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        Spacer(flex: 1),
-                        GridView.count(
-                          crossAxisCount:
-                              orientation == Orientation.portrait ? 1 : 3,
-                          childAspectRatio:
-                              orientation == Orientation.portrait ? 8 : 6,
-                          shrinkWrap: true,
-                          children: [
-                            _buildNuptialHeading(orientation),
-                            _buildTodayPercentage(orientation),
-                            _buildTodayWeather(orientation),
-                          ],
-                        ),
-                        Spacer(flex: 1),
-                        GridView.count(
-                          crossAxisCount:
-                              orientation == Orientation.portrait ? 3 : 6,
-                          childAspectRatio: 2.0,
-                          padding: orientation == Orientation.portrait
-                              ? const EdgeInsets.symmetric(vertical: 0)
-                              : const EdgeInsets.symmetric(horizontal: 0),
-                          shrinkWrap: true,
-                          children: [
-                            _buildTemperature(),
-                            _buildWindSpeed(),
-                            _buildPrecipitation(),
-                            _buildHumidity(),
-                            _buildCloudiness(),
-                            _buildAirPressure(),
-                          ],
-                        ),
-                        Spacer(flex: 1),
-                        _buildUpcomingWeek(orientation),
-                        Spacer(flex: 1),
-                        orientation == Orientation.portrait
-                            ? Text(
-                                (kIsWeb
-                                        ? 'Web'
-                                        : toBeginningOfSentenceCase(
-                                            Platform.operatingSystem)!) +
-                                    ' Version $version+$buildNumber',
-                                style:
-                                    TextStyle(fontSize: 8, color: Colors.grey))
-                            : Container(), // Not enough room, unnecessary
-                      ],
-                    );
+              ? _buildCircularProgressIndicator()
+              : Column(
+            //mainAxisAlignment: MainAxisAlignment.end,
+            //crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Spacer(flex: 1),
+              GridView.count(
+                crossAxisCount:
+                orientation == Orientation.portrait ? 1 : 3,
+                childAspectRatio:
+                orientation == Orientation.portrait ? 8 : 6,
+                shrinkWrap: true,
+                children: [
+                  _buildNuptialHeading(orientation),
+                  _buildTodayPercentage(orientation),
+                  _buildTodayWeather(orientation),
+                ],
+              ),
+              Spacer(flex: 1),
+              GridView.count(
+                crossAxisCount:
+                orientation == Orientation.portrait ? 3 : 6,
+                childAspectRatio: 2.0,
+                padding: orientation == Orientation.portrait
+                    ? const EdgeInsets.symmetric(vertical: 0)
+                    : const EdgeInsets.symmetric(horizontal: 0),
+                shrinkWrap: true,
+                children: [
+                  _buildTemperature(),
+                  _buildWindSpeed(),
+                  _buildPrecipitation(),
+                  _buildHumidity(),
+                  _buildCloudiness(),
+                  _buildAirPressure(),
+                ],
+              ),
+              Spacer(flex: 1),
+              _buildUpcomingWeek(orientation),
+              Spacer(flex: 1),
+              orientation == Orientation.portrait
+                  ? Text(
+                  (kIsWeb
+                      ? 'Web'
+                      : toBeginningOfSentenceCase(
+                      Platform.operatingSystem)!) +
+                      ' Version $version+$buildNumber',
+                  style:
+                  TextStyle(fontSize: 8, color: Colors.grey))
+                  : Container(), // Not enough room, unnecessary
+            ],
+          );
         },
       ),
 
@@ -260,8 +328,8 @@ class _MyHomePageState extends State<MyHomePage> {
         color: (percentage < amberThreshold
             ? Colors.red
             : (percentage < greenThreshold
-                ? Colors.deepOrange
-                : Colors.green)));
+            ? Colors.deepOrange
+            : Colors.green)));
   }
 
   Widget _buildErrorMessage() {
@@ -278,10 +346,10 @@ class _MyHomePageState extends State<MyHomePage> {
     //                     ],
     return Center(
         child: Text(
-      '$errorMessage',
-      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-      textAlign: TextAlign.center,
-    ));
+          '$errorMessage',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+          textAlign: TextAlign.center,
+        ));
   }
 
   Widget _buildCircularProgressIndicator() {
@@ -315,8 +383,8 @@ class _MyHomePageState extends State<MyHomePage> {
         color: (_percentage[0] < amberThreshold
             ? Colors.red
             : (_percentage[0] < greenThreshold
-                ? Colors.deepOrange
-                : Colors.green)),
+            ? Colors.deepOrange
+            : Colors.green)),
         height: orientation == Orientation.portrait ? 1.1 : 1.0,
         fontSize: 37,
         fontWeight: FontWeight.w900,
@@ -550,7 +618,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Text(
               weekdayFormat.format(DateTime.fromMillisecondsSinceEpoch(
                   (_weather!.daily!.elementAt(i).dt! +
-                          _weather!.timezoneOffset!) *
+                      _weather!.timezoneOffset!) *
                       1000,
                   isUtc: true)),
               style: getColorGradient(_percentage[i]),
@@ -586,7 +654,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   handleError(e) {
-    errorMessage = e.toString();
+    setState(() {
+      errorMessage = e.toString().substring('Exception: '.length);
+      print('handleError: $e');
+    });
+    //throw e;
   }
 
 /*
@@ -626,6 +698,7 @@ class Choice {
 }
 
 const List<Choice> choices = const <Choice>[
+  const Choice(title: 'Select Location', url: '', icon: Icons.add_location_alt),
   const Choice(
       title: 'Report Issue',
       url: 'mailto:bitbot@bitbot.com.au?subject=Help with Ant Flight',

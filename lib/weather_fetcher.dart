@@ -6,14 +6,15 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_webservice/src/places.dart';
 import 'package:http/http.dart' as http;
 import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
 import 'package:nuptialflight/responses/weather_response.dart';
 
 class WeatherFetcher {
   late bool _mockLocation;
-  String? _lat;
-  String? _lon;
+  double? _lat;
+  double? _lon;
 
   WeatherFetcher({bool mockLocation = false}) {
     _mockLocation = mockLocation;
@@ -35,17 +36,27 @@ class WeatherFetcher {
           if (!kIsWeb) position = await Geolocator.getLastKnownPosition();
         }
         if (position != null) {
-          _lat = position.latitude.toStringAsFixed(4);
-          _lon = position.longitude.toStringAsFixed(4);
+          _lat = position.latitude;
+          _lon = position.longitude;
         } else {
           throw Exception(
-              'Failed to get your location! You could try:\n\nRefreshing page.\n\nOpening in Chrome or another browser.\n\nDownloading from the app store.');
+              'Failed to get your location! You could try:\n\nRefreshing page.\n\nOpening in Chrome or another browser.\n\nDownloading from the app store.\n\nManually choosing your location in the options.');
         }
       }
     } else {
-      _lat = '-35.7600';
-      _lon = '150.2053';
+      _lat = -35.7600;
+      _lon = 150.2053;
     }
+  }
+
+  setLocation(PlacesDetailsResponse? detail) {
+    if (detail == null) {
+      throw Exception('Location search failed!');
+    }
+
+    _lat = detail.result.geometry!.location.lat;
+    _lon = detail.result.geometry!.location.lng;
+    print('setLocation: _lat=$_lat _lon=$_lon');
   }
 
   Future<ReverseGeocodingResponse> fetchReverseGeocoding() async {
@@ -54,7 +65,7 @@ class WeatherFetcher {
           'Location is unknown! Perhaps you didn\'t allow location permissions?');
 
     String url =
-        'https://api.openweathermap.org/geo/1.0/reverse?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&limit=1';
+        'https://api.openweathermap.org/geo/1.0/reverse?lat=${_lat!.toStringAsFixed(4)}&lon=${_lon!.toStringAsFixed(4)}&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&limit=1';
     developer.log("url=$url", name: 'weather');
     if (!kIsWeb) stdout.writeln("url=$url");
 
