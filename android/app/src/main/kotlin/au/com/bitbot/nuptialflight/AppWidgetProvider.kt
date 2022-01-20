@@ -25,30 +25,30 @@ class AppWidgetProvider : HomeWidgetProvider() {
                         MainActivity::class.java)
                 setOnClickPendingIntent(R.id.widget_root, pendingIntent)
 
-                val percentage = widgetData.getInt("_percentage", 0)
-
-                var percentageText = "Flight: $percentage%"
-
+                var percentage = widgetData.getInt("_percentage", 0)
+                var percentageText = " $percentage%" // Deliberate space padding
                 if (percentage == 0) {
-                    percentageText = "Downloading"
+                    percentageText = "Calculating"
                 }
 
+                setTextColor(R.id.tv_heading, Color.BLACK)
+                setTextViewText(R.id.tv_heading, "Ant\nNuptial\nFlight")
                 setTextViewText(R.id.tv_percentage, percentageText)
                 if (percentage < amberThreshold) {
                     setTextColor(R.id.tv_percentage, Color.BLACK)
-                    setInt(R.id.tv_percentage, "setBackgroundColor", Color.RED)
+                    setInt(R.id.linear_layout, "setBackgroundColor", Color.RED)
                 } else if (percentage < greenThreshold) {
                     setTextColor(R.id.tv_percentage, Color.BLACK)
-                    setInt(R.id.tv_percentage, "setBackgroundColor", Color.YELLOW)
+                    setInt(R.id.linear_layout, "setBackgroundColor", Color.YELLOW)
                 } else {
                     setTextColor(R.id.tv_percentage, Color.BLACK)
-                    setInt(R.id.tv_percentage, "setBackgroundColor", Color.GREEN)
+                    setInt(R.id.linear_layout, "setBackgroundColor", Color.GREEN)
                 }
 
                 // Pending intent to update counter on button click
-                val backgroundIntent = HomeWidgetBackgroundIntent.getBroadcast(context,
-                        Uri.parse("myAppWidget://updateweather"))
-                //setOnClickPendingIntent(R.id.bt_update, backgroundIntent)
+//                val backgroundIntent = HomeWidgetBackgroundIntent.getBroadcast(context,
+//                        Uri.parse("myAppWidget://updateweather"))
+//                setOnClickPendingIntent(R.id.bt_update, backgroundIntent)
             }
             appWidgetManager.updateAppWidget(widgetId, views)
         }

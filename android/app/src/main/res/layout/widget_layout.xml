@@ -1,24 +1,45 @@
 <FrameLayout
     android:id="@+id/widget_root"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="80dp"
-    android:layout_height="40dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:padding="0dp"
+        android:layout_margin="0dp"
         android:background="#1f303d">
+
+        <TextView
+            android:id="@+id/tv_heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:paddingTop="3dp"
+            android:layout_margin="0dp"
+            android:gravity="center"
+            android:layout_gravity="top"
+            android:text="@string/loading"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/tv_percentage"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:paddingTop="3dp"
+            android:layout_margin="0dp"
             android:gravity="center"
-            android:padding="4dp"
-            android:text="--"
+            android:layout_gravity="bottom"
+            android:text=""
             android:textColor="@android:color/white"
-            android:textSize="12sp" />
+            android:textSize="24sp" />
 
 <!--
         <Button
@@ -30,5 +51,5 @@
             android:textColor="@android:color/holo_blue_dark"
             android:textSize="12sp" />
 -->
-    </RelativeLayout>
+    </LinearLayout>
 </FrameLayout>
