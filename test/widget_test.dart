@@ -11,7 +11,7 @@ import 'package:nuptialflight/main.dart';
 void main() {
   testWidgets('Smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyHomePage());
+    await tester.pumpWidget(MyMaterialApp());
 
     // Verify that our counter starts at 0.
     // expect(find.text('0'), findsOneWidget);
