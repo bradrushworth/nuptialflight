@@ -145,10 +145,12 @@ class _MyHomePageState extends State<MyHomePage> {
         title: 'Source Code',
         url: 'https://github.com/bradrushworth/nuptialflight',
         icon: Icons.source));
-    choices.add(const Choice(
-        title: 'Buy Brad Coffee',
-        url: 'https://www.buymeacoffee.com/bitbot',
-        icon: Icons.coffee));
+    if (kIsWeb) {
+      choices.add(const Choice(
+          title: 'Buy Brad Coffee',
+          url: 'https://www.buymeacoffee.com/bitbot',
+          icon: Icons.coffee));
+    }
   }
 
   void _loadData() async {
