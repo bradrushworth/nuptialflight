@@ -97,6 +97,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final String kGoogleApiKey = 'AIzaSyDNaPQ01hKnTmVRQoT_FM1ZTTxDnw6GoOU';
+  late final List<Choice> choices;
 
   String? appName, packageName, version, buildNumber;
   WeatherFetcher weatherFetcher = WeatherFetcher();
@@ -109,8 +110,45 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    createMenu();
     widgetInitState(_loadData);
     _loadData(); // This will load data every time app is opened
+  }
+
+  void createMenu() {
+    choices = <Choice>[];
+    choices.add(const Choice(
+        title: 'Select Location', url: '', icon: Icons.add_location_alt));
+    choices.add(const Choice(
+        title: 'Report Issue',
+        url: 'mailto:bitbot@bitbot.com.au?subject=Help with Ant Flight',
+        icon: Icons.email));
+    choices.add(const Choice(
+        title: 'Web App',
+        url: 'https://nuptialflight.codemagic.app/#/',
+        icon: Icons.web));
+    if (kIsWeb || Platform.isAndroid) {
+      choices.add(const Choice(
+          title: 'Android',
+          url:
+              'https://play.google.com/store/apps/details?id=au.com.bitbot.nuptialflight',
+          icon: Icons.android));
+    }
+    if (kIsWeb || Platform.isIOS || Platform.isMacOS) {
+      choices.add(const Choice(
+          title: 'IOS',
+          url:
+              'https://apps.apple.com/us/app/ant-nuptial-flight-predictor/id1603373687',
+          icon: Icons.phone_iphone));
+    }
+    choices.add(const Choice(
+        title: 'Source Code',
+        url: 'https://github.com/bradrushworth/nuptialflight',
+        icon: Icons.source));
+    choices.add(const Choice(
+        title: 'Buy Brad Coffee',
+        url: 'https://www.buymeacoffee.com/bitbot',
+        icon: Icons.coffee));
   }
 
   void _loadData() async {
@@ -260,57 +298,57 @@ class _MyHomePageState extends State<MyHomePage> {
           return errorMessage != null
               ? _buildErrorMessage()
               : !loaded
-              ? _buildCircularProgressIndicator()
-              : Column(
-            //mainAxisAlignment: MainAxisAlignment.end,
-            //crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Spacer(flex: 1),
-              GridView.count(
-                crossAxisCount:
-                orientation == Orientation.portrait ? 1 : 3,
-                childAspectRatio:
-                orientation == Orientation.portrait ? 8 : 6,
-                shrinkWrap: true,
-                children: [
-                  _buildNuptialHeading(orientation),
-                  _buildTodayPercentage(orientation),
-                  _buildTodayWeather(orientation),
-                ],
-              ),
-              Spacer(flex: 1),
-              GridView.count(
-                crossAxisCount:
-                orientation == Orientation.portrait ? 3 : 6,
-                childAspectRatio: 2.0,
-                padding: orientation == Orientation.portrait
-                    ? const EdgeInsets.symmetric(vertical: 0)
-                    : const EdgeInsets.symmetric(horizontal: 0),
-                shrinkWrap: true,
-                children: [
-                  _buildTemperature(),
-                  _buildWindSpeed(),
-                  _buildPrecipitation(),
-                  _buildHumidity(),
-                  _buildCloudiness(),
-                  _buildAirPressure(),
-                ],
-              ),
-              Spacer(flex: 1),
-              _buildUpcomingWeek(orientation),
-              Spacer(flex: 1),
-              orientation == Orientation.portrait
-                  ? Text(
-                  (kIsWeb
-                      ? 'Web'
-                      : toBeginningOfSentenceCase(
-                      Platform.operatingSystem)!) +
-                      ' Version $version+$buildNumber',
-                  style:
-                  TextStyle(fontSize: 8, color: Colors.grey))
-                  : Container(), // Not enough room, unnecessary
-            ],
-          );
+                  ? _buildCircularProgressIndicator()
+                  : Column(
+                      //mainAxisAlignment: MainAxisAlignment.end,
+                      //crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Spacer(flex: 1),
+                        GridView.count(
+                          crossAxisCount:
+                              orientation == Orientation.portrait ? 1 : 3,
+                          childAspectRatio:
+                              orientation == Orientation.portrait ? 8 : 6,
+                          shrinkWrap: true,
+                          children: [
+                            _buildNuptialHeading(orientation),
+                            _buildTodayPercentage(orientation),
+                            _buildTodayWeather(orientation),
+                          ],
+                        ),
+                        Spacer(flex: 1),
+                        GridView.count(
+                          crossAxisCount:
+                              orientation == Orientation.portrait ? 3 : 6,
+                          childAspectRatio: 2.0,
+                          padding: orientation == Orientation.portrait
+                              ? const EdgeInsets.symmetric(vertical: 0)
+                              : const EdgeInsets.symmetric(horizontal: 0),
+                          shrinkWrap: true,
+                          children: [
+                            _buildTemperature(),
+                            _buildWindSpeed(),
+                            _buildPrecipitation(),
+                            _buildHumidity(),
+                            _buildCloudiness(),
+                            _buildAirPressure(),
+                          ],
+                        ),
+                        Spacer(flex: 1),
+                        _buildUpcomingWeek(orientation),
+                        Spacer(flex: 1),
+                        orientation == Orientation.portrait
+                            ? Text(
+                                (kIsWeb
+                                        ? 'Web'
+                                        : toBeginningOfSentenceCase(
+                                            Platform.operatingSystem)!) +
+                                    ' Version $version+$buildNumber',
+                                style:
+                                    TextStyle(fontSize: 8, color: Colors.grey))
+                            : Container(), // Not enough room, unnecessary
+                      ],
+                    );
         },
       ),
 
@@ -328,8 +366,8 @@ class _MyHomePageState extends State<MyHomePage> {
         color: (percentage < amberThreshold
             ? Colors.red
             : (percentage < greenThreshold
-            ? Colors.deepOrange
-            : Colors.green)));
+                ? Colors.deepOrange
+                : Colors.green)));
   }
 
   Widget _buildErrorMessage() {
@@ -346,10 +384,10 @@ class _MyHomePageState extends State<MyHomePage> {
     //                     ],
     return Center(
         child: Text(
-          '$errorMessage',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-          textAlign: TextAlign.center,
-        ));
+      '$errorMessage',
+      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+      textAlign: TextAlign.center,
+    ));
   }
 
   Widget _buildCircularProgressIndicator() {
@@ -383,8 +421,8 @@ class _MyHomePageState extends State<MyHomePage> {
         color: (_percentage[0] < amberThreshold
             ? Colors.red
             : (_percentage[0] < greenThreshold
-            ? Colors.deepOrange
-            : Colors.green)),
+                ? Colors.deepOrange
+                : Colors.green)),
         height: orientation == Orientation.portrait ? 1.1 : 1.0,
         fontSize: 37,
         fontWeight: FontWeight.w900,
@@ -618,7 +656,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Text(
               weekdayFormat.format(DateTime.fromMillisecondsSinceEpoch(
                   (_weather!.daily!.elementAt(i).dt! +
-                      _weather!.timezoneOffset!) *
+                          _weather!.timezoneOffset!) *
                       1000,
                   isUtc: true)),
               style: getColorGradient(_percentage[i]),
@@ -696,33 +734,3 @@ class Choice {
   final String url;
   final IconData icon;
 }
-
-const List<Choice> choices = const <Choice>[
-  const Choice(title: 'Select Location', url: '', icon: Icons.add_location_alt),
-  const Choice(
-      title: 'Report Issue',
-      url: 'mailto:bitbot@bitbot.com.au?subject=Help with Ant Flight',
-      icon: Icons.email),
-  const Choice(
-      title: 'Web App',
-      url: 'https://nuptialflight.codemagic.app/#/',
-      icon: Icons.web),
-  const Choice(
-      title: 'Android',
-      url:
-          'https://play.google.com/store/apps/details?id=au.com.bitbot.nuptialflight',
-      icon: Icons.android),
-  const Choice(
-      title: 'IOS',
-      url:
-          'https://apps.apple.com/us/app/ant-nuptial-flight-predictor/id1603373687',
-      icon: Icons.phone_iphone),
-  const Choice(
-      title: 'Source Code',
-      url: 'https://github.com/bradrushworth/nuptialflight',
-      icon: Icons.source),
-  const Choice(
-      title: 'Buy Brad Coffee',
-      url: 'https://www.buymeacoffee.com/bitbot',
-      icon: Icons.coffee),
-];
