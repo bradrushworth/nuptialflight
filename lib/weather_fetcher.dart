@@ -20,36 +20,43 @@ class WeatherFetcher {
     _mockLocation = mockLocation;
   }
 
-  Future getLocation() async {
+  Future<bool> getLocation(bool waitForPosition) async {
     if (!_mockLocation) {
       LocationPermission permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.whileInUse ||
           permission == LocationPermission.always) {
         Position? position;
-        try {
-          position = await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.low,
-              timeLimit: Duration(seconds: 5));
-        } catch (exception) {
-          developer.log("Can't get current position: exception=$exception",
-              name: 'WeatherFetcher');
-          if (!kIsWeb) position = await Geolocator.getLastKnownPosition();
+        if (kIsWeb || waitForPosition) {
+          try {
+            position = await Geolocator.getCurrentPosition(
+                desiredAccuracy: LocationAccuracy.low,
+                timeLimit: Duration(seconds: 30));
+          } catch (exception) {
+            developer.log("Can't get current position: exception=$exception",
+                name: 'WeatherFetcher');
+          }
+        } else if (!kIsWeb) {
+          position = await Geolocator.getLastKnownPosition();
         }
         if (position != null) {
           _lat = position.latitude;
           _lon = position.longitude;
-        } else {
-          throw Exception(
-              'Failed to get your location! You could try:\n\nRefreshing page.\n\nOpening in Chrome or another browser.\n\nDownloading from the app store.\n\nManually choosing your location in the options.');
+          return true;
         }
+        if (_lat == null || _lon == null) {
+          throw Exception(
+              'Failed to get your location!\n\nPlease manually enter your location.');
+        }
+        return false;
       }
     } else {
       _lat = -35.7600;
       _lon = 150.2053;
     }
+    return true;
   }
 
-  setLocation(PlacesDetailsResponse? detail) {
+  void setLocation(PlacesDetailsResponse? detail) {
     if (detail == null) {
       throw Exception('Location search failed!');
     }

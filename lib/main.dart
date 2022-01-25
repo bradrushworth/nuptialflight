@@ -1,7 +1,9 @@
 //import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
 //import 'dart:developer' as developer;
 
+import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:device_preview/device_preview.dart';
@@ -156,17 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _loadData() async {
     await dotenv.load(fileName: 'assets/.env');
 
-    await weatherFetcher
-        .getLocation()
-        .then((o) => Future.wait([
-              weatherFetcher.fetchNearestWeatherLocation(),
-              weatherFetcher.fetchWeather()
-            ])
-                .then((List responses) =>
-                    _updateWeather(responses[0], responses[1]))
-                .catchError((e) => handleError(e)))
-        .catchError((e) => handleError(e));
-    print("_loadData: _percentage=" + _percentage.toString());
+    _getLocation();
 
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     setState(() {
@@ -177,7 +169,37 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<void> _getLocation() async {
+    setState(() {
+      errorMessage = null;
+    });
+
+    await weatherFetcher
+        .getLocation(false)
+        .then((updated) => updated ? _getWeather() : Future.value())
+        .then((value) => print(
+            "_getLocation(passive): _percentage=" + _percentage.toString()))
+        .then((value) => weatherFetcher.getLocation(true))
+        .then((updated) => updated ? _getWeather() : Future.value())
+        .then((value) => print(
+            "_getLocation(active): _percentage=" + _percentage.toString()))
+        .catchError((e) => handleLocationError(e));
+  }
+
+  Future<void> _getWeather() {
+    return Future.wait([
+      weatherFetcher.fetchNearestWeatherLocation(),
+      weatherFetcher.fetchWeather()
+    ])
+        .then((List responses) => _updateWeather(responses[0], responses[1]))
+        .catchError((e) => handleError(e));
+  }
+
   Future<void> _findPlaceName() async {
+    setState(() {
+      errorMessage = null;
+    });
+
     PlacesDetailsResponse? place = await PlacesAutocomplete.show(
       context: context,
       //location: weatherFetcher.getLatLng(),
@@ -191,15 +213,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (place != null) {
       weatherFetcher.setLocation(place);
-      Future.wait([
-        weatherFetcher.fetchNearestWeatherLocation(),
-        weatherFetcher.fetchWeather()
-      ])
-          .then((List responses) => _updateWeather(responses[0], responses[1]))
-          .catchError((e) => handleError(e));
+      _getWeather();
       print('_findPlaceName: _percentage=' + _percentage.toString());
     } else {
       print('_findPlaceName: User cancelled search!');
+      handleSearchError(Exception('User cancelled search!'));
     }
   }
 
@@ -363,13 +381,27 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  TextStyle? getColorGradient(int percentage) {
+  static TextStyle getColorTextStyle(int percentage) {
     return TextStyle(
-        color: (percentage < amberThreshold
-            ? Colors.red
-            : (percentage < greenThreshold
-                ? Colors.deepOrange
-                : Colors.green)));
+        color: getColorGradient(percentage), fontWeight: FontWeight.w600);
+  }
+
+  static Color? getColorGradient(int percentage) {
+    Color? color = (percentage < amberThreshold
+        ? Colors.red
+        : (percentage < greenThreshold ? Colors.deepOrange : Colors.green));
+
+    return color;
+  }
+
+  static Color? getContinuousColorGradient(int percentage) {
+    // Bias towards red and green and away from the middle
+    int r = max(0, (1.0 * 255 * (100 - percentage * 1.2)) ~/ 100);
+    int g = min(255, (1.0 * 255 * percentage * 1.2) ~/ 100);
+    int b = 0;
+    Color color = Color.fromARGB(255, r, g, b);
+
+    return color;
   }
 
   Widget _buildErrorMessage() {
@@ -420,11 +452,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return AutoSizeText(
       '${_percentage[0]}%',
       style: TextStyle(
-        color: (_percentage[0] < amberThreshold
-            ? Colors.red
-            : (_percentage[0] < greenThreshold
-                ? Colors.deepOrange
-                : Colors.green)),
+        color: getColorGradient(_percentage[0]),
         height: orientation == Orientation.portrait ? 1.1 : 1.0,
         fontSize: 37,
         fontWeight: FontWeight.w900,
@@ -661,7 +689,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           _weather!.timezoneOffset!) *
                       1000,
                   isUtc: true)),
-              style: getColorGradient(_percentage[i]),
+              style: getColorTextStyle(_percentage[i]),
             ),
           ),
         ),
@@ -669,7 +697,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             child: Text(
               ' ${_weather!.daily!.elementAt(i).temp!.eve!.toStringAsFixed(1)}°C',
-              style: getColorGradient(_percentage[i]),
+              style: getColorTextStyle(_percentage[i]),
             ),
           ),
         ),
@@ -677,7 +705,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             child: Text(
               ' ${_weather!.daily!.elementAt(i).windSpeed!.toStringAsFixed(1)}\u{00A0}m/s',
-              style: getColorGradient(_percentage[i]),
+              style: getColorTextStyle(_percentage[i]),
             ),
           ),
         ),
@@ -685,7 +713,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             child: Text(
               ' ${_percentage[i]}%',
-              style: getColorGradient(_percentage[i]),
+              style: getColorTextStyle(_percentage[i]),
             ),
           ),
         ),
@@ -693,12 +721,32 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  handleError(e) {
-    setState(() {
-      errorMessage = e.toString().substring('Exception: '.length);
-      print('handleError: $e');
+  void handleLocationError(Exception? e) {
+    handleError(e);
+
+    // Wait then show location search dialog
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      _findPlaceName();
     });
-    //throw e;
+  }
+
+  void handleSearchError(Exception? e) {
+    handleError(e);
+
+    // Wait then try to get weather again
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      _getLocation();
+    });
+  }
+
+  void handleError(Exception? e) {
+    if (e != null) {
+      setState(() {
+        errorMessage = e.toString().substring('Exception: '.length);
+        print('handleError: $e');
+      });
+      //throw e;
+    }
   }
 
 /*
