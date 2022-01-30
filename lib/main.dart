@@ -98,6 +98,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final String corsProxyUrl =
+      'https://api.bitbot.com.au/cors/https://maps.googleapis.com/maps/api';
   final String kGoogleApiKey = 'AIzaSyDNaPQ01hKnTmVRQoT_FM1ZTTxDnw6GoOU';
   late final List<Choice> choices;
 
@@ -133,14 +135,14 @@ class _MyHomePageState extends State<MyHomePage> {
       choices.add(const Choice(
           title: 'Android',
           url:
-              'https://play.google.com/store/apps/details?id=au.com.bitbot.nuptialflight',
+          'https://play.google.com/store/apps/details?id=au.com.bitbot.nuptialflight',
           icon: Icons.android));
     }
     if (kIsWeb || Platform.isIOS || Platform.isMacOS) {
       choices.add(const Choice(
           title: 'IOS',
           url:
-              'https://apps.apple.com/us/app/ant-nuptial-flight-predictor/id1603373687',
+          'https://apps.apple.com/us/app/ant-nuptial-flight-predictor/id1603373687',
           icon: Icons.phone_iphone));
     }
     choices.add(const Choice(
@@ -178,11 +180,11 @@ class _MyHomePageState extends State<MyHomePage> {
         .getLocation(false)
         .then((updated) => updated ? _getWeather() : Future.value())
         .then((value) => print(
-            "_getLocation(passive): _percentage=" + _percentage.toString()))
+        "_getLocation(passive): _percentage=" + _percentage.toString()))
         .then((value) => weatherFetcher.getLocation(true))
         .then((updated) => updated ? _getWeather() : Future.value())
         .then((value) => print(
-            "_getLocation(active): _percentage=" + _percentage.toString()))
+        "_getLocation(active): _percentage=" + _percentage.toString()))
         .catchError((e) => handleLocationError(e));
   }
 
@@ -204,7 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
       context: context,
       //location: weatherFetcher.getLatLng(),
       apiKey: kGoogleApiKey,
-      //proxyBaseUrl: 'https://cors-anywhere.herokuapp.com',
+      proxyBaseUrl: corsProxyUrl,
       mode: Mode.fullscreen,
       components: [],
       types: [],
@@ -225,6 +227,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (prediction != null) {
       return GoogleMapsPlaces(
         apiKey: kGoogleApiKey,
+        baseUrl: corsProxyUrl,
       ).getDetailsByPlaceId(prediction!.placeId!);
     }
     return null;
@@ -306,7 +309,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     Text('    '),
                     Text('${choice.title}'),
                   ]),
-                  enabled: !(kIsWeb && choice.icon == Icons.add_location_alt),
                 );
               }).toList();
             },
@@ -318,57 +320,57 @@ class _MyHomePageState extends State<MyHomePage> {
           return errorMessage != null
               ? _buildErrorMessage()
               : !loaded
-                  ? _buildCircularProgressIndicator()
-                  : Column(
-                      //mainAxisAlignment: MainAxisAlignment.end,
-                      //crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        Spacer(flex: 1),
-                        GridView.count(
-                          crossAxisCount:
-                              orientation == Orientation.portrait ? 1 : 3,
-                          childAspectRatio:
-                              orientation == Orientation.portrait ? 8 : 6,
-                          shrinkWrap: true,
-                          children: [
-                            _buildNuptialHeading(orientation),
-                            _buildTodayPercentage(orientation),
-                            _buildTodayWeather(orientation),
-                          ],
-                        ),
-                        Spacer(flex: 1),
-                        GridView.count(
-                          crossAxisCount:
-                              orientation == Orientation.portrait ? 3 : 6,
-                          childAspectRatio: 2.0,
-                          padding: orientation == Orientation.portrait
-                              ? const EdgeInsets.symmetric(vertical: 0)
-                              : const EdgeInsets.symmetric(horizontal: 0),
-                          shrinkWrap: true,
-                          children: [
-                            _buildTemperature(),
-                            _buildWindSpeed(),
-                            _buildPrecipitation(),
-                            _buildHumidity(),
-                            _buildCloudiness(),
-                            _buildAirPressure(),
-                          ],
-                        ),
-                        Spacer(flex: 1),
-                        _buildUpcomingWeek(orientation),
-                        Spacer(flex: 1),
-                        orientation == Orientation.portrait
-                            ? Text(
-                                (kIsWeb
-                                        ? 'Web'
-                                        : toBeginningOfSentenceCase(
-                                            Platform.operatingSystem)!) +
-                                    ' Version $version+$buildNumber',
-                                style:
-                                    TextStyle(fontSize: 8, color: Colors.grey))
-                            : Container(), // Not enough room, unnecessary
-                      ],
-                    );
+              ? _buildCircularProgressIndicator()
+              : Column(
+            //mainAxisAlignment: MainAxisAlignment.end,
+            //crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Spacer(flex: 1),
+              GridView.count(
+                crossAxisCount:
+                orientation == Orientation.portrait ? 1 : 3,
+                childAspectRatio:
+                orientation == Orientation.portrait ? 8 : 6,
+                shrinkWrap: true,
+                children: [
+                  _buildNuptialHeading(orientation),
+                  _buildTodayPercentage(orientation),
+                  _buildTodayWeather(orientation),
+                ],
+              ),
+              Spacer(flex: 1),
+              GridView.count(
+                crossAxisCount:
+                orientation == Orientation.portrait ? 3 : 6,
+                childAspectRatio: 2.0,
+                padding: orientation == Orientation.portrait
+                    ? const EdgeInsets.symmetric(vertical: 0)
+                    : const EdgeInsets.symmetric(horizontal: 0),
+                shrinkWrap: true,
+                children: [
+                  _buildTemperature(),
+                  _buildWindSpeed(),
+                  _buildPrecipitation(),
+                  _buildHumidity(),
+                  _buildCloudiness(),
+                  _buildAirPressure(),
+                ],
+              ),
+              Spacer(flex: 1),
+              _buildUpcomingWeek(orientation),
+              Spacer(flex: 1),
+              orientation == Orientation.portrait
+                  ? Text(
+                  (kIsWeb
+                      ? 'Web'
+                      : toBeginningOfSentenceCase(
+                      Platform.operatingSystem)!) +
+                      ' Version $version+$buildNumber',
+                  style:
+                  TextStyle(fontSize: 8, color: Colors.grey))
+                  : Container(), // Not enough room, unnecessary
+            ],
+          );
         },
       ),
 
@@ -418,10 +420,10 @@ class _MyHomePageState extends State<MyHomePage> {
     //                     ],
     return Center(
         child: Text(
-      '$errorMessage',
-      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-      textAlign: TextAlign.center,
-    ));
+          '$errorMessage',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+          textAlign: TextAlign.center,
+        ));
   }
 
   Widget _buildCircularProgressIndicator() {
@@ -686,7 +688,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Text(
               weekdayFormat.format(DateTime.fromMillisecondsSinceEpoch(
                   (_weather!.daily!.elementAt(i).dt! +
-                          _weather!.timezoneOffset!) *
+                      _weather!.timezoneOffset!) *
                       1000,
                   isUtc: true)),
               style: getColorTextStyle(_percentage[i]),
