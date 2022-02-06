@@ -21,12 +21,12 @@ void main() {
       expect(response.name, 'Eurobodalla Shire Council');
       expect(response.state, 'New South Wales');
       expect(response.country, 'AU');
-    }, skip: true);
+    });
 
     test('Fetch Weather Location', () async {
       String response = await weatherFetcher.fetchNearestWeatherLocation();
       expect(response, 'Batemans Bay');
-    }, skip: true);
+    });
 
     test('Fetch Weather', () async {
       WeatherResponse response = await weatherFetcher.fetchWeather();
