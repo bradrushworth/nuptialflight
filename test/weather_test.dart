@@ -10,7 +10,7 @@ void main() {
   group('Download', () {
     dotenv.testLoad(fileInput: File('assets/.env').readAsStringSync());
     WeatherFetcher weatherFetcher = WeatherFetcher(mockLocation: true);
-    weatherFetcher.getLocation(false);
+    weatherFetcher.findLocation(false);
 
     test('Fetch Geocoding', () async {
       ReverseGeocodingResponse response =

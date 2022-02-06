@@ -43,7 +43,7 @@ android {
 
     defaultConfig {
         applicationId "au.com.bitbot.nuptialflight"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

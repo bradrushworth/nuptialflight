@@ -8,6 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_webservice/src/places.dart';
 import 'package:http/http.dart' as http;
+import 'package:latlong2/latlong.dart';
 import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
 import 'package:nuptialflight/responses/weather_response.dart';
 
@@ -20,7 +21,7 @@ class WeatherFetcher {
     _mockLocation = mockLocation;
   }
 
-  Future<bool> getLocation(bool waitForPosition) async {
+  Future<bool> findLocation(bool waitForPosition) async {
     if (!_mockLocation) {
       LocationPermission permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.whileInUse ||
@@ -54,6 +55,11 @@ class WeatherFetcher {
       _lon = 150.2053;
     }
     return true;
+  }
+
+  LatLng? getLocation() {
+    if (_lat == null || _lon == null) return null;
+    return LatLng(_lat!, _lon!);
   }
 
   void setLocation(PlacesDetailsResponse? detail) {
