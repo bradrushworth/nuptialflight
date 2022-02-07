@@ -36,7 +36,7 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   WeatherFetcher weatherFetcher = WeatherFetcher();
   MapController mapController = MapController();
-  final double defaultZoom = 2;
+  final double defaultZoom = 3;
 
   @override
   void initState() {
@@ -75,19 +75,22 @@ class _MapPageState extends State<MapPage> {
         options: MapOptions(
           center: weatherFetcher.getLocation(),
           zoom: defaultZoom,
-          minZoom: 3,
-          maxZoom: 10,
+          minZoom: 2,
+          maxZoom: 7,
+          rotationWinGestures:
+              MultiFingerGesture.pinchMove | MultiFingerGesture.pinchZoom,
         ),
         children: <Widget>[
           TileLayerWidget(
             options: TileLayerOptions(
                 urlTemplate:
-                    'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}',
-                subdomains: ['a', 'b', 'c', 'd'],
+                    //'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}',
+                    'https://maps.bitbot.com.au/tiles/toner/{z}/{x}/{y}.{ext}?origin=nw',
+                subdomains: ['a', 'b', 'c'],
                 attributionBuilder: (_) {
                   return Html(
                     data:
-                        'Weather &copy; <a href="http://openweathermap.org">OpenWeatherMap</a> &mdash; Tiles by <a href="http://stamen.com">Stamen Design</a> <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                        '<div style="color: #00ffff;">Weather &copy; <a href="http://openweathermap.org">OpenWeatherMap</a><br/>Tiles by <a href="http://stamen.com">Stamen Design</a> - <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a><br/>Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</div>',
                     onLinkTap: (url, context, attributes, element) =>
                         Utils.launchURL(url!),
                   );
@@ -135,13 +138,15 @@ class _MapPageState extends State<MapPage> {
     return TileLayerWidget(
       options: TileLayerOptions(
         urlTemplate:
-            'https://tile.openweathermap.org/map/{layer}/{z}/{x}/{y}.png?appid={apiKey}',
+            //'https://tile.openweathermap.org/map/{layer}/{z}/{x}/{y}.{ext}?appid={apiKey}',
+            'https://maps.bitbot.com.au/tiles/{layer}/{z}/{x}/{y}.{ext}?origin=nw',
         subdomains: ['a', 'b', 'c'],
         minZoom: 0,
         maxZoom: 19,
         additionalOptions: {
+          'ext': 'png',
           'layer': layer,
-          'apiKey': dotenv.env['OPENWEATHERMAP_API_KEY']!,
+          'apiKey': dotenv.env['OPENWEATHERMAP_MAP_KEY']!,
         },
         opacity: 0.165,
         //backgroundColor: Colors.black,
