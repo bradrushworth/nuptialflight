@@ -125,9 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
     choices = <Choice>[];
     choices.add(const Choice(
         title: 'Select Location', url: '', icon: Icons.add_location_alt));
-    if (!kIsWeb || !kReleaseMode || true) {
-      choices.add(const Choice(title: 'Show Map', url: '', icon: Icons.map));
-    }
+    choices.add(const Choice(title: 'Show Map', url: '', icon: Icons.map));
     choices.add(const Choice(
         title: 'Report Issue',
         url: 'mailto:bitbot@bitbot.com.au?subject=Help with Ant Flight',

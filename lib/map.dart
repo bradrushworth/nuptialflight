@@ -76,7 +76,7 @@ class _MapPageState extends State<MapPage> {
           center: weatherFetcher.getLocation(),
           zoom: defaultZoom,
           minZoom: 2,
-          maxZoom: 7,
+          maxZoom: 9,
           rotationWinGestures:
               MultiFingerGesture.pinchMove | MultiFingerGesture.pinchZoom,
         ),
