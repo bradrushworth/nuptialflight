@@ -146,7 +146,7 @@ class _MapPageState extends State<MapPage> {
         additionalOptions: {
           'ext': 'png',
           'layer': layer,
-          'apiKey': dotenv.env['OPENWEATHERMAP_MAP_KEY']!,
+          //'apiKey': dotenv.env['OPENWEATHERMAP_MAP_KEY']!,
         },
         opacity: 0.165,
         //backgroundColor: Colors.black,
