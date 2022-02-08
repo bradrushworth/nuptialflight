@@ -75,7 +75,10 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
         darkTheme: ThemeData(
             brightness: Brightness.dark, primarySwatch: primarySwatch),
         themeMode: ThemeMode.system,
-        home: MyHomePage(primarySwatch: setPrimarySwatch));
+        home: MyHomePage(
+          primarySwatch: setPrimarySwatch,
+          weatherFetcher: WeatherFetcher(),
+        ));
   }
 
   void setPrimarySwatch(MaterialColor s) {
@@ -86,17 +89,24 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
 }
 
 class MyHomePage extends StatefulWidget {
-  final void Function(MaterialColor s) primarySwatch;
+  final void Function(MaterialColor s)? primarySwatch;
+  final bool fixedLocation;
+  final WeatherFetcher weatherFetcher;
 
   MyHomePage(
-      {Key? key, required void Function(MaterialColor s) this.primarySwatch})
+      {Key? key,
+      void Function(MaterialColor s)? this.primarySwatch,
+      this.fixedLocation = false,
+      required this.weatherFetcher})
       : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 
   void setPrimarySwatch(MaterialColor swatch) {
-    primarySwatch(swatch);
+    if (primarySwatch != null) {
+      primarySwatch!(swatch);
+    }
   }
 }
 
@@ -104,9 +114,10 @@ class _MyHomePageState extends State<MyHomePage> {
   final String corsProxyUrl =
       'https://api.bitbot.com.au/cors/https://maps.googleapis.com/maps/api';
   late final List<Choice> choices;
+  late final bool fixedLocation;
+  late final WeatherFetcher weatherFetcher;
 
   String? appName, packageName, version, buildNumber;
-  WeatherFetcher weatherFetcher = WeatherFetcher();
   String? _geocoding;
   WeatherResponse? _weather;
   bool loaded = false;
@@ -116,6 +127,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    this.fixedLocation = widget.fixedLocation;
+    this.weatherFetcher = widget.weatherFetcher;
     createMenu();
     widgetInitState(_loadData);
     _loadData(); // This will load data every time app is opened
@@ -181,16 +194,23 @@ class _MyHomePageState extends State<MyHomePage> {
       errorMessage = null;
     });
 
-    await weatherFetcher
-        .findLocation(false)
-        .then((updated) => updated ? _getWeather() : Future.value())
-        .then((value) => print(
-            "findLocation(passive): _percentage=" + _percentage.toString()))
-        .then((value) => weatherFetcher.findLocation(true))
-        .then((updated) => updated ? _getWeather() : Future.value())
-        .then((value) => print(
-            "findLocation(active): _percentage=" + _percentage.toString()))
-        .catchError((e) => handleLocationError(e));
+    if (fixedLocation) {
+      await _getWeather()
+          .then((value) => print(
+              "findLocation(fixed): _percentage=" + _percentage.toString()))
+          .catchError((e) => handleLocationError(e));
+    } else {
+      await weatherFetcher
+          .findLocation(false)
+          .then((updated) => updated ? _getWeather() : Future.value())
+          .then((value) => print(
+              "findLocation(passive): _percentage=" + _percentage.toString()))
+          .then((value) => weatherFetcher.findLocation(true))
+          .then((updated) => updated ? _getWeather() : Future.value())
+          .then((value) => print(
+              "findLocation(active): _percentage=" + _percentage.toString()))
+          .catchError((e) => handleLocationError(e));
+    }
   }
 
   Future<void> _getWeather() {
@@ -203,10 +223,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _findPlaceName() async {
-    setState(() {
-      errorMessage = null;
-    });
-
     PlacesDetailsResponse? place = await PlacesAutocomplete.show(
       context: context,
       //location: weatherFetcher.getLatLng(),
@@ -219,9 +235,17 @@ class _MyHomePageState extends State<MyHomePage> {
     ).then((prediction) => _lookupPlace(prediction));
 
     if (place != null) {
-      weatherFetcher.setLocation(place);
-      _getWeather();
-      print('_findPlaceName: _percentage=' + _percentage.toString());
+      WeatherFetcher newWeatherFetcher = WeatherFetcher();
+      newWeatherFetcher.setLocationPlace(place);
+      Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (_) => MyHomePage(
+                  fixedLocation: true,
+                  weatherFetcher: newWeatherFetcher,
+                ),
+            fullscreenDialog: true,
+            maintainState: true),
+      );
     } else {
       print('_findPlaceName: User cancelled search!');
       handleSearchError(Exception('User cancelled search!'));
@@ -239,10 +263,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _showMap() async {
-    setState(() {
-      errorMessage = null;
-    });
-
     Navigator.of(context).push(
       MaterialPageRoute(
           builder: (_) => MapPage(),

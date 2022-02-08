@@ -62,7 +62,13 @@ class WeatherFetcher {
     return LatLng(_lat!, _lon!);
   }
 
-  void setLocation(PlacesDetailsResponse? detail) {
+  void setLocation(LatLng latLng) {
+    _lat = latLng.latitude;
+    _lon = latLng.longitude;
+    print('setLocation: _lat=$_lat _lon=$_lon');
+  }
+
+  void setLocationPlace(PlacesDetailsResponse? detail) {
     if (detail == null) {
       throw Exception('Location search failed!');
     }

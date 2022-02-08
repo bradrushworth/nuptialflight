@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:nuptialflight/main.dart';
 import 'package:nuptialflight/utils.dart';
 import 'package:nuptialflight/weather_fetcher.dart';
 
@@ -77,8 +78,22 @@ class _MapPageState extends State<MapPage> {
           zoom: defaultZoom,
           minZoom: 2,
           maxZoom: 9,
-          rotationWinGestures:
-              MultiFingerGesture.pinchMove | MultiFingerGesture.pinchZoom,
+          onLongPress: (position, latLng) {
+            weatherFetcher.setLocation(latLng);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (_) => MyHomePage(
+                        fixedLocation: true,
+                        weatherFetcher: weatherFetcher,
+                      ),
+                  fullscreenDialog: true,
+                  maintainState: true),
+            );
+          },
+          interactiveFlags: InteractiveFlag.pinchZoom |
+              InteractiveFlag.drag |
+              InteractiveFlag.doubleTapZoom |
+              InteractiveFlag.flingAnimation,
         ),
         children: <Widget>[
           TileLayerWidget(
