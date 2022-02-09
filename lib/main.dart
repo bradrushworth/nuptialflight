@@ -210,6 +210,9 @@ class _MyHomePageState extends State<MyHomePage> {
           .then((value) => print(
               "findLocation(active): _percentage=" + _percentage.toString()))
           .catchError((e) => handleLocationError(e));
+
+      // Only update the Android widget for the current location
+      updateAppWidget(_percentage);
     }
   }
 
@@ -302,7 +305,6 @@ class _MyHomePageState extends State<MyHomePage> {
       loaded = true;
       print("_updateWeather: _percentage=" + _percentage.toString());
     });
-    updateAppWidget(_percentage);
   }
 
   /// Future feature to record user saw a nuptial flight
