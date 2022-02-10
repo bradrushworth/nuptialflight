@@ -198,7 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
       await _getWeather()
           .then((value) => print(
               "findLocation(fixed): _percentage=" + _percentage.toString()))
-          .catchError((e) => handleLocationError(e));
+          .catchError((e) => handleError(e));
     } else {
       await weatherFetcher
           .findLocation(false)
