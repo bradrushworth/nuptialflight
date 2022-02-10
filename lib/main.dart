@@ -740,7 +740,7 @@ class _MyHomePageState extends State<MyHomePage> {
         DataCell(
           Container(
             child: Text(
-              ' ${_weather!.daily!.elementAt(i).temp!.eve!.toStringAsFixed(1)}°C',
+              ' ${_weather!.daily!.elementAt(i).temp!.max!.toStringAsFixed(1)}°C',
               style: getColorTextStyle(_percentage[i]),
             ),
           ),
@@ -800,7 +800,7 @@ class _MyHomePageState extends State<MyHomePage> {
       builder: (context, weather) {
         if (weather.hasData) {
           return Text(
-            '${weather.requireData.daily?.first.temp?.day}',
+            '${weather.requireData.daily?.first.temp?.max}',
             style: Theme.of(context).textTheme.headline4,
           );
         } else if (weather.hasError) {

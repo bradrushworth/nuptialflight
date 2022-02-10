@@ -60,7 +60,6 @@ double nuptialPercentage(Daily daily) {
 
 /// Evening temperature. Celsius.
 double temperatureContribution(Daily daily) {
-  //return max(0, min(10, daily.temp!.eve! - 15) / 10.0);
   // z = (x – μ (mean)) / σ (standard deviation)
   if (daily.temp!.max! > TEMP_AVG) return 1.0;
   return max(0, min(0.5, Normal.cdf(-(daily.temp!.max! - TEMP_AVG).abs() / TEMP_STD))) * 2;
