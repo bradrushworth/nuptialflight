@@ -180,12 +180,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
     _getLocation();
 
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    setState(() {
-      appName = packageInfo.appName;
-      packageName = packageInfo.packageName;
-      version = packageInfo.version;
-      buildNumber = packageInfo.buildNumber;
+    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+      setState(() {
+        appName = packageInfo.appName;
+        packageName = packageInfo.packageName;
+        version = packageInfo.version;
+        buildNumber = packageInfo.buildNumber;
+      });
     });
   }
 
@@ -256,12 +257,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future<PlacesDetailsResponse?> _lookupPlace(prediction) async {
+  Future<PlacesDetailsResponse?> _lookupPlace(Prediction? prediction) async {
     if (prediction != null) {
       return GoogleMapsPlaces(
         apiKey: kGoogleApiKey,
         baseUrl: corsProxyUrl,
-      ).getDetailsByPlaceId(prediction!.placeId!);
+      ).getDetailsByPlaceId(prediction.placeId!);
     }
     return null;
   }
