@@ -770,15 +770,19 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void handleLocationError(Exception? e) {
-    handleError(e);
+    if (e != null && e.toString().startsWith('Exception: ')) {
+      handleError(e);
 
-    // Remove the percentage from the Android widget
-    clearAppWidget();
+      // Remove the percentage from the Android widget
+      clearAppWidget();
 
-    // Wait then show location search dialog
-    Future.delayed(const Duration(milliseconds: 3000), () {
-      _findPlaceName();
-    });
+      // Wait then show location search dialog
+      Future.delayed(const Duration(milliseconds: 3000), () {
+        _findPlaceName();
+      });
+    } else {
+      print('unhandledError: $e');
+    }
   }
 
   void handleSearchError(Exception? e) {
@@ -791,13 +795,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void handleError(Exception? e) {
-    if (e != null && e.toString().startsWith('Exception: ')) {
-      setState(() {
-        errorMessage = e.toString().substring('Exception: '.length);
-        print('handleError: $e');
-      });
-      //throw e;
-    }
+    setState(() {
+      errorMessage = e.toString().substring('Exception: '.length);
+      print('handleError: $e');
+    });
+    //throw e;
   }
 
 /*
