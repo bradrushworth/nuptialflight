@@ -791,7 +791,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void handleError(Exception? e) {
-    if (e != null) {
+    if (e != null && e.toString().startsWith('Exception: ')) {
       setState(() {
         errorMessage = e.toString().substring('Exception: '.length);
         print('handleError: $e');
