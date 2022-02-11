@@ -1,5 +1,6 @@
-import 'package:home_widget/home_widget.dart';
 import 'dart:io';
+
+import 'package:home_widget/home_widget.dart';
 //import 'package:flutter/foundation.dart' show kIsWeb;
 
 void initialiseWidget() {
@@ -32,6 +33,12 @@ Future<void> backgroundCallback(Uri? uri) async {
 
 Future<void> updateAppWidget(List<int> percentage) async {
   await HomeWidget.saveWidgetData<int>('_percentage', percentage[0]);
+  await HomeWidget.updateWidget(
+      name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
+}
+
+Future<void> clearAppWidget() async {
+  await HomeWidget.saveWidgetData<int>('_percentage', 0);
   await HomeWidget.updateWidget(
       name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
 }

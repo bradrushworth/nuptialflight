@@ -195,24 +195,25 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     if (fixedLocation) {
-      await _getWeather()
-          .then((value) => print(
+      _getWeather()
+          .then((nothing) => print(
               "findLocation(fixed): _percentage=" + _percentage.toString()))
           .catchError((e) => handleError(e));
     } else {
-      await weatherFetcher
+      // Try to passively then actively determine the location.
+      // Only update the Android widget for the current location.
+      weatherFetcher
           .findLocation(false)
           .then((updated) => updated ? _getWeather() : Future.value())
-          .then((value) => print(
+          .then((nothing) => updateAppWidget(_percentage))
+          .then((nothing) => print(
               "findLocation(passive): _percentage=" + _percentage.toString()))
-          .then((value) => weatherFetcher.findLocation(true))
+          .then((nothing) => weatherFetcher.findLocation(true))
           .then((updated) => updated ? _getWeather() : Future.value())
-          .then((value) => print(
+          .then((nothing) => updateAppWidget(_percentage))
+          .then((nothing) => print(
               "findLocation(active): _percentage=" + _percentage.toString()))
           .catchError((e) => handleLocationError(e));
-
-      // Only update the Android widget for the current location
-      updateAppWidget(_percentage);
     }
   }
 
@@ -432,8 +433,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   static Color? getColorGradient(int percentage) {
     Color? color = (percentage < amberThreshold
-        ? Colors.red
-        : (percentage < greenThreshold ? Colors.deepOrange : Colors.green));
+        ? Colors.red[800]
+        : (percentage < greenThreshold
+            ? Colors.deepOrange[600]
+            : Colors.green[700]));
 
     return color;
   }
@@ -767,6 +770,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void handleLocationError(Exception? e) {
     handleError(e);
+
+    // Remove the percentage from the Android widget
+    clearAppWidget();
 
     // Wait then show location search dialog
     Future.delayed(const Duration(milliseconds: 3000), () {

@@ -6,3 +6,5 @@ void widgetInitState(Function function) {}
 Future<void> backgroundCallback(Uri? uri) async {}
 
 Future<void> updateAppWidget(List<int> percentage) async {}
+
+Future<void> clearAppWidget() async {}
