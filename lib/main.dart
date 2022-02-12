@@ -190,7 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future<void> _getLocation() async {
+  void _getLocation() {
     setState(() {
       errorMessage = null;
     });
@@ -227,8 +227,8 @@ class _MyHomePageState extends State<MyHomePage> {
         .catchError((e) => handleError(e));
   }
 
-  Future<void> _findPlaceName() async {
-    PlacesDetailsResponse? place = await PlacesAutocomplete.show(
+  void _findPlaceName() {
+    PlacesAutocomplete.show(
       context: context,
       //location: weatherFetcher.getLatLng(),
       apiKey: kGoogleApiKey,
@@ -237,8 +237,12 @@ class _MyHomePageState extends State<MyHomePage> {
       components: [],
       types: [],
       strictbounds: false,
-    ).then((prediction) => _lookupPlace(prediction));
+    )
+        .then((Prediction? prediction) => _lookupPlace(prediction))
+        .then((PlacesDetailsResponse? place) => _setPlaceName(place));
+  }
 
+  void _setPlaceName(PlacesDetailsResponse? place) {
     if (place != null) {
       WeatherFetcher newWeatherFetcher = WeatherFetcher();
       newWeatherFetcher.setLocationPlace(place);
@@ -257,17 +261,17 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future<PlacesDetailsResponse?> _lookupPlace(Prediction? prediction) async {
+  Future<PlacesDetailsResponse?> _lookupPlace(Prediction? prediction) {
     if (prediction != null) {
       return GoogleMapsPlaces(
         apiKey: kGoogleApiKey,
         baseUrl: corsProxyUrl,
       ).getDetailsByPlaceId(prediction.placeId!);
     }
-    return null;
+    return Future.value();
   }
 
-  Future<void> _showMap() async {
+  void _showMap() {
     Navigator.of(context).push(
       MaterialPageRoute(
           builder: (_) => MapPage(),

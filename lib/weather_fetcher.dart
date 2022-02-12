@@ -40,21 +40,32 @@ class WeatherFetcher {
           position = await Geolocator.getLastKnownPosition();
         }
         if (position != null) {
-          _lat = position.latitude;
-          _lon = position.longitude;
-          return true;
+          if (_lat == null ||
+              _lon == null ||
+              _lat!.toStringAsFixed(2) !=
+                  position.latitude.toStringAsFixed(2) ||
+              _lon!.toStringAsFixed(2) !=
+                  position.longitude.toStringAsFixed(2)) {
+            // Position has changed
+            _lat = position.latitude;
+            _lon = position.longitude;
+            return true;
+          }
         }
         if (_lat == null || _lon == null) {
           throw Exception(
               'Failed to get your location!\n\nPlease manually enter your location.');
         }
         return false;
+      } else {
+        throw Exception(
+            'Location permissions are denied!\n\nPlease manually enter your location.');
       }
     } else {
       _lat = -35.7600;
       _lon = 150.2053;
     }
-    return true;
+    return false;
   }
 
   LatLng? getLocation() {
@@ -68,11 +79,7 @@ class WeatherFetcher {
     print('setLocation: _lat=$_lat _lon=$_lon');
   }
 
-  void setLocationPlace(PlacesDetailsResponse? detail) {
-    if (detail == null) {
-      throw Exception('Location search failed!');
-    }
-
+  void setLocationPlace(PlacesDetailsResponse detail) {
     _lat = detail.result.geometry!.location.lat;
     _lon = detail.result.geometry!.location.lng;
     print('setLocation: _lat=$_lat _lon=$_lon');
