@@ -440,7 +440,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Color? color = (percentage < amberThreshold
         ? Colors.red[800]
         : (percentage < greenThreshold
-            ? Colors.deepOrange[600]
+            ? Colors.orange[800]
             : Colors.green[700]));
 
     return color;
