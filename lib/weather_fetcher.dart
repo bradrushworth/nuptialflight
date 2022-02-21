@@ -150,7 +150,7 @@ class WeatherFetcher {
           'Location is unknown! Perhaps you didn\'t allow location permissions?');
 
     String url =
-        'https://api.openweathermap.org/data/2.5/onecall?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&exclude=minutely,hourly,current';
+        'https://api.openweathermap.org/data/2.5/onecall?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&exclude=minutely,current';
     developer.log("url=$url", name: 'WeatherFetcher');
     if (!kIsWeb) stdout.writeln("url=$url");
 

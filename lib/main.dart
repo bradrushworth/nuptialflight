@@ -29,6 +29,7 @@ import 'utils.dart';
 
 final DateFormat dateFormat = DateFormat("yyyy-MM-dd");
 final DateFormat weekdayFormat = DateFormat("E");
+final DateFormat timeOfDayFormat = DateFormat("ha");
 
 const String kGoogleApiKey = 'AIzaSyDNaPQ01hKnTmVRQoT_FM1ZTTxDnw6GoOU';
 
@@ -113,6 +114,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final String corsProxyUrl =
       'https://api.bitbot.com.au/cors/https://maps.googleapis.com/maps/api';
+
+  final AutoSizeGroup headingGroup = AutoSizeGroup();
+  final AutoSizeGroup parameterGroup = AutoSizeGroup();
+  final AutoSizeGroup suitabilityGroup = AutoSizeGroup();
+
   late final List<Choice> choices;
   late final bool fixedLocation;
   late final WeatherFetcher weatherFetcher;
@@ -122,7 +128,13 @@ class _MyHomePageState extends State<MyHomePage> {
   WeatherResponse? _weather;
   bool loaded = false;
   String? errorMessage;
-  List<int> _percentage = [0, 0, 0, 0, 0, 0, 0, 0];
+
+  //int _diurnalPercentage = 0;
+  //int _nocturnalPercentage = 0;
+  Hourly? _indexOfDiurnalHour;
+  Hourly? _indexOfNocturnalHour;
+  List<int> _hourlyPercentage = [0, 0];
+  List<int> _dailyPercentage = [0, 0, 0, 0, 0, 0, 0, 0];
 
   @override
   void initState() {
@@ -197,8 +209,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (fixedLocation) {
       _getWeather()
-          .then((nothing) => print(
-              "findLocation(fixed): _percentage=" + _percentage.toString()))
+          .then((nothing) => print("findLocation(fixed): _dailyPercentage=" +
+              _dailyPercentage.toString()))
           .catchError((e) => handleError(e));
     } else {
       // Try to passively then actively determine the location.
@@ -206,14 +218,14 @@ class _MyHomePageState extends State<MyHomePage> {
       weatherFetcher
           .findLocation(false)
           .then((updated) => updated ? _getWeather() : Future.value())
-          .then((nothing) => updateAppWidget(_percentage))
-          .then((nothing) => print(
-              "findLocation(passive): _percentage=" + _percentage.toString()))
+          .then((nothing) => updateAppWidget(_dailyPercentage))
+          .then((nothing) => print("findLocation(passive): _percentage=" +
+              _dailyPercentage.toString()))
           .then((nothing) => weatherFetcher.findLocation(true))
           .then((updated) => updated ? _getWeather() : Future.value())
-          .then((nothing) => updateAppWidget(_percentage))
-          .then((nothing) => print(
-              "findLocation(active): _percentage=" + _percentage.toString()))
+          .then((nothing) => updateAppWidget(_dailyPercentage))
+          .then((nothing) => print("findLocation(active): _percentage=" +
+              _dailyPercentage.toString()))
           .catchError((e) => handleLocationError(e));
     }
   }
@@ -281,35 +293,53 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _updateWeather(String geocoding, WeatherResponse value) {
-    print('_updateWeather: geocoding=$geocoding value=${value.daily}');
+    print('_updateWeather: geocoding=$geocoding');
     setState(() {
       _geocoding = geocoding;
       _weather = value;
-      _percentage[0] =
-          (nuptialPercentage(value.daily!.elementAt(0)) * 100.0).toInt();
-      _percentage[1] =
-          (nuptialPercentage(value.daily!.elementAt(1)) * 100.0).toInt();
-      _percentage[2] =
-          (nuptialPercentage(value.daily!.elementAt(2)) * 100.0).toInt();
-      _percentage[3] =
-          (nuptialPercentage(value.daily!.elementAt(3)) * 100.0).toInt();
-      _percentage[4] =
-          (nuptialPercentage(value.daily!.elementAt(4)) * 100.0).toInt();
-      _percentage[5] =
-          (nuptialPercentage(value.daily!.elementAt(5)) * 100.0).toInt();
-      _percentage[6] =
-          (nuptialPercentage(value.daily!.elementAt(6)) * 100.0).toInt();
-      _percentage[7] =
-          (nuptialPercentage(value.daily!.elementAt(7)) * 100.0).toInt();
-      if (_percentage[0] >= greenThreshold) {
+      _indexOfDiurnalHour = value.hourly!.firstWhere((e) =>
+          timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
+              (e.dt! + _weather!.timezoneOffset!) * 1000,
+              isUtc: true)) ==
+          '12PM');
+      _indexOfNocturnalHour = value.hourly!.firstWhere((e) =>
+          timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
+              (e.dt! + _weather!.timezoneOffset!) * 1000,
+              isUtc: true)) ==
+          '9PM');
+      _hourlyPercentage[0] =
+          (nuptialHourlyPercentage(_indexOfDiurnalHour!) * 100.0).toInt();
+      _hourlyPercentage[1] =
+          (nuptialHourlyPercentage(_indexOfNocturnalHour!) * 100.0).toInt();
+      // _hourlyPercentage[0] =
+      //     (nuptialDailyPercentage(value.daily!.elementAt(0)) * 100.0).toInt();
+      // _hourlyPercentage[1] =
+      //     (nuptialDailyPercentage(value.daily!.elementAt(0), nocturnal: true) * 100.0).toInt();
+      _dailyPercentage[0] =
+          (nuptialDailyPercentage(value.daily!.elementAt(0)) * 100.0).toInt();
+      _dailyPercentage[1] =
+          (nuptialDailyPercentage(value.daily!.elementAt(1)) * 100.0).toInt();
+      _dailyPercentage[2] =
+          (nuptialDailyPercentage(value.daily!.elementAt(2)) * 100.0).toInt();
+      _dailyPercentage[3] =
+          (nuptialDailyPercentage(value.daily!.elementAt(3)) * 100.0).toInt();
+      _dailyPercentage[4] =
+          (nuptialDailyPercentage(value.daily!.elementAt(4)) * 100.0).toInt();
+      _dailyPercentage[5] =
+          (nuptialDailyPercentage(value.daily!.elementAt(5)) * 100.0).toInt();
+      _dailyPercentage[6] =
+          (nuptialDailyPercentage(value.daily!.elementAt(6)) * 100.0).toInt();
+      _dailyPercentage[7] =
+          (nuptialDailyPercentage(value.daily!.elementAt(7)) * 100.0).toInt();
+      if (_dailyPercentage[0] >= greenThreshold) {
         widget.setPrimarySwatch(Colors.lightGreen);
-      } else if (_percentage[0] >= 50) {
+      } else if (_dailyPercentage[0] >= 50) {
         widget.setPrimarySwatch(Colors.amber);
       } else {
         widget.setPrimarySwatch(Colors.red);
       }
       loaded = true;
-      print("_updateWeather: _percentage=" + _percentage.toString());
+      print("_updateWeather: _dailyPercentage=" + _dailyPercentage.toString());
     });
   }
 
@@ -370,10 +400,11 @@ class _MyHomePageState extends State<MyHomePage> {
               : !loaded
                   ? _buildCircularProgressIndicator()
                   : Column(
-                      //mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: orientation == Orientation.portrait
+                          ? MainAxisAlignment.spaceBetween
+                          : MainAxisAlignment.spaceAround,
                       //crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
-                        Spacer(flex: 1),
                         GridView.count(
                           crossAxisCount:
                               orientation == Orientation.portrait ? 1 : 3,
@@ -382,41 +413,78 @@ class _MyHomePageState extends State<MyHomePage> {
                           shrinkWrap: true,
                           children: [
                             _buildNuptialHeading(orientation),
-                            _buildTodayPercentage(orientation),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                _buildTodayPercentage(orientation, 'Diurnal',
+                                    _hourlyPercentage[0]),
+                                _buildTodayPercentage(orientation, 'Nocturnal',
+                                    _hourlyPercentage[1]),
+                              ],
+                            ),
                             _buildTodayWeather(orientation),
                           ],
                         ),
-                        Spacer(flex: 1),
                         GridView.count(
                           crossAxisCount:
-                              orientation == Orientation.portrait ? 3 : 6,
+                              orientation == Orientation.portrait ? 3 : 9,
                           childAspectRatio: 2.0,
                           padding: orientation == Orientation.portrait
                               ? const EdgeInsets.symmetric(vertical: 0)
                               : const EdgeInsets.symmetric(horizontal: 0),
                           shrinkWrap: true,
                           children: [
-                            _buildTemperature(),
+                            // _buildTemperature(
+                            //     'Day Temp', _weather!.daily!.first.temp!.day!),
+                            // _buildTemperature(
+                            //     'Max Temp', _weather!.daily!.first.temp!.max!),
+                            // _buildTemperature(
+                            //     'Eve Temp', _weather!.daily!.first.temp!.eve!),
+
+                            _buildTemperature(
+                                timeOfDayFormat
+                                        .format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                (_indexOfDiurnalHour!.dt! +
+                                                        _weather!
+                                                            .timezoneOffset!) *
+                                                    1000,
+                                                isUtc: true))
+                                        .toLowerCase() +
+                                    ' Temp',
+                                _indexOfDiurnalHour!.temp!),
+                            _buildTemperature(
+                                'Max Temp', _weather!.daily!.first.temp!.max!),
+                            _buildTemperature(
+                                timeOfDayFormat
+                                        .format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                (_indexOfNocturnalHour!.dt! +
+                                                        _weather!
+                                                            .timezoneOffset!) *
+                                                    1000,
+                                                isUtc: true))
+                                        .toLowerCase() +
+                                    ' Temp',
+                                _indexOfNocturnalHour!.temp!),
                             _buildWindSpeed(),
+                            _buildWindGust(),
                             _buildPrecipitation(),
                             _buildHumidity(),
                             _buildCloudiness(),
                             _buildAirPressure(),
                           ],
                         ),
-                        Spacer(flex: 1),
                         _buildUpcomingWeek(orientation),
-                        Spacer(flex: 1),
-                        orientation == Orientation.portrait
-                            ? Text(
-                                (kIsWeb
-                                        ? 'Web'
-                                        : toBeginningOfSentenceCase(
-                                            Platform.operatingSystem)!) +
-                                    ' Version $version+$buildNumber',
-                                style:
-                                    TextStyle(fontSize: 8, color: Colors.grey))
-                            : Container(), // Not enough room, unnecessary
+                        if (orientation == Orientation.portrait)
+                          Text(
+                              (kIsWeb
+                                      ? 'Web'
+                                      : toBeginningOfSentenceCase(
+                                          Platform.operatingSystem)!) +
+                                  ' Version $version+$buildNumber',
+                              style:
+                                  TextStyle(fontSize: 8, color: Colors.grey)),
                       ],
                     );
         },
@@ -487,29 +555,52 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildNuptialHeading(Orientation orientation) {
     return AutoSizeText(
       orientation == Orientation.portrait
-          ? 'Likelihood of Ant Nuptial Flight Today'
-          : 'Likelihood of Ant\nNuptial Flight Today',
+          ? 'Likelihood of Ant Nuptial Flight'
+          : 'Likelihood of Ant\nNuptial Flight',
       style: TextStyle(
         height: orientation == Orientation.portrait ? 2.0 : 1.0,
-        fontSize: 21,
+        fontSize: 22,
         fontWeight: FontWeight.w600,
       ),
+      minFontSize: 16,
+      maxFontSize: 24,
       textAlign: TextAlign.center,
       softWrap: true,
       maxLines: 2,
     );
   }
 
-  Widget _buildTodayPercentage(Orientation orientation) {
-    return AutoSizeText(
-      '${_percentage[0]}%',
-      style: TextStyle(
-        color: getColorGradient(_percentage[0]),
-        height: orientation == Orientation.portrait ? 1.1 : 1.0,
-        fontSize: 37,
-        fontWeight: FontWeight.w900,
-      ),
-      textAlign: TextAlign.center,
+  Widget _buildTodayPercentage(
+      Orientation orientation, String heading, int percentage) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AutoSizeText(
+          heading,
+          group: headingGroup,
+          style: TextStyle(
+            fontSize: 14,
+            height: orientation == Orientation.portrait ? 0.95 : 0.90,
+          ),
+          minFontSize: 14,
+          maxFontSize: 22,
+          stepGranularity: 1.0,
+          textAlign: TextAlign.center,
+        ),
+        AutoSizeText(
+          '${percentage}%',
+          style: TextStyle(
+            color: getColorGradient(percentage),
+            height: orientation == Orientation.portrait ? 0.95 : 0.90,
+            fontSize: 37,
+            fontWeight: FontWeight.w900,
+          ),
+          minFontSize: 37,
+          maxFontSize: 48,
+          stepGranularity: 1.0,
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 
@@ -519,49 +610,53 @@ class _MyHomePageState extends State<MyHomePage> {
         AutoSizeText(
           (_geocoding == null ? 'Today\'s Weather' : '$_geocoding Weather'),
           style: TextStyle(
-            height: orientation == Orientation.portrait ? 1.6 : 1.0,
-            fontSize: 18,
+            fontSize: 17,
             fontWeight: FontWeight.w600,
           ),
+          minFontSize: 17,
+          maxFontSize: 26,
+          stepGranularity: 1.0,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        // AutoSizeText(
-        //   dateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-        //       (_weather!.daily!.first.dt! + _weather!.timezoneOffset!) * 1000,
-        //       isUtc: true)),
-        //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-        // ),
         AutoSizeText(
           toBeginningOfSentenceCase(
               _weather!.daily!.first.weather!.first.description)!,
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
+          minFontSize: 17,
+          maxFontSize: 20,
+          stepGranularity: 1.0,
           maxLines: 1,
         ),
       ],
     );
   }
 
-  Widget _buildTemperature() {
+  Widget _buildTemperature(String heading, num temp) {
     return SizedBox(
       child: Column(
         children: [
-          Text(
-            'Temperature',
+          AutoSizeText(
+            heading,
             style: TextStyle(fontSize: 14),
+            stepGranularity: 1.0,
+            group: headingGroup,
           ),
-          Text(
-            (_weather!.daily!.first.temp!.eve!).toStringAsFixed(1) + "°C",
+          AutoSizeText(
+            (temp).toStringAsFixed(1) + "°C",
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+            stepGranularity: 1.0,
+            group: parameterGroup,
           ),
-          Text(
+          AutoSizeText(
             "Suitability: " +
-                (temperatureContribution(_weather!.daily!.first) * 100)
-                    .toStringAsFixed(0) +
+                (temperatureContribution(temp) * 100).toStringAsFixed(0) +
                 "%",
             style: TextStyle(
               fontSize: 12,
             ),
+            stepGranularity: 1.0,
+            group: suitabilityGroup,
           ),
         ],
       ),
@@ -572,22 +667,54 @@ class _MyHomePageState extends State<MyHomePage> {
     return SizedBox(
       child: Column(
         children: [
-          Text(
+          AutoSizeText(
             'Wind Speed',
             style: TextStyle(fontSize: 14),
+            group: headingGroup,
           ),
-          Text(
+          AutoSizeText(
             '${_weather!.daily!.first.windSpeed!.toStringAsFixed(1)}\u{00A0}m/s',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+            group: parameterGroup,
           ),
-          Text(
+          AutoSizeText(
             "Suitability: " +
-                (windContribution(_weather!.daily!.first) * 100)
+                (windContribution(_weather!.daily!.first.windSpeed!) * 100)
                     .toStringAsFixed(0) +
                 "%",
             style: TextStyle(
               fontSize: 12,
             ),
+            group: suitabilityGroup,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWindGust() {
+    return SizedBox(
+      child: Column(
+        children: [
+          AutoSizeText(
+            'Wind Gust',
+            style: TextStyle(fontSize: 14),
+            group: headingGroup,
+          ),
+          AutoSizeText(
+            '${_weather!.daily!.first.windGust!.toStringAsFixed(1)}\u{00A0}m/s',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+            group: parameterGroup,
+          ),
+          AutoSizeText(
+            "Suitability: " +
+                (windContribution(_weather!.daily!.first.windGust!) * 100)
+                    .toStringAsFixed(0) +
+                "%",
+            style: TextStyle(
+              fontSize: 12,
+            ),
+            group: suitabilityGroup,
           ),
         ],
       ),
@@ -598,22 +725,25 @@ class _MyHomePageState extends State<MyHomePage> {
     return SizedBox(
       child: Column(
         children: [
-          Text(
+          AutoSizeText(
             'Precipitation',
             style: TextStyle(fontSize: 14),
+            group: headingGroup,
           ),
-          Text(
+          AutoSizeText(
             (_weather!.daily!.first.pop! * 100).toStringAsFixed(0) + "%",
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+            group: parameterGroup,
           ),
-          Text(
+          AutoSizeText(
             "Suitability: " +
-                (rainContribution(_weather!.daily!.first) * 100)
+                (rainContribution(_weather!.daily!.first.pop!) * 100)
                     .toStringAsFixed(0) +
                 "%",
             style: TextStyle(
               fontSize: 12,
             ),
+            group: suitabilityGroup,
           ),
         ],
       ),
@@ -624,22 +754,25 @@ class _MyHomePageState extends State<MyHomePage> {
     return SizedBox(
       child: Column(
         children: [
-          Text(
+          AutoSizeText(
             'Humidity',
             style: TextStyle(fontSize: 14),
+            group: headingGroup,
           ),
-          Text(
-            '${_weather!.daily!.first.humidity}%',
+          AutoSizeText(
+            '${_weather!.daily!.first.humidity!}%',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+            group: parameterGroup,
           ),
-          Text(
+          AutoSizeText(
             "Suitability: " +
-                (humidityContribution(_weather!.daily!.first) * 100)
+                (humidityContribution(_weather!.daily!.first.humidity!) * 100)
                     .toStringAsFixed(0) +
                 "%",
             style: TextStyle(
               fontSize: 12,
             ),
+            group: suitabilityGroup,
           ),
         ],
       ),
@@ -650,20 +783,23 @@ class _MyHomePageState extends State<MyHomePage> {
     return SizedBox(
       child: Column(
         children: [
-          Text(
+          AutoSizeText(
             'Cloudiness',
             style: TextStyle(fontSize: 14),
+            group: headingGroup,
           ),
-          Text(
-            '${_weather!.daily!.first.clouds}%',
+          AutoSizeText(
+            '${_weather!.daily!.first.clouds!}%',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+            group: parameterGroup,
           ),
-          Text(
+          AutoSizeText(
             "Suitability: " +
-                (cloudinessContribution(_weather!.daily!.first) * 100)
+                (cloudinessContribution(_weather!.daily!.first.clouds!) * 100)
                     .toStringAsFixed(0) +
                 "%",
             style: TextStyle(fontSize: 12),
+            group: suitabilityGroup,
           ),
         ],
       ),
@@ -674,23 +810,26 @@ class _MyHomePageState extends State<MyHomePage> {
     return SizedBox(
       child: Column(
         children: [
-          Text(
+          AutoSizeText(
             'Air Pressure',
             style: TextStyle(fontSize: 14),
+            group: headingGroup,
           ),
-          Text(
+          AutoSizeText(
             (_weather!.daily!.first.pressure!).toStringAsFixed(0) +
                 "\u{00A0}hPa",
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+            group: parameterGroup,
           ),
-          Text(
+          AutoSizeText(
             "Suitability: " +
-                (pressureContribution(_weather!.daily!.first) * 100)
+                (pressureContribution(_weather!.daily!.first.pressure!) * 100)
                     .toStringAsFixed(0) +
                 "%",
             style: TextStyle(
               fontSize: 12,
             ),
+            group: suitabilityGroup,
           ),
         ],
       ),
@@ -717,6 +856,7 @@ class _MyHomePageState extends State<MyHomePage> {
             DataColumn(label: Text('Likelihood'), numeric: true),
           ],
           rows: [
+            _buildFuturePercentage(0),
             _buildFuturePercentage(1),
             _buildFuturePercentage(2),
             _buildFuturePercentage(3),
@@ -734,46 +874,38 @@ class _MyHomePageState extends State<MyHomePage> {
     return DataRow(
       cells: [
         DataCell(
-          Container(
-            child: Text(
-              weekdayFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                  (_weather!.daily!.elementAt(i).dt! +
-                          _weather!.timezoneOffset!) *
-                      1000,
-                  isUtc: true)),
-              style: getColorTextStyle(_percentage[i]),
-            ),
+          Text(
+            weekdayFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                (_weather!.daily!.elementAt(i).dt! +
+                        _weather!.timezoneOffset!) *
+                    1000,
+                isUtc: true)),
+            style: getColorTextStyle(_dailyPercentage[i]),
           ),
         ),
         DataCell(
-          Container(
-            child: Text(
-              ' ${_weather!.daily!.elementAt(i).temp!.max!.toStringAsFixed(1)}°C',
-              style: getColorTextStyle(_percentage[i]),
-            ),
+          Text(
+            ' ${_weather!.daily!.elementAt(i).temp!.day!.toStringAsFixed(1)}°C',
+            style: getColorTextStyle(_dailyPercentage[i]),
           ),
         ),
         DataCell(
-          Container(
-            child: Text(
-              ' ${_weather!.daily!.elementAt(i).windSpeed!.toStringAsFixed(1)}\u{00A0}m/s',
-              style: getColorTextStyle(_percentage[i]),
-            ),
+          Text(
+            ' ${_weather!.daily!.elementAt(i).windSpeed!.toStringAsFixed(1)}\u{00A0}m/s',
+            style: getColorTextStyle(_dailyPercentage[i]),
           ),
         ),
         DataCell(
-          Container(
-            child: Text(
-              ' ${_percentage[i]}%',
-              style: getColorTextStyle(_percentage[i]),
-            ),
+          Text(
+            ' ${_dailyPercentage[i]}%',
+            style: getColorTextStyle(_dailyPercentage[i]),
           ),
         ),
       ],
     );
   }
 
-  void handleLocationError(Exception? e) {
+  void handleLocationError(e) {
     if (e != null && e.toString().startsWith('Exception: ')) {
       handleError(e);
 
@@ -789,7 +921,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void handleSearchError(Exception? e) {
+  void handleSearchError(e) {
     handleError(e);
 
     // Wait then try to get weather again
@@ -798,9 +930,9 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void handleError(Exception? e) {
+  void handleError(e) {
     setState(() {
-      errorMessage = e.toString().substring('Exception: '.length);
+      errorMessage = e.toString().replaceFirst('^Exception: ', '');
       print('handleError: $e');
     });
     //throw e;
