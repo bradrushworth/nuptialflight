@@ -2,6 +2,7 @@
 //import 'dart:developer' as developer;
 
 import 'dart:async';
+import 'dart:developer' as developer;
 import 'dart:io';
 import 'dart:math';
 
@@ -28,6 +29,7 @@ import 'nuptials.dart';
 import 'utils.dart';
 
 final DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+final DateFormat longDateFormat = DateFormat.MMMEd();
 final DateFormat weekdayFormat = DateFormat("E");
 final DateFormat timeOfDayFormat = DateFormat("ha");
 
@@ -125,6 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String? appName, packageName, version, buildNumber;
   String? _geocoding;
+  WeatherResponse? _historical;
   WeatherResponse? _weather;
   bool loaded = false;
   String? errorMessage;
@@ -231,11 +234,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _getWeather() {
+    DateTime now = new DateTime.now();
+    int dt = now.toUtc().millisecondsSinceEpoch ~/ 1000;
+
     return Future.wait([
       weatherFetcher.fetchNearestWeatherLocation(),
-      weatherFetcher.fetchWeather()
+      weatherFetcher.fetchHistoricalWeather(dt),
+      weatherFetcher.fetchWeather(),
     ])
-        .then((List responses) => _updateWeather(responses[0], responses[1]))
+        .then((List responses) =>
+            _updateWeather(responses[0], responses[1], responses[2]))
         .catchError((e) => handleError(e));
   }
 
@@ -292,54 +300,56 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _updateWeather(String geocoding, WeatherResponse value) {
+  void _updateWeather(
+      String geocoding, WeatherResponse historical, WeatherResponse weather) {
     print('_updateWeather: geocoding=$geocoding');
     setState(() {
       _geocoding = geocoding;
-      _weather = value;
-      _indexOfDiurnalHour = value.hourly!.firstWhere((e) =>
+
+      _historical = historical;
+      _indexOfDiurnalHour = historical.hourly!.firstWhere((e) =>
           timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
-              (e.dt! + _weather!.timezoneOffset!) * 1000,
+              (e.dt! + historical.timezoneOffset!) * 1000,
               isUtc: true)) ==
           '12PM');
-      _indexOfNocturnalHour = value.hourly!.firstWhere((e) =>
+      _indexOfNocturnalHour = historical.hourly!.firstWhere((e) =>
           timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
-              (e.dt! + _weather!.timezoneOffset!) * 1000,
+              (e.dt! + historical.timezoneOffset!) * 1000,
               isUtc: true)) ==
           '9PM');
       _hourlyPercentage[0] =
           (nuptialHourlyPercentage(_indexOfDiurnalHour!) * 100.0).toInt();
       _hourlyPercentage[1] =
           (nuptialHourlyPercentage(_indexOfNocturnalHour!) * 100.0).toInt();
-      // _hourlyPercentage[0] =
-      //     (nuptialDailyPercentage(value.daily!.elementAt(0)) * 100.0).toInt();
-      // _hourlyPercentage[1] =
-      //     (nuptialDailyPercentage(value.daily!.elementAt(0), nocturnal: true) * 100.0).toInt();
+
+      _weather = weather;
       _dailyPercentage[0] =
-          (nuptialDailyPercentage(value.daily!.elementAt(0)) * 100.0).toInt();
+          (nuptialDailyPercentage(weather.daily!.elementAt(0)) * 100.0).toInt();
       _dailyPercentage[1] =
-          (nuptialDailyPercentage(value.daily!.elementAt(1)) * 100.0).toInt();
+          (nuptialDailyPercentage(weather.daily!.elementAt(1)) * 100.0).toInt();
       _dailyPercentage[2] =
-          (nuptialDailyPercentage(value.daily!.elementAt(2)) * 100.0).toInt();
+          (nuptialDailyPercentage(weather.daily!.elementAt(2)) * 100.0).toInt();
       _dailyPercentage[3] =
-          (nuptialDailyPercentage(value.daily!.elementAt(3)) * 100.0).toInt();
+          (nuptialDailyPercentage(weather.daily!.elementAt(3)) * 100.0).toInt();
       _dailyPercentage[4] =
-          (nuptialDailyPercentage(value.daily!.elementAt(4)) * 100.0).toInt();
+          (nuptialDailyPercentage(weather.daily!.elementAt(4)) * 100.0).toInt();
       _dailyPercentage[5] =
-          (nuptialDailyPercentage(value.daily!.elementAt(5)) * 100.0).toInt();
+          (nuptialDailyPercentage(weather.daily!.elementAt(5)) * 100.0).toInt();
       _dailyPercentage[6] =
-          (nuptialDailyPercentage(value.daily!.elementAt(6)) * 100.0).toInt();
+          (nuptialDailyPercentage(weather.daily!.elementAt(6)) * 100.0).toInt();
       _dailyPercentage[7] =
-          (nuptialDailyPercentage(value.daily!.elementAt(7)) * 100.0).toInt();
-      if (_dailyPercentage[0] >= greenThreshold) {
+          (nuptialDailyPercentage(weather.daily!.elementAt(7)) * 100.0).toInt();
+
+      if (_hourlyPercentage[0] >= greenThreshold) {
         widget.setPrimarySwatch(Colors.lightGreen);
-      } else if (_dailyPercentage[0] >= 50) {
+      } else if (_hourlyPercentage[0] >= 50) {
         widget.setPrimarySwatch(Colors.amber);
       } else {
         widget.setPrimarySwatch(Colors.red);
       }
       loaded = true;
-      print("_updateWeather: _dailyPercentage=" + _dailyPercentage.toString());
+      print(
+          "_updateWeather: _hourlyPercentage=" + _hourlyPercentage.toString());
     });
   }
 
@@ -359,6 +369,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget buildUI(String title) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -398,18 +409,21 @@ class _MyHomePageState extends State<MyHomePage> {
           return errorMessage != null
               ? _buildErrorMessage()
               : !loaded
-                  ? _buildCircularProgressIndicator()
-                  : Column(
-                      mainAxisAlignment: orientation == Orientation.portrait
-                          ? MainAxisAlignment.spaceBetween
-                          : MainAxisAlignment.spaceAround,
-                      //crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        GridView.count(
-                          crossAxisCount:
+              ? _buildCircularProgressIndicator()
+              : Column(
+            mainAxisAlignment: orientation == Orientation.portrait
+                ? MainAxisAlignment.spaceBetween
+                : MainAxisAlignment.spaceAround,
+            //crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              GridView.count(
+                crossAxisCount:
                               orientation == Orientation.portrait ? 1 : 3,
                           childAspectRatio:
-                              orientation == Orientation.portrait ? 8 : 6,
+                              orientation == Orientation.portrait ? 6 : 4,
+                          padding: orientation == Orientation.portrait
+                              ? const EdgeInsets.symmetric(vertical: 0)
+                              : const EdgeInsets.symmetric(horizontal: 0),
                           shrinkWrap: true,
                           children: [
                             _buildNuptialHeading(orientation),
@@ -421,13 +435,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                 _buildTodayPercentage(orientation, 'Nocturnal',
                                     _hourlyPercentage[1]),
                               ],
-                            ),
-                            _buildTodayWeather(orientation),
-                          ],
-                        ),
-                        GridView.count(
-                          crossAxisCount:
-                              orientation == Orientation.portrait ? 3 : 9,
+                  ),
+                  _buildTodayWeather(orientation),
+                ],
+              ),
+              GridView.count(
+                crossAxisCount:
+                              orientation == Orientation.portrait ? 3 : 6,
                           childAspectRatio: 2.0,
                           padding: orientation == Orientation.portrait
                               ? const EdgeInsets.symmetric(vertical: 0)
@@ -439,25 +453,25 @@ class _MyHomePageState extends State<MyHomePage> {
                             // _buildTemperature(
                             //     'Max Temp', _weather!.daily!.first.temp!.max!),
                             // _buildTemperature(
-                            //     'Eve Temp', _weather!.daily!.first.temp!.eve!),
+                  //     'Eve Temp', _weather!.daily!.first.temp!.eve!),
 
-                            _buildTemperature(
-                                timeOfDayFormat
-                                        .format(
-                                            DateTime.fromMillisecondsSinceEpoch(
-                                                (_indexOfDiurnalHour!.dt! +
-                                                        _weather!
-                                                            .timezoneOffset!) *
-                                                    1000,
-                                                isUtc: true))
-                                        .toLowerCase() +
-                                    ' Temp',
-                                _indexOfDiurnalHour!.temp!),
-                            _buildTemperature(
-                                'Max Temp', _weather!.daily!.first.temp!.max!),
-                            _buildTemperature(
-                                timeOfDayFormat
-                                        .format(
+                  _buildTemperature(
+                      timeOfDayFormat
+                          .format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              (_indexOfDiurnalHour!.dt! +
+                                  _weather!
+                                      .timezoneOffset!) *
+                                  1000,
+                              isUtc: true))
+                          .toLowerCase() +
+                          ' Temp',
+                      _indexOfDiurnalHour!.temp!),
+                  _buildTemperature(
+                      'Max Temp', _weather!.daily!.first.temp!.max!),
+                  _buildTemperature(
+                      timeOfDayFormat
+                          .format(
                                             DateTime.fromMillisecondsSinceEpoch(
                                                 (_indexOfNocturnalHour!.dt! +
                                                         _weather!
@@ -468,14 +482,21 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ' Temp',
                                 _indexOfNocturnalHour!.temp!),
                             _buildWindSpeed(),
-                            _buildWindGust(),
+                            if (orientation == Orientation.portrait)
+                              _buildWindGust(),
                             _buildPrecipitation(),
                             _buildHumidity(),
-                            _buildCloudiness(),
-                            _buildAirPressure(),
+                            if (orientation == Orientation.portrait)
+                              _buildCloudiness(),
+                            if (orientation == Orientation.portrait)
+                              _buildAirPressure(),
                           ],
                         ),
                         _buildUpcomingWeek(orientation),
+                        if (orientation == Orientation.portrait)
+                          Container(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 30)),
                         if (orientation == Orientation.portrait)
                           Text(
                               (kIsWeb
@@ -491,11 +512,12 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
 
       /// Future feature to record that the user saw a nuptial flight today
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _foundNuptialFlight,
-      //   tooltip: 'Found Nuptial Flight',
-      //   child: Icon(Icons.add),
-      //), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton: FloatingActionButton(
+        onPressed: _foundNuptialFlight,
+        tooltip: 'Found Nuptial Flight',
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }
 
@@ -573,7 +595,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildTodayPercentage(
       Orientation orientation, String heading, int percentage) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         AutoSizeText(
           heading,
@@ -620,8 +642,13 @@ class _MyHomePageState extends State<MyHomePage> {
           overflow: TextOverflow.ellipsis,
         ),
         AutoSizeText(
-          toBeginningOfSentenceCase(
-              _weather!.daily!.first.weather!.first.description)!,
+          longDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                  (_historical!.current!.dt! + _historical!.timezoneOffset!) *
+                      1000,
+                  isUtc: true)) +
+              ' - ' +
+              toBeginningOfSentenceCase(
+                  _historical!.current!.weather!.first.description)!,
           style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
           minFontSize: 17,
           maxFontSize: 20,
@@ -655,6 +682,8 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextStyle(
               fontSize: 12,
             ),
+            minFontSize: 2,
+            maxFontSize: 12,
             stepGranularity: 1.0,
             group: suitabilityGroup,
           ),
@@ -670,21 +699,26 @@ class _MyHomePageState extends State<MyHomePage> {
           AutoSizeText(
             'Wind Speed',
             style: TextStyle(fontSize: 14),
+            stepGranularity: 1.0,
             group: headingGroup,
           ),
           AutoSizeText(
-            '${_weather!.daily!.first.windSpeed!.toStringAsFixed(1)}\u{00A0}m/s',
+            '${_indexOfDiurnalHour!.windSpeed!.toStringAsFixed(1)}\u{00A0}m/s',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+            stepGranularity: 1.0,
             group: parameterGroup,
           ),
           AutoSizeText(
             "Suitability: " +
-                (windContribution(_weather!.daily!.first.windSpeed!) * 100)
+                (windContribution(_indexOfDiurnalHour!.windSpeed!) * 100)
                     .toStringAsFixed(0) +
                 "%",
             style: TextStyle(
               fontSize: 12,
             ),
+            minFontSize: 2,
+            maxFontSize: 12,
+            stepGranularity: 1.0,
             group: suitabilityGroup,
           ),
         ],
@@ -699,11 +733,13 @@ class _MyHomePageState extends State<MyHomePage> {
           AutoSizeText(
             'Wind Gust',
             style: TextStyle(fontSize: 14),
+            stepGranularity: 1.0,
             group: headingGroup,
           ),
           AutoSizeText(
             '${_weather!.daily!.first.windGust!.toStringAsFixed(1)}\u{00A0}m/s',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+            stepGranularity: 1.0,
             group: parameterGroup,
           ),
           AutoSizeText(
@@ -714,6 +750,9 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextStyle(
               fontSize: 12,
             ),
+            minFontSize: 2,
+            maxFontSize: 12,
+            stepGranularity: 1.0,
             group: suitabilityGroup,
           ),
         ],
@@ -728,11 +767,13 @@ class _MyHomePageState extends State<MyHomePage> {
           AutoSizeText(
             'Precipitation',
             style: TextStyle(fontSize: 14),
+            stepGranularity: 1.0,
             group: headingGroup,
           ),
           AutoSizeText(
             (_weather!.daily!.first.pop! * 100).toStringAsFixed(0) + "%",
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+            stepGranularity: 1.0,
             group: parameterGroup,
           ),
           AutoSizeText(
@@ -743,6 +784,9 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextStyle(
               fontSize: 12,
             ),
+            minFontSize: 2,
+            maxFontSize: 12,
+            stepGranularity: 1.0,
             group: suitabilityGroup,
           ),
         ],
@@ -757,21 +801,26 @@ class _MyHomePageState extends State<MyHomePage> {
           AutoSizeText(
             'Humidity',
             style: TextStyle(fontSize: 14),
+            stepGranularity: 1.0,
             group: headingGroup,
           ),
           AutoSizeText(
-            '${_weather!.daily!.first.humidity!}%',
+            '${_indexOfDiurnalHour!.humidity!}%',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+            stepGranularity: 1.0,
             group: parameterGroup,
           ),
           AutoSizeText(
             "Suitability: " +
-                (humidityContribution(_weather!.daily!.first.humidity!) * 100)
+                (humidityContribution(_indexOfDiurnalHour!.humidity!) * 100)
                     .toStringAsFixed(0) +
                 "%",
             style: TextStyle(
               fontSize: 12,
             ),
+            minFontSize: 2,
+            maxFontSize: 12,
+            stepGranularity: 1.0,
             group: suitabilityGroup,
           ),
         ],
@@ -786,19 +835,24 @@ class _MyHomePageState extends State<MyHomePage> {
           AutoSizeText(
             'Cloudiness',
             style: TextStyle(fontSize: 14),
+            stepGranularity: 1.0,
             group: headingGroup,
           ),
           AutoSizeText(
-            '${_weather!.daily!.first.clouds!}%',
+            '${_indexOfDiurnalHour!.clouds!}%',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+            stepGranularity: 1.0,
             group: parameterGroup,
           ),
           AutoSizeText(
             "Suitability: " +
-                (cloudinessContribution(_weather!.daily!.first.clouds!) * 100)
+                (cloudinessContribution(_indexOfDiurnalHour!.clouds!) * 100)
                     .toStringAsFixed(0) +
                 "%",
             style: TextStyle(fontSize: 12),
+            minFontSize: 2,
+            maxFontSize: 12,
+            stepGranularity: 1.0,
             group: suitabilityGroup,
           ),
         ],
@@ -813,22 +867,26 @@ class _MyHomePageState extends State<MyHomePage> {
           AutoSizeText(
             'Air Pressure',
             style: TextStyle(fontSize: 14),
+            stepGranularity: 1.0,
             group: headingGroup,
           ),
           AutoSizeText(
-            (_weather!.daily!.first.pressure!).toStringAsFixed(0) +
-                "\u{00A0}hPa",
+            (_indexOfDiurnalHour!.pressure!).toStringAsFixed(0) + "\u{00A0}hPa",
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+            stepGranularity: 1.0,
             group: parameterGroup,
           ),
           AutoSizeText(
             "Suitability: " +
-                (pressureContribution(_weather!.daily!.first.pressure!) * 100)
+                (pressureContribution(_indexOfDiurnalHour!.pressure!) * 100)
                     .toStringAsFixed(0) +
                 "%",
             style: TextStyle(
               fontSize: 12,
             ),
+            minFontSize: 2,
+            maxFontSize: 12,
+            stepGranularity: 1.0,
             group: suitabilityGroup,
           ),
         ],
@@ -856,7 +914,6 @@ class _MyHomePageState extends State<MyHomePage> {
             DataColumn(label: Text('Likelihood'), numeric: true),
           ],
           rows: [
-            _buildFuturePercentage(0),
             _buildFuturePercentage(1),
             _buildFuturePercentage(2),
             _buildFuturePercentage(3),
@@ -917,7 +974,8 @@ class _MyHomePageState extends State<MyHomePage> {
         _findPlaceName();
       });
     } else {
-      print('unhandledError: $e');
+      developer.log('unhandledError: $e', error: e);
+      throw e;
     }
   }
 
@@ -931,11 +989,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void handleError(e) {
-    setState(() {
-      errorMessage = e.toString().replaceFirst('^Exception: ', '');
-      print('handleError: $e');
-    });
-    //throw e;
+    if (e != null && e.toString().startsWith('Exception: ')) {
+      setState(() {
+        errorMessage = e.toString().replaceFirst('^Exception: ', '');
+        developer.log('handleError: $e', error: e);
+      });
+    } else {
+      developer.log('unhandledError: $e', error: e);
+      throw e;
+    }
   }
 
 /*

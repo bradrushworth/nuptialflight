@@ -150,11 +150,35 @@ class WeatherFetcher {
           'Location is unknown! Perhaps you didn\'t allow location permissions?');
 
     String url =
-        'https://api.openweathermap.org/data/2.5/onecall?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&exclude=minutely,current';
+        'https://api.openweathermap.org/data/2.5/onecall?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&exclude=minutely,hourly,current';
     developer.log("url=$url", name: 'WeatherFetcher');
     if (!kIsWeb) stdout.writeln("url=$url");
 
     final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return WeatherResponse.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to download weather!');
+    }
+  }
+
+  Future<WeatherResponse> fetchHistoricalWeather(int dt) async {
+    if (_lat == null || _lon == null)
+      throw Exception(
+          'Location is unknown! Perhaps you didn\'t allow location permissions?');
+
+    String url =
+        'https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&dt=$dt';
+    developer.log("url=$url", name: 'WeatherFetcher');
+    if (!kIsWeb) stdout.writeln("url=$url");
+
+    final response = await http.get(Uri.parse(url));
+    developer.log("response=${response.body}", name: 'WeatherFetcher');
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,

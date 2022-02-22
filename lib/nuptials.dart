@@ -27,8 +27,9 @@ const double RADIATION_STD = 19.5; // SE not SD
 
 double nuptialHourlyPercentage(Hourly hourly) {
   double temp = temperatureContribution(hourly.temp!);
-  double wind = windContribution(hourly.windSpeed!);
-  double rain = rainContribution(hourly.pop!);
+  double windSpeed = windContribution(hourly.windSpeed!);
+  //double windGust = windContribution(hourly.windGust!);
+  //double rain = rainContribution(hourly.pop!);
   double humid = humidityContribution(hourly.humidity!);
   double cloud = cloudinessContribution(hourly.clouds!);
   double press = pressureContribution(hourly.pressure!);
@@ -40,10 +41,9 @@ double nuptialHourlyPercentage(Hourly hourly) {
   // developer.log("cloud=$cloud", name: 'nuptialPercentage');
   // developer.log("press=$press", name: 'nuptialPercentage');
   var values = [
-    {'percentage': temp * wind * rain, 'weighting': 1},
-    {'percentage': temp * wind * humid, 'weighting': 1},
-    {'percentage': temp * wind * cloud, 'weighting': 1},
-    {'percentage': temp * wind * press, 'weighting': 1},
+    {'percentage': temp * windSpeed * humid, 'weighting': 1},
+    {'percentage': temp * windSpeed * cloud, 'weighting': 1},
+    {'percentage': temp * windSpeed * press, 'weighting': 1},
   ];
   return nuptialCalculator(values);
 }
