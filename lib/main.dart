@@ -235,7 +235,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _getWeather() {
     DateTime now = new DateTime.now();
-    int dt = now.toUtc().millisecondsSinceEpoch ~/ 1000;
+    DateTime today = new DateTime(now.year, now.month, now.day);
+    int dt = today.millisecondsSinceEpoch ~/ 1000;
 
     return Future.wait([
       weatherFetcher.fetchNearestWeatherLocation(),
