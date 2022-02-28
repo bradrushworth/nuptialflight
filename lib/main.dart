@@ -410,15 +410,15 @@ class _MyHomePageState extends State<MyHomePage> {
           return errorMessage != null
               ? _buildErrorMessage()
               : !loaded
-              ? _buildCircularProgressIndicator()
-              : Column(
-            mainAxisAlignment: orientation == Orientation.portrait
-                ? MainAxisAlignment.spaceBetween
-                : MainAxisAlignment.spaceAround,
-            //crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              GridView.count(
-                crossAxisCount:
+                  ? _buildCircularProgressIndicator()
+                  : Column(
+                      mainAxisAlignment: orientation == Orientation.portrait
+                          ? MainAxisAlignment.spaceBetween
+                          : MainAxisAlignment.spaceAround,
+                      //crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        GridView.count(
+                          crossAxisCount:
                               orientation == Orientation.portrait ? 1 : 3,
                           childAspectRatio:
                               orientation == Orientation.portrait ? 6 : 4,
@@ -436,12 +436,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                 _buildTodayPercentage(orientation, 'Nocturnal',
                                     _hourlyPercentage[1]),
                               ],
-                  ),
-                  _buildTodayWeather(orientation),
-                ],
-              ),
-              GridView.count(
-                crossAxisCount:
+                            ),
+                            _buildTodayWeather(orientation),
+                          ],
+                        ),
+                        GridView.count(
+                          crossAxisCount:
                               orientation == Orientation.portrait ? 3 : 6,
                           childAspectRatio: 2.0,
                           padding: orientation == Orientation.portrait
@@ -454,25 +454,25 @@ class _MyHomePageState extends State<MyHomePage> {
                             // _buildTemperature(
                             //     'Max Temp', _weather!.daily!.first.temp!.max!),
                             // _buildTemperature(
-                  //     'Eve Temp', _weather!.daily!.first.temp!.eve!),
+                            //     'Eve Temp', _weather!.daily!.first.temp!.eve!),
 
-                  _buildTemperature(
-                      timeOfDayFormat
-                          .format(
-                          DateTime.fromMillisecondsSinceEpoch(
-                              (_indexOfDiurnalHour!.dt! +
-                                  _weather!
-                                      .timezoneOffset!) *
-                                  1000,
-                              isUtc: true))
-                          .toLowerCase() +
-                          ' Temp',
-                      _indexOfDiurnalHour!.temp!),
-                  _buildTemperature(
-                      'Max Temp', _weather!.daily!.first.temp!.max!),
-                  _buildTemperature(
-                      timeOfDayFormat
-                          .format(
+                            _buildTemperature(
+                                timeOfDayFormat
+                                        .format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                (_indexOfDiurnalHour!.dt! +
+                                                        _weather!
+                                                            .timezoneOffset!) *
+                                                    1000,
+                                                isUtc: true))
+                                        .toLowerCase() +
+                                    ' Temp',
+                                _indexOfDiurnalHour!.temp!),
+                            _buildTemperature(
+                                'Max Temp', _weather!.daily!.first.temp!.max!),
+                            _buildTemperature(
+                                timeOfDayFormat
+                                        .format(
                                             DateTime.fromMillisecondsSinceEpoch(
                                                 (_indexOfNocturnalHour!.dt! +
                                                         _weather!
@@ -513,12 +513,12 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
 
       /// Future feature to record that the user saw a nuptial flight today
-      floatingActionButton: FloatingActionButton(
-        onPressed: _foundNuptialFlight,
-        tooltip: 'Found Nuptial Flight',
-        child: Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _foundNuptialFlight,
+      //   tooltip: 'Found Nuptial Flight',
+      //   child: Icon(Icons.add),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }
 
