@@ -35,7 +35,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
 
-    compileSdkVersion 31
+    compileSdkVersion 32
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -44,7 +44,7 @@ android {
     defaultConfig {
         applicationId "au.com.bitbot.nuptialflight"
         minSdkVersion 19
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
