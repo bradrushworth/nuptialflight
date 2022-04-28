@@ -312,12 +312,12 @@ class _MyHomePageState extends State<MyHomePage> {
           timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
               (e.dt! + historical.timezoneOffset!) * 1000,
               isUtc: true)) ==
-          '12PM');
+          '11AM');
       _indexOfNocturnalHour = historical.hourly!.firstWhere((e) =>
           timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
               (e.dt! + historical.timezoneOffset!) * 1000,
               isUtc: true)) ==
-          '9PM');
+          '5PM');
       _hourlyPercentage[0] =
           (nuptialHourlyPercentage(_indexOfDiurnalHour!) * 100.0).toInt();
       _hourlyPercentage[1] =
