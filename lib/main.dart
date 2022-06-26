@@ -154,9 +154,14 @@ class _MyHomePageState extends State<MyHomePage> {
     choices.add(const Choice(
         title: 'Select Location', url: '', icon: Icons.add_location_alt));
     choices.add(const Choice(title: 'Show Map', url: '', icon: Icons.map));
-    choices.add(const Choice(
+    choices.add(Choice(
         title: 'Report Issue',
-        url: 'mailto:bitbot@bitbot.com.au?subject=Help with Ant Flight',
+        url: 'mailto:bitbot@bitbot.com.au?subject=Help with Ant Flight (' +
+            (kIsWeb
+                ? 'Web'
+                : toBeginningOfSentenceCase(Platform.operatingSystem)!) +
+            ' Version $version+$buildNumber' +
+            ')',
         icon: Icons.email));
     if (!kIsWeb) {
       choices.add(const Choice(
@@ -164,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
           url: 'https://nuptialflight.codemagic.app/',
           icon: Icons.web));
     }
-    if (kIsWeb || Platform.isAndroid) {
+    if (kIsWeb || Platform.isAndroid || Platform.isFuchsia) {
       choices.add(const Choice(
           title: 'Android',
           url:
@@ -349,9 +354,8 @@ class _MyHomePageState extends State<MyHomePage> {
         widget.setPrimarySwatch(Colors.red);
       }
       loaded = true;
-      print(
-          "_updateWeather: _hourlyPercentage=" + _hourlyPercentage.toString());
     });
+    print("_updateWeather: _hourlyPercentage=" + _hourlyPercentage.toString());
   }
 
   /// Future feature to record user saw a nuptial flight
@@ -992,6 +996,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void handleError(e) {
     if (e != null && e.toString().startsWith('Exception: ')) {
       setState(() {
+        loaded = true;
         errorMessage = e.toString().replaceFirst('^Exception: ', '');
         developer.log('handleError: $e', error: e);
       });
