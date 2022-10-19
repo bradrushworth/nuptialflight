@@ -35,7 +35,7 @@ void main() {
       expect(response.lon, 150.2053);
       anyOf(response.timezoneOffset, 36000, 39600); // 39600 in daylight savings
       expect(response.daily!.length, 8);
-      expect(response.daily!.first.uvi, greaterThan(0));
+      expect(response.daily!.first.uvi, greaterThanOrEqualTo(0));
     });
   });
 }
