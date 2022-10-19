@@ -33,7 +33,7 @@ void main() {
       expect(response, isNotNull);
       expect(response.lat, -35.76);
       expect(response.lon, 150.2053);
-      expect(response.timezoneOffset, 36000); // 39600 in daylight savings
+      anyOf(response.timezoneOffset, 36000, 39600); // 39600 in daylight savings
       expect(response.daily!.length, 8);
       expect(response.daily!.first.uvi, greaterThan(0));
     });
