@@ -942,7 +942,7 @@ class _MyHomePageState extends State<MyHomePage> {
             group: headingGroup,
           ),
           AutoSizeText(
-            (_weather!.daily!.first.uvi! * 100).toStringAsFixed(0),
+            (_weather!.daily!.first.uvi!).toStringAsFixed(1),
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
             stepGranularity: 1.0,
             group: parameterGroup,
