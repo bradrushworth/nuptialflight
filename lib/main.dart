@@ -1167,6 +1167,8 @@ class _MyHomePageState extends State<MyHomePage> {
         developer.log('handleError: $e', error: e);
       });
     } else {
+      loaded = true;
+      errorMessage = e.toString();
       developer.log('unhandledError: $e', error: e);
       throw e;
     }

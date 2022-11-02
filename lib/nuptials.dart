@@ -2,7 +2,6 @@ import 'dart:math';
 
 //import 'dart:developer' as developer;
 import 'package:normal/normal.dart';
-
 //import 'package:collection/collection.dart';
 import 'package:nuptialflight/models/final_model.dart';
 import 'package:nuptialflight/responses/weather_response.dart';
@@ -97,7 +96,7 @@ double nuptialDailyPercentageModel(num lat, Daily daily,
   return score([
     lat.toDouble(),
     daily.temp!.day!.toDouble(),
-    daily.windGust!.toDouble(),
+    daily.windSpeed!.toDouble(),
     daily.humidity!.toDouble(),
     daily.clouds!.toDouble(),
     daily.pressure!.toDouble(),
