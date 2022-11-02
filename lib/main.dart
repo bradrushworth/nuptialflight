@@ -343,27 +343,47 @@ class _MyHomePageState extends State<MyHomePage> {
               isUtc: true)) ==
           '5PM');
       _hourlyPercentage[0] =
-          (nuptialHourlyPercentage(_indexOfDiurnalHour!) * 100.0).toInt();
+          (nuptialHourlyPercentageModel(weather.lat!, _indexOfDiurnalHour!) *
+                  100.0)
+              .toInt();
       _hourlyPercentage[1] =
-          (nuptialHourlyPercentage(_indexOfNocturnalHour!) * 100.0).toInt();
+          (nuptialHourlyPercentageModel(weather.lat!, _indexOfNocturnalHour!) *
+                  100.0)
+              .toInt();
 
       _weather = weather;
-      _dailyPercentage[0] =
-          (nuptialDailyPercentage(weather.daily!.elementAt(0)) * 100.0).toInt();
-      _dailyPercentage[1] =
-          (nuptialDailyPercentage(weather.daily!.elementAt(1)) * 100.0).toInt();
-      _dailyPercentage[2] =
-          (nuptialDailyPercentage(weather.daily!.elementAt(2)) * 100.0).toInt();
-      _dailyPercentage[3] =
-          (nuptialDailyPercentage(weather.daily!.elementAt(3)) * 100.0).toInt();
-      _dailyPercentage[4] =
-          (nuptialDailyPercentage(weather.daily!.elementAt(4)) * 100.0).toInt();
-      _dailyPercentage[5] =
-          (nuptialDailyPercentage(weather.daily!.elementAt(5)) * 100.0).toInt();
-      _dailyPercentage[6] =
-          (nuptialDailyPercentage(weather.daily!.elementAt(6)) * 100.0).toInt();
-      _dailyPercentage[7] =
-          (nuptialDailyPercentage(weather.daily!.elementAt(7)) * 100.0).toInt();
+      _dailyPercentage[0] = (nuptialDailyPercentageModel(
+                  weather.lat!, weather.daily!.elementAt(0)) *
+              100.0)
+          .toInt();
+      _dailyPercentage[1] = (nuptialDailyPercentageModel(
+                  weather.lat!, weather.daily!.elementAt(1)) *
+              100.0)
+          .toInt();
+      _dailyPercentage[2] = (nuptialDailyPercentageModel(
+                  weather.lat!, weather.daily!.elementAt(2)) *
+              100.0)
+          .toInt();
+      _dailyPercentage[3] = (nuptialDailyPercentageModel(
+                  weather.lat!, weather.daily!.elementAt(3)) *
+              100.0)
+          .toInt();
+      _dailyPercentage[4] = (nuptialDailyPercentageModel(
+                  weather.lat!, weather.daily!.elementAt(4)) *
+              100.0)
+          .toInt();
+      _dailyPercentage[5] = (nuptialDailyPercentageModel(
+                  weather.lat!, weather.daily!.elementAt(5)) *
+              100.0)
+          .toInt();
+      _dailyPercentage[6] = (nuptialDailyPercentageModel(
+                  weather.lat!, weather.daily!.elementAt(6)) *
+              100.0)
+          .toInt();
+      _dailyPercentage[7] = (nuptialDailyPercentageModel(
+                  weather.lat!, weather.daily!.elementAt(7)) *
+              100.0)
+          .toInt();
 
       if (_hourlyPercentage[0] >= greenThreshold) {
         widget.setPrimarySwatch(Colors.lightGreen);
@@ -553,12 +573,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             _buildWindSpeed(),
                             if (orientation == Orientation.portrait)
                               _buildWindGust(),
-                            _buildPrecipitation(),
+                            _buildAirPressure(),
                             _buildHumidity(),
                             if (orientation == Orientation.portrait)
                               _buildCloudiness(),
                             if (orientation == Orientation.portrait)
-                              _buildAirPressure(),
+                              _buildUVI(),
                           ],
                         ),
                         _buildUpcomingWeek(orientation),
@@ -896,6 +916,40 @@ class _MyHomePageState extends State<MyHomePage> {
           AutoSizeText(
             "Suitability: " +
                 (rainContribution(_weather!.daily!.first.pop!) * 100)
+                    .toStringAsFixed(0) +
+                "%",
+            style: TextStyle(
+              fontSize: 12,
+            ),
+            minFontSize: 2,
+            maxFontSize: 12,
+            stepGranularity: 1.0,
+            group: suitabilityGroup,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUVI() {
+    return SizedBox(
+      child: Column(
+        children: [
+          AutoSizeText(
+            'UVI',
+            style: TextStyle(fontSize: 14),
+            stepGranularity: 1.0,
+            group: headingGroup,
+          ),
+          AutoSizeText(
+            (_weather!.daily!.first.uvi! * 100).toStringAsFixed(0),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+            stepGranularity: 1.0,
+            group: parameterGroup,
+          ),
+          AutoSizeText(
+            "Suitability: " +
+                (uviContribution(_weather!.daily!.first.uvi!) * 100)
                     .toStringAsFixed(0) +
                 "%",
             style: TextStyle(
