@@ -80,19 +80,19 @@ void main() {
     });
 
     test('Cloud Coverage', () {
-      expect(cloudinessContribution(daily.clouds!), closeTo(0.32, 0.01));
+      expect(cloudinessContribution(daily.clouds!), closeTo(0.18, 0.01));
     });
 
     test('Pressure', () {
-      expect(pressureContribution(daily.pressure!), closeTo(0.54, 0.01));
+      expect(pressureContribution(daily.pressure!), closeTo(0.11, 0.01));
     });
 
     test('Total', () {
-      expect(nuptialDailyPercentage(daily), closeTo(0.17, 0.01));
+      expect(nuptialDailyPercentage(daily), closeTo(0.07, 0.01));
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.31, 0.01));
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.24, 0.01));
     });
   });
 
