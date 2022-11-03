@@ -2,6 +2,7 @@ import 'dart:math';
 
 //import 'dart:developer' as developer;
 import 'package:normal/normal.dart';
+
 //import 'package:collection/collection.dart';
 import 'package:nuptialflight/models/final_model.dart';
 import 'package:nuptialflight/responses/weather_response.dart';
@@ -11,9 +12,9 @@ import 'package:nuptialflight/responses/weather_response.dart';
 /// https://antwiki.org/wiki/images/5/50/Depa%2C_L._2006._Weather_conditions_during_nuptial_flight_of_Manica_rubida.pdf
 /// https://onlinelibrary.wiley.com/doi/epdf/10.1111/ecog.03140
 ///
-const double TEMP_AVG = 16; // 24.00;
+const double TEMP_AVG = 16.5; // 24.00;
 const double TEMP_STD = 10; // 3.96;
-const double HUMIDITY_AVG = 75.00; // 62.00;
+const double HUMIDITY_AVG = 77.00; // 62.00;
 const double HUMIDITY_STD = 30; // 7.99;
 const double WIND_AVG = 5.7; // 3.96;
 const double WIND_STD = 5; // 0.78;
@@ -25,7 +26,7 @@ const double PRESSURE_AVG = 1014; // 1020;
 const double PRESSURE_STD = 14.85;
 const double RADIATION_AVG = 225.7; // (J.cm-2.h-1)
 const double RADIATION_STD = 19.5; // SE not SD
-const double UVI_AVG = 6;
+const double UVI_AVG = 6.1;
 const double UVI_STD = 6;
 
 double nuptialHourlyPercentage(Hourly hourly) {
@@ -36,17 +37,14 @@ double nuptialHourlyPercentage(Hourly hourly) {
   double humid = humidityContribution(hourly.humidity!);
   double cloud = cloudinessContribution(hourly.clouds!);
   double press = pressureContribution(hourly.pressure!);
-  // developer.log("dt=" + daily.dt.toString(), name: 'nuptialPercentage');
-  // developer.log("temp=$temp", name: 'nuptialPercentage');
-  // developer.log("wind=$wind", name: 'nuptialPercentage');
-  // developer.log("humid=$humid", name: 'nuptialPercentage');
-  // developer.log("rain=$rain", name: 'nuptialPercentage');
-  // developer.log("cloud=$cloud", name: 'nuptialPercentage');
-  // developer.log("press=$press", name: 'nuptialPercentage');
+  double uvi = pressureContribution(hourly.uvi!);
   var values = [
-    {'percentage': temp * windSpeed * humid, 'weighting': 1},
-    {'percentage': temp * windSpeed * cloud, 'weighting': 1},
-    {'percentage': temp * windSpeed * press, 'weighting': 1},
+    {'percentage': temp, 'weighting': 1},
+    {'percentage': windSpeed, 'weighting': 1},
+    {'percentage': humid, 'weighting': 3},
+    {'percentage': cloud, 'weighting': 1},
+    {'percentage': press, 'weighting': 2},
+    {'percentage': uvi, 'weighting': 2},
   ];
   return nuptialCalculator(values);
 }
@@ -60,25 +58,19 @@ double nuptialDailyPercentage(Daily daily, {bool nocturnal = false}) {
   double humid = humidityContribution(daily.humidity!);
   double cloud = cloudinessContribution(daily.clouds!);
   double press = pressureContribution(daily.pressure!);
-  // developer.log("dt=" + daily.dt.toString(), name: 'nuptialPercentage');
-  // developer.log("temp=$temp", name: 'nuptialPercentage');
-  // developer.log("windSpeed=windSpeed", name: 'nuptialPercentage');
-  // developer.log("windGust=windGust", name: 'nuptialPercentage');
-  // developer.log("humid=$humid", name: 'nuptialPercentage');
-  // developer.log("rain=$rain", name: 'nuptialPercentage');
-  // developer.log("cloud=$cloud", name: 'nuptialPercentage');
-  // developer.log("press=$press", name: 'nuptialPercentage');
+  double uvi = pressureContribution(daily.uvi!);
   var values = [
-    {'percentage': temp * windSpeed * humid, 'weighting': 1},
-    {'percentage': temp * windSpeed * cloud, 'weighting': 1},
-    {'percentage': temp * windSpeed * press, 'weighting': 1},
+    {'percentage': temp, 'weighting': 1},
+    {'percentage': windSpeed, 'weighting': 1},
+    {'percentage': humid, 'weighting': 3},
+    {'percentage': cloud, 'weighting': 1},
+    {'percentage': press, 'weighting': 2},
+    {'percentage': uvi, 'weighting': 2},
   ];
   return nuptialCalculator(values);
 }
 
 double nuptialHourlyPercentageModel(num lat, Hourly hourly) {
-  if (hourly.temp == null) return 0.0;
-  print("hourly=$hourly");
   return score([
     lat.toDouble(),
     hourly.temp!.toDouble(),
@@ -92,10 +84,9 @@ double nuptialHourlyPercentageModel(num lat, Hourly hourly) {
 
 double nuptialDailyPercentageModel(num lat, Daily daily,
     {bool nocturnal = false}) {
-  if (daily.temp == null) return 0.0;
   return score([
     lat.toDouble(),
-    daily.temp!.day!.toDouble(),
+    nocturnal ? daily.temp!.eve!.toDouble() : daily.temp!.day!.toDouble(),
     daily.windSpeed!.toDouble(),
     daily.humidity!.toDouble(),
     daily.clouds!.toDouble(),

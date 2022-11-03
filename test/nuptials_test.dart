@@ -13,6 +13,8 @@ void main() {
     daily.dewPoint = 18.43;
     daily.clouds = CLOUD_AVG.round();
     daily.pressure = PRESSURE_AVG.round();
+    daily.uvi = UVI_STD.round();
+    double lat = -35.2;
 
     test('Temperature', () {
       expect(temperatureContribution(daily.temp!.day!), closeTo(1.00, 0.01));
@@ -39,7 +41,11 @@ void main() {
     });
 
     test('Total', () {
-      expect(nuptialDailyPercentage(daily), closeTo(1.00, 0.01));
+      expect(nuptialDailyPercentage(daily), closeTo(0.80, 0.01));
+    });
+
+    test('Model', () {
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.81, 0.01));
     });
   });
 
@@ -47,20 +53,22 @@ void main() {
     Daily daily = Daily();
     daily.temp =
         Temp(day: 5.0, min: 5.0, max: 5.0, night: 5.0, eve: 5.0, morn: 5.0);
-    daily.humidity = 0;
+    daily.humidity = 10;
     daily.windSpeed = 30.0;
     daily.windGust = 31.0;
     daily.pop = 1.0;
-    daily.dewPoint = 35;
-    daily.clouds = 10;
-    daily.pressure = 970;
+    daily.dewPoint = 2.5;
+    daily.clouds = 30;
+    daily.pressure = 990;
+    daily.uvi = 3;
+    double lat = -35.2;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily.temp!.day!), closeTo(0.27, 0.01));
+      expect(temperatureContribution(daily.temp!.day!), closeTo(0.25, 0.01));
     });
 
     test('Humidity', () {
-      expect(humidityContribution(daily.humidity!), closeTo(0.01, 0.01));
+      expect(humidityContribution(daily.humidity!), closeTo(0.02, 0.01));
     });
 
     test('Wind', () {
@@ -72,41 +80,47 @@ void main() {
     });
 
     test('Cloud Coverage', () {
-      expect(cloudinessContribution(daily.clouds!), closeTo(0.05, 0.01));
+      expect(cloudinessContribution(daily.clouds!), closeTo(0.32, 0.01));
     });
 
     test('Pressure', () {
-      expect(pressureContribution(daily.pressure!), closeTo(0.00, 0.01));
+      expect(pressureContribution(daily.pressure!), closeTo(0.54, 0.01));
     });
 
     test('Total', () {
-      expect(nuptialDailyPercentage(daily), closeTo(0.00, 0.01));
+      expect(nuptialDailyPercentage(daily), closeTo(0.17, 0.01));
+    });
+
+    test('Model', () {
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.31, 0.01));
     });
   });
 
   group('Great day', () {
     Daily daily = Daily();
     daily.temp = Temp(
-        day: 18.65,
+        day: 17.65,
         min: 16.97,
         max: 23.65,
         night: 21.53,
         eve: 22.65,
         morn: 18.54);
-    daily.humidity = 55;
+    daily.humidity = 80;
     daily.windSpeed = 5.37;
     daily.windGust = 6.37;
     daily.pop = 0.05;
     daily.dewPoint = 15;
-    daily.clouds = 80;
+    daily.clouds = 70;
     daily.pressure = 1015;
+    daily.uvi = 5;
+    double lat = -35.2;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily.temp!.day!), closeTo(0.79, 0.01));
+      expect(temperatureContribution(daily.temp!.day!), closeTo(0.91, 0.01));
     });
 
     test('Humidity', () {
-      expect(humidityContribution(daily.humidity!), closeTo(0.50, 0.01));
+      expect(humidityContribution(daily.humidity!), closeTo(0.92, 0.01));
     });
 
     test('Wind', () {
@@ -118,7 +132,7 @@ void main() {
     });
 
     test('Cloud Coverage', () {
-      expect(cloudinessContribution(daily.clouds!), closeTo(0.74, 0.01));
+      expect(cloudinessContribution(daily.clouds!), closeTo(1.00, 0.01));
     });
 
     test('Pressure', () {
@@ -126,7 +140,11 @@ void main() {
     });
 
     test('Total', () {
-      expect(nuptialDailyPercentage(daily), closeTo(0.54, 0.01));
+      expect(nuptialDailyPercentage(daily), closeTo(0.75, 0.01));
+    });
+
+    test('Model', () {
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.50, 0.01));
     });
   });
 
@@ -146,13 +164,15 @@ void main() {
     daily.dewPoint = 15;
     daily.clouds = 80;
     daily.pressure = 1015;
+    daily.uvi = 1;
+    double lat = -35.2;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily.temp!.day!), closeTo(0.27, 0.01));
+      expect(temperatureContribution(daily.temp!.day!), closeTo(0.30, 0.01));
     });
 
     test('Humidity', () {
-      expect(humidityContribution(daily.humidity!), closeTo(0.42, 0.01));
+      expect(humidityContribution(daily.humidity!), closeTo(0.38, 0.01));
     });
 
     test('Wind', () {
@@ -172,7 +192,11 @@ void main() {
     });
 
     test('Total', () {
-      expect(nuptialDailyPercentage(daily), closeTo(0.07, 0.01));
+      expect(nuptialDailyPercentage(daily), closeTo(0.45, 0.01));
+    });
+
+    test('Model', () {
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.11, 0.01));
     });
   });
 
@@ -180,20 +204,22 @@ void main() {
     Daily daily = Daily();
     daily.temp = Temp(
         day: 6.84, min: 6.97, max: 6.84, night: 1.53, eve: 5.65, morn: 3.54);
-    daily.humidity = 25;
+    daily.humidity = 40;
     daily.windSpeed = 16.37;
     daily.windGust = 17.37;
     daily.pop = 0.70;
-    daily.dewPoint = 25;
-    daily.clouds = 95;
+    daily.dewPoint = 0;
+    daily.clouds = 99;
     daily.pressure = 995;
+    daily.uvi = 12;
+    double lat = -35.2;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily.temp!.day!), closeTo(0.35, 0.01));
+      expect(temperatureContribution(daily.temp!.day!), closeTo(0.33, 0.01));
     });
 
     test('Humidity', () {
-      expect(humidityContribution(daily.humidity!), closeTo(0.09, 0.01));
+      expect(humidityContribution(daily.humidity!), closeTo(0.22, 0.01));
     });
 
     test('Wind', () {
@@ -205,7 +231,7 @@ void main() {
     });
 
     test('Cloud Coverage', () {
-      expect(cloudinessContribution(daily.clouds!), closeTo(0.40, 0.01));
+      expect(cloudinessContribution(daily.clouds!), closeTo(0.33, 0.01));
     });
 
     test('Pressure', () {
@@ -213,7 +239,11 @@ void main() {
     });
 
     test('Total', () {
-      expect(nuptialDailyPercentage(daily), closeTo(0.01, 0.01));
+      expect(nuptialDailyPercentage(daily), closeTo(0.18, 0.01));
+    });
+
+    test('Model', () {
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.37, 0.01));
     });
   });
 }
