@@ -38,7 +38,6 @@ dependencies:
   flutter_dotenv: ^5.0.2
   url_launcher: ^6.1.6
   auto_size_text: ^3.0.0
-  device_preview: ^1.1.0
   screenshot_modes: ^1.0.1
   html: ^0.15.0
   #image: ^3.1.0
@@ -54,6 +53,7 @@ dev_dependencies:
   test: any
   flutter_automation: any
   flutter_launcher_icons: ^0.9.2 # Causes some dependency conflicts
+  device_preview: ^1.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

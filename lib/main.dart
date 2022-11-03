@@ -126,14 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
       'https://api.bitbot.com.au/cors/https://maps.googleapis.com/maps/api';
 
   // Create client for Arango database
-  var _arangoClient = DbClient(
-    scheme: 'https',
-    host: 'api.bitbot.com.au',
-    port: 8530,
-    db: 'nuptialFlight',
-    user: 'nuptialflight',
-    pass: 'fdggdsgdfstg34wfwfwff',
-  );
+  var _arangoClient;
   var _weatherPostKey;
 
   final AutoSizeGroup headingGroup = AutoSizeGroup();
@@ -163,6 +156,16 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     this.fixedLocation = widget.fixedLocation;
     this.weatherFetcher = widget.weatherFetcher;
+    if (!kIsWeb) {
+      _arangoClient = DbClient(
+        scheme: 'https',
+        host: 'api.bitbot.com.au',
+        port: 8530,
+        db: 'nuptialFlight',
+        user: 'nuptialflight',
+        pass: 'fdggdsgdfstg34wfwfwff',
+      );
+    }
     createMenu();
     widgetInitState(_loadData);
     _loadData(); // This will load data every time app is opened
