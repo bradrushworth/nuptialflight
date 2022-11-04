@@ -2,10 +2,9 @@ import 'dart:math';
 
 //import 'dart:developer' as developer;
 import 'package:normal/normal.dart';
-
 //import 'package:collection/collection.dart';
 import 'package:nuptialflight/models/final_model.dart';
-import 'package:nuptialflight/responses/weather_response.dart';
+import 'package:nuptialflight/responses/onecall_response.dart';
 
 ///
 /// https://www.antwiki.org/wiki/images/d/dd/Boomsma%2C_J.J.%2C_Leusink%2C_A._1981._Weather_conditions_during_nuptial_flights_of_four_European_ant_species_.pdf

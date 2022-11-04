@@ -1,5 +1,5 @@
 import 'package:nuptialflight/nuptials.dart';
-import 'package:nuptialflight/responses/weather_response.dart';
+import 'package:nuptialflight/responses/onecall_response.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -45,7 +45,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.81, 0.01));
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.93, 0.01));
     });
   });
 
@@ -92,14 +92,14 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.24, 0.01));
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.48, 0.01));
     });
   });
 
   group('Great day', () {
     Daily daily = Daily();
     daily.temp = Temp(
-        day: 17.65,
+        day: 16.65,
         min: 16.97,
         max: 23.65,
         night: 21.53,
@@ -116,7 +116,7 @@ void main() {
     double lat = -35.2;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily.temp!.day!), closeTo(0.91, 0.01));
+      expect(temperatureContribution(daily.temp!.day!), closeTo(0.99, 0.01));
     });
 
     test('Humidity', () {
@@ -144,7 +144,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.50, 0.01));
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.45, 0.01));
     });
   });
 
@@ -196,7 +196,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.11, 0.01));
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.47, 0.01));
     });
   });
 
@@ -243,7 +243,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.37, 0.01));
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.35, 0.01));
     });
   });
 }

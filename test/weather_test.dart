@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:nuptialflight/responses/onecall_response.dart';
 import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
-import 'package:nuptialflight/responses/weather_response.dart';
 import 'package:nuptialflight/weather_fetcher.dart';
 import 'package:test/test.dart';
 
@@ -24,12 +24,13 @@ void main() {
     });
 
     test('Fetch Weather Location', () async {
-      String response = await weatherFetcher.fetchNearestWeatherLocation();
+      String? response =
+          (await weatherFetcher.fetchNearestWeatherLocation()).name;
       expect(response, 'Batemans Bay');
     });
 
     test('Fetch Weather', () async {
-      WeatherResponse response = await weatherFetcher.fetchWeather();
+      OneCallResponse response = await weatherFetcher.fetchWeather();
       expect(response, isNotNull);
       expect(response.lat, -35.76);
       expect(response.lon, 150.2053);

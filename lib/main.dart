@@ -16,6 +16,7 @@ import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:intl/intl.dart';
 import 'package:nuptialflight/map.dart';
+import 'package:nuptialflight/responses/onecall_response.dart';
 import 'package:nuptialflight/responses/weather_response.dart';
 import 'package:nuptialflight/screenshots_mobile.dart'
     if (dart.library.io) 'package:nuptialflight/screenshots_mobile.dart'
@@ -127,7 +128,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // Create client for Arango database
   Database? _arangoClient;
-  var _weatherPostKey;
+  var _weatherCurrentKey;
+  var _weatherHistoricalKey;
+  var _weatherFlightsKey;
 
   final AutoSizeGroup headingGroup = AutoSizeGroup();
   final AutoSizeGroup parameterGroup = AutoSizeGroup();
@@ -139,8 +142,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String? appName, packageName, version, buildNumber;
   String? _geocoding;
-  WeatherResponse? _historical;
-  WeatherResponse? _weather;
+  CurrentWeatherResponse? _currentWeather;
+  OneCallResponse? _historical;
+  OneCallResponse? _weather;
   bool loaded = false;
   String? errorMessage;
 
@@ -221,9 +225,11 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     });
 
-    _arangoClient = Database('https://api.bitbot.com.au:8530');
-    await _arangoClient!
-        .connect('nuptialflight', 'nuptialflight', 'fdggdsgdfstg34wfwfwff');
+    if (!kDebugMode) {
+      _arangoClient = Database('https://api.bitbot.com.au:8530');
+      await _arangoClient!
+          .connect('nuptialflight', 'nuptialflight', 'fdggdsgdfstg34wfwfwff');
+    }
   }
 
   void _getLocation() {
@@ -322,11 +328,18 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _updateWeather(
-      String geocoding, WeatherResponse historical, WeatherResponse weather) {
-    print('_updateWeather: geocoding=$geocoding');
+  void _updateWeather(CurrentWeatherResponse current,
+      OneCallResponse historical, OneCallResponse weather) {
     setState(() {
-      _geocoding = geocoding;
+      _currentWeather = current;
+      if (current.name == null) {
+        developer.log("Unexpected reverse geocoding response",
+            name: 'WeatherFetcher');
+        _geocoding = "Unknown Location";
+      } else {
+        _geocoding = current.name;
+      }
+      print('_updateWeather: geocoding=$_geocoding');
 
       _historical = historical;
       _indexOfDiurnalHour = historical.hourly!.firstWhere((e) =>
@@ -404,12 +417,36 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    // Let's create a new database post
-    Collection? collection = await _arangoClient!.collection('flights');
-    Document createResult = await collection!
-        .document()
-        .add({'flight': 'unknown', 'weather': _weather!.toJson()});
-    _weatherPostKey = createResult.key;
+    if (!kDebugMode) {
+      // Let's create a new database post
+      Collection? collection = await _arangoClient!.collection('flights');
+      Document createResult = await collection!.document().add({
+        'flight': 'unknown',
+        'version': '$version+$buildNumber',
+        'weather': _weather!.toJson()
+      });
+      _weatherFlightsKey = createResult.key;
+    }
+    if (!kDebugMode) {
+      // Let's create a new database post
+      Collection? collection = await _arangoClient!.collection('historical');
+      Document createResult = await collection!.document().add({
+        'flight': 'unknown',
+        'version': '$version+$buildNumber',
+        'weather': _historical!.toJson()
+      });
+      _weatherHistoricalKey = createResult.key;
+    }
+    if (!kDebugMode) {
+      // Let's create a new database post
+      Collection? collection = await _arangoClient!.collection('current');
+      Document createResult = await collection!.document().add({
+        'flight': 'unknown',
+        'version': '$version+$buildNumber',
+        'weather': _currentWeather!.toJson()
+      });
+      _weatherCurrentKey = createResult.key;
+    }
   }
 
   /// Feature to record user saw a nuptial flight
@@ -439,11 +476,38 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    // Let's update the existing database entry
-    Collection? collection = await _arangoClient!.collection('flights');
-    Document updateResult = await collection!
-        .document(document_handle: _weatherPostKey)
-        .update({'flight': 'yes', 'size': size, 'weather': _weather!.toJson()});
+    if (!kDebugMode) {
+      // Let's update the existing database entry
+      Collection? collection = await _arangoClient!.collection('flights');
+      await collection!.document(document_handle: _weatherFlightsKey).update({
+        'flight': 'yes',
+        'size': size,
+        'version': '$version+$buildNumber',
+        'weather': _weather!.toJson()
+      });
+    }
+    if (!kDebugMode) {
+      // Let's update the existing database entry
+      Collection? collection = await _arangoClient!.collection('historical');
+      await collection!
+          .document(document_handle: _weatherHistoricalKey)
+          .update({
+        'flight': 'yes',
+        'size': size,
+        'version': '$version+$buildNumber',
+        'weather': _historical!.toJson()
+      });
+    }
+    if (!kDebugMode) {
+      // Let's update the existing database entry
+      Collection? collection = await _arangoClient!.collection('current');
+      await collection!.document(document_handle: _weatherCurrentKey).update({
+        'flight': 'yes',
+        'size': size,
+        'version': '$version+$buildNumber',
+        'weather': _currentWeather!.toJson()
+      });
+    }
   }
 
   @override

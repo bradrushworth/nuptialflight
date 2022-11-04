@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as developer;
-import 'dart:io';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -9,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_webservice/src/places.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
+import 'package:nuptialflight/responses/onecall_response.dart';
 import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
 import 'package:nuptialflight/responses/weather_response.dart';
 
@@ -92,8 +92,7 @@ class WeatherFetcher {
 
     String url =
         'https://api.openweathermap.org/geo/1.0/reverse?lat=${_lat!.toStringAsFixed(4)}&lon=${_lon!.toStringAsFixed(4)}&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&limit=1';
-    developer.log("url=$url", name: 'weather');
-    if (!kIsWeb) stdout.writeln("url=$url");
+    print("url=$url");
 
     final response = await http.get(Uri.parse(url));
 
@@ -112,54 +111,43 @@ class WeatherFetcher {
     }
   }
 
-  Future<String> fetchNearestWeatherLocation() async {
+  Future<CurrentWeatherResponse> fetchNearestWeatherLocation() async {
     if (_lat == null || _lon == null)
       throw Exception(
           'Location is unknown! Perhaps you didn\'t allow location permissions?');
 
     String url =
         'https://api.openweathermap.org/data/2.5/weather?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&mode=json';
-    developer.log("url=$url", name: 'WeatherFetcher');
-    if (!kIsWeb) stdout.writeln("url=$url");
+    print("url=$url");
 
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      Map json = jsonDecode(response.body);
-      if (!json.containsKey('name')) {
-        //throw Exception('Unexpected reverse geocoding response!');
-        developer.log("Unexpected reverse geocoding response",
-            name: 'WeatherFetcher');
-        return "Unknown Location";
-      }
-      return json['name'];
+      return CurrentWeatherResponse.fromJson(jsonDecode(response.body));
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      //throw Exception('Failed to load reverse geocoding!');
-      developer.log("Failed to load reverse geocoding", name: 'WeatherFetcher');
-      return "Unknown Location";
+      throw Exception('Failed to download current weather!');
     }
   }
 
-  Future<WeatherResponse> fetchWeather() async {
+  Future<OneCallResponse> fetchWeather() async {
     if (_lat == null || _lon == null)
       throw Exception(
           'Location is unknown! Perhaps you didn\'t allow location permissions?');
 
     String url =
         'https://api.openweathermap.org/data/2.5/onecall?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&exclude=minutely,hourly,current';
-    developer.log("url=$url", name: 'WeatherFetcher');
-    if (!kIsWeb) stdout.writeln("url=$url");
+    print("url=$url");
 
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      return WeatherResponse.fromJson(jsonDecode(response.body));
+      return OneCallResponse.fromJson(jsonDecode(response.body));
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
@@ -167,15 +155,14 @@ class WeatherFetcher {
     }
   }
 
-  Future<WeatherResponse> fetchHistoricalWeather(int dt) async {
+  Future<OneCallResponse> fetchHistoricalWeather(int dt) async {
     if (_lat == null || _lon == null)
       throw Exception(
           'Location is unknown! Perhaps you didn\'t allow location permissions?');
 
     String url =
         'https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&dt=$dt';
-    developer.log("url=$url", name: 'WeatherFetcher');
-    if (!kIsWeb) stdout.writeln("url=$url");
+    print("url=$url");
 
     final response = await http.get(Uri.parse(url));
     developer.log("response=${response.body}", name: 'WeatherFetcher');
@@ -183,7 +170,7 @@ class WeatherFetcher {
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      return WeatherResponse.fromJson(jsonDecode(response.body));
+      return OneCallResponse.fromJson(jsonDecode(response.body));
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
