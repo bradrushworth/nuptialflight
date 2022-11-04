@@ -228,7 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (!kDebugMode) {
       _arangoClient = Database('https://api.bitbot.com.au:8530');
       await _arangoClient!
-          .connect('nuptialflight', 'nuptialflight', 'fdggdsgdfstg34wfwfwff');
+          .connect('nuptialFlight', 'nuptialflight', 'fdggdsgdfstg34wfwfwff');
     }
   }
 
@@ -413,11 +413,11 @@ class _MyHomePageState extends State<MyHomePage> {
     if (fixedLocation) {
       return;
     }
-    if (kIsWeb) {
+    if (kDebugMode) {
       return;
     }
 
-    if (!kDebugMode) {
+    {
       // Let's create a new database post
       Collection? collection = await _arangoClient!.collection('flights');
       Document createResult = await collection!.document().add({
@@ -427,7 +427,7 @@ class _MyHomePageState extends State<MyHomePage> {
       });
       _weatherFlightsKey = createResult.key;
     }
-    if (!kDebugMode) {
+    {
       // Let's create a new database post
       Collection? collection = await _arangoClient!.collection('historical');
       Document createResult = await collection!.document().add({
@@ -437,7 +437,7 @@ class _MyHomePageState extends State<MyHomePage> {
       });
       _weatherHistoricalKey = createResult.key;
     }
-    if (!kDebugMode) {
+    {
       // Let's create a new database post
       Collection? collection = await _arangoClient!.collection('current');
       Document createResult = await collection!.document().add({
@@ -463,9 +463,9 @@ class _MyHomePageState extends State<MyHomePage> {
       });
       return;
     }
-    if (kIsWeb) {
+    if (kDebugMode) {
       setState(() {
-        errorMessage = "Not supported on web!";
+        errorMessage = "Not supported in debug mode!";
       });
       // Wait then got back
       Future.delayed(const Duration(milliseconds: 2000), () {
@@ -476,7 +476,7 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    if (!kDebugMode) {
+    {
       // Let's update the existing database entry
       Collection? collection = await _arangoClient!.collection('flights');
       await collection!.document(document_handle: _weatherFlightsKey).update({
@@ -486,7 +486,7 @@ class _MyHomePageState extends State<MyHomePage> {
         'weather': _weather!.toJson()
       });
     }
-    if (!kDebugMode) {
+    {
       // Let's update the existing database entry
       Collection? collection = await _arangoClient!.collection('historical');
       await collection!
@@ -498,7 +498,7 @@ class _MyHomePageState extends State<MyHomePage> {
         'weather': _historical!.toJson()
       });
     }
-    if (!kDebugMode) {
+    {
       // Let's update the existing database entry
       Collection? collection = await _arangoClient!.collection('current');
       await collection!.document(document_handle: _weatherCurrentKey).update({

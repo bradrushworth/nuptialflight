@@ -132,7 +132,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "921c580a30de611e94c39cabe715a815743cd85c"
+      resolved-ref: "77b7d1229bb58e69195dd8d358dc6e9d5b9eeb37"
       url: "https://github.com/bradrushworth/darango.git"
     source: git
     version: "0.1.0"
