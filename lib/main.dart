@@ -6,8 +6,8 @@ import 'dart:developer' as developer;
 import 'dart:io';
 import 'dart:math';
 
-import 'package:arango_driver/arango_driver.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:darango/darango.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -126,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
       'https://api.bitbot.com.au/cors/https://maps.googleapis.com/maps/api';
 
   // Create client for Arango database
-  var _arangoClient;
+  Database? _arangoClient;
   var _weatherPostKey;
 
   final AutoSizeGroup headingGroup = AutoSizeGroup();
@@ -156,16 +156,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     this.fixedLocation = widget.fixedLocation;
     this.weatherFetcher = widget.weatherFetcher;
-    if (!kIsWeb) {
-      _arangoClient = DbClient(
-        scheme: 'https',
-        host: 'api.bitbot.com.au',
-        port: 8530,
-        db: 'nuptialFlight',
-        user: 'nuptialflight',
-        pass: 'fdggdsgdfstg34wfwfwff',
-      );
-    }
     createMenu();
     widgetInitState(_loadData);
     _loadData(); // This will load data every time app is opened
@@ -230,6 +220,10 @@ class _MyHomePageState extends State<MyHomePage> {
         buildNumber = packageInfo.buildNumber;
       });
     });
+
+    _arangoClient = Database('https://api.bitbot.com.au:8530');
+    await _arangoClient!
+        .connect('nuptialflight', 'nuptialflight', 'fdggdsgdfstg34wfwfwff');
   }
 
   void _getLocation() {
@@ -388,9 +382,9 @@ class _MyHomePageState extends State<MyHomePage> {
               100.0)
           .toInt();
 
-      if (_hourlyPercentage[0] >= greenThreshold) {
+      if (_dailyPercentage[0] >= greenThreshold) {
         widget.setPrimarySwatch(Colors.lightGreen);
-      } else if (_hourlyPercentage[0] >= 50) {
+      } else if (_dailyPercentage[0] >= amberThreshold) {
         widget.setPrimarySwatch(Colors.amber);
       } else {
         widget.setPrimarySwatch(Colors.red);
@@ -410,10 +404,12 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    // Let's create a new post
-    var createResult = await _arangoClient.createDocument(
-        'flights', {'flight': 'unknown', 'weather': _weather!.toJson()});
-    _weatherPostKey = createResult.identifier.key;
+    // Let's create a new database post
+    Collection? collection = await _arangoClient!.collection('flights');
+    Document createResult = await collection!
+        .document()
+        .add({'flight': 'unknown', 'weather': _weather!.toJson()});
+    _weatherPostKey = createResult.key;
   }
 
   /// Feature to record user saw a nuptial flight
@@ -443,9 +439,11 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    // Let's create a new post
-    await _arangoClient.updateDocument('flights', _weatherPostKey,
-        {'flight': 'yes', 'size': size, 'weather': _weather!.toJson()});
+    // Let's update the existing database entry
+    Collection? collection = await _arangoClient!.collection('flights');
+    Document updateResult = await collection!
+        .document(document_handle: _weatherPostKey)
+        .update({'flight': 'yes', 'size': size, 'weather': _weather!.toJson()});
   }
 
   @override
@@ -524,6 +522,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               children: <Widget>[
                                 _buildTodayPercentage(orientation, 'Diurnal',
                                     _hourlyPercentage[0]),
+                                _buildTodayPercentage(orientation, 'Overall',
+                                    _dailyPercentage[0]),
                                 _buildTodayPercentage(orientation, 'Nocturnal',
                                     _hourlyPercentage[1]),
                               ],
