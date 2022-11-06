@@ -5,7 +5,7 @@ void main() {
   group('Model', () {
     test('Temperature', () {
       expect(
-          score([-35.2, 16.4, 5.7, 77, 74, 1013, 6.1])[1], closeTo(0.95, 0.01));
+          score([-35.2, 16.4, 5.7, 77, 74, 1013, 6.1])[1], closeTo(1.00, 0.01));
     });
   });
 }
