@@ -130,12 +130,10 @@ packages:
   darango:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "77b7d1229bb58e69195dd8d358dc6e9d5b9eeb37"
-      url: "https://github.com/bradrushworth/darango.git"
-    source: git
-    version: "0.1.0"
+      name: darango
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   device_frame:
     dependency: transitive
     description:
@@ -1042,7 +1040,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.1"
+    version: "3.1.0"
   wkt_parser:
     dependency: transitive
     description:

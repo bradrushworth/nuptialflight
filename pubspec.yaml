@@ -45,9 +45,9 @@ dependencies:
   flutter_google_places: ^0.3.0
   flutter_map: ^1.1.1
   flutter_html: ^2.2.1
-  darango:
-    git: https://github.com/bradrushworth/darango.git
-    #path: ../darango
+  darango: ^0.1.1
+    #git: https://github.com/bradrushworth/darango.git
+  #path: ../darango
 
 dev_dependencies:
   flutter_test:

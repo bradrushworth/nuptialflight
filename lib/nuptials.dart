@@ -43,7 +43,7 @@ double nuptialHourlyPercentage(Hourly hourly) {
     {'percentage': humid, 'weighting': 3},
     {'percentage': cloud, 'weighting': 1},
     {'percentage': press, 'weighting': 2},
-    {'percentage': uvi, 'weighting': 2},
+    {'percentage': uvi, 'weighting': 0},
   ];
   return nuptialCalculator(values);
 }
@@ -64,7 +64,7 @@ double nuptialDailyPercentage(Daily daily, {bool nocturnal = false}) {
     {'percentage': humid, 'weighting': 3},
     {'percentage': cloud, 'weighting': 1},
     {'percentage': press, 'weighting': 2},
-    {'percentage': uvi, 'weighting': 2},
+    {'percentage': uvi, 'weighting': 0},
   ];
   return nuptialCalculator(values);
 }
