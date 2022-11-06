@@ -1236,7 +1236,9 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       setState(() {
         loaded = true;
-        errorMessage = e.toString();
+        errorMessage =
+            'Unexpected error occurred. Please report to bitbot@bitbot.com.au ' +
+                e.toString();
         developer.log('unhandledError: $e', error: e);
       });
       throw e;
