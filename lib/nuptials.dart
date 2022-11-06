@@ -39,10 +39,10 @@ double nuptialHourlyPercentage(Hourly hourly) {
   double uvi = pressureContribution(hourly.uvi!);
   var values = [
     {'percentage': temp, 'weighting': 1},
-    {'percentage': windSpeed, 'weighting': 1},
+    {'percentage': windSpeed, 'weighting': 2},
     {'percentage': humid, 'weighting': 3},
     {'percentage': cloud, 'weighting': 1},
-    {'percentage': press, 'weighting': 2},
+    {'percentage': press, 'weighting': 1},
     {'percentage': uvi, 'weighting': 0},
   ];
   return nuptialCalculator(values);
@@ -60,10 +60,10 @@ double nuptialDailyPercentage(Daily daily, {bool nocturnal = false}) {
   double uvi = pressureContribution(daily.uvi!);
   var values = [
     {'percentage': temp, 'weighting': 1},
-    {'percentage': windSpeed, 'weighting': 1},
+    {'percentage': windSpeed, 'weighting': 2},
     {'percentage': humid, 'weighting': 3},
     {'percentage': cloud, 'weighting': 1},
-    {'percentage': press, 'weighting': 2},
+    {'percentage': press, 'weighting': 1},
     {'percentage': uvi, 'weighting': 0},
   ];
   return nuptialCalculator(values);
