@@ -45,7 +45,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.86, 0.01));
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.96, 0.01));
     });
   });
 
@@ -92,7 +92,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.00, 0.01));
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.01, 0.01));
     });
   });
 
@@ -106,12 +106,12 @@ void main() {
         eve: 22.65,
         morn: 18.54);
     daily.humidity = 80;
-    daily.windSpeed = 5.37;
+    daily.windSpeed = 5.77;
     daily.windGust = 6.37;
     daily.pop = 0.05;
     daily.dewPoint = 15;
-    daily.clouds = 70;
-    daily.pressure = 1015;
+    daily.clouds = 75;
+    daily.pressure = 1013;
     daily.uvi = 5;
     double lat = -35.2;
 
@@ -124,7 +124,7 @@ void main() {
     });
 
     test('Wind', () {
-      expect(windContribution(daily.windSpeed!), closeTo(0.95, 0.01));
+      expect(windContribution(daily.windSpeed!), closeTo(0.99, 0.01));
     });
 
     test('Rain', () {
@@ -132,7 +132,7 @@ void main() {
     });
 
     test('Cloud Coverage', () {
-      expect(cloudinessContribution(daily.clouds!), closeTo(1.00, 0.01));
+      expect(cloudinessContribution(daily.clouds!), closeTo(0.87, 0.01));
     });
 
     test('Pressure', () {
@@ -144,7 +144,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.63, 0.01));
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.76, 0.01));
     });
   });
 
@@ -196,7 +196,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.37, 0.01));
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.16, 0.01));
     });
   });
 
@@ -243,7 +243,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.20, 0.01));
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.01, 0.01));
     });
   });
 }

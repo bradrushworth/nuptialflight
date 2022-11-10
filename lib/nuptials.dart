@@ -70,28 +70,30 @@ double nuptialDailyPercentage(Daily daily, {bool nocturnal = false}) {
 }
 
 double nuptialHourlyPercentageModel(num lat, Hourly hourly) {
-  return score([
-    lat.toDouble(),
-    hourly.temp!.toDouble(),
-    hourly.windSpeed!.toDouble(),
-    hourly.humidity!.toDouble(),
-    hourly.clouds!.toDouble(),
-    hourly.pressure!.toDouble(),
-    hourly.uvi!.toDouble(),
-  ])[1];
+  return max(
+      0.01,
+      score([
+        lat.toDouble(),
+        hourly.temp!.toDouble(),
+        hourly.windSpeed!.toDouble(),
+        hourly.humidity!.toDouble(),
+        hourly.clouds!.toDouble(),
+        hourly.pressure!.toDouble(),
+      ])[1]);
 }
 
 double nuptialDailyPercentageModel(num lat, Daily daily,
     {bool nocturnal = false}) {
-  return score([
-    lat.toDouble(),
-    nocturnal ? daily.temp!.eve!.toDouble() : daily.temp!.day!.toDouble(),
-    daily.windSpeed!.toDouble(),
-    daily.humidity!.toDouble(),
-    daily.clouds!.toDouble(),
-    daily.pressure!.toDouble(),
-    daily.uvi!.toDouble(),
-  ])[1];
+  return max(
+      0.01,
+      score([
+        lat.toDouble(),
+        nocturnal ? daily.temp!.eve!.toDouble() : daily.temp!.day!.toDouble(),
+        daily.windSpeed!.toDouble(),
+        daily.humidity!.toDouble(),
+        daily.clouds!.toDouble(),
+        daily.pressure!.toDouble(),
+      ])[1]);
 }
 
 ///
