@@ -11,6 +11,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 void main() {
   PackageInfo.setMockInitialValues(
+      installerStore: 'installerStore',
       appName: 'appName',
       packageName: 'packageName',
       version: 'version',

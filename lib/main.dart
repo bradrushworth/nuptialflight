@@ -584,11 +584,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-                                _buildTodayPercentage(orientation, 'Diurnal',
+                                _buildTodayPercentage(orientation, 'Morning',
                                     _hourlyPercentage[0]),
                                 _buildTodayPercentage(orientation, 'Overall',
                                     _dailyPercentage[0]),
-                                _buildTodayPercentage(orientation, 'Nocturnal',
+                                _buildTodayPercentage(orientation, 'Evening',
                                     _hourlyPercentage[1]),
                               ],
                             ),
@@ -645,7 +645,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             if (orientation == Orientation.portrait)
                               _buildCloudiness(),
                             if (orientation == Orientation.portrait)
-                              _buildUVI(),
+                              _buildPrecipitation(),
                           ],
                         ),
                         _buildUpcomingWeek(orientation),

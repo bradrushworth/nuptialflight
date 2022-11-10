@@ -95,28 +95,32 @@ class _MapPageState extends State<MapPage> {
               InteractiveFlag.doubleTapZoom |
               InteractiveFlag.flingAnimation,
         ),
-        children: <Widget>[
-          TileLayerWidget(
-            options: TileLayerOptions(
-                urlTemplate:
-                    //'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}',
-                    'https://maps.bitbot.com.au/tiles/toner/{z}/{x}/{y}.{ext}?origin=nw',
-                subdomains: ['a', 'b', 'c'],
-                attributionBuilder: (_) {
-                  return Html(
-                    data:
-                        '<div style="color: #00ffff;">Weather &copy; <a href="http://openweathermap.org">OpenWeatherMap</a><br/>Tiles by <a href="http://stamen.com">Stamen Design</a> - <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a><br/>Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</div>',
-                    onLinkTap: (url, context, attributes, element) =>
-                        Utils.launchURL(url!),
-                  );
-                },
-                opacity: 1.0,
-                minZoom: 0,
-                maxZoom: 20,
-                additionalOptions: {
-                  'ext': 'png',
-                }),
+        nonRotatedChildren: [
+          AttributionWidget(
+            attributionBuilder: (_) {
+              return Html(
+                data:
+                    '<div style="color: #00ffff;">Weather &copy; <a href="http://openweathermap.org">OpenWeatherMap</a><br/>Tiles by <a href="http://stamen.com">Stamen Design</a> - <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a><br/>Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</div>',
+                onLinkTap: (url, context, attributes, element) =>
+                    Utils.launchURL(url!),
+              );
+            },
           ),
+        ],
+        children: <Widget>[
+          TileLayer(
+              urlTemplate:
+                  //'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}',
+                  'https://maps.bitbot.com.au/tiles/toner/{z}/{x}/{y}.{ext}?origin=nw',
+              subdomains: ['a', 'b', 'c'],
+              userAgentPackageName: 'au.com.bitbot.nuptialflight',
+              opacity: 1.0,
+              minZoom: 0,
+              maxZoom: 20,
+              additionalOptions: {
+                'ext': 'png',
+              }),
+
           // _openWeatherMapWidget('precipitation_new'),
           // _openWeatherMapWidget('pressure_new'),
           _openWeatherMapWidget(
@@ -149,29 +153,28 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  TileLayerWidget _openWeatherMapWidget(String layer, ColorFilter colorFilter) {
-    return TileLayerWidget(
-      options: TileLayerOptions(
-        urlTemplate:
-            //'https://tile.openweathermap.org/map/{layer}/{z}/{x}/{y}.{ext}?appid={apiKey}',
-            'https://maps.bitbot.com.au/tiles/{layer}/{z}/{x}/{y}.{ext}?origin=nw',
-        subdomains: ['a', 'b', 'c'],
-        minZoom: 0,
-        maxZoom: 19,
-        additionalOptions: {
-          'ext': 'png',
-          'layer': layer,
-          //'apiKey': dotenv.env['OPENWEATHERMAP_MAP_KEY']!,
-        },
-        opacity: 0.165,
-        //backgroundColor: Colors.black,
-        tileBuilder: (context, tileWidget, tile) {
-          return ColorFiltered(
-            colorFilter: colorFilter,
-            child: tileWidget,
-          );
-        },
-      ),
+  TileLayer _openWeatherMapWidget(String layer, ColorFilter colorFilter) {
+    return TileLayer(
+      urlTemplate:
+          //'https://tile.openweathermap.org/map/{layer}/{z}/{x}/{y}.{ext}?appid={apiKey}',
+          'https://maps.bitbot.com.au/tiles/{layer}/{z}/{x}/{y}.{ext}?origin=nw',
+      subdomains: ['a', 'b', 'c'],
+      userAgentPackageName: 'au.com.bitbot.nuptialflight',
+      minZoom: 0,
+      maxZoom: 19,
+      additionalOptions: {
+        'ext': 'png',
+        'layer': layer,
+        //'apiKey': dotenv.env['OPENWEATHERMAP_MAP_KEY']!,
+      },
+      opacity: 0.165,
+      //backgroundColor: Colors.black,
+      tileBuilder: (context, tileWidget, tile) {
+        return ColorFiltered(
+          colorFilter: colorFilter,
+          child: tileWidget,
+        );
+      },
     );
   }
 }
