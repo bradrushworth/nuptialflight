@@ -160,7 +160,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     this.fixedLocation = widget.fixedLocation;
     this.weatherFetcher = widget.weatherFetcher;
-    createMenu();
     widgetInitState(_loadData);
     _loadData(); // This will load data every time app is opened
   }
@@ -176,7 +175,10 @@ class _MyHomePageState extends State<MyHomePage> {
             (kIsWeb
                 ? 'Web'
                 : toBeginningOfSentenceCase(Platform.operatingSystem)!) +
-            ' Version $version+$buildNumber' +
+            ' Version ' +
+            (version ?? '?') +
+            '+' +
+            (buildNumber ?? '?') +
             ')',
         icon: Icons.email));
     if (!kIsWeb) {
@@ -223,6 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
         version = packageInfo.version;
         buildNumber = packageInfo.buildNumber;
       });
+      createMenu(); // After version and buildNumber is loaded
     });
 
     if (!kDebugMode) {
@@ -653,7 +656,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           Container(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 30)),
-                        if (orientation == Orientation.portrait)
+                        if (orientation == Orientation.portrait ||
+                            orientation == Orientation.landscape)
                           Text(
                               (kIsWeb
                                       ? 'Web'

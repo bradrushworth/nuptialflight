@@ -28,10 +28,18 @@ flutter packages pub run flutter_launcher_icons:main
 flutter --no-color build appbundle
 ```
 
+Dependency upgrade instruction:
+
+```
+flutter pub upgrade --major-versions
+```
+
 You'll need to create a file at assets/.env with a line:
+
 ```
 OPENWEATHERMAP_API_KEY=<your secret key>
 ```
+
 setting your free https://home.openweathermap.org/api_keys key.
 
 ## Attribution
