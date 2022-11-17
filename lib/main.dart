@@ -785,8 +785,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildNuptialHeading(Orientation orientation) {
     return AutoSizeText(
       orientation == Orientation.portrait
-          ? 'Likelihood of Ant Nuptial Flight'
-          : 'Likelihood of Ant\nNuptial Flight',
+          ? 'Confidence of Ant Nuptial Flight'
+          : 'Confidence of Ant\nNuptial Flight',
       style: TextStyle(
         height: orientation == Orientation.portrait ? 2.0 : 1.0,
         fontSize: 22,
@@ -1153,7 +1153,7 @@ class _MyHomePageState extends State<MyHomePage> {
             DataColumn(label: Text('Day'), numeric: true),
             DataColumn(label: Text('Temperature'), numeric: true),
             DataColumn(label: Text('Wind Speed'), numeric: true),
-            DataColumn(label: Text('Likelihood'), numeric: true),
+            DataColumn(label: Text('Confidence'), numeric: true),
           ],
           rows: [
             _buildFuturePercentage(1),

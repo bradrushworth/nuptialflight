@@ -50,3 +50,4 @@ app.*.map.json
 /gradlew
 /gradlew.bat
 /screenshots/resized/
+/coverage/lcov.info
