@@ -452,30 +452,36 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  /// Create an alert dialog
+  Future<void> showAlert(String title, String message) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("OK"))
+            ],
+          );
+        });
+  }
+
   /// Feature to record user saw a nuptial flight
   void _sawNuptialFlight(String size) async {
+    Navigator.of(context).pop();
+
     if (fixedLocation) {
-      setState(() {
-        errorMessage = "Can only report current location!";
-      });
-      // Wait then got back
-      Future.delayed(const Duration(milliseconds: 2000), () {
-        setState(() {
-          errorMessage = null;
-        });
-      });
+      showAlert('Error', 'Can only report current location!');
       return;
     }
+
     if (kDebugMode) {
-      setState(() {
-        errorMessage = "Not supported in debug mode!";
-      });
-      // Wait then got back
-      Future.delayed(const Duration(milliseconds: 2000), () {
-        setState(() {
-          errorMessage = null;
-        });
-      });
+      showAlert('Error', 'Not supported in debug mode!');
       return;
     }
 
@@ -511,6 +517,7 @@ class _MyHomePageState extends State<MyHomePage> {
         'weather': _currentWeather!.toJson()
       });
     }
+    showAlert('Success', 'Thank you for submitting!');
   }
 
   @override
@@ -680,7 +687,6 @@ class _MyHomePageState extends State<MyHomePage> {
             style: ElevatedButton.styleFrom(alignment: Alignment.centerLeft),
             onPressed: () {
               _sawNuptialFlight('small');
-              Navigator.of(context).pop();
             },
           );
           Widget mediumButton = ElevatedButton(
@@ -688,7 +694,6 @@ class _MyHomePageState extends State<MyHomePage> {
             style: ElevatedButton.styleFrom(alignment: Alignment.center),
             onPressed: () {
               _sawNuptialFlight('medium');
-              Navigator.of(context).pop();
             },
           );
           Widget largeButton = ElevatedButton(
@@ -696,7 +701,6 @@ class _MyHomePageState extends State<MyHomePage> {
             style: ElevatedButton.styleFrom(alignment: Alignment.centerRight),
             onPressed: () {
               _sawNuptialFlight('large');
-              Navigator.of(context).pop();
             },
           );
           // set up the AlertDialog
