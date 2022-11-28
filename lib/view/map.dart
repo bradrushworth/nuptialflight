@@ -3,9 +3,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:nuptialflight/main.dart';
-import 'package:nuptialflight/utils.dart';
-import 'package:nuptialflight/weather_fetcher.dart';
+
+import '../controller/arangodb.dart';
+import '../controller/weather_fetcher.dart';
+import '../main.dart';
+import '../utils.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: 'assets/.env');
@@ -30,14 +32,17 @@ class MyMapApp extends StatelessWidget {
 }
 
 class MapPage extends StatefulWidget {
+  MapPage();
+
   @override
   _MapPageState createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
-  WeatherFetcher weatherFetcher = WeatherFetcher();
-  MapController mapController = MapController();
+  WeatherFetcher _weatherFetcher = WeatherFetcher();
+  MapController _mapController = MapController();
   final double defaultZoom = 3;
+  List<Marker> _markers = <Marker>[];
 
   @override
   void initState() {
@@ -46,13 +51,27 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _loadData() async {
-    await weatherFetcher.findLocation(false).then((value) => _moveMap());
+    ArangoSingleton().getRecentFlights().then((value) => value.forEach((row) {
+          //print("v=$row");
+          _markers.add(
+            Marker(
+              point: new LatLng(row['lat'], row['lon']),
+              builder: (ctx) => _MarkerIcon(
+                key: row['key'],
+                size: row['size'],
+                weather: row['weather'],
+              ),
+            ),
+          );
+        }));
+
+    await _weatherFetcher.findLocation(false).then((value) => _moveMap());
   }
 
   void _moveMap() {
-    LatLng? latLng = weatherFetcher.getLocation();
+    LatLng? latLng = _weatherFetcher.getLocation();
     if (latLng != null) {
-      mapController.moveAndRotate(latLng, defaultZoom, 0.0);
+      _mapController.moveAndRotate(latLng, defaultZoom, 0.0);
     }
   }
 
@@ -72,19 +91,19 @@ class _MapPageState extends State<MapPage> {
         child: Icon(Icons.arrow_back),
       ),
       body: FlutterMap(
-        mapController: mapController,
+        mapController: _mapController,
         options: MapOptions(
-          center: weatherFetcher.getLocation(),
+          center: _weatherFetcher.getLocation(),
           zoom: defaultZoom,
           minZoom: 2,
           maxZoom: 9,
           onLongPress: (position, latLng) {
-            weatherFetcher.setLocation(latLng);
+            _weatherFetcher.setLocation(latLng);
             Navigator.of(context).push(
               MaterialPageRoute(
                   builder: (_) => MyHomePage(
                         fixedLocation: true,
-                        weatherFetcher: weatherFetcher,
+                        weatherFetcher: _weatherFetcher,
                       ),
                   fullscreenDialog: true,
                   maintainState: true),
@@ -100,7 +119,7 @@ class _MapPageState extends State<MapPage> {
             attributionBuilder: (_) {
               return Html(
                 data:
-                    '<div style="color: #00ffff;">Weather &copy; <a href="http://openweathermap.org">OpenWeatherMap</a><br/>Tiles by <a href="http://stamen.com">Stamen Design</a> - <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a><br/>Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</div>',
+                    '<div style="color: #00ffff;">Markers show last 48hr nuptial flights.<br/>Marker size indicates species size.<br/>Weather &copy; <a href="http://openweathermap.org">OpenWeatherMap</a><br/>Tiles by <a href="http://stamen.com">Stamen Design</a> - <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a><br/>Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</div>',
                 onLinkTap: (url, context, attributes, element) =>
                     Utils.launchURL(url!),
               );
@@ -148,6 +167,7 @@ class _MapPageState extends State<MapPage> {
                 0, 0, 0, 0, 0, // B
                 0, 0, 2, 0, -60, // A
               ])),
+          MarkerLayer(markers: _markers),
         ],
       ),
     );
@@ -175,6 +195,29 @@ class _MapPageState extends State<MapPage> {
           child: tileWidget,
         );
       },
+    );
+  }
+
+  Widget _MarkerIcon({required key, required size, required weather}) {
+    //return Text("Key: ${key}\,Size: ${size}\nWeather: ${weather}");
+
+    double sizeDouble = 15;
+    switch (size) {
+      case 'small':
+        sizeDouble = 20;
+        break;
+      case 'medium':
+        sizeDouble = 27;
+        break;
+      case 'large':
+        sizeDouble = 34;
+        break;
+    }
+    return Icon(
+      Icons.location_pin,
+      color: Colors.cyanAccent,
+      size: sizeDouble,
+      semanticLabel: size,
     );
   }
 }

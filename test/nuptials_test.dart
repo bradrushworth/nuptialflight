@@ -1,4 +1,4 @@
-import 'package:nuptialflight/nuptials.dart';
+import 'package:nuptialflight/controller/nuptials.dart';
 import 'package:nuptialflight/responses/onecall_response.dart';
 import 'package:test/test.dart';
 

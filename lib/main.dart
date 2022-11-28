@@ -7,7 +7,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:darango/darango.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,20 +14,21 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:intl/intl.dart';
-import 'package:nuptialflight/map.dart';
-import 'package:nuptialflight/responses/onecall_response.dart';
-import 'package:nuptialflight/responses/weather_response.dart';
-import 'package:nuptialflight/screenshots_mobile.dart'
-    if (dart.library.io) 'package:nuptialflight/screenshots_mobile.dart'
-    if (dart.library.js) 'package:nuptialflight/screenshots_other.dart';
-import 'package:nuptialflight/weather_fetcher.dart';
-import 'package:nuptialflight/widgets_other.dart'
-    if (dart.library.io) 'package:nuptialflight/widgets_mobile.dart'
-    if (dart.library.js) 'package:nuptialflight/widgets_other.dart';
+import 'package:nuptialflight/controller/arangodb.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-import 'nuptials.dart';
+import 'controller/nuptials.dart';
+import 'controller/screenshots_mobile.dart'
+    if (dart.library.io) 'controller/screenshots_mobile.dart'
+    if (dart.library.js) 'controller/screenshots_other.dart';
+import 'controller/weather_fetcher.dart';
+import 'controller/widgets_other.dart'
+    if (dart.library.io) 'controller/widgets_mobile.dart'
+    if (dart.library.js) 'controller/widgets_other.dart';
+import 'responses/onecall_response.dart';
+import 'responses/weather_response.dart';
 import 'utils.dart';
+import 'view/map.dart';
 
 final DateFormat dateFormat = DateFormat("yyyy-MM-dd");
 final DateFormat longDateFormat = DateFormat.MMMEd();
@@ -126,12 +126,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final String corsProxyUrl =
       'https://api.bitbot.com.au/cors/https://maps.googleapis.com/maps/api';
 
-  // Create client for Arango database
-  Database? _arangoClient;
-  var _weatherCurrentKey;
-  var _weatherHistoricalKey;
-  var _weatherFlightsKey;
-
   final AutoSizeGroup headingGroup = AutoSizeGroup();
   final AutoSizeGroup parameterGroup = AutoSizeGroup();
   final AutoSizeGroup suitabilityGroup = AutoSizeGroup();
@@ -227,12 +221,6 @@ class _MyHomePageState extends State<MyHomePage> {
       });
       createMenu(); // After version and buildNumber is loaded
     });
-
-    if (!kDebugMode) {
-      _arangoClient = Database('https://api.bitbot.com.au:8530');
-      await _arangoClient!
-          .connect('nuptialFlight', 'nuptialflight', 'fdggdsgdfstg34wfwfwff');
-    }
   }
 
   void _getLocation() {
@@ -420,36 +408,8 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    {
-      // Let's create a new database post
-      Collection? collection = await _arangoClient!.collection('flights');
-      Document createResult = await collection!.document().add({
-        'flight': 'unknown',
-        'version': '$version+$buildNumber',
-        'weather': _weather!.toJson()
-      });
-      _weatherFlightsKey = createResult.key;
-    }
-    {
-      // Let's create a new database post
-      Collection? collection = await _arangoClient!.collection('historical');
-      Document createResult = await collection!.document().add({
-        'flight': 'unknown',
-        'version': '$version+$buildNumber',
-        'weather': _historical!.toJson()
-      });
-      _weatherHistoricalKey = createResult.key;
-    }
-    {
-      // Let's create a new database post
-      Collection? collection = await _arangoClient!.collection('current');
-      Document createResult = await collection!.document().add({
-        'flight': 'unknown',
-        'version': '$version+$buildNumber',
-        'weather': _currentWeather!.toJson()
-      });
-      _weatherCurrentKey = createResult.key;
-    }
+    ArangoSingleton().createWeather(
+        version, buildNumber, _weather, _historical, _currentWeather);
   }
 
   /// Create an alert dialog
@@ -485,38 +445,8 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    {
-      // Let's update the existing database entry
-      Collection? collection = await _arangoClient!.collection('flights');
-      await collection!.document(document_handle: _weatherFlightsKey).update({
-        'flight': 'yes',
-        'size': size,
-        'version': '$version+$buildNumber',
-        'weather': _weather!.toJson()
-      });
-    }
-    {
-      // Let's update the existing database entry
-      Collection? collection = await _arangoClient!.collection('historical');
-      await collection!
-          .document(document_handle: _weatherHistoricalKey)
-          .update({
-        'flight': 'yes',
-        'size': size,
-        'version': '$version+$buildNumber',
-        'weather': _historical!.toJson()
-      });
-    }
-    {
-      // Let's update the existing database entry
-      Collection? collection = await _arangoClient!.collection('current');
-      await collection!.document(document_handle: _weatherCurrentKey).update({
-        'flight': 'yes',
-        'size': size,
-        'version': '$version+$buildNumber',
-        'weather': _currentWeather!.toJson()
-      });
-    }
+    ArangoSingleton().updateWeather(
+        version, buildNumber, size, _weather, _historical, _currentWeather);
     showAlert('Success', 'Thank you for submitting!');
   }
 
@@ -708,7 +638,9 @@ class _MyHomePageState extends State<MyHomePage> {
             title: Center(child: Text('Report Nuptial Flight')),
             content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
               Container(
-                child: Text("What size queen ant did you see today?"),
+                child: Text(
+                    "What size queen ant did you see today? Please only report real sightings. This data trains the app.",
+                    textAlign: TextAlign.center),
               ),
               Text(''),
               Row(
@@ -749,7 +681,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   static Color? getContinuousColorGradient(int percentage) {
-    // Bias towards red and green and away from the middle
+// Bias towards red and green and away from the middle
     int r = max(0, (1.0 * 255 * (100 - percentage * 1.2)) ~/ 100);
     int g = min(255, (1.0 * 255 * percentage * 1.2) ~/ 100);
     int b = 0;
