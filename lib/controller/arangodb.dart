@@ -109,15 +109,15 @@ class ArangoSingleton {
   Future<List> getRecentFlights() async {
     Aql aql = _arangoClient!.aql();
     String query = """
-FOR f IN flights
+FOR f IN current
 FILTER f.`flight` == 'yes'
-&& DATE_FORMAT(TO_NUMBER(f.weather.daily[0].dt)*1000, "%yyyy-%mm-%dd") >= DATE_ADD(DATE_NOW(), -48, "hour")
+&& DATE_ISO8601(TO_NUMBER(f.weather.dt) * 1000) >= DATE_ADD(DATE_NOW(), -48, "hour")
 RETURN {
     "key": f._key,
-    "weather": f.weather.daily[0].weather[0].description,
+    "weather": f.weather.weather[0].description,
     "size": f.size,
-    "lat": f.weather.lat,
-    "lon": f.weather.lon
+    "lat": f.weather.coord.lat,
+    "lon": f.weather.coord.lon,
 }
 """;
 
