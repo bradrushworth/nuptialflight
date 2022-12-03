@@ -2,7 +2,7 @@
 
 A basic Flutter application with an Android home screen app widget. Works on Android, IOS and Web.
 
-Demo: https://nuptialflight.codemagic.app/
+Web App: https://nuptialflight.app/
 
 Ant Nuptial Flight Predictor downloads the weather in your current location and gives you the rough
 likelihood that queen ants are flying near you today and for the next week. When the percentage is

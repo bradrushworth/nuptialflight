@@ -178,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (!kIsWeb) {
       choices.add(const Choice(
           title: 'Web App',
-          url: 'https://nuptialflight.codemagic.app/',
+          url: 'https://nuptialflight.app/',
           icon: Icons.web));
     }
     if (kIsWeb || Platform.isAndroid || Platform.isFuchsia) {
