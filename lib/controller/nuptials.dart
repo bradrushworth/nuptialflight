@@ -74,11 +74,11 @@ double nuptialHourlyPercentageModel(num lat, Hourly hourly) {
       0.01,
       score([
         lat.toDouble(),
-        hourly.temp!.toDouble(),
-        hourly.windSpeed!.toDouble(),
-        hourly.humidity!.toDouble(),
-        hourly.clouds!.toDouble(),
-        hourly.pressure!.toDouble(),
+        temperatureContribution(hourly.temp!.toDouble()),
+        windContribution(hourly.windSpeed!.toDouble()),
+        humidityContribution(hourly.humidity!.toDouble()),
+        cloudinessContribution(hourly.clouds!.toDouble()),
+        pressureContribution(hourly.pressure!.toDouble()),
       ])[1]);
 }
 
@@ -88,11 +88,13 @@ double nuptialDailyPercentageModel(num lat, Daily daily,
       0.01,
       score([
         lat.toDouble(),
-        nocturnal ? daily.temp!.eve!.toDouble() : daily.temp!.day!.toDouble(),
-        daily.windSpeed!.toDouble(),
-        daily.humidity!.toDouble(),
-        daily.clouds!.toDouble(),
-        daily.pressure!.toDouble(),
+        temperatureContribution(nocturnal
+            ? daily.temp!.eve!.toDouble()
+            : daily.temp!.day!.toDouble()),
+        windContribution(daily.windSpeed!.toDouble()),
+        humidityContribution(daily.humidity!.toDouble()),
+        cloudinessContribution(daily.clouds!.toDouble()),
+        pressureContribution(daily.pressure!.toDouble()),
       ])[1]);
 }
 

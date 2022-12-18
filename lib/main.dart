@@ -690,6 +690,14 @@ class _MyHomePageState extends State<MyHomePage> {
     return color;
   }
 
+  static String getColorText(int percentage) {
+    String? text = (percentage < amberThreshold
+        ? 'No'
+        : (percentage < greenThreshold ? 'Maybe' : 'Yes'));
+
+    return text!;
+  }
+
   Widget _buildErrorMessage() {
     //                  return AlertDialog(
     //                     title: const Text('That is correct!'),
