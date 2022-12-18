@@ -37,8 +37,8 @@ final DateFormat timeOfDayFormat = DateFormat("ha");
 
 const String kGoogleApiKey = 'AIzaSyDNaPQ01hKnTmVRQoT_FM1ZTTxDnw6GoOU';
 
-const int greenThreshold = 75;
-const int amberThreshold = 50;
+const int greenThreshold = 60;
+const int amberThreshold = 40;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -729,7 +729,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildNuptialHeading(Orientation orientation) {
     return AutoSizeText(
       orientation == Orientation.portrait
-          ? 'Confidence of Ant Nuptial Flight'
+          ? 'Confidence of Nuptial Flight'
           : 'Confidence of Ant\nNuptial Flight',
       style: TextStyle(
         height: orientation == Orientation.portrait ? 2.0 : 1.0,
@@ -763,6 +763,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         AutoSizeText(
           '${percentage}%',
+          //getColorText(percentage),
           style: TextStyle(
             color: getColorGradient(percentage),
             height: orientation == Orientation.portrait ? 0.95 : 0.90,
@@ -1141,6 +1142,7 @@ class _MyHomePageState extends State<MyHomePage> {
         DataCell(
           Text(
             ' ${_dailyPercentage[i]}%',
+            //' ' + getColorText(_dailyPercentage[i]),
             style: getColorTextStyle(_dailyPercentage[i]),
           ),
         ),
