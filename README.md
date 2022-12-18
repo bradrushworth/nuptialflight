@@ -12,9 +12,13 @@ high, time to get outside and looking for ants in your local area!
 
 ## The Science
 
+Originally I used these papers to inform the algorithms in the app:
+
 * [Weather conditions during nuptial flight of Manica rubida](https://antwiki.org/wiki/images/5/50/Depa%2C_L._2006._Weather_conditions_during_nuptial_flight_of_Manica_rubida.pdf)
 * [The spatial distribution and environmental triggers of ant mating flights](https://onlinelibrary.wiley.com/doi/epdf/10.1111/ecog.03140)
 * [Weather Conditions During Nuptial Flights of Four European Ant Species](https://www.antwiki.org/wiki/images/d/dd/Boomsma%2C_J.J.%2C_Leusink%2C_A._1981._Weather_conditions_during_nuptial_flights_of_four_European_ant_species_.pdf)
+
+Newer versions of the app use Data Science algorithms, for example Random Forest over user-contributed data.
 
 ## Getting Started
 
