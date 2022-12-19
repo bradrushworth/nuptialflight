@@ -609,58 +609,67 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
 
       /// Future feature to record that the user saw a nuptial flight today
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          // set up the buttons
-          Widget smallButton = ElevatedButton(
-            child: Text("Small"),
-            style: ElevatedButton.styleFrom(alignment: Alignment.centerLeft),
-            onPressed: () {
-              _sawNuptialFlight('small');
-            },
-          );
-          Widget mediumButton = ElevatedButton(
-            child: Text("Medium"),
-            style: ElevatedButton.styleFrom(alignment: Alignment.center),
-            onPressed: () {
-              _sawNuptialFlight('medium');
-            },
-          );
-          Widget largeButton = ElevatedButton(
-            child: Text("Large"),
-            style: ElevatedButton.styleFrom(alignment: Alignment.centerRight),
-            onPressed: () {
-              _sawNuptialFlight('large');
-            },
-          );
-          // set up the AlertDialog
-          AlertDialog alert = AlertDialog(
-            title: Center(child: Text('Report Nuptial Flight')),
-            content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-              Container(
-                child: Text(
-                    "What size queen ant did you see today? Please only report real sightings. This data trains the app.",
-                    textAlign: TextAlign.center),
-              ),
-              Text(''),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[smallButton, mediumButton, largeButton],
-              ),
-            ]),
-          );
-          // show the dialog
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return alert;
-            },
-          );
-        },
-        tooltip: 'Saw Nuptial Flight',
-        child:
-            Icon(halictus_rubicundus_silhouette, size: 45, color: Colors.white),
-      ),
+      floatingActionButton: fixedLocation
+          ? null
+          : FloatingActionButton(
+              onPressed: () async {
+                // set up the buttons
+                Widget smallButton = ElevatedButton(
+                  child: Text("Small"),
+                  style:
+                      ElevatedButton.styleFrom(alignment: Alignment.centerLeft),
+                  onPressed: () {
+                    _sawNuptialFlight('small');
+                  },
+                );
+                Widget mediumButton = ElevatedButton(
+                  child: Text("Medium"),
+                  style: ElevatedButton.styleFrom(alignment: Alignment.center),
+                  onPressed: () {
+                    _sawNuptialFlight('medium');
+                  },
+                );
+                Widget largeButton = ElevatedButton(
+                  child: Text("Large"),
+                  style: ElevatedButton.styleFrom(
+                      alignment: Alignment.centerRight),
+                  onPressed: () {
+                    _sawNuptialFlight('large');
+                  },
+                );
+                // set up the AlertDialog
+                AlertDialog alert = AlertDialog(
+                  title: Center(child: Text('Report Nuptial Flight')),
+                  content:
+                      Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                    Container(
+                      child: Text(
+                          "What size queen ant did you see today? Please only report real sightings. This data trains the app.",
+                          textAlign: TextAlign.center),
+                    ),
+                    Text(''),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        smallButton,
+                        mediumButton,
+                        largeButton
+                      ],
+                    ),
+                  ]),
+                );
+                // show the dialog
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return alert;
+                  },
+                );
+              },
+              tooltip: 'Saw Nuptial Flight',
+              child: Icon(halictus_rubicundus_silhouette,
+                  size: 45, color: Colors.white),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }

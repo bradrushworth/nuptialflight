@@ -87,8 +87,8 @@ class CurrentWeatherResponse {
 }
 
 class Coordinates {
-  double? lon;
-  double? lat;
+  num? lon;
+  num? lat;
 
   Coordinates({this.lon, this.lat});
 
@@ -131,10 +131,10 @@ class WeatherDescription {
 }
 
 class MainParameters {
-  double? temp;
-  double? feelsLike;
-  double? tempMin;
-  double? tempMax;
+  num? temp;
+  num? feelsLike;
+  num? tempMin;
+  num? tempMax;
   int? pressure;
   int? humidity;
 
@@ -168,7 +168,7 @@ class MainParameters {
 }
 
 class Wind {
-  double? speed;
+  num? speed;
   int? deg;
 
   Wind({this.speed, this.deg});
