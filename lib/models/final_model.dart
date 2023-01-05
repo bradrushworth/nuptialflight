@@ -2,91 +2,661 @@ import 'dart:math';
 
 List<double> score(List<double> input) {
   double var0;
-  if (input[0] >= -17.5) {
+  if (input[0] >= -20.5) {
     if (input[0] >= 36.5) {
-      if (input[2] >= 0.85) {
-        if (input[1] >= 0.75) {
-          if (input[3] >= 0.45) {
-            if (input[0] >= 39.0) {
-              var0 = -0.55862075;
+      if (input[4] >= 0.15) {
+        if (input[3] >= 0.45) {
+          if (input[5] >= 0.75) {
+            if (input[3] >= 0.55) {
+              var0 = -0.3692308;
             } else {
-              var0 = 0.085714296;
+              var0 = 0.0;
             }
           } else {
-            if (input[3] >= 0.35000002) {
-              var0 = 0.36;
+            if (input[1] >= 0.95) {
+              var0 = -0.4909091;
             } else {
-              var0 = -0.44000003;
+              var0 = -0.02079208;
             }
           }
         } else {
-          if (input[1] >= 0.25) {
-            if (input[1] >= 0.35000002) {
-              var0 = -0.05346535;
+          if (input[3] >= 0.25) {
+            if (input[5] >= 0.65) {
+              var0 = 0.37272727;
             } else {
-              var0 = 0.3767442;
+              var0 = -0.36666667;
             }
           } else {
-            var0 = -0.4909091;
+            if (input[5] >= 0.45) {
+              var0 = -0.36363637;
+            } else {
+              var0 = 0.32903227;
+            }
           }
         }
       } else {
-        if (input[4] >= 0.25) {
-          if (input[3] >= 0.25) {
-            if (input[1] >= 0.45) {
-              var0 = 0.08130842;
-            } else {
-              var0 = -0.2883117;
-            }
+        if (input[2] >= 0.65) {
+          if (input[0] >= 43.0) {
+            var0 = -0.5;
           } else {
-            var0 = -0.5314286;
+            if (input[4] >= 0.05) {
+              var0 = 0.30322582;
+            } else {
+              var0 = 0.027411168;
+            }
           }
         } else {
-          if (input[1] >= 0.35000002) {
-            if (input[1] >= 0.65) {
-              var0 = 0.15971223;
+          if (input[2] >= 0.45) {
+            if (input[5] >= 0.85) {
+              var0 = -0.10344828;
             } else {
-              var0 = -0.1647059;
+              var0 = 0.31278688;
             }
           } else {
-            if (input[1] >= 0.25) {
-              var0 = 0.22285716;
+            if (input[3] >= 0.25) {
+              var0 = -0.24000001;
             } else {
-              var0 = 0.45000002;
+              var0 = 0.27272728;
             }
           }
         }
       }
     } else {
-      if (input[4] >= 0.95) {
-        var0 = -0.44000003;
+      if (input[5] >= 0.95) {
+        if (input[0] >= 12.5) {
+          if (input[4] >= 0.25) {
+            if (input[2] >= 0.55) {
+              var0 = 0.34054056;
+            } else {
+              var0 = -0.3;
+            }
+          } else {
+            var0 = -0.47368425;
+          }
+        } else {
+          var0 = -0.49565217;
+        }
       } else {
         if (input[0] >= 11.5) {
           if (input[0] >= 12.5) {
             if (input[2] >= 0.65) {
-              var0 = 0.14060326;
+              var0 = 0.16148798;
             } else {
-              var0 = 0.3644172;
+              var0 = 0.3510836;
             }
           } else {
             if (input[1] >= 0.85) {
-              var0 = 0.06666667;
+              var0 = 0.10909092;
             } else {
-              var0 = -0.504;
+              var0 = -0.36296296;
             }
           }
         } else {
-          if (input[5] >= 0.65) {
-            if (input[0] >= 5.5) {
-              var0 = 0.44137934;
+          if (input[0] >= -16.5) {
+            if (input[2] >= 0.95) {
+              var0 = 0.0;
             } else {
-              var0 = 0.27878788;
+              var0 = 0.38410044;
             }
           } else {
-            if (input[2] >= 0.45) {
-              var0 = -0.3375;
+            if (input[2] >= 0.75) {
+              var0 = -0.44000003;
             } else {
-              var0 = 0.43448275;
+              var0 = 0.21758243;
+            }
+          }
+        }
+      }
+    }
+  } else {
+    if (input[1] >= 0.55) {
+      if (input[3] >= 0.65) {
+        if (input[5] >= 0.75) {
+          if (input[4] >= 0.25) {
+            if (input[4] >= 0.95) {
+              var0 = -0.3;
+            } else {
+              var0 = 0.111627914;
+            }
+          } else {
+            var0 = -0.33333337;
+          }
+        } else {
+          if (input[0] >= -34.5) {
+            if (input[4] >= 0.35000002) {
+              var0 = -0.5;
+            } else {
+              var0 = 0.09333334;
+            }
+          } else {
+            var0 = -0.5555556;
+          }
+        }
+      } else {
+        if (input[2] >= 0.65) {
+          if (input[0] >= -29.5) {
+            if (input[5] >= 0.75) {
+              var0 = -0.50769234;
+            } else {
+              var0 = 0.03529412;
+            }
+          } else {
+            if (input[5] >= 0.75) {
+              var0 = -0.38957345;
+            } else {
+              var0 = -0.5829788;
+            }
+          }
+        } else {
+          if (input[0] >= -40.5) {
+            if (input[2] >= 0.25) {
+              var0 = -0.208;
+            } else {
+              var0 = 0.32000002;
+            }
+          } else {
+            var0 = 0.42857146;
+          }
+        }
+      }
+    } else {
+      if (input[3] >= 0.85) {
+        var0 = -0.5489362;
+      } else {
+        if (input[3] >= 0.25) {
+          if (input[0] >= -32.5) {
+            if (input[5] >= 0.75) {
+              var0 = -0.24782608;
+            } else {
+              var0 = 0.03561644;
+            }
+          } else {
+            if (input[5] >= 0.75) {
+              var0 = 0.1960396;
+            } else {
+              var0 = -0.10666668;
+            }
+          }
+        } else {
+          if (input[1] >= 0.45) {
+            var0 = -0.5489362;
+          } else {
+            if (input[4] >= 0.65) {
+              var0 = -0.5368421;
+            } else {
+              var0 = -0.11598513;
+            }
+          }
+        }
+      }
+    }
+  }
+  double var1;
+  if (input[0] >= -20.5) {
+    if (input[0] >= 11.5) {
+      if (input[0] >= 12.5) {
+        if (input[0] >= 36.5) {
+          if (input[4] >= 0.15) {
+            if (input[1] >= 0.45) {
+              var1 = -0.0048478185;
+            } else {
+              var1 = -0.19240747;
+            }
+          } else {
+            if (input[1] >= 0.35000002) {
+              var1 = 0.07921536;
+            } else {
+              var1 = 0.27364194;
+            }
+          }
+        } else {
+          if (input[4] >= 0.05) {
+            if (input[0] >= 15.5) {
+              var1 = 0.27816632;
+            } else {
+              var1 = 0.1226387;
+            }
+          } else {
+            if (input[3] >= 0.25) {
+              var1 = -0.3576262;
+            } else {
+              var1 = 0.15441084;
+            }
+          }
+        }
+      } else {
+        if (input[3] >= 0.45) {
+          if (input[1] >= 0.85) {
+            if (input[3] >= 0.75) {
+              var1 = 0.35126114;
+            } else {
+              var1 = -0.389121;
+            }
+          } else {
+            var1 = -0.47042397;
+          }
+        } else {
+          if (input[5] >= 0.85) {
+            var1 = -0.3809358;
+          } else {
+            var1 = 0.33261418;
+          }
+        }
+      }
+    } else {
+      if (input[5] >= 0.55) {
+        if (input[2] >= 0.55) {
+          if (input[5] >= 0.65) {
+            if (input[5] >= 0.95) {
+              var1 = -0.26092616;
+            } else {
+              var1 = 0.22305717;
+            }
+          } else {
+            if (input[2] >= 0.85) {
+              var1 = -0.0029638084;
+            } else {
+              var1 = -0.44561252;
+            }
+          }
+        } else {
+          if (input[4] >= 0.45) {
+            if (input[4] >= 0.55) {
+              var1 = 0.3355859;
+            } else {
+              var1 = -0.3980376;
+            }
+          } else {
+            var1 = 0.39769465;
+          }
+        }
+      } else {
+        if (input[3] >= 0.95) {
+          var1 = 0.28401873;
+        } else {
+          var1 = -0.51868063;
+        }
+      }
+    }
+  } else {
+    if (input[1] >= 0.55) {
+      if (input[3] >= 0.45) {
+        if (input[2] >= 0.85) {
+          if (input[1] >= 0.85) {
+            if (input[5] >= 0.75) {
+              var1 = 0.15430138;
+            } else {
+              var1 = -0.44712877;
+            }
+          } else {
+            var1 = -0.49147773;
+          }
+        } else {
+          if (input[4] >= 0.35000002) {
+            if (input[2] >= 0.75) {
+              var1 = 0.10845005;
+            } else {
+              var1 = -0.38579383;
+            }
+          } else {
+            if (input[4] >= 0.25) {
+              var1 = 0.15500882;
+            } else {
+              var1 = -0.27184838;
+            }
+          }
+        }
+      } else {
+        if (input[2] >= 0.65) {
+          if (input[0] >= -27.5) {
+            if (input[4] >= 0.85) {
+              var1 = 0.37515527;
+            } else {
+              var1 = -0.34953716;
+            }
+          } else {
+            if (input[0] >= -37.5) {
+              var1 = -0.4768627;
+            } else {
+              var1 = -0.16760771;
+            }
+          }
+        } else {
+          if (input[5] >= 0.35000002) {
+            if (input[3] >= 0.25) {
+              var1 = -0.03469656;
+            } else {
+              var1 = -0.48216286;
+            }
+          } else {
+            var1 = 0.3494464;
+          }
+        }
+      }
+    } else {
+      if (input[0] >= -26.5) {
+        if (input[2] >= 0.45) {
+          if (input[2] >= 0.85) {
+            if (input[0] >= -21.5) {
+              var1 = 0.0794236;
+            } else {
+              var1 = -0.49569893;
+            }
+          } else {
+            if (input[1] >= 0.45) {
+              var1 = 0.20341699;
+            } else {
+              var1 = -0.43308258;
+            }
+          }
+        } else {
+          var1 = 0.3571936;
+        }
+      } else {
+        if (input[3] >= 0.25) {
+          if (input[5] >= 0.85) {
+            if (input[0] >= -32.5) {
+              var1 = -0.50373703;
+            } else {
+              var1 = 0.03911479;
+            }
+          } else {
+            if (input[2] >= 0.55) {
+              var1 = 0.109529845;
+            } else {
+              var1 = -0.492412;
+            }
+          }
+        } else {
+          if (input[1] >= 0.45) {
+            var1 = -0.42618185;
+          } else {
+            if (input[5] >= 0.55) {
+              var1 = -0.12197402;
+            } else {
+              var1 = 0.12430183;
+            }
+          }
+        }
+      }
+    }
+  }
+  double var2;
+  if (input[0] >= -20.5) {
+    if (input[1] >= 0.95) {
+      if (input[0] >= 38.5) {
+        if (input[0] >= 47.0) {
+          if (input[3] >= 0.55) {
+            var2 = -0.3105872;
+          } else {
+            var2 = 0.25681883;
+          }
+        } else {
+          var2 = -0.5062605;
+        }
+      } else {
+        if (input[0] >= 35.5) {
+          if (input[3] >= 0.75) {
+            var2 = 0.30513677;
+          } else {
+            if (input[3] >= 0.15) {
+              var2 = -0.37619835;
+            } else {
+              var2 = 0.34391302;
+            }
+          }
+        } else {
+          var2 = -0.47549382;
+        }
+      }
+    } else {
+      if (input[0] >= 11.5) {
+        if (input[3] >= 0.85) {
+          if (input[2] >= 0.65) {
+            if (input[0] >= 13.5) {
+              var2 = -0.31756473;
+            } else {
+              var2 = 0.25423855;
+            }
+          } else {
+            if (input[1] >= 0.65) {
+              var2 = -0.21533728;
+            } else {
+              var2 = 0.15919861;
+            }
+          }
+        } else {
+          if (input[0] >= 12.5) {
+            if (input[3] >= 0.65) {
+              var2 = 0.14541523;
+            } else {
+              var2 = 0.05145597;
+            }
+          } else {
+            if (input[5] >= 0.85) {
+              var2 = -0.25624502;
+            } else {
+              var2 = 0.06775534;
+            }
+          }
+        }
+      } else {
+        if (input[4] >= 0.25) {
+          if (input[2] >= 0.65) {
+            if (input[4] >= 0.65) {
+              var2 = -0.35597754;
+            } else {
+              var2 = 0.18696512;
+            }
+          } else {
+            if (input[5] >= 0.55) {
+              var2 = 0.28717282;
+            } else {
+              var2 = -0.34628013;
+            }
+          }
+        } else {
+          if (input[4] >= 0.05) {
+            var2 = -0.5494011;
+          } else {
+            if (input[5] >= 0.75) {
+              var2 = 0.3502889;
+            } else {
+              var2 = -0.34048587;
+            }
+          }
+        }
+      }
+    }
+  } else {
+    if (input[1] >= 0.45) {
+      if (input[3] >= 0.65) {
+        if (input[1] >= 0.75) {
+          if (input[2] >= 0.75) {
+            if (input[0] >= -34.5) {
+              var2 = -0.42908955;
+            } else {
+              var2 = 0.21248776;
+            }
+          } else {
+            if (input[0] >= -33.5) {
+              var2 = 0.07131238;
+            } else {
+              var2 = -0.47730353;
+            }
+          }
+        } else {
+          if (input[3] >= 0.85) {
+            if (input[5] >= 0.75) {
+              var2 = -0.45672432;
+            } else {
+              var2 = -0.10223531;
+            }
+          } else {
+            if (input[3] >= 0.75) {
+              var2 = 0.27061322;
+            } else {
+              var2 = 0.029592726;
+            }
+          }
+        }
+      } else {
+        if (input[2] >= 0.75) {
+          if (input[4] >= 0.85) {
+            if (input[3] >= 0.45) {
+              var2 = -0.39096463;
+            } else {
+              var2 = 0.15448727;
+            }
+          } else {
+            if (input[1] >= 0.75) {
+              var2 = -0.18684441;
+            } else {
+              var2 = -0.4165504;
+            }
+          }
+        } else {
+          if (input[4] >= 0.35000002) {
+            if (input[2] >= 0.2) {
+              var2 = -0.3690351;
+            } else {
+              var2 = 0.45483014;
+            }
+          } else {
+            if (input[2] >= 0.55) {
+              var2 = 0.10251254;
+            } else {
+              var2 = -0.22049928;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[0] >= -26.5) {
+        if (input[2] >= 0.45) {
+          if (input[2] >= 0.85) {
+            if (input[0] >= -21.5) {
+              var2 = 0.07011893;
+            } else {
+              var2 = -0.39969414;
+            }
+          } else {
+            if (input[4] >= 0.75) {
+              var2 = -0.0027002417;
+            } else {
+              var2 = -0.37825143;
+            }
+          }
+        } else {
+          var2 = 0.26452073;
+        }
+      } else {
+        if (input[3] >= 0.75) {
+          var2 = -0.4426771;
+        } else {
+          if (input[3] >= 0.55) {
+            if (input[5] >= 0.55) {
+              var2 = 0.2731421;
+            } else {
+              var2 = -0.47485214;
+            }
+          } else {
+            if (input[1] >= 0.15) {
+              var2 = -0.00018659215;
+            } else {
+              var2 = -0.13981643;
+            }
+          }
+        }
+      }
+    }
+  }
+  double var3;
+  if (input[0] >= -20.5) {
+    if (input[0] >= 40.5) {
+      if (input[2] >= 0.75) {
+        if (input[1] >= 0.35000002) {
+          if (input[2] >= 0.95) {
+            if (input[1] >= 0.75) {
+              var3 = -0.47311515;
+            } else {
+              var3 = 0.2347071;
+            }
+          } else {
+            if (input[1] >= 0.55) {
+              var3 = -0.22363028;
+            } else {
+              var3 = -0.50915086;
+            }
+          }
+        } else {
+          if (input[0] >= 45.5) {
+            if (input[1] >= 0.25) {
+              var3 = 0.065682426;
+            } else {
+              var3 = -0.44330588;
+            }
+          } else {
+            if (input[1] >= 0.15) {
+              var3 = 0.37325618;
+            } else {
+              var3 = -0.01725446;
+            }
+          }
+        }
+      } else {
+        if (input[1] >= 0.95) {
+          var3 = -0.3889472;
+        } else {
+          if (input[3] >= 0.15) {
+            if (input[1] >= 0.45) {
+              var3 = 0.10923841;
+            } else {
+              var3 = -0.06823888;
+            }
+          } else {
+            var3 = -0.3776764;
+          }
+        }
+      }
+    } else {
+      if (input[5] >= 0.95) {
+        if (input[4] >= 0.25) {
+          if (input[0] >= 12.5) {
+            if (input[2] >= 0.85) {
+              var3 = -0.3475927;
+            } else {
+              var3 = 0.16226493;
+            }
+          } else {
+            var3 = -0.32977402;
+          }
+        } else {
+          var3 = -0.4343896;
+        }
+      } else {
+        if (input[0] >= 9.0) {
+          if (input[0] >= 14.5) {
+            if (input[3] >= 0.85) {
+              var3 = -0.12593289;
+            } else {
+              var3 = 0.120437704;
+            }
+          } else {
+            if (input[3] >= 0.65) {
+              var3 = 0.106765985;
+            } else {
+              var3 = -0.24588226;
+            }
+          }
+        } else {
+          if (input[0] >= 5.5) {
+            var3 = 0.29898223;
+          } else {
+            if (input[5] >= 0.75) {
+              var3 = 0.20842715;
+            } else {
+              var3 = 0.010759327;
             }
           }
         }
@@ -95,570 +665,60 @@ List<double> score(List<double> input) {
   } else {
     if (input[1] >= 0.55) {
       if (input[2] >= 0.25) {
-        if (input[3] >= 0.75) {
-          if (input[5] >= 0.65) {
-            if (input[0] >= -33.5) {
-              var0 = -0.16363637;
-            } else {
-              var0 = 0.25500003;
-            }
-          } else {
-            var0 = -0.5478261;
-          }
-        } else {
-          if (input[2] >= 0.65) {
-            if (input[3] >= 0.45) {
-              var0 = -0.3375;
-            } else {
-              var0 = -0.52121216;
-            }
-          } else {
-            if (input[2] >= 0.55) {
-              var0 = 0.0;
-            } else {
-              var0 = -0.46451613;
-            }
-          }
-        }
-      } else {
-        if (input[4] >= 0.65) {
-          var0 = 0.4666667;
-        } else {
-          var0 = 0.15;
-        }
-      }
-    } else {
-      if (input[0] >= -26.5) {
-        if (input[2] >= 0.85) {
-          if (input[0] >= -21.5) {
-            if (input[4] >= 0.65) {
-              var0 = -0.4666667;
-            } else {
-              var0 = 0.1373494;
-            }
-          } else {
-            var0 = -0.54285717;
-          }
-        } else {
-          if (input[3] >= 0.15) {
-            var0 = -0.57303375;
-          } else {
-            if (input[4] >= 0.15) {
-              var0 = -0.42857146;
-            } else {
-              var0 = -0.085714296;
-            }
-          }
-        }
-      } else {
-        if (input[2] >= 0.65) {
-          if (input[5] >= 0.85) {
-            if (input[4] >= 0.15) {
-              var0 = -0.48000002;
-            } else {
-              var0 = -0.011764707;
-            }
-          } else {
-            if (input[3] >= 0.25) {
-              var0 = 0.13571429;
-            } else {
-              var0 = -0.088324875;
-            }
-          }
-        } else {
-          if (input[5] >= 0.75) {
-            if (input[3] >= 0.25) {
-              var0 = 0.25714287;
-            } else {
-              var0 = -0.48571432;
-            }
-          } else {
-            var0 = -0.554717;
-          }
-        }
-      }
-    }
-  }
-  double var1;
-  if (input[0] >= -17.5) {
-    if (input[0] >= 40.5) {
-      if (input[1] >= 0.95) {
-        if (input[0] >= 47.0) {
-          if (input[3] >= 0.55) {
-            var1 = -0.35880956;
-          } else {
-            var1 = 0.35715795;
-          }
-        } else {
-          var1 = -0.5287261;
-        }
-      } else {
-        if (input[2] >= 0.75) {
-          if (input[1] >= 0.35000002) {
-            if (input[2] >= 0.95) {
-              var1 = 0.09066816;
-            } else {
-              var1 = -0.3070296;
-            }
-          } else {
-            if (input[0] >= 45.5) {
-              var1 = -0.17982396;
-            } else {
-              var1 = 0.29817206;
-            }
-          }
-        } else {
-          if (input[0] >= 46.5) {
-            if (input[0] >= 49.5) {
-              var1 = 0.050693672;
-            } else {
-              var1 = 0.3515337;
-            }
-          } else {
-            if (input[0] >= 43.5) {
-              var1 = -0.51131463;
-            } else {
-              var1 = 0.054952614;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[0] >= 11.5) {
-        if (input[0] >= 12.5) {
+        if (input[3] >= 0.45) {
           if (input[5] >= 0.45) {
-            if (input[3] >= 0.65) {
-              var1 = 0.20269647;
+            if (input[4] >= 0.35000002) {
+              var3 = -0.15426938;
             } else {
-              var1 = 0.053947218;
+              var3 = 0.031298988;
             }
           } else {
-            if (input[3] >= 0.55) {
-              var1 = 0.12257976;
-            } else {
-              var1 = 0.4488772;
-            }
+            var3 = -0.3889039;
           }
         } else {
-          if (input[1] >= 0.85) {
-            if (input[3] >= 0.70000005) {
-              var1 = 0.38695806;
+          if (input[0] >= -40.5) {
+            if (input[5] >= 0.35000002) {
+              var3 = -0.27566466;
             } else {
-              var1 = -0.37224352;
+              var3 = 0.13070695;
             }
           } else {
-            if (input[5] >= 0.85) {
-              var1 = -0.44797873;
-            } else {
-              var1 = -0.10940952;
-            }
-          }
-        }
-      } else {
-        if (input[5] >= 0.65) {
-          if (input[2] >= 0.95) {
-            if (input[0] >= 2.0) {
-              var1 = -0.42415258;
-            } else {
-              var1 = 0.3137517;
-            }
-          } else {
-            if (input[0] >= 5.5) {
-              var1 = 0.3616205;
-            } else {
-              var1 = 0.1909692;
-            }
-          }
-        } else {
-          if (input[2] >= 0.45) {
-            if (input[3] >= 0.95) {
-              var1 = 0.1700342;
-            } else {
-              var1 = -0.4289578;
-            }
-          } else {
-            if (input[3] >= 0.85) {
-              var1 = 0.39166853;
-            } else {
-              var1 = 0.14656574;
-            }
-          }
-        }
-      }
-    }
-  } else {
-    if (input[1] >= 0.45) {
-      if (input[3] >= 0.25) {
-        if (input[5] >= 0.65) {
-          if (input[2] >= 0.85) {
-            if (input[3] >= 0.75) {
-              var1 = 0.0811602;
-            } else {
-              var1 = -0.335991;
-            }
-          } else {
-            if (input[1] >= 0.75) {
-              var1 = -0.10852336;
-            } else {
-              var1 = 0.075981885;
-            }
-          }
-        } else {
-          if (input[4] >= 0.55) {
-            var1 = -0.4792186;
-          } else {
-            if (input[0] >= -27.5) {
-              var1 = 0.13026537;
-            } else {
-              var1 = -0.24086873;
-            }
-          }
-        }
-      } else {
-        if (input[5] >= 0.35000002) {
-          var1 = -0.49333748;
-        } else {
-          if (input[2] >= 0.65) {
-            var1 = -0.30693027;
-          } else {
-            var1 = 0.22730315;
-          }
-        }
-      }
-    } else {
-      if (input[0] >= -26.5) {
-        if (input[2] >= 0.85) {
-          if (input[0] >= -21.5) {
-            if (input[4] >= 0.65) {
-              var1 = -0.37503374;
-            } else {
-              var1 = 0.09863328;
-            }
-          } else {
-            var1 = -0.4196222;
-          }
-        } else {
-          if (input[3] >= 0.15) {
-            var1 = -0.4447263;
-          } else {
-            if (input[4] >= 0.05) {
-              var1 = -0.043083955;
-            } else {
-              var1 = -0.38333645;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= -34.5) {
-          if (input[3] >= 0.65) {
-            var1 = -0.49297473;
-          } else {
-            if (input[2] >= 0.55) {
-              var1 = 0.09831442;
-            } else {
-              var1 = -0.401767;
-            }
-          }
-        } else {
-          if (input[5] >= 0.85) {
-            if (input[0] >= -35.5) {
-              var1 = 0.10508355;
-            } else {
-              var1 = -0.40946501;
-            }
-          } else {
-            var1 = -0.503388;
-          }
-        }
-      }
-    }
-  }
-  double var2;
-  if (input[0] >= -17.5) {
-    if (input[0] >= 36.5) {
-      if (input[4] >= 0.45) {
-        if (input[1] >= 0.45) {
-          if (input[1] >= 0.75) {
-            if (input[0] >= 51.5) {
-              var2 = 0.37472296;
-            } else {
-              var2 = -0.3131629;
-            }
-          } else {
-            if (input[3] >= 0.15) {
-              var2 = 0.19038647;
-            } else {
-              var2 = -0.2776931;
-            }
-          }
-        } else {
-          var2 = -0.46766162;
-        }
-      } else {
-        if (input[0] >= 37.5) {
-          if (input[3] >= 0.65) {
-            if (input[1] >= 0.55) {
-              var2 = -0.17512399;
-            } else {
-              var2 = 0.12077507;
-            }
-          } else {
-            if (input[2] >= 0.85) {
-              var2 = -0.0779403;
-            } else {
-              var2 = 0.13883387;
-            }
-          }
-        } else {
-          if (input[4] >= 0.05) {
-            var2 = -0.51650304;
-          } else {
-            if (input[5] >= 0.65) {
-              var2 = 0.12969388;
-            } else {
-              var2 = -0.40582952;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[0] >= 34.5) {
-        if (input[3] >= 0.95) {
-          var2 = 0.040120993;
-        } else {
-          if (input[5] >= 0.75) {
-            var2 = 0.059455078;
-          } else {
-            if (input[1] >= 0.65) {
-              var2 = 0.43644506;
-            } else {
-              var2 = 0.15881498;
-            }
-          }
-        }
-      } else {
-        if (input[1] >= 0.75) {
-          if (input[3] >= 0.75) {
-            if (input[3] >= 0.85) {
-              var2 = -0.28468928;
-            } else {
-              var2 = 0.16241801;
-            }
-          } else {
-            var2 = -0.51319474;
-          }
-        } else {
-          if (input[4] >= 0.25) {
-            if (input[0] >= 15.5) {
-              var2 = 0.29667267;
-            } else {
-              var2 = 0.10517187;
-            }
-          } else {
-            if (input[3] >= 0.45) {
-              var2 = 0.13518927;
-            } else {
-              var2 = -0.2673689;
-            }
-          }
-        }
-      }
-    }
-  } else {
-    if (input[2] >= 0.25) {
-      if (input[2] >= 0.55) {
-        if (input[1] >= 0.45) {
-          if (input[3] >= 0.75) {
-            if (input[2] >= 0.65) {
-              var2 = 0.11686869;
-            } else {
-              var2 = -0.38941836;
-            }
-          } else {
-            if (input[2] >= 0.65) {
-              var2 = -0.25506052;
-            } else {
-              var2 = 0.014673876;
-            }
-          }
-        } else {
-          if (input[0] >= -26.5) {
-            if (input[5] >= 0.85) {
-              var2 = -0.050851826;
-            } else {
-              var2 = -0.3183884;
-            }
-          } else {
-            if (input[0] >= -35.5) {
-              var2 = 0.043779925;
-            } else {
-              var2 = -0.41409832;
-            }
-          }
-        }
-      } else {
-        if (input[4] >= 0.85) {
-          if (input[2] >= 0.45) {
-            var2 = 0.29477537;
-          } else {
-            var2 = -0.2144219;
-          }
-        } else {
-          if (input[5] >= 0.95) {
-            if (input[2] >= 0.45) {
-              var2 = -0.2885842;
-            } else {
-              var2 = 0.2606544;
-            }
-          } else {
-            var2 = -0.42330566;
-          }
-        }
-      }
-    } else {
-      if (input[3] >= 0.55) {
-        var2 = -0.3282904;
-      } else {
-        var2 = 0.39259443;
-      }
-    }
-  }
-  double var3;
-  if (input[0] >= -17.5) {
-    if (input[4] >= 0.95) {
-      var3 = -0.41400555;
-    } else {
-      if (input[0] >= 11.5) {
-        if (input[0] >= 12.5) {
-          if (input[3] >= 0.85) {
-            if (input[2] >= 0.55) {
-              var3 = -0.22261222;
-            } else {
-              var3 = 0.15117377;
-            }
-          } else {
-            if (input[1] >= 0.95) {
-              var3 = -0.16267392;
-            } else {
-              var3 = 0.06977046;
-            }
-          }
-        } else {
-          if (input[1] >= 0.85) {
-            if (input[3] >= 0.70000005) {
-              var3 = 0.29828006;
-            } else {
-              var3 = -0.24221008;
-            }
-          } else {
-            if (input[5] >= 0.85) {
-              var3 = -0.38870728;
-            } else {
-              var3 = -0.09318372;
-            }
+            var3 = 0.27486745;
           }
         }
       } else {
         if (input[5] >= 0.75) {
-          if (input[4] >= 0.65) {
-            if (input[1] >= 0.25) {
-              var3 = 0.13628252;
+          var3 = 0.37554133;
+        } else {
+          var3 = -0.32475892;
+        }
+      }
+    } else {
+      if (input[3] >= 0.85) {
+        var3 = -0.3822438;
+      } else {
+        if (input[4] >= 0.85) {
+          if (input[3] >= 0.35000002) {
+            if (input[5] >= 0.55) {
+              var3 = 0.2596738;
             } else {
-              var3 = -0.5415989;
+              var3 = -0.3610267;
+            }
+          } else {
+            var3 = -0.3520883;
+          }
+        } else {
+          if (input[0] >= -37.5) {
+            if (input[1] >= 0.15) {
+              var3 = -0.028073795;
+            } else {
+              var3 = -0.21335217;
             }
           } else {
             if (input[1] >= 0.15) {
-              var3 = 0.22163759;
+              var3 = -0.08924892;
             } else {
-              var3 = 0.35931778;
-            }
-          }
-        } else {
-          if (input[2] >= 0.45) {
-            if (input[0] >= 5.5) {
-              var3 = 0.13849036;
-            } else {
-              var3 = -0.1050256;
-            }
-          } else {
-            var3 = 0.31694108;
-          }
-        }
-      }
-    }
-  } else {
-    if (input[4] >= 0.85) {
-      if (input[5] >= 0.55) {
-        if (input[3] >= 0.35000002) {
-          if (input[0] >= -36.5) {
-            if (input[4] >= 0.95) {
-              var3 = -0.25329533;
-            } else {
-              var3 = 0.3466832;
-            }
-          } else {
-            var3 = -0.30298677;
-          }
-        } else {
-          var3 = -0.33863738;
-        }
-      } else {
-        var3 = -0.41515264;
-      }
-    } else {
-      if (input[4] >= 0.35000002) {
-        if (input[5] >= 0.85) {
-          if (input[3] >= 0.75) {
-            if (input[2] >= 0.85) {
-              var3 = -0.44362214;
-            } else {
-              var3 = 0.19009203;
-            }
-          } else {
-            var3 = -0.4319253;
-          }
-        } else {
-          if (input[2] >= 0.95) {
-            if (input[5] >= 0.55) {
-              var3 = -0.10271763;
-            } else {
-              var3 = 0.3446986;
-            }
-          } else {
-            if (input[5] >= 0.55) {
-              var3 = -0.06706885;
-            } else {
-              var3 = -0.34356225;
-            }
-          }
-        }
-      } else {
-        if (input[2] >= 0.75) {
-          if (input[1] >= 0.45) {
-            if (input[5] >= 0.85) {
-              var3 = -0.42242277;
-            } else {
-              var3 = -0.16850638;
-            }
-          } else {
-            if (input[5] >= 0.45) {
-              var3 = -0.049060266;
-            } else {
-              var3 = 0.28183374;
-            }
-          }
-        } else {
-          if (input[1] >= 0.25) {
-            if (input[2] >= 0.55) {
-              var3 = 0.12169123;
-            } else {
-              var3 = -0.20801027;
-            }
-          } else {
-            if (input[3] >= 0.35000002) {
-              var3 = 0.015376699;
-            } else {
-              var3 = -0.43723384;
+              var3 = 0.49279335;
             }
           }
         }
@@ -666,681 +726,693 @@ List<double> score(List<double> input) {
     }
   }
   double var4;
-  if (input[0] >= -28.5) {
-    if (input[2] >= 0.85) {
-      if (input[0] >= -21.5) {
-        if (input[4] >= 0.75) {
-          var4 = -0.4724181;
-        } else {
-          if (input[0] >= 38.5) {
-            if (input[4] >= 0.25) {
-              var4 = -0.018036006;
-            } else {
-              var4 = -0.30985188;
-            }
-          } else {
-            if (input[4] >= 0.65) {
-              var4 = -0.36087614;
-            } else {
-              var4 = 0.12969875;
-            }
-          }
-        }
-      } else {
+  if (input[0] >= -20.5) {
+    if (input[2] >= 0.65) {
+      if (input[5] >= 0.35000002) {
         if (input[4] >= 0.85) {
-          if (input[5] >= 0.75) {
-            var4 = -0.33015344;
-          } else {
-            if (input[3] >= 0.45) {
-              var4 = 0.18268228;
-            } else {
-              var4 = 0.47619712;
-            }
-          }
-        } else {
-          if (input[1] >= 0.15) {
-            if (input[4] >= 0.25) {
-              var4 = -0.39173213;
-            } else {
-              var4 = -0.10161836;
-            }
-          } else {
-            if (input[3] >= 0.15) {
-              var4 = 0.25814822;
-            } else {
-              var4 = -0.3933498;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[0] >= -26.5) {
-        if (input[0] >= -17.5) {
-          if (input[0] >= 11.5) {
-            if (input[0] >= 12.5) {
-              var4 = 0.03454571;
-            } else {
-              var4 = -0.21907619;
-            }
-          } else {
-            if (input[0] >= 5.5) {
-              var4 = 0.23787303;
-            } else {
-              var4 = 0.06281833;
-            }
-          }
-        } else {
-          if (input[1] >= 0.65) {
-            var4 = 0.28685194;
-          } else {
-            if (input[3] >= 0.15) {
-              var4 = -0.35885167;
-            } else {
-              var4 = -0.10906743;
-            }
-          }
-        }
-      } else {
-        if (input[1] >= 0.15) {
-          if (input[5] >= 0.75) {
-            if (input[2] >= 0.65) {
-              var4 = -0.43405914;
-            } else {
-              var4 = 0.13569143;
-            }
-          } else {
-            if (input[4] >= 0.79999995) {
-              var4 = 0.1301395;
-            } else {
-              var4 = 0.44404426;
-            }
-          }
-        } else {
-          var4 = -0.43648145;
-        }
-      }
-    }
-  } else {
-    if (input[5] >= 0.75) {
-      if (input[5] >= 0.85) {
-        if (input[0] >= -36.5) {
-          if (input[2] >= 0.75) {
-            if (input[1] >= 0.25) {
-              var4 = -0.32585528;
-            } else {
-              var4 = 0.3236106;
-            }
-          } else {
-            if (input[4] >= 0.35000002) {
-              var4 = -0.21806854;
-            } else {
-              var4 = 0.1481868;
-            }
-          }
-        } else {
-          var4 = -0.42557672;
-        }
-      } else {
-        if (input[3] >= 0.25) {
-          if (input[0] >= -32.5) {
-            var4 = -0.35993028;
-          } else {
-            if (input[1] >= 0.95) {
-              var4 = -0.2758551;
-            } else {
-              var4 = 0.21638592;
-            }
-          }
-        } else {
-          if (input[3] >= 0.05) {
-            var4 = -0.43278983;
-          } else {
-            if (input[1] >= 0.35000002) {
-              var4 = 0.41440815;
-            } else {
-              var4 = -0.30037087;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[2] >= 0.95) {
-        if (input[5] >= 0.55) {
-          var4 = -0.40740365;
-        } else {
-          if (input[5] >= 0.45) {
-            if (input[4] >= 0.55) {
-              var4 = 0.3144759;
-            } else {
-              var4 = -0.32285616;
-            }
-          } else {
-            var4 = 0.29772583;
-          }
-        }
-      } else {
-        if (input[0] >= -41.5) {
-          if (input[2] >= 0.75) {
-            if (input[3] >= 0.05) {
-              var4 = -0.3714745;
-            } else {
-              var4 = 0.25613475;
-            }
-          } else {
-            if (input[4] >= 0.45) {
-              var4 = -0.39310765;
-            } else {
-              var4 = -0.07976301;
-            }
-          }
-        } else {
-          var4 = 0.2593444;
-        }
-      }
-    }
-  }
-  double var5;
-  if (input[0] >= -28.5) {
-    if (input[4] >= 0.95) {
-      var5 = -0.3370449;
-    } else {
-      if (input[2] >= 0.65) {
-        if (input[3] >= 0.85) {
-          if (input[5] >= 0.75) {
-            if (input[0] >= 11.5) {
-              var5 = -0.5238577;
-            } else {
-              var5 = -0.066742204;
-            }
-          } else {
-            if (input[4] >= 0.25) {
-              var5 = 0.064169265;
-            } else {
-              var5 = -0.39009926;
-            }
-          }
-        } else {
-          if (input[1] >= 0.75) {
-            if (input[0] >= -27.5) {
-              var5 = -0.11960241;
-            } else {
-              var5 = 0.41316542;
-            }
-          } else {
-            if (input[3] >= 0.65) {
-              var5 = 0.11370819;
-            } else {
-              var5 = -0.018060695;
-            }
-          }
-        }
-      } else {
-        if (input[1] >= 0.35000002) {
-          if (input[0] >= 47.5) {
-            if (input[5] >= 0.45) {
-              var5 = -0.52242994;
-            } else {
-              var5 = 0.034547493;
-            }
-          } else {
-            if (input[5] >= 0.75) {
-              var5 = -0.08159745;
-            } else {
-              var5 = 0.09346105;
-            }
-          }
-        } else {
-          if (input[3] >= 0.35000002) {
-            if (input[3] >= 0.45) {
-              var5 = 0.13121083;
-            } else {
-              var5 = 0.35964096;
-            }
-          } else {
-            if (input[0] >= 27.0) {
-              var5 = 0.12514843;
-            } else {
-              var5 = -0.35449743;
-            }
-          }
-        }
-      }
-    }
-  } else {
-    if (input[5] >= 0.75) {
-      if (input[4] >= 0.85) {
-        if (input[3] >= 0.6) {
-          if (input[1] >= 0.85) {
-            var5 = 0.44753566;
-          } else {
-            if (input[1] >= 0.55) {
-              var5 = -0.089398906;
-            } else {
-              var5 = 0.27986348;
-            }
-          }
-        } else {
-          if (input[1] >= 0.55) {
-            var5 = -0.29454395;
-          } else {
-            var5 = 0.35740575;
-          }
-        }
-      } else {
-        if (input[1] >= 0.95) {
-          var5 = -0.35311162;
-        } else {
-          if (input[5] >= 0.85) {
-            if (input[2] >= 0.75) {
-              var5 = -0.2339216;
-            } else {
-              var5 = 0.01928005;
-            }
-          } else {
+          if (input[0] >= -18.5) {
             if (input[3] >= 0.25) {
-              var5 = 0.11401715;
+              var4 = -0.5507258;
             } else {
-              var5 = -0.21899922;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[2] >= 0.95) {
-        if (input[5] >= 0.55) {
-          var5 = -0.3533592;
-        } else {
-          if (input[5] >= 0.45) {
-            if (input[4] >= 0.55) {
-              var5 = 0.27141085;
-            } else {
-              var5 = -0.27715275;
+              var4 = 0.1316386;
             }
           } else {
-            if (input[3] >= 0.75) {
-              var5 = 0.33275422;
-            } else {
-              var5 = 0.17093565;
-            }
-          }
-        }
-      } else {
-        if (input[3] >= 0.35000002) {
-          if (input[5] >= 0.45) {
-            if (input[2] >= 0.85) {
-              var5 = -0.36018682;
-            } else {
-              var5 = 0.015459235;
-            }
-          } else {
-            var5 = -0.37561908;
-          }
-        } else {
-          if (input[3] >= 0.05) {
-            if (input[5] >= 0.35000002) {
-              var5 = -0.3965457;
-            } else {
-              var5 = -0.026087694;
-            }
-          } else {
-            if (input[2] >= 0.85) {
-              var5 = 0.35207263;
-            } else {
-              var5 = -0.31862763;
-            }
-          }
-        }
-      }
-    }
-  }
-  double var6;
-  if (input[0] >= -16.5) {
-    if (input[0] >= 40.5) {
-      if (input[3] >= 0.95) {
-        if (input[0] >= 41.5) {
-          if (input[4] >= 0.70000005) {
-            var6 = 0.3322781;
-          } else {
-            var6 = -0.34925517;
-          }
-        } else {
-          var6 = 0.43271944;
-        }
-      } else {
-        if (input[3] >= 0.75) {
-          if (input[0] >= 41.5) {
-            if (input[4] >= 0.45) {
-              var6 = -0.41412437;
-            } else {
-              var6 = 0.062504;
-            }
-          } else {
-            var6 = -0.5128329;
-          }
-        } else {
-          if (input[0] >= 46.5) {
-            if (input[0] >= 49.5) {
-              var6 = -0.066167936;
-            } else {
-              var6 = 0.3002053;
-            }
-          } else {
-            if (input[5] >= 0.85) {
-              var6 = -0.24967238;
-            } else {
-              var6 = 0.0060350895;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[5] >= 0.45) {
-        if (input[5] >= 0.85) {
-          if (input[4] >= 0.05) {
-            if (input[0] >= 37.5) {
-              var6 = 0.3373251;
-            } else {
-              var6 = 0.0754247;
-            }
-          } else {
-            if (input[0] >= 26.0) {
-              var6 = -0.28743336;
-            } else {
-              var6 = 0.042347293;
-            }
-          }
-        } else {
-          if (input[0] >= 0.5) {
-            if (input[3] >= 0.65) {
-              var6 = 0.030640278;
-            } else {
-              var6 = -0.06742727;
-            }
-          } else {
-            if (input[2] >= 0.65) {
-              var6 = -0.049801476;
-            } else {
-              var6 = 0.22749382;
-            }
-          }
-        }
-      } else {
-        if (input[3] >= 0.55) {
-          if (input[3] >= 0.75) {
-            if (input[2] >= 0.4) {
-              var6 = 0.09158679;
-            } else {
-              var6 = 0.25956574;
-            }
-          } else {
-            var6 = -0.43763122;
-          }
-        } else {
-          var6 = 0.31157714;
-        }
-      }
-    }
-  } else {
-    if (input[3] >= 0.85) {
-      if (input[1] >= 0.75) {
-        if (input[2] >= 0.75) {
-          if (input[0] >= -34.5) {
-            var6 = -0.2400849;
-          } else {
-            var6 = 0.3367222;
-          }
-        } else {
-          var6 = -0.35348275;
-        }
-      } else {
-        if (input[5] >= 0.75) {
-          var6 = -0.47854286;
-        } else {
-          if (input[1] >= 0.55) {
-            if (input[1] >= 0.65) {
-              var6 = -0.26714307;
-            } else {
-              var6 = 0.05328209;
-            }
-          } else {
-            var6 = -0.3480392;
-          }
-        }
-      }
-    } else {
-      if (input[2] >= 0.25) {
-        if (input[2] >= 0.55) {
-          if (input[1] >= 0.55) {
-            if (input[2] >= 0.65) {
-              var6 = -0.12934434;
-            } else {
-              var6 = 0.053330306;
-            }
-          } else {
-            if (input[3] >= 0.75) {
-              var6 = 0.18014228;
-            } else {
-              var6 = -0.011147549;
-            }
+            var4 = 0.33071762;
           }
         } else {
           if (input[3] >= 0.65) {
-            if (input[5] >= 0.85) {
-              var6 = 0.28116164;
-            } else {
-              var6 = -0.2802699;
-            }
-          } else {
-            var6 = -0.34808105;
-          }
-        }
-      } else {
-        if (input[0] >= -32.5) {
-          var6 = 0.33061248;
-        } else {
-          var6 = 0.13346365;
-        }
-      }
-    }
-  }
-  double var7;
-  if (input[4] >= 0.95) {
-    var7 = -0.33199376;
-  } else {
-    if (input[0] >= -28.5) {
-      if (input[5] >= 0.75) {
-        if (input[1] >= 0.35000002) {
-          if (input[5] >= 0.85) {
-            if (input[0] >= -26.5) {
-              var7 = 0.011449436;
-            } else {
-              var7 = -0.3390428;
-            }
-          } else {
             if (input[1] >= 0.75) {
-              var7 = -0.45995036;
+              var4 = -0.17737186;
             } else {
-              var7 = -0.20272265;
-            }
-          }
-        } else {
-          if (input[5] >= 0.95) {
-            if (input[3] >= 0.6) {
-              var7 = -0.15859586;
-            } else {
-              var7 = -0.48292273;
+              var4 = 0.10377246;
             }
           } else {
-            if (input[4] >= 0.85) {
-              var7 = -0.29937878;
+            if (input[0] >= 37.5) {
+              var4 = 0.032596067;
             } else {
-              var7 = 0.069563776;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= -26.5) {
-          if (input[0] >= 14.5) {
-            if (input[5] >= 0.65) {
-              var7 = 0.14800258;
-            } else {
-              var7 = -0.007695081;
-            }
-          } else {
-            if (input[4] >= 0.15) {
-              var7 = -0.062749095;
-            } else {
-              var7 = -0.41816062;
-            }
-          }
-        } else {
-          if (input[3] >= 0.65) {
-            var7 = -0.35654595;
-          } else {
-            if (input[2] >= 0.85) {
-              var7 = 0.040323827;
-            } else {
-              var7 = 0.24758482;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[5] >= 0.75) {
-        if (input[4] >= 0.85) {
-          if (input[3] >= 0.6) {
-            if (input[0] >= -34.5) {
-              var7 = 0.0933934;
-            } else {
-              var7 = 0.38239774;
-            }
-          } else {
-            if (input[1] >= 0.55) {
-              var7 = -0.24526685;
-            } else {
-              var7 = 0.31985998;
-            }
-          }
-        } else {
-          if (input[4] >= 0.55) {
-            if (input[2] >= 0.15) {
-              var7 = -0.39542052;
-            } else {
-              var7 = 0.26472938;
-            }
-          } else {
-            if (input[1] >= 0.95) {
-              var7 = -0.27383816;
-            } else {
-              var7 = 0.015187508;
+              var4 = -0.15902522;
             }
           }
         }
       } else {
         if (input[2] >= 0.95) {
-          if (input[5] >= 0.55) {
-            var7 = -0.31066602;
+          if (input[3] >= 0.65) {
+            var4 = 0.120710514;
           } else {
-            if (input[5] >= 0.45) {
-              var7 = 0.021244144;
+            var4 = -0.28584552;
+          }
+        } else {
+          var4 = -0.49441406;
+        }
+      }
+    } else {
+      if (input[5] >= 0.45) {
+        if (input[0] >= 49.5) {
+          if (input[4] >= 0.05) {
+            var4 = -0.51162094;
+          } else {
+            var4 = 0.18625526;
+          }
+        } else {
+          if (input[0] >= 10.5) {
+            if (input[1] >= 0.85) {
+              var4 = 0.15747502;
             } else {
-              var7 = 0.19884527;
+              var4 = -0.0021365918;
+            }
+          } else {
+            if (input[4] >= 0.25) {
+              var4 = 0.19209576;
+            } else {
+              var4 = -0.3738103;
+            }
+          }
+        }
+      } else {
+        if (input[1] >= 0.75) {
+          if (input[4] >= 0.35000002) {
+            if (input[0] >= 39.0) {
+              var4 = 0.015199807;
+            } else {
+              var4 = 0.35783955;
+            }
+          } else {
+            var4 = -0.48776764;
+          }
+        } else {
+          if (input[0] >= 51.5) {
+            var4 = -0.34550178;
+          } else {
+            if (input[2] >= 0.35000002) {
+              var4 = 0.19835295;
+            } else {
+              var4 = 0.35066688;
+            }
+          }
+        }
+      }
+    }
+  } else {
+    if (input[4] >= 0.95) {
+      var4 = -0.3614239;
+    } else {
+      if (input[4] >= 0.85) {
+        if (input[3] >= 0.35000002) {
+          if (input[0] >= -36.5) {
+            if (input[5] >= 0.55) {
+              var4 = 0.24053314;
+            } else {
+              var4 = -0.30986038;
+            }
+          } else {
+            var4 = -0.30904642;
+          }
+        } else {
+          var4 = -0.32206532;
+        }
+      } else {
+        if (input[4] >= 0.35000002) {
+          if (input[5] >= 0.85) {
+            if (input[2] >= 0.85) {
+              var4 = -0.45589375;
+            } else {
+              var4 = -0.10542706;
+            }
+          } else {
+            if (input[2] >= 0.95) {
+              var4 = 0.15042342;
+            } else {
+              var4 = -0.12134737;
             }
           }
         } else {
-          if (input[3] >= 0.35000002) {
-            if (input[5] >= 0.45) {
-              var7 = -0.024078809;
+          if (input[2] >= 0.75) {
+            if (input[1] >= 0.45) {
+              var4 = -0.2277033;
             } else {
-              var7 = -0.33581996;
+              var4 = -0.0034793841;
             }
           } else {
-            if (input[3] >= 0.05) {
-              var7 = -0.30273932;
+            if (input[1] >= 0.15) {
+              var4 = 0.057727743;
             } else {
-              var7 = 0.03609175;
+              var4 = -0.40961376;
             }
           }
         }
       }
     }
   }
-  double var8;
-  if (input[4] >= 0.95) {
-    var8 = -0.3023308;
-  } else {
-    if (input[1] >= 0.95) {
-      if (input[5] >= 0.65) {
-        if (input[3] >= 0.45) {
-          if (input[4] >= 0.35000002) {
+  double var5;
+  if (input[0] >= -16.5) {
+    if (input[0] >= 36.5) {
+      if (input[0] >= 37.5) {
+        if (input[3] >= 0.75) {
+          if (input[1] >= 0.65) {
             if (input[3] >= 0.95) {
-              var8 = 0.2744881;
+              var5 = 0.16909115;
             } else {
-              var8 = -0.357582;
+              var5 = -0.36163643;
+            }
+          } else {
+            if (input[1] >= 0.55) {
+              var5 = 0.18909223;
+            } else {
+              var5 = -0.11885712;
+            }
+          }
+        } else {
+          if (input[0] >= 40.5) {
+            if (input[0] >= 46.5) {
+              var5 = 0.13217205;
+            } else {
+              var5 = -0.029075097;
             }
           } else {
             if (input[3] >= 0.65) {
-              var8 = -0.02847311;
+              var5 = -0.4302266;
             } else {
-              var8 = 0.23101704;
+              var5 = 0.11506779;
             }
           }
-        } else {
-          var8 = -0.32798517;
         }
       } else {
-        if (input[3] >= 0.2) {
-          var8 = -0.3979018;
+        if (input[1] >= 0.65) {
+          var5 = -0.5500198;
         } else {
-          var8 = 0.26954308;
+          if (input[1] >= 0.55) {
+            if (input[4] >= 0.15) {
+              var5 = -0.12092356;
+            } else {
+              var5 = 0.36423087;
+            }
+          } else {
+            if (input[4] >= 0.65) {
+              var5 = 0.115259506;
+            } else {
+              var5 = -0.38727072;
+            }
+          }
         }
       }
     } else {
-      if (input[1] >= 0.85) {
-        if (input[2] >= 0.55) {
-          if (input[5] >= 0.85) {
-            var8 = -0.38982;
-          } else {
-            if (input[4] >= 0.55) {
-              var8 = -0.12895316;
-            } else {
-              var8 = 0.114518106;
-            }
-          }
+      if (input[4] >= 0.65) {
+        if (input[2] >= 0.85) {
+          var5 = -0.5164254;
         } else {
-          if (input[0] >= -32.5) {
-            if (input[0] >= 41.5) {
-              var8 = -0.11015812;
+          if (input[0] >= 26.0) {
+            if (input[3] >= 0.55) {
+              var5 = 0.33021408;
             } else {
-              var8 = 0.22725567;
+              var5 = 0.05661181;
             }
           } else {
-            var8 = -0.23097444;
+            if (input[1] >= 0.15) {
+              var5 = -0.15786502;
+            } else {
+              var5 = 0.23247415;
+            }
           }
         }
       } else {
-        if (input[0] >= 49.5) {
-          if (input[1] >= 0.55) {
-            var8 = -0.43623477;
-          } else {
-            if (input[5] >= 0.65) {
-              var8 = -0.41120186;
+        if (input[5] >= 0.95) {
+          if (input[3] >= 0.6) {
+            if (input[4] >= 0.35000002) {
+              var5 = -0.350185;
             } else {
-              var8 = 0.14079796;
+              var5 = 0.22752665;
+            }
+          } else {
+            var5 = -0.38125533;
+          }
+        } else {
+          if (input[0] >= 14.5) {
+            if (input[0] >= 28.0) {
+              var5 = 0.033680804;
+            } else {
+              var5 = 0.20130025;
+            }
+          } else {
+            if (input[0] >= 13.5) {
+              var5 = -0.15852696;
+            } else {
+              var5 = 0.10906381;
+            }
+          }
+        }
+      }
+    }
+  } else {
+    if (input[2] >= 0.15) {
+      if (input[2] >= 0.55) {
+        if (input[5] >= 0.35000002) {
+          if (input[2] >= 0.75) {
+            if (input[3] >= 0.65) {
+              var5 = 0.04183685;
+            } else {
+              var5 = -0.085365765;
+            }
+          } else {
+            if (input[4] >= 0.45) {
+              var5 = -0.16202831;
+            } else {
+              var5 = 0.06259968;
             }
           }
         } else {
-          if (input[0] >= 46.5) {
-            if (input[1] >= 0.45) {
-              var8 = 0.34371656;
+          if (input[2] >= 0.95) {
+            var5 = 0.3645277;
+          } else {
+            if (input[2] >= 0.65) {
+              var5 = -0.34184316;
             } else {
-              var8 = -0.15295202;
+              var5 = 0.09964862;
+            }
+          }
+        }
+      } else {
+        if (input[5] >= 0.75) {
+          if (input[2] >= 0.45) {
+            if (input[4] >= 0.79999995) {
+              var5 = 0.3008068;
+            } else {
+              var5 = -0.28182602;
             }
           } else {
-            if (input[0] >= 44.5) {
-              var8 = -0.38574007;
+            if (input[0] >= -33.5) {
+              var5 = 0.21157897;
             } else {
-              var8 = -0.0060110753;
+              var5 = -0.33592427;
+            }
+          }
+        } else {
+          if (input[0] >= -40.0) {
+            if (input[3] >= 0.75) {
+              var5 = -0.123442076;
+            } else {
+              var5 = -0.44847664;
+            }
+          } else {
+            var5 = 0.20100819;
+          }
+        }
+      }
+    } else {
+      var5 = 0.26454931;
+    }
+  }
+  double var6;
+  if (input[1] >= 0.95) {
+    if (input[3] >= 0.95) {
+      if (input[0] >= -34.5) {
+        var6 = 0.07253789;
+      } else {
+        var6 = 0.29958054;
+      }
+    } else {
+      if (input[4] >= 0.35000002) {
+        var6 = -0.3840245;
+      } else {
+        if (input[4] >= 0.25) {
+          if (input[2] >= 0.85) {
+            var6 = -0.24164279;
+          } else {
+            if (input[3] >= 0.55) {
+              var6 = -0.014346871;
+            } else {
+              var6 = 0.27908227;
+            }
+          }
+        } else {
+          if (input[3] >= 0.15) {
+            var6 = -0.3883609;
+          } else {
+            var6 = 0.023758376;
+          }
+        }
+      }
+    }
+  } else {
+    if (input[0] >= -35.5) {
+      if (input[2] >= 0.15) {
+        if (input[4] >= 0.95) {
+          if (input[0] >= -18.5) {
+            var6 = -0.42165998;
+          } else {
+            if (input[0] >= -20.5) {
+              var6 = 0.30519062;
+            } else {
+              var6 = -0.30246598;
+            }
+          }
+        } else {
+          if (input[3] >= 0.65) {
+            if (input[1] >= 0.65) {
+              var6 = -0.087433726;
+            } else {
+              var6 = 0.06773351;
+            }
+          } else {
+            if (input[1] >= 0.85) {
+              var6 = 0.099195704;
+            } else {
+              var6 = -0.020958463;
+            }
+          }
+        }
+      } else {
+        if (input[3] >= 0.55) {
+          var6 = -0.12111163;
+        } else {
+          var6 = 0.37281978;
+        }
+      }
+    } else {
+      if (input[0] >= -37.5) {
+        if (input[2] >= 0.65) {
+          if (input[4] >= 0.85) {
+            if (input[3] >= 0.75) {
+              var6 = 0.23443641;
+            } else {
+              var6 = -0.32629037;
+            }
+          } else {
+            var6 = -0.45907432;
+          }
+        } else {
+          if (input[4] >= 0.05) {
+            var6 = -0.3720937;
+          } else {
+            if (input[3] >= 0.25) {
+              var6 = 0.29375616;
+            } else {
+              var6 = -0.28148147;
+            }
+          }
+        }
+      } else {
+        if (input[1] >= 0.15) {
+          if (input[5] >= 0.85) {
+            var6 = -0.45862827;
+          } else {
+            if (input[4] >= 0.05) {
+              var6 = -0.09129251;
+            } else {
+              var6 = 0.3684961;
+            }
+          }
+        } else {
+          var6 = 0.36361894;
+        }
+      }
+    }
+  }
+  double var7;
+  if (input[2] >= 0.65) {
+    if (input[1] >= 0.55) {
+      if (input[5] >= 0.65) {
+        if (input[3] >= 0.15) {
+          if (input[5] >= 0.85) {
+            if (input[1] >= 0.75) {
+              var7 = -0.31469667;
+            } else {
+              var7 = 0.05964136;
+            }
+          } else {
+            if (input[0] >= 45.5) {
+              var7 = 0.43106166;
+            } else {
+              var7 = 0.04144328;
+            }
+          }
+        } else {
+          var7 = -0.45339158;
+        }
+      } else {
+        if (input[5] >= 0.55) {
+          if (input[3] >= 0.85) {
+            if (input[2] >= 0.85) {
+              var7 = 0.34929854;
+            } else {
+              var7 = -0.2891701;
+            }
+          } else {
+            var7 = -0.48758766;
+          }
+        } else {
+          if (input[4] >= 0.15) {
+            if (input[0] >= 49.5) {
+              var7 = 0.15050638;
+            } else {
+              var7 = -0.3407546;
+            }
+          } else {
+            if (input[2] >= 0.75) {
+              var7 = 0.13592072;
+            } else {
+              var7 = -0.23400962;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[3] >= 0.85) {
+        if (input[0] >= 13.5) {
+          if (input[3] >= 0.95) {
+            if (input[1] >= 0.25) {
+              var7 = -0.3322572;
+            } else {
+              var7 = 0.13764295;
+            }
+          } else {
+            var7 = -0.48256245;
+          }
+        } else {
+          if (input[0] >= 5.5) {
+            if (input[0] >= 8.5) {
+              var7 = 0.016074559;
+            } else {
+              var7 = 0.31918144;
+            }
+          } else {
+            if (input[0] >= 2.0) {
+              var7 = -0.66731554;
+            } else {
+              var7 = -0.105045475;
+            }
+          }
+        }
+      } else {
+        if (input[3] >= 0.65) {
+          if (input[4] >= 0.65) {
+            if (input[0] >= -20.5) {
+              var7 = -0.019653887;
+            } else {
+              var7 = -0.4821832;
+            }
+          } else {
+            if (input[5] >= 0.55) {
+              var7 = 0.09090102;
+            } else {
+              var7 = 0.34164545;
+            }
+          }
+        } else {
+          if (input[3] >= 0.35000002) {
+            if (input[4] >= 0.65) {
+              var7 = 0.07495312;
+            } else {
+              var7 = -0.11535049;
+            }
+          } else {
+            if (input[4] >= 0.25) {
+              var7 = -0.103815876;
+            } else {
+              var7 = 0.08176643;
+            }
+          }
+        }
+      }
+    }
+  } else {
+    if (input[0] >= -20.5) {
+      if (input[4] >= 0.85) {
+        if (input[5] >= 0.85) {
+          var7 = -0.42374328;
+        } else {
+          if (input[5] >= 0.75) {
+            if (input[0] >= 16.5) {
+              var7 = -0.34320363;
+            } else {
+              var7 = 0.2123022;
+            }
+          } else {
+            if (input[1] >= 0.25) {
+              var7 = 0.33868477;
+            } else {
+              var7 = 0.07578598;
+            }
+          }
+        }
+      } else {
+        if (input[2] >= 0.45) {
+          if (input[4] >= 0.05) {
+            if (input[1] >= 0.25) {
+              var7 = -0.04761436;
+            } else {
+              var7 = 0.12044054;
+            }
+          } else {
+            if (input[0] >= 40.5) {
+              var7 = 0.2235248;
+            } else {
+              var7 = -0.009511861;
+            }
+          }
+        } else {
+          if (input[0] >= 47.5) {
+            if (input[1] >= 0.85) {
+              var7 = -0.024854273;
+            } else {
+              var7 = -0.46987775;
+            }
+          } else {
+            if (input[2] >= 0.35000002) {
+              var7 = -0.07338225;
+            } else {
+              var7 = 0.14504091;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[5] >= 0.95) {
+        if (input[0] >= -32.5) {
+          var7 = -0.32847118;
+        } else {
+          if (input[0] >= -35.5) {
+            if (input[1] >= 0.35000002) {
+              var7 = 0.26635796;
+            } else {
+              var7 = 0.54284686;
+            }
+          } else {
+            var7 = 0.16538969;
+          }
+        }
+      } else {
+        if (input[3] >= 0.15) {
+          if (input[0] >= -41.5) {
+            if (input[1] >= 0.35000002) {
+              var7 = -0.13116828;
+            } else {
+              var7 = 0.09539754;
+            }
+          } else {
+            if (input[4] >= 0.5) {
+              var7 = 0.4153738;
+            } else {
+              var7 = 0.16062972;
+            }
+          }
+        } else {
+          var7 = -0.39855608;
+        }
+      }
+    }
+  }
+  double var8;
+  if (input[0] >= 49.5) {
+    if (input[5] >= 0.45) {
+      if (input[4] >= 0.05) {
+        if (input[5] >= 0.55) {
+          var8 = -0.4292905;
+        } else {
+          if (input[2] >= 0.85) {
+            if (input[3] >= 0.75) {
+              var8 = -0.2696457;
+            } else {
+              var8 = 0.27702883;
+            }
+          } else {
+            if (input[3] >= 0.65) {
+              var8 = -0.41272336;
+            } else {
+              var8 = -0.07552246;
+            }
+          }
+        }
+      } else {
+        var8 = 0.15625274;
+      }
+    } else {
+      if (input[5] >= 0.35000002) {
+        if (input[2] >= 0.5) {
+          if (input[0] >= 51.5) {
+            var8 = 0.3949996;
+          } else {
+            var8 = 0.18502727;
+          }
+        } else {
+          var8 = 0.11113119;
+        }
+      } else {
+        var8 = -0.37120977;
+      }
+    }
+  } else {
+    if (input[0] >= 46.5) {
+      if (input[5] >= 0.65) {
+        if (input[1] >= 0.45) {
+          if (input[2] >= 0.5) {
+            var8 = 0.44648466;
+          } else {
+            var8 = 0.19300692;
+          }
+        } else {
+          if (input[0] >= 48.5) {
+            var8 = 0.32907447;
+          } else {
+            var8 = -0.33641362;
+          }
+        }
+      } else {
+        if (input[0] >= 47.5) {
+          var8 = -0.35831156;
+        } else {
+          if (input[5] >= 0.45) {
+            var8 = -0.30039164;
+          } else {
+            var8 = 0.28603902;
+          }
+        }
+      }
+    } else {
+      if (input[0] >= 44.5) {
+        var8 = -0.45662567;
+      } else {
+        if (input[2] >= 0.15) {
+          if (input[4] >= 0.95) {
+            if (input[0] >= -18.5) {
+              var8 = -0.3327777;
+            } else {
+              var8 = -0.08081877;
+            }
+          } else {
+            if (input[4] >= 0.85) {
+              var8 = 0.074060746;
+            } else {
+              var8 = -0.0060677207;
+            }
+          }
+        } else {
+          if (input[3] >= 0.55) {
+            var8 = -0.026643323;
+          } else {
+            if (input[1] >= 0.6) {
+              var8 = 0.3466629;
+            } else {
+              var8 = 0.080904216;
             }
           }
         }
@@ -1348,313 +1420,441 @@ List<double> score(List<double> input) {
     }
   }
   double var9;
-  if (input[4] >= 0.95) {
-    var9 = -0.2777747;
-  } else {
-    if (input[2] >= 0.15) {
-      if (input[0] >= 15.5) {
-        if (input[0] >= 36.5) {
-          if (input[0] >= 37.5) {
-            if (input[3] >= 0.65) {
-              var9 = -0.051535152;
+  if (input[0] >= -35.5) {
+    if (input[1] >= 0.95) {
+      if (input[3] >= 0.95) {
+        if (input[0] >= -34.5) {
+          var9 = 0.08074373;
+        } else {
+          var9 = 0.29164156;
+        }
+      } else {
+        if (input[4] >= 0.35000002) {
+          var9 = -0.32638168;
+        } else {
+          if (input[0] >= 46.5) {
+            var9 = 0.17515975;
+          } else {
+            if (input[2] >= 0.75) {
+              var9 = -0.3214121;
             } else {
-              var9 = 0.022565054;
+              var9 = -0.049462225;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[3] >= 0.85) {
+        if (input[0] >= -14.5) {
+          if (input[4] >= 0.25) {
+            if (input[4] >= 0.45) {
+              var9 = -0.108782865;
+            } else {
+              var9 = 0.07330551;
             }
           } else {
-            if (input[1] >= 0.65) {
-              var9 = -0.4656017;
+            if (input[0] >= 51.5) {
+              var9 = 0.2315574;
             } else {
-              var9 = -0.026217623;
+              var9 = -0.37580708;
             }
           }
         } else {
-          if (input[1] >= 0.15) {
-            if (input[4] >= 0.35000002) {
-              var9 = 0.23797423;
-            } else {
-              var9 = 0.04093397;
-            }
+          if (input[0] >= -33.5) {
+            var9 = -0.40609744;
           } else {
-            if (input[3] >= 0.45000002) {
-              var9 = 0.08653818;
+            if (input[5] >= 0.65) {
+              var9 = 0.11391076;
             } else {
-              var9 = -0.47590742;
+              var9 = -0.31282064;
             }
           }
         }
       } else {
         if (input[3] >= 0.65) {
-          if (input[5] >= 0.65) {
-            if (input[2] >= 0.65) {
-              var9 = 0.0011016208;
+          if (input[2] >= 0.55) {
+            if (input[4] >= 0.65) {
+              var9 = -0.096004054;
             } else {
-              var9 = 0.10538592;
+              var9 = 0.10516491;
             }
           } else {
-            if (input[5] >= 0.35000002) {
-              var9 = -0.17689711;
+            if (input[0] >= 16.5) {
+              var9 = -0.3101609;
             } else {
-              var9 = 0.1857942;
+              var9 = 0.049593065;
             }
           }
         } else {
-          if (input[0] >= 7.0) {
-            if (input[2] >= 0.55) {
-              var9 = -0.60430026;
+          if (input[1] >= 0.85) {
+            if (input[0] >= 41.5) {
+              var9 = -0.31837404;
             } else {
-              var9 = 0.079324275;
+              var9 = 0.11541835;
             }
           } else {
-            if (input[0] >= -4.5) {
-              var9 = 0.26743618;
+            if (input[3] >= 0.45) {
+              var9 = -0.07147691;
             } else {
-              var9 = -0.02494338;
+              var9 = 0.011833592;
             }
           }
         }
       }
-    } else {
-      if (input[3] >= 0.55) {
-        var9 = -0.268576;
+    }
+  } else {
+    if (input[0] >= -37.5) {
+      if (input[2] >= 0.65) {
+        if (input[4] >= 0.85) {
+          if (input[3] >= 0.75) {
+            var9 = 0.18850674;
+          } else {
+            var9 = -0.25786722;
+          }
+        } else {
+          var9 = -0.39488906;
+        }
       } else {
-        var9 = 0.29417753;
+        if (input[4] >= 0.05) {
+          var9 = -0.31019852;
+        } else {
+          if (input[3] >= 0.25) {
+            if (input[5] >= 0.95) {
+              var9 = 0.3023315;
+            } else {
+              var9 = 0.09300027;
+            }
+          } else {
+            var9 = -0.24205205;
+          }
+        }
+      }
+    } else {
+      if (input[1] >= 0.15) {
+        if (input[5] >= 0.85) {
+          var9 = -0.38616154;
+        } else {
+          if (input[5] >= 0.75) {
+            if (input[2] >= 0.75) {
+              var9 = 0.43841237;
+            } else {
+              var9 = -0.1241821;
+            }
+          } else {
+            if (input[2] >= 0.65) {
+              var9 = -0.17763025;
+            } else {
+              var9 = 0.07419833;
+            }
+          }
+        }
+      } else {
+        if (input[2] >= 0.75) {
+          var9 = 0.1532564;
+        } else {
+          var9 = 0.35017133;
+        }
       }
     }
   }
   double var10;
-  if (input[0] >= -35.5) {
-    if (input[0] >= -34.5) {
-      if (input[3] >= 0.85) {
-        if (input[0] >= -4.5) {
-          if (input[0] >= 11.5) {
-            if (input[0] >= 35.5) {
-              var10 = -0.013586384;
-            } else {
-              var10 = -0.27399185;
-            }
-          } else {
-            if (input[0] >= 5.5) {
-              var10 = 0.19933888;
-            } else {
-              var10 = -0.10398913;
-            }
-          }
+  if (input[5] >= 0.45) {
+    if (input[0] >= 49.5) {
+      if (input[4] >= 0.05) {
+        if (input[5] >= 0.55) {
+          var10 = -0.37082404;
         } else {
-          if (input[5] >= 0.75) {
-            var10 = -0.42310402;
+          if (input[3] >= 0.75) {
+            var10 = -0.33490238;
           } else {
-            if (input[0] >= -33.5) {
-              var10 = -0.3011309;
+            if (input[2] >= 0.85) {
+              var10 = 0.22156604;
             } else {
-              var10 = 0.032540053;
+              var10 = -0.19420877;
             }
           }
         }
       } else {
-        if (input[3] >= 0.35000002) {
-          if (input[1] >= 0.55) {
-            if (input[1] >= 0.65) {
-              var10 = 0.016265355;
-            } else {
-              var10 = -0.16711894;
-            }
-          } else {
-            if (input[5] >= 0.45) {
-              var10 = 0.026430627;
-            } else {
-              var10 = 0.20525602;
-            }
-          }
-        } else {
-          if (input[3] >= 0.25) {
-            if (input[0] >= -27.5) {
-              var10 = -0.23596115;
-            } else {
-              var10 = 0.017978014;
-            }
-          } else {
-            if (input[4] >= 0.25) {
-              var10 = -0.07449814;
-            } else {
-              var10 = 0.053266015;
-            }
-          }
-        }
+        var10 = 0.11582836;
       }
     } else {
-      if (input[1] >= 0.75) {
-        if (input[2] >= 0.55) {
-          if (input[4] >= 0.35000002) {
-            if (input[4] >= 0.85) {
-              var10 = 0.28250864;
+      if (input[0] >= 46.5) {
+        if (input[5] >= 0.65) {
+          if (input[1] >= 0.45) {
+            if (input[2] >= 0.5) {
+              var10 = 0.3683996;
             } else {
-              var10 = -0.3115033;
+              var10 = 0.15186775;
             }
           } else {
-            if (input[3] >= 0.35000002) {
-              var10 = 0.37944356;
+            if (input[0] >= 48.5) {
+              var10 = 0.27629828;
             } else {
-              var10 = 0.055053044;
+              var10 = -0.28473714;
             }
           }
         } else {
-          var10 = -0.23496817;
+          var10 = -0.29656664;
         }
       } else {
-        if (input[3] >= 0.75) {
-          if (input[2] >= 0.75) {
-            var10 = 0.4277951;
-          } else {
-            var10 = 0.07043147;
-          }
+        if (input[0] >= 43.5) {
+          var10 = -0.4308184;
         } else {
-          if (input[3] >= 0.25) {
-            var10 = -0.39876068;
-          } else {
-            if (input[3] >= 0.15) {
-              var10 = 0.13570446;
+          if (input[2] >= 0.95) {
+            if (input[5] >= 0.95) {
+              var10 = 0.22962809;
             } else {
-              var10 = -0.31233507;
+              var10 = -0.10014627;
+            }
+          } else {
+            if (input[4] >= 0.65) {
+              var10 = -0.048222847;
+            } else {
+              var10 = 0.01199343;
             }
           }
         }
       }
     }
   } else {
-    if (input[4] >= 0.05) {
-      if (input[3] >= 0.75) {
-        if (input[2] >= 0.75) {
-          if (input[5] >= 0.85) {
-            var10 = -0.21197179;
-          } else {
-            if (input[5] >= 0.75) {
-              var10 = 0.30674294;
+    if (input[2] >= 0.95) {
+      if (input[1] >= 0.65) {
+        var10 = -0.24867612;
+      } else {
+        if (input[0] >= 41.5) {
+          var10 = 0.060656022;
+        } else {
+          if (input[4] >= 0.35000002) {
+            if (input[3] >= 0.75) {
+              var10 = 0.33606994;
             } else {
-              var10 = 0.07472847;
+              var10 = 0.097816415;
+            }
+          } else {
+            if (input[1] >= 0.45) {
+              var10 = 0.14288905;
+            } else {
+              var10 = 0.5739655;
             }
           }
-        } else {
-          var10 = -0.30191693;
-        }
-      } else {
-        if (input[0] >= -41.5) {
-          if (input[1] >= 0.95) {
-            var10 = -0.011200434;
-          } else {
-            var10 = -0.38850024;
-          }
-        } else {
-          var10 = 0.13740648;
         }
       }
     } else {
-      if (input[3] >= 0.25) {
-        if (input[3] >= 0.35000002) {
-          var10 = -0.2235342;
-        } else {
-          if (input[0] >= -37.5) {
-            var10 = 0.11215274;
+      if (input[0] >= 13.0) {
+        if (input[0] >= 35.5) {
+          if (input[0] >= 37.5) {
+            if (input[2] >= 0.75) {
+              var10 = -0.06704672;
+            } else {
+              var10 = 0.0872196;
+            }
           } else {
-            var10 = 0.45685452;
+            var10 = -0.32420948;
+          }
+        } else {
+          if (input[3] >= 0.55) {
+            var10 = 0.020661866;
+          } else {
+            var10 = 0.32185978;
           }
         }
       } else {
-        var10 = -0.26372364;
+        if (input[1] >= 0.55) {
+          if (input[1] >= 0.65) {
+            var10 = -0.3286265;
+          } else {
+            var10 = 0.271827;
+          }
+        } else {
+          var10 = -0.43991384;
+        }
       }
     }
   }
   double var11;
-  if (input[1] >= 0.95) {
-    if (input[5] >= 0.65) {
-      if (input[4] >= 0.25) {
-        if (input[4] >= 0.35000002) {
-          if (input[3] >= 0.95) {
-            var11 = 0.22194451;
-          } else {
-            var11 = -0.31667587;
-          }
-        } else {
-          if (input[3] >= 0.65) {
-            if (input[2] >= 0.55) {
-              var11 = -0.30728412;
-            } else {
-              var11 = 0.3089326;
-            }
-          } else {
-            if (input[2] >= 0.65) {
-              var11 = 0.24212016;
-            } else {
-              var11 = 0.04754213;
-            }
-          }
-        }
-      } else {
-        var11 = -0.31595686;
-      }
-    } else {
-      if (input[3] >= 0.2) {
-        var11 = -0.35555637;
-      } else {
-        var11 = 0.21304901;
-      }
-    }
-  } else {
-    if (input[4] >= 0.95) {
-      var11 = -0.2413738;
-    } else {
-      if (input[4] >= 0.55) {
-        if (input[5] >= 0.75) {
+  if (input[2] >= 0.65) {
+    if (input[1] >= 0.55) {
+      if (input[3] >= 0.35000002) {
+        if (input[3] >= 0.75) {
           if (input[0] >= 37.5) {
-            var11 = -0.4121834;
-          } else {
-            if (input[2] >= 0.85) {
-              var11 = -0.23221438;
+            if (input[0] >= 42.5) {
+              var11 = 0.11636519;
             } else {
-              var11 = 0.062371377;
-            }
-          }
-        } else {
-          if (input[5] >= 0.65) {
-            if (input[1] >= 0.25) {
-              var11 = 0.25632527;
-            } else {
-              var11 = -0.04574585;
-            }
-          } else {
-            if (input[3] >= 0.15) {
-              var11 = -0.0580379;
-            } else {
-              var11 = 0.22355337;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= 14.5) {
-          if (input[0] >= 28.0) {
-            if (input[0] >= 30.5) {
-              var11 = 0.0057381266;
-            } else {
-              var11 = -0.58047956;
+              var11 = -0.31841028;
             }
           } else {
             if (input[4] >= 0.25) {
-              var11 = 0.16512428;
+              var11 = 0.1657248;
             } else {
-              var11 = -0.026326124;
+              var11 = -0.26293853;
             }
           }
         } else {
-          if (input[0] >= 13.5) {
-            if (input[3] >= 0.65) {
-              var11 = -0.030780077;
+          if (input[0] >= -35.5) {
+            if (input[1] >= 0.85) {
+              var11 = 0.04738856;
             } else {
-              var11 = -0.45558384;
+              var11 = -0.08455032;
             }
           } else {
-            if (input[0] >= 12.5) {
-              var11 = 0.26236963;
+            var11 = -0.34418547;
+          }
+        }
+      } else {
+        if (input[0] >= -37.5) {
+          if (input[4] >= 0.65) {
+            if (input[1] >= 0.75) {
+              var11 = -0.23963366;
             } else {
-              var11 = -0.024971263;
+              var11 = 0.18756567;
+            }
+          } else {
+            if (input[5] >= 0.45) {
+              var11 = -0.35357922;
+            } else {
+              var11 = -0.040460605;
+            }
+          }
+        } else {
+          if (input[4] >= 0.05) {
+            var11 = -0.20991069;
+          } else {
+            var11 = 0.3534461;
+          }
+        }
+      }
+    } else {
+      if (input[3] >= 0.85) {
+        if (input[0] >= 13.5) {
+          if (input[5] >= 0.55) {
+            var11 = -0.4077525;
+          } else {
+            if (input[0] >= 41.5) {
+              var11 = -0.25960618;
+            } else {
+              var11 = 0.1877534;
+            }
+          }
+        } else {
+          if (input[0] >= -14.5) {
+            if (input[1] >= 0.35000002) {
+              var11 = 0.3101322;
+            } else {
+              var11 = 0.0022890235;
+            }
+          } else {
+            var11 = -0.32521152;
+          }
+        }
+      } else {
+        if (input[3] >= 0.65) {
+          if (input[5] >= 0.95) {
+            var11 = -0.40176672;
+          } else {
+            if (input[1] >= 0.45) {
+              var11 = 0.19621135;
+            } else {
+              var11 = 0.037218664;
+            }
+          }
+        } else {
+          if (input[0] >= -25.5) {
+            if (input[4] >= 0.35000002) {
+              var11 = -0.26066402;
+            } else {
+              var11 = 0.010148154;
+            }
+          } else {
+            if (input[2] >= 0.75) {
+              var11 = -0.0058694575;
+            } else {
+              var11 = 0.14593324;
+            }
+          }
+        }
+      }
+    }
+  } else {
+    if (input[5] >= 0.85) {
+      if (input[1] >= 0.15) {
+        if (input[0] >= 13.5) {
+          if (input[0] >= 36.5) {
+            if (input[1] >= 0.85) {
+              var11 = 0.16323788;
+            } else {
+              var11 = -0.1842035;
+            }
+          } else {
+            if (input[3] >= 0.85) {
+              var11 = -0.21646549;
+            } else {
+              var11 = 0.21607141;
+            }
+          }
+        } else {
+          if (input[4] >= 0.35000002) {
+            if (input[4] >= 0.85) {
+              var11 = 0.024430564;
+            } else {
+              var11 = -0.45198485;
+            }
+          } else {
+            if (input[3] >= 0.65) {
+              var11 = 0.13112357;
+            } else {
+              var11 = -0.14222409;
+            }
+          }
+        }
+      } else {
+        var11 = -0.43968463;
+      }
+    } else {
+      if (input[4] >= 0.85) {
+        if (input[0] >= -23.5) {
+          if (input[5] >= 0.75) {
+            if (input[1] >= 0.35000002) {
+              var11 = -0.29475147;
+            } else {
+              var11 = 0.19415301;
+            }
+          } else {
+            if (input[0] >= 40.5) {
+              var11 = 0.042812902;
+            } else {
+              var11 = 0.28835467;
+            }
+          }
+        } else {
+          var11 = -0.2549011;
+        }
+      } else {
+        if (input[3] >= 0.35000002) {
+          if (input[3] >= 0.45) {
+            if (input[4] >= 0.45) {
+              var11 = -0.13822317;
+            } else {
+              var11 = 0.055322852;
+            }
+          } else {
+            if (input[4] >= 0.25) {
+              var11 = 0.34296054;
+            } else {
+              var11 = -0.17597556;
+            }
+          }
+        } else {
+          if (input[4] >= 0.05) {
+            if (input[1] >= 0.15) {
+              var11 = -0.35223705;
+            } else {
+              var11 = 0.15656146;
+            }
+          } else {
+            if (input[1] >= 0.15) {
+              var11 = 0.064315915;
+            } else {
+              var11 = -0.4045266;
             }
           }
         }
@@ -1662,281 +1862,317 @@ List<double> score(List<double> input) {
     }
   }
   double var12;
-  if (input[1] >= 0.95) {
-    if (input[5] >= 0.65) {
-      if (input[4] >= 0.25) {
-        if (input[4] >= 0.35000002) {
-          if (input[3] >= 0.95) {
-            var12 = 0.20147133;
+  if (input[0] >= -35.5) {
+    if (input[1] >= 0.95) {
+      if (input[3] >= 0.95) {
+        var12 = 0.18137264;
+      } else {
+        if (input[0] >= -29.5) {
+          if (input[0] >= -27.5) {
+            if (input[0] >= 37.5) {
+              var12 = -0.08066003;
+            } else {
+              var12 = -0.39645505;
+            }
           } else {
-            var12 = -0.2878124;
+            var12 = 0.27462366;
           }
         } else {
-          if (input[0] >= 45.5) {
-            var12 = 0.2633823;
-          } else {
-            if (input[0] >= 39.0) {
-              var12 = -0.23917279;
+          var12 = -0.30845097;
+        }
+      }
+    } else {
+      if (input[5] >= 0.45) {
+        if (input[0] >= 49.5) {
+          if (input[4] >= 0.05) {
+            if (input[5] >= 0.55) {
+              var12 = -0.33444676;
             } else {
-              var12 = 0.13904646;
+              var12 = -0.11673174;
             }
+          } else {
+            var12 = 0.10008449;
+          }
+        } else {
+          if (input[1] >= 0.05) {
+            if (input[0] >= 46.5) {
+              var12 = 0.16227818;
+            } else {
+              var12 = 0.0009955224;
+            }
+          } else {
+            var12 = -0.34172922;
           }
         }
       } else {
-        var12 = -0.2810086;
-      }
-    } else {
-      if (input[3] >= 0.2) {
-        var12 = -0.3220098;
-      } else {
-        var12 = 0.17827809;
+        if (input[2] >= 0.85) {
+          if (input[1] >= 0.75) {
+            var12 = -0.25811622;
+          } else {
+            if (input[3] >= 0.85) {
+              var12 = -0.21938881;
+            } else {
+              var12 = 0.27805924;
+            }
+          }
+        } else {
+          if (input[2] >= 0.75) {
+            if (input[1] >= 0.65) {
+              var12 = -0.08778329;
+            } else {
+              var12 = -0.36528566;
+            }
+          } else {
+            if (input[0] >= 13.0) {
+              var12 = 0.06235798;
+            } else {
+              var12 = -0.1712274;
+            }
+          }
+        }
       }
     }
   } else {
-    if (input[1] >= 0.85) {
-      if (input[5] >= 0.35000002) {
-        if (input[5] >= 0.95) {
-          var12 = -0.26812255;
+    if (input[0] >= -37.5) {
+      if (input[2] >= 0.65) {
+        if (input[4] >= 0.85) {
+          var12 = -0.011320162;
         } else {
-          if (input[3] >= 0.65) {
-            if (input[4] >= 0.25) {
-              var12 = 0.030635232;
-            } else {
-              var12 = -0.42281726;
-            }
-          } else {
-            if (input[0] >= -35.5) {
-              var12 = 0.11967937;
-            } else {
-              var12 = -0.30286908;
-            }
-          }
+          var12 = -0.356828;
         }
       } else {
-        if (input[4] >= 0.7) {
-          var12 = 0.26734456;
+        if (input[4] >= 0.05) {
+          var12 = -0.2731505;
         } else {
-          var12 = -0.4319488;
+          if (input[3] >= 0.25) {
+            if (input[5] >= 0.95) {
+              var12 = 0.281838;
+            } else {
+              var12 = 0.072750956;
+            }
+          } else {
+            var12 = -0.20534681;
+          }
         }
       }
     } else {
-      if (input[3] >= 0.85) {
-        if (input[5] >= 0.85) {
-          if (input[2] >= 0.35000002) {
-            if (input[2] >= 0.65) {
-              var12 = -0.173862;
-            } else {
-              var12 = -0.60052574;
-            }
-          } else {
-            var12 = 0.15560663;
-          }
-        } else {
-          if (input[0] >= -4.5) {
-            if (input[5] >= 0.35000002) {
-              var12 = 0.03686599;
-            } else {
-              var12 = -0.29730955;
-            }
-          } else {
-            if (input[0] >= -33.5) {
-              var12 = -0.32604772;
-            } else {
-              var12 = -0.06369919;
-            }
-          }
-        }
+      if (input[4] >= 0.65) {
+        var12 = -0.31355363;
       } else {
-        if (input[3] >= 0.75) {
-          if (input[4] >= 0.25) {
-            if (input[0] >= 37.5) {
-              var12 = -0.19802243;
-            } else {
-              var12 = 0.08135209;
-            }
+        if (input[1] >= 0.15) {
+          if (input[5] >= 0.85) {
+            var12 = -0.3465814;
           } else {
-            if (input[2] >= 0.65) {
-              var12 = -0.018533096;
+            if (input[1] >= 0.45) {
+              var12 = 0.09779995;
             } else {
-              var12 = 0.33597505;
+              var12 = -0.21285638;
             }
           }
         } else {
-          if (input[0] >= 51.5) {
-            var12 = -0.342762;
+          if (input[5] >= 0.85) {
+            var12 = 0.31859064;
           } else {
-            if (input[1] >= 0.75) {
-              var12 = -0.08200901;
-            } else {
-              var12 = -0.00014586675;
-            }
+            var12 = 0.11064767;
           }
         }
       }
     }
   }
   double var13;
-  if (input[0] >= 52.5) {
-    if (input[5] >= 0.45) {
-      var13 = -0.2389215;
-    } else {
-      var13 = 0.29375523;
-    }
-  } else {
-    if (input[2] >= 0.15) {
-      if (input[4] >= 0.95) {
-        var13 = -0.2256174;
-      } else {
-        if (input[0] >= 40.5) {
-          if (input[3] >= 0.95) {
-            if (input[0] >= 41.5) {
-              var13 = 0.05309209;
+  if (input[2] >= 0.15) {
+    if (input[2] >= 0.35000002) {
+      if (input[3] >= 0.85) {
+        if (input[4] >= 0.25) {
+          if (input[5] >= 0.85) {
+            if (input[1] >= 0.85) {
+              var13 = 0.17387408;
             } else {
-              var13 = 0.3234886;
+              var13 = -0.2567332;
             }
           } else {
-            if (input[2] >= 0.95) {
-              var13 = 0.08697909;
+            if (input[5] >= 0.65) {
+              var13 = 0.055854816;
             } else {
-              var13 = -0.05930064;
+              var13 = -0.07750484;
             }
           }
         } else {
-          if (input[0] >= 15.5) {
-            if (input[2] >= 0.75) {
-              var13 = 0.13803437;
+          if (input[0] >= 51.5) {
+            var13 = 0.17998996;
+          } else {
+            if (input[5] >= 0.45) {
+              var13 = -0.39271736;
             } else {
-              var13 = -0.008132069;
+              var13 = -0.12284706;
+            }
+          }
+        }
+      } else {
+        if (input[0] >= -35.5) {
+          if (input[0] >= 40.5) {
+            if (input[2] >= 0.45) {
+              var13 = -0.010963095;
+            } else {
+              var13 = -0.22093855;
             }
           } else {
-            if (input[5] >= 0.35000002) {
-              var13 = -0.019395921;
+            if (input[0] >= 15.5) {
+              var13 = 0.067758195;
             } else {
-              var13 = 0.12311702;
+              var13 = -0.0029361132;
+            }
+          }
+        } else {
+          if (input[2] >= 0.85) {
+            if (input[5] >= 0.35000002) {
+              var13 = -0.367172;
+            } else {
+              var13 = 0.15426497;
+            }
+          } else {
+            if (input[3] >= 0.65) {
+              var13 = -0.25062305;
+            } else {
+              var13 = 0.030756397;
             }
           }
         }
       }
     } else {
-      if (input[5] >= 0.6) {
-        var13 = 0.21257235;
+      if (input[4] >= 0.15) {
+        if (input[0] >= 45.0) {
+          var13 = -0.323369;
+        } else {
+          if (input[0] >= -32.5) {
+            if (input[2] >= 0.25) {
+              var13 = 0.048675068;
+            } else {
+              var13 = 0.28720593;
+            }
+          } else {
+            var13 = -0.20957173;
+          }
+        }
       } else {
-        var13 = 0.033210374;
+        var13 = -0.47313726;
       }
+    }
+  } else {
+    if (input[3] >= 0.55) {
+      var13 = -0.11433623;
+    } else {
+      var13 = 0.26846683;
     }
   }
   double var14;
   if (input[4] >= 0.95) {
-    var14 = -0.20829947;
+    if (input[3] >= 0.65) {
+      if (input[0] >= -7.5) {
+        var14 = -0.20475955;
+      } else {
+        var14 = 0.13596931;
+      }
+    } else {
+      var14 = -0.288758;
+    }
   } else {
-    if (input[2] >= 0.65) {
-      if (input[0] >= 41.5) {
-        if (input[1] >= 0.25) {
-          if (input[4] >= 0.35000002) {
-            if (input[0] >= 43.5) {
-              var14 = 0.07217243;
+    if (input[4] >= 0.85) {
+      if (input[0] >= 9.0) {
+        if (input[3] >= 0.35000002) {
+          if (input[5] >= 0.35000002) {
+            if (input[0] >= 14.5) {
+              var14 = -0.42066327;
             } else {
-              var14 = -0.3593959;
+              var14 = -0.10399587;
             }
           } else {
-            if (input[4] >= 0.25) {
-              var14 = 0.2596087;
-            } else {
-              var14 = -0.073894404;
-            }
+            var14 = 0.18842636;
           }
         } else {
-          if (input[3] >= 0.25) {
-            var14 = -0.3940414;
+          if (input[1] >= 0.45) {
+            if (input[1] >= 0.55) {
+              var14 = 0.3110541;
+            } else {
+              var14 = 0.06519732;
+            }
           } else {
-            var14 = 0.21251523;
+            var14 = -0.30734718;
           }
         }
       } else {
-        if (input[5] >= 0.95) {
-          if (input[4] >= 0.65) {
-            if (input[0] >= 31.5) {
-              var14 = 0.30640927;
+        if (input[5] >= 0.55) {
+          if (input[5] >= 0.75) {
+            if (input[0] >= -33.5) {
+              var14 = -0.21266624;
             } else {
-              var14 = -0.13482288;
+              var14 = 0.20032683;
             }
           } else {
-            if (input[1] >= 0.15) {
-              var14 = -0.41858152;
+            if (input[0] >= -27.5) {
+              var14 = 0.32456815;
             } else {
-              var14 = 0.34779257;
+              var14 = -0.21996455;
             }
           }
         } else {
-          if (input[0] >= 4.0) {
-            if (input[4] >= 0.85) {
-              var14 = -0.47695193;
-            } else {
-              var14 = -0.028508151;
-            }
-          } else {
-            if (input[4] >= 0.55) {
-              var14 = 0.09331358;
-            } else {
-              var14 = -0.010649908;
-            }
-          }
+          var14 = -0.27336454;
         }
       }
     } else {
-      if (input[1] >= 0.35000002) {
-        if (input[3] >= 0.55) {
-          if (input[0] >= -34.5) {
-            if (input[4] >= 0.45) {
-              var14 = -0.19432852;
+      if (input[5] >= 0.55) {
+        if (input[2] >= 0.95) {
+          if (input[5] >= 0.65) {
+            if (input[5] >= 0.95) {
+              var14 = 0.22660363;
             } else {
-              var14 = -0.011881393;
+              var14 = -0.07845911;
             }
           } else {
-            var14 = -0.33645606;
+            var14 = -0.45213646;
           }
         } else {
-          if (input[0] >= -34.5) {
-            if (input[0] >= 14.5) {
-              var14 = 0.04698131;
+          if (input[1] >= 0.35000002) {
+            if (input[4] >= 0.75) {
+              var14 = -0.29087928;
             } else {
-              var14 = -0.15605599;
+              var14 = -0.017774384;
             }
           } else {
-            if (input[3] >= 0.25) {
-              var14 = 0.20617788;
+            if (input[3] >= 0.45) {
+              var14 = -0.02135362;
             } else {
-              var14 = -0.21320663;
+              var14 = 0.071689464;
             }
           }
         }
       } else {
-        if (input[3] >= 0.35000002) {
-          if (input[3] >= 0.45) {
-            if (input[0] >= 4.5) {
-              var14 = 0.12827677;
+        if (input[2] >= 0.95) {
+          if (input[0] >= 39.0) {
+            if (input[5] >= 0.45) {
+              var14 = -0.33018753;
             } else {
-              var14 = -0.1602638;
+              var14 = 0.027892802;
             }
           } else {
-            if (input[5] >= 0.75) {
-              var14 = 0.33779165;
+            if (input[4] >= 0.05) {
+              var14 = 0.28421375;
             } else {
-              var14 = 0.14781003;
+              var14 = -0.28747022;
             }
           }
         } else {
-          if (input[0] >= 27.0) {
-            if (input[0] >= 37.5) {
-              var14 = -0.17050031;
+          if (input[0] >= -28.5) {
+            if (input[0] >= -27.5) {
+              var14 = 0.018997861;
             } else {
-              var14 = 0.17801915;
+              var14 = 0.35354447;
             }
           } else {
-            if (input[4] >= 0.45) {
-              var14 = 0.030827349;
+            if (input[2] >= 0.65) {
+              var14 = -0.33165753;
             } else {
-              var14 = -0.3672397;
+              var14 = 0.049733903;
             }
           }
         }
@@ -1944,485 +2180,309 @@ List<double> score(List<double> input) {
     }
   }
   double var15;
-  if (input[0] >= -35.5) {
-    if (input[0] >= -34.5) {
-      if (input[5] >= 0.45) {
-        if (input[0] >= 49.5) {
-          if (input[5] >= 0.55) {
-            if (input[4] >= 0.05) {
-              var15 = -0.3846585;
+  if (input[2] >= 0.15) {
+    if (input[2] >= 0.35000002) {
+      if (input[0] >= 46.5) {
+        if (input[1] >= 0.45) {
+          if (input[0] >= 47.5) {
+            if (input[5] >= 0.35000002) {
+              var15 = 0.12917599;
             } else {
-              var15 = 0.103043884;
+              var15 = -0.30229774;
             }
           } else {
-            if (input[4] >= 0.35000002) {
-              var15 = -0.28978935;
-            } else {
-              var15 = 0.20529348;
-            }
+            var15 = 0.29451752;
           }
         } else {
-          if (input[0] >= 48.5) {
-            var15 = 0.31518465;
-          } else {
-            if (input[0] >= 43.5) {
-              var15 = -0.13480295;
+          if (input[4] >= 0.15) {
+            if (input[2] >= 0.85) {
+              var15 = -0.0552227;
             } else {
-              var15 = -0.0029950489;
+              var15 = -0.3509074;
+            }
+          } else {
+            if (input[3] >= 0.6) {
+              var15 = 0.23300968;
+            } else {
+              var15 = -0.28407753;
             }
           }
         }
       } else {
-        if (input[4] >= 0.05) {
-          if (input[3] >= 0.55) {
-            if (input[0] >= 51.5) {
-              var15 = 0.28331065;
-            } else {
-              var15 = -0.090404645;
-            }
-          } else {
-            if (input[0] >= 41.5) {
-              var15 = -0.25363165;
-            } else {
-              var15 = 0.22045909;
-            }
-          }
+        if (input[0] >= 44.5) {
+          var15 = -0.31354696;
         } else {
-          if (input[2] >= 0.65) {
-            if (input[3] >= 0.15) {
-              var15 = -0.4232609;
+          if (input[1] >= 0.45) {
+            if (input[0] >= 12.5) {
+              var15 = 0.010060013;
             } else {
-              var15 = -0.10782907;
+              var15 = -0.045723356;
             }
           } else {
-            if (input[1] >= 0.75) {
-              var15 = -0.2891506;
+            if (input[0] >= 29.5) {
+              var15 = -0.0675233;
             } else {
-              var15 = 0.1904103;
+              var15 = 0.01603383;
             }
           }
         }
       }
     } else {
-      if (input[1] >= 0.75) {
-        if (input[5] >= 0.45) {
-          if (input[5] >= 0.55) {
-            if (input[5] >= 0.75) {
-              var15 = 0.24038687;
+      if (input[4] >= 0.15) {
+        if (input[0] >= 45.0) {
+          var15 = -0.2769583;
+        } else {
+          if (input[5] >= 0.65) {
+            if (input[5] >= 0.85) {
+              var15 = 0.10091796;
             } else {
-              var15 = -0.3624866;
+              var15 = -0.34304824;
             }
           } else {
-            var15 = 0.345503;
+            if (input[0] >= 37.5) {
+              var15 = 0.34237128;
+            } else {
+              var15 = -0.055601686;
+            }
           }
-        } else {
-          var15 = -0.22986178;
         }
       } else {
-        if (input[3] >= 0.75) {
-          if (input[2] >= 0.75) {
-            var15 = 0.29303908;
-          } else {
-            var15 = 0.078166805;
-          }
-        } else {
-          if (input[1] >= 0.45) {
-            var15 = -0.35144556;
-          } else {
-            if (input[1] >= 0.35000002) {
-              var15 = 0.15974206;
-            } else {
-              var15 = -0.26591364;
-            }
-          }
-        }
+        var15 = -0.40065306;
       }
     }
   } else {
-    if (input[4] >= 0.05) {
-      if (input[3] >= 0.75) {
-        if (input[2] >= 0.75) {
-          if (input[1] >= 0.85) {
-            var15 = 0.22926675;
-          } else {
-            if (input[5] >= 0.35000002) {
-              var15 = -0.13902357;
-            } else {
-              var15 = 0.20849125;
-            }
-          }
-        } else {
-          var15 = -0.25054923;
-        }
-      } else {
-        if (input[0] >= -41.5) {
-          if (input[1] >= 0.95) {
-            var15 = 0.0034643807;
-          } else {
-            var15 = -0.3447927;
-          }
-        } else {
-          var15 = 0.068360135;
-        }
-      }
+    if (input[3] >= 0.55) {
+      var15 = -0.09524389;
     } else {
-      if (input[3] >= 0.25) {
-        if (input[3] >= 0.35000002) {
-          var15 = -0.18953772;
-        } else {
-          if (input[0] >= -37.5) {
-            var15 = 0.08813853;
-          } else {
-            var15 = 0.37023023;
-          }
-        }
-      } else {
-        var15 = -0.22512738;
-      }
+      var15 = 0.23747705;
     }
   }
   double var16;
-  if (input[0] >= -28.5) {
-    if (input[3] >= 0.45) {
-      if (input[2] >= 0.35000002) {
-        if (input[2] >= 0.45) {
-          if (input[5] >= 0.55) {
-            if (input[3] >= 0.65) {
-              var16 = 0.007963873;
-            } else {
-              var16 = -0.06840097;
-            }
-          } else {
-            if (input[0] >= 39.0) {
-              var16 = 0.004132311;
-            } else {
-              var16 = 0.24019621;
-            }
-          }
-        } else {
-          if (input[0] >= 9.0) {
-            if (input[0] >= 46.5) {
-              var16 = 0.006630704;
-            } else {
-              var16 = -0.56296796;
-            }
-          } else {
-            if (input[4] >= 0.45) {
-              var16 = -0.23072752;
-            } else {
-              var16 = 0.27082163;
-            }
-          }
-        }
+  if (input[4] >= 0.95) {
+    if (input[3] >= 0.65) {
+      if (input[0] >= -7.5) {
+        var16 = -0.1871771;
       } else {
-        if (input[0] >= 45.5) {
-          var16 = -0.28027636;
-        } else {
-          if (input[0] >= 37.0) {
-            var16 = 0.341528;
-          } else {
-            if (input[3] >= 0.55) {
-              var16 = -0.11580741;
-            } else {
-              var16 = 0.21461567;
-            }
-          }
-        }
+        var16 = 0.10699803;
       }
     } else {
-      if (input[3] >= 0.35000002) {
-        if (input[4] >= 0.05) {
-          if (input[0] >= 43.0) {
-            var16 = -0.254852;
-          } else {
-            if (input[1] >= 0.45) {
-              var16 = 0.24139763;
-            } else {
-              var16 = 0.06502708;
-            }
-          }
-        } else {
-          if (input[1] >= 0.75) {
-            var16 = -0.4492687;
-          } else {
-            if (input[1] >= 0.65) {
-              var16 = 0.22649331;
-            } else {
-              var16 = -0.0689093;
-            }
-          }
-        }
-      } else {
-        if (input[3] >= 0.25) {
-          if (input[4] >= 0.85) {
-            var16 = 0.21896051;
-          } else {
-            if (input[0] >= -27.5) {
-              var16 = -0.21570812;
-            } else {
-              var16 = 0.13737915;
-            }
-          }
-        } else {
-          if (input[5] >= 0.65) {
-            if (input[5] >= 0.75) {
-              var16 = 0.000047797857;
-            } else {
-              var16 = 0.16774788;
-            }
-          } else {
-            if (input[0] >= 36.0) {
-              var16 = -0.2740623;
-            } else {
-              var16 = 0.07248428;
-            }
-          }
-        }
-      }
+      var16 = -0.25894058;
     }
   } else {
-    if (input[5] >= 0.75) {
-      if (input[4] >= 0.85) {
-        if (input[1] >= 0.55) {
-          if (input[0] >= -34.5) {
-            var16 = -0.21751422;
+    if (input[4] >= 0.85) {
+      if (input[3] >= 0.15) {
+        if (input[2] >= 0.55) {
+          if (input[0] >= 14.5) {
+            if (input[5] >= 0.95) {
+              var16 = 0.16738455;
+            } else {
+              var16 = -0.37598816;
+            }
           } else {
-            var16 = 0.18377365;
+            if (input[5] >= 0.55) {
+              var16 = 0.10243873;
+            } else {
+              var16 = -0.23578884;
+            }
           }
         } else {
-          var16 = 0.31631255;
+          if (input[3] >= 0.75) {
+            var16 = -0.11926966;
+          } else {
+            if (input[0] >= 38.0) {
+              var16 = 0.3098775;
+            } else {
+              var16 = 0.15361965;
+            }
+          }
         }
       } else {
-        if (input[4] >= 0.55) {
-          if (input[2] >= 0.15) {
-            var16 = -0.33826694;
-          } else {
-            var16 = 0.20123357;
-          }
-        } else {
-          if (input[3] >= 0.45) {
-            if (input[0] >= -32.5) {
-              var16 = -0.29241985;
-            } else {
-              var16 = 0.10484978;
-            }
-          } else {
-            if (input[3] >= 0.35000002) {
-              var16 = -0.30303884;
-            } else {
-              var16 = 0.046005033;
-            }
-          }
-        }
+        var16 = -0.2882984;
       }
     } else {
-      if (input[2] >= 0.75) {
-        if (input[4] >= 0.55) {
-          if (input[1] >= 0.55) {
-            var16 = -0.22334616;
-          } else {
-            if (input[3] >= 0.75) {
-              var16 = 0.25950915;
+      if (input[0] >= -16.5) {
+        if (input[0] >= -9.5) {
+          if (input[2] >= 0.75) {
+            if (input[0] >= 39.5) {
+              var16 = -0.057792544;
             } else {
-              var16 = 0.025378311;
+              var16 = 0.082157396;
+            }
+          } else {
+            if (input[2] >= 0.65) {
+              var16 = -0.09152398;
+            } else {
+              var16 = 0.01075059;
             }
           }
         } else {
-          if (input[3] >= 0.05) {
-            if (input[5] >= 0.45) {
-              var16 = -0.3561476;
-            } else {
-              var16 = -0.045156527;
-            }
-          } else {
-            var16 = 0.13812433;
-          }
+          var16 = 0.2992149;
         }
       } else {
-        if (input[2] >= 0.55) {
-          if (input[3] >= 0.35000002) {
-            if (input[0] >= -33.5) {
-              var16 = 0.3689902;
+        if (input[3] >= 0.95) {
+          var16 = -0.32464337;
+        } else {
+          if (input[0] >= -32.5) {
+            if (input[1] >= 0.35000002) {
+              var16 = -0.18208838;
             } else {
-              var16 = -0.007884426;
+              var16 = 0.014516374;
             }
           } else {
-            if (input[5] >= 0.35000002) {
-              var16 = -0.30921414;
+            if (input[3] >= 0.45) {
+              var16 = 0.06596166;
             } else {
-              var16 = 0.12540294;
+              var16 = -0.03725176;
             }
           }
-        } else {
-          var16 = -0.2753156;
         }
       }
     }
   }
   double var17;
-  if (input[2] >= 0.65) {
-    if (input[0] >= 41.5) {
-      if (input[1] >= 0.25) {
-        if (input[4] >= 0.35000002) {
-          if (input[0] >= 43.5) {
-            if (input[4] >= 0.75) {
-              var17 = 0.28665677;
+  if (input[1] >= 0.15) {
+    if (input[5] >= 0.15) {
+      if (input[5] >= 0.95) {
+        if (input[0] >= -32.5) {
+          if (input[1] >= 0.45) {
+            if (input[3] >= 0.45) {
+              var17 = -0.18180682;
             } else {
-              var17 = -0.06570987;
+              var17 = 0.13921402;
             }
           } else {
-            var17 = -0.3138193;
+            if (input[3] >= 0.65) {
+              var17 = -0.11411831;
+            } else {
+              var17 = -0.42372754;
+            }
           }
         } else {
-          if (input[1] >= 0.65) {
-            if (input[3] >= 0.75) {
-              var17 = -0.29626358;
+          if (input[2] >= 0.65) {
+            if (input[1] >= 0.25) {
+              var17 = -0.33931077;
             } else {
-              var17 = 0.095690034;
+              var17 = 0.3208115;
             }
           } else {
-            if (input[3] >= 0.55) {
-              var17 = 0.31014624;
-            } else {
-              var17 = 0.023372207;
-            }
+            var17 = 0.28540766;
           }
         }
       } else {
-        if (input[5] >= 0.75) {
-          var17 = 0.15307698;
-        } else {
-          var17 = -0.3605256;
-        }
-      }
-    } else {
-      if (input[0] >= 40.5) {
-        if (input[4] >= 0.05) {
-          if (input[5] >= 0.85) {
-            var17 = -0.39200103;
-          } else {
-            if (input[1] >= 0.75) {
-              var17 = -0.091683604;
+        if (input[0] >= -35.5) {
+          if (input[0] >= -34.5) {
+            if (input[1] >= 0.35000002) {
+              var17 = -0.011804808;
             } else {
-              var17 = 0.19376355;
-            }
-          }
-        } else {
-          var17 = -0.4645292;
-        }
-      } else {
-        if (input[3] >= 0.95) {
-          if (input[5] >= 0.55) {
-            if (input[0] >= -8.0) {
-              var17 = -0.4998887;
-            } else {
-              var17 = -0.10600348;
-            }
-          } else {
-            var17 = 0.1332329;
-          }
-        } else {
-          if (input[0] >= 15.5) {
-            if (input[2] >= 0.75) {
-              var17 = 0.121039234;
-            } else {
-              var17 = -0.12215778;
-            }
-          } else {
-            if (input[0] >= 11.5) {
-              var17 = -0.12265355;
-            } else {
-              var17 = -0.0014020059;
-            }
-          }
-        }
-      }
-    }
-  } else {
-    if (input[0] >= 36.5) {
-      if (input[4] >= 0.25) {
-        if (input[3] >= 0.25) {
-          if (input[1] >= 0.35000002) {
-            if (input[0] >= 37.5) {
-              var17 = 0.011744932;
-            } else {
-              var17 = -0.3862605;
-            }
-          } else {
-            var17 = -0.41044477;
-          }
-        } else {
-          var17 = -0.41211796;
-        }
-      } else {
-        if (input[1] >= 0.75) {
-          if (input[0] >= 43.0) {
-            var17 = -0.3477521;
-          } else {
-            if (input[0] >= 39.0) {
-              var17 = 0.20363604;
-            } else {
-              var17 = -0.05552968;
-            }
-          }
-        } else {
-          if (input[0] >= 46.5) {
-            if (input[5] >= 0.85) {
-              var17 = 0.073149085;
-            } else {
-              var17 = 0.2916631;
+              var17 = 0.026451653;
             }
           } else {
             if (input[3] >= 0.15) {
-              var17 = -0.25552195;
+              var17 = 0.13197577;
             } else {
-              var17 = 0.13062382;
+              var17 = -0.38814053;
             }
+          }
+        } else {
+          if (input[1] >= 0.35000002) {
+            if (input[5] >= 0.85) {
+              var17 = -0.2977709;
+            } else {
+              var17 = 0.02710987;
+            }
+          } else {
+            var17 = -0.3365562;
           }
         }
       }
     } else {
-      if (input[0] >= 12.5) {
-        if (input[1] >= 0.15) {
-          if (input[3] >= 0.95) {
-            var17 = -0.1295536;
-          } else {
-            if (input[1] >= 0.75) {
-              var17 = -0.08316795;
+      var17 = -0.3085516;
+    }
+  } else {
+    if (input[4] >= 0.15) {
+      if (input[3] >= 0.25) {
+        if (input[3] >= 0.65) {
+          if (input[5] >= 0.65) {
+            if (input[0] >= 30.0) {
+              var17 = -0.24556042;
             } else {
-              var17 = 0.19160737;
+              var17 = 0.27888015;
+            }
+          } else {
+            if (input[1] >= 0.05) {
+              var17 = -0.42860177;
+            } else {
+              var17 = 0.12602045;
             }
           }
         } else {
-          if (input[3] >= 0.75) {
-            var17 = 0.061133385;
+          if (input[0] >= 8.5) {
+            var17 = -0.4404086;
           } else {
-            var17 = -0.4252223;
+            if (input[0] >= -4.5) {
+              var17 = 0.19544066;
+            } else {
+              var17 = -0.17472434;
+            }
           }
         }
       } else {
-        if (input[0] >= 10.5) {
-          if (input[1] >= 0.85) {
-            var17 = 0.15410869;
-          } else {
-            if (input[3] >= 0.45) {
-              var17 = -0.34552115;
+        if (input[0] >= -27.5) {
+          if (input[4] >= 0.35000002) {
+            if (input[2] >= 0.65) {
+              var17 = -0.23080038;
             } else {
-              var17 = 0.051904444;
+              var17 = 0.16025567;
+            }
+          } else {
+            if (input[4] >= 0.25) {
+              var17 = 0.19693239;
+            } else {
+              var17 = 0.50405914;
             }
           }
         } else {
-          if (input[5] >= 0.95) {
-            if (input[0] >= -32.0) {
-              var17 = -0.21086814;
+          if (input[0] >= -37.0) {
+            var17 = -0.34747723;
+          } else {
+            var17 = 0.26292217;
+          }
+        }
+      }
+    } else {
+      if (input[5] >= 0.95) {
+        if (input[2] >= 0.95) {
+          var17 = 0.47108555;
+        } else {
+          if (input[0] >= -37.0) {
+            var17 = -0.2335509;
+          } else {
+            var17 = 0.27775523;
+          }
+        }
+      } else {
+        if (input[0] >= 40.5) {
+          if (input[5] >= 0.75) {
+            var17 = 0.31781703;
+          } else {
+            if (input[3] >= 0.65) {
+              var17 = 0.257083;
             } else {
-              var17 = 0.2796284;
+              var17 = -0.3565035;
+            }
+          }
+        } else {
+          if (input[3] >= 0.45) {
+            if (input[3] >= 0.55) {
+              var17 = -0.410224;
+            } else {
+              var17 = 0.16180393;
             }
           } else {
-            if (input[0] >= -16.5) {
-              var17 = 0.09452056;
+            if (input[3] >= 0.05) {
+              var17 = -0.46863565;
             } else {
-              var17 = -0.080086015;
+              var17 = -0.097378924;
             }
           }
         }
@@ -2430,121 +2490,181 @@ List<double> score(List<double> input) {
     }
   }
   double var18;
-  if (input[3] >= 0.85) {
-    if (input[4] >= 0.25) {
-      if (input[0] >= 5.5) {
-        if (input[0] >= 9.0) {
-          if (input[1] >= 0.55) {
-            if (input[0] >= 42.5) {
-              var18 = 0.18860634;
+  if (input[0] >= 15.5) {
+    if (input[0] >= 29.5) {
+      if (input[0] >= 34.5) {
+        if (input[0] >= 36.5) {
+          if (input[0] >= 37.5) {
+            if (input[4] >= 0.45) {
+              var18 = -0.06242043;
             } else {
-              var18 = 0.0007116571;
+              var18 = 0.018318705;
             }
           } else {
-            if (input[1] >= 0.25) {
-              var18 = -0.35865727;
+            if (input[1] >= 0.65) {
+              var18 = -0.4144252;
             } else {
-              var18 = 0.030031484;
+              var18 = -0.04811054;
             }
           }
         } else {
-          if (input[2] >= 0.6) {
-            var18 = 0.32076707;
-          } else {
-            if (input[1] >= 0.4) {
-              var18 = 0.21233387;
+          if (input[1] >= 0.45) {
+            if (input[5] >= 0.79999995) {
+              var18 = 0.084822565;
             } else {
-              var18 = -0.048046514;
+              var18 = 0.34487468;
             }
+          } else {
+            var18 = -0.41083026;
           }
         }
       } else {
-        if (input[1] >= 0.25) {
-          if (input[5] >= 0.85) {
-            if (input[5] >= 0.95) {
-              var18 = -0.07233268;
+        if (input[4] >= 0.05) {
+          if (input[1] >= 0.25) {
+            if (input[3] >= 0.75) {
+              var18 = -0.35835072;
             } else {
-              var18 = -0.3279814;
+              var18 = 0.14811899;
             }
           } else {
-            if (input[2] >= 0.55) {
-              var18 = -0.041567396;
-            } else {
-              var18 = 0.20000769;
-            }
+            var18 = -0.39630476;
           }
         } else {
-          if (input[2] >= 0.55) {
-            var18 = -0.46834558;
-          } else {
-            var18 = -0.014824828;
-          }
+          var18 = -0.5272431;
         }
       }
     } else {
-      if (input[0] >= 51.5) {
-        var18 = 0.18559103;
+      if (input[2] >= 0.45) {
+        if (input[5] >= 0.95) {
+          var18 = -0.2639518;
+        } else {
+          if (input[3] >= 0.85) {
+            var18 = -0.28684726;
+          } else {
+            if (input[1] >= 0.15) {
+              var18 = 0.23332773;
+            } else {
+              var18 = -0.08096398;
+            }
+          }
+        }
       } else {
-        var18 = -0.374292;
+        var18 = -0.43009287;
       }
     }
   } else {
-    if (input[0] >= 49.5) {
-      if (input[5] >= 0.55) {
-        var18 = -0.34456694;
-      } else {
-        if (input[5] >= 0.35000002) {
-          if (input[2] >= 0.65) {
-            if (input[1] >= 0.85) {
-              var18 = 0.2759875;
+    if (input[5] >= 0.85) {
+      if (input[3] >= 0.65) {
+        if (input[4] >= 0.45) {
+          if (input[0] >= -23.5) {
+            if (input[4] >= 0.75) {
+              var18 = -0.017478935;
             } else {
-              var18 = 0.12554507;
+              var18 = -0.35360378;
             }
           } else {
-            if (input[5] >= 0.45) {
-              var18 = -0.22428021;
+            if (input[0] >= -26.5) {
+              var18 = 0.33699107;
             } else {
-              var18 = 0.17696084;
+              var18 = -0.025772579;
             }
           }
         } else {
-          var18 = -0.28443217;
+          if (input[0] >= -34.5) {
+            if (input[4] >= 0.05) {
+              var18 = 0.13272104;
+            } else {
+              var18 = 0.39028803;
+            }
+          } else {
+            var18 = -0.35168013;
+          }
+        }
+      } else {
+        if (input[0] >= -30.0) {
+          if (input[0] >= -26.5) {
+            if (input[0] >= 1.0) {
+              var18 = -0.36822748;
+            } else {
+              var18 = -0.06927372;
+            }
+          } else {
+            var18 = -0.38392976;
+          }
+        } else {
+          if (input[3] >= 0.35000002) {
+            if (input[4] >= 0.85) {
+              var18 = 0.18369462;
+            } else {
+              var18 = -0.25431615;
+            }
+          } else {
+            if (input[4] >= 0.15) {
+              var18 = -0.14624062;
+            } else {
+              var18 = 0.08757405;
+            }
+          }
         }
       }
     } else {
-      if (input[0] >= 46.5) {
-        if (input[1] >= 0.45) {
-          if (input[2] >= 0.45) {
-            if (input[5] >= 0.65) {
-              var18 = 0.33580703;
+      if (input[4] >= 0.15) {
+        if (input[3] >= 0.65) {
+          if (input[4] >= 0.85) {
+            if (input[5] >= 0.75) {
+              var18 = 0.21639761;
             } else {
-              var18 = -0.024923675;
+              var18 = -0.04933001;
             }
           } else {
-            var18 = -0.09968569;
+            if (input[0] >= 5.5) {
+              var18 = 0.03169565;
+            } else {
+              var18 = -0.1009835;
+            }
           }
         } else {
-          if (input[0] >= 48.5) {
-            var18 = 0.19012716;
+          if (input[1] >= 0.45) {
+            if (input[1] >= 0.55) {
+              var18 = 0.03877934;
+            } else {
+              var18 = -0.2590269;
+            }
           } else {
-            var18 = -0.3918266;
+            if (input[0] >= -34.5) {
+              var18 = 0.1462803;
+            } else {
+              var18 = -0.11168807;
+            }
           }
         }
       } else {
-        if (input[0] >= 44.5) {
-          var18 = -0.2922094;
-        } else {
-          if (input[3] >= 0.75) {
-            if (input[0] >= 10.5) {
-              var18 = 0.11490149;
+        if (input[4] >= 0.05) {
+          if (input[5] >= 0.45) {
+            if (input[2] >= 0.65) {
+              var18 = -0.47083288;
             } else {
-              var18 = -0.06429811;
+              var18 = -0.1685576;
             }
           } else {
-            if (input[1] >= 0.95) {
-              var18 = -0.10633447;
+            if (input[2] >= 0.95) {
+              var18 = 0.23980273;
             } else {
-              var18 = -0.001263585;
+              var18 = -0.20493807;
+            }
+          }
+        } else {
+          if (input[0] >= -25.5) {
+            if (input[1] >= 0.15) {
+              var18 = -0.43712044;
+            } else {
+              var18 = -0.0303816;
+            }
+          } else {
+            if (input[3] >= 0.15) {
+              var18 = 0.13654183;
+            } else {
+              var18 = -0.2115833;
             }
           }
         }
@@ -2553,100 +2673,116 @@ List<double> score(List<double> input) {
   }
   double var19;
   if (input[4] >= 0.95) {
-    var19 = -0.18076813;
-  } else {
-    if (input[3] >= 0.85) {
-      if (input[4] >= 0.25) {
-        if (input[1] >= 0.55) {
-          if (input[1] >= 0.65) {
-            if (input[1] >= 0.75) {
-              var19 = 0.057188623;
-            } else {
-              var19 = -0.32972103;
-            }
-          } else {
-            if (input[5] >= 0.75) {
-              var19 = -0.049646698;
-            } else {
-              var19 = 0.20907532;
-            }
-          }
-        } else {
-          if (input[1] >= 0.35000002) {
-            var19 = -0.35521653;
-          } else {
-            if (input[2] >= 0.95) {
-              var19 = -0.3391222;
-            } else {
-              var19 = 0.009195248;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= 51.5) {
-          var19 = 0.16747543;
-        } else {
-          var19 = -0.32795954;
-        }
-      }
+    if (input[2] >= 0.75) {
+      var19 = -0.24356718;
     } else {
-      if (input[5] >= 0.85) {
-        if (input[1] >= 0.75) {
-          if (input[2] >= 0.65) {
-            if (input[0] >= 47.0) {
-              var19 = 0.14312644;
-            } else {
-              var19 = -0.3532607;
-            }
+      if (input[0] >= -18.5) {
+        var19 = -0.2144164;
+      } else {
+        var19 = 0.14247662;
+      }
+    }
+  } else {
+    if (input[0] >= 41.5) {
+      if (input[1] >= 0.85) {
+        if (input[0] >= 51.5) {
+          if (input[3] >= 0.95) {
+            var19 = 0.31388655;
           } else {
-            if (input[0] >= 40.5) {
-              var19 = -0.35098222;
-            } else {
-              var19 = 0.12291344;
-            }
+            var19 = 0.08085858;
           }
         } else {
-          if (input[3] >= 0.65) {
-            if (input[4] >= 0.25) {
-              var19 = 0.03626801;
+          if (input[0] >= 47.5) {
+            if (input[2] >= 0.65) {
+              var19 = 0.121373706;
             } else {
-              var19 = 0.24700584;
+              var19 = -0.26147008;
             }
           } else {
-            if (input[0] >= 17.0) {
-              var19 = 0.07039272;
-            } else {
-              var19 = -0.048181858;
-            }
+            var19 = -0.3589551;
           }
         }
       } else {
-        if (input[4] >= 0.45) {
-          if (input[2] >= 0.95) {
-            if (input[5] >= 0.65) {
-              var19 = 0.25008616;
+        if (input[0] >= 49.5) {
+          if (input[4] >= 0.05) {
+            if (input[4] >= 0.35000002) {
+              var19 = -0.32137653;
             } else {
-              var19 = 0.00018273434;
+              var19 = -0.08918542;
             }
           } else {
             if (input[2] >= 0.55) {
-              var19 = -0.03957971;
+              var19 = 0.17201263;
             } else {
-              var19 = 0.11623914;
+              var19 = 0.04654794;
             }
           }
         } else {
-          if (input[5] >= 0.55) {
-            if (input[4] >= 0.05) {
-              var19 = -0.09378189;
+          if (input[5] >= 0.75) {
+            if (input[3] >= 0.85) {
+              var19 = -0.26317307;
             } else {
-              var19 = 0.023175891;
+              var19 = 0.22439535;
             }
           } else {
-            if (input[2] >= 0.45) {
-              var19 = 0.053583708;
+            if (input[3] >= 0.55) {
+              var19 = 0.14392653;
             } else {
-              var19 = -0.14782798;
+              var19 = -0.29578727;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[1] >= 0.85) {
+        if (input[5] >= 0.35000002) {
+          if (input[0] >= 35.5) {
+            if (input[2] >= 0.65) {
+              var19 = 0.00067312043;
+            } else {
+              var19 = 0.13062266;
+            }
+          } else {
+            if (input[5] >= 0.75) {
+              var19 = 0.055318337;
+            } else {
+              var19 = -0.10306327;
+            }
+          }
+        } else {
+          if (input[4] >= 0.79999995) {
+            var19 = 0.15007232;
+          } else {
+            var19 = -0.36941487;
+          }
+        }
+      } else {
+        if (input[0] >= 38.5) {
+          if (input[1] >= 0.75) {
+            if (input[4] >= 0.15) {
+              var19 = -0.4263528;
+            } else {
+              var19 = -0.072622195;
+            }
+          } else {
+            if (input[5] >= 0.85) {
+              var19 = -0.18133354;
+            } else {
+              var19 = 0.01143924;
+            }
+          }
+        } else {
+          if (input[3] >= 0.95) {
+            if (input[0] >= 11.5) {
+              var19 = -0.40327403;
+            } else {
+              var19 = -0.0525378;
+            }
+          } else {
+            if (input[3] >= 0.05) {
+              var19 = 0.002325663;
+            } else {
+              var19 = -0.14826848;
             }
           }
         }
@@ -2654,81 +2790,89 @@ List<double> score(List<double> input) {
     }
   }
   double var20;
-  if (input[0] >= 49.5) {
-    if (input[5] >= 0.65) {
-      var20 = -0.29884785;
-    } else {
-      if (input[5] >= 0.35000002) {
-        if (input[5] >= 0.45) {
-          if (input[4] >= 0.35000002) {
-            var20 = -0.27266487;
-          } else {
-            if (input[2] >= 0.65) {
-              var20 = 0.1462048;
-            } else {
-              var20 = -0.005438376;
-            }
-          }
-        } else {
-          var20 = 0.19920175;
-        }
+  if (input[4] >= 0.95) {
+    if (input[0] >= -20.5) {
+      if (input[0] >= -18.5) {
+        var20 = -0.21406963;
       } else {
-        var20 = -0.28129494;
+        var20 = 0.21630856;
       }
+    } else {
+      var20 = -0.22853309;
     }
   } else {
-    if (input[0] >= 46.5) {
-      if (input[1] >= 0.45) {
-        if (input[5] >= 0.65) {
-          var20 = 0.2840447;
+    if (input[5] >= 0.55) {
+      if (input[0] >= 49.5) {
+        if (input[3] >= 0.85) {
+          var20 = 0.03737385;
         } else {
-          if (input[4] >= 0.35000002) {
-            var20 = 0.11728807;
-          } else {
-            var20 = -0.114060275;
-          }
+          var20 = -0.29163858;
         }
       } else {
-        if (input[1] >= 0.15) {
-          var20 = -0.36281705;
+        if (input[0] >= 46.5) {
+          if (input[1] >= 0.45) {
+            if (input[2] >= 0.55) {
+              var20 = 0.26534438;
+            } else {
+              var20 = 0.0042137625;
+            }
+          } else {
+            var20 = -0.063819215;
+          }
         } else {
-          var20 = 0.09518343;
+          if (input[0] >= 43.5) {
+            var20 = -0.32224157;
+          } else {
+            if (input[0] >= 41.5) {
+              var20 = 0.09412673;
+            } else {
+              var20 = -0.007917918;
+            }
+          }
         }
       }
     } else {
-      if (input[0] >= 43.5) {
-        if (input[5] >= 0.45) {
-          var20 = -0.3670139;
-        } else {
-          var20 = 0.17664763;
-        }
-      } else {
-        if (input[4] >= 0.65) {
-          if (input[2] >= 0.75) {
-            if (input[1] >= 0.75) {
-              var20 = -0.18022697;
+      if (input[2] >= 0.45) {
+        if (input[1] >= 0.15) {
+          if (input[0] >= -35.5) {
+            if (input[0] >= -34.5) {
+              var20 = 0.040973347;
             } else {
-              var20 = 0.074546434;
+              var20 = 0.2205259;
             }
           } else {
-            if (input[2] >= 0.65) {
-              var20 = -0.43400106;
+            if (input[3] >= 0.75) {
+              var20 = 0.10476405;
             } else {
-              var20 = -0.015503952;
+              var20 = -0.30811936;
             }
           }
         } else {
-          if (input[4] >= 0.55) {
-            if (input[1] >= 0.75) {
-              var20 = -0.31491297;
+          if (input[0] >= -37.0) {
+            if (input[5] >= 0.45) {
+              var20 = -0.37716517;
             } else {
-              var20 = 0.09721558;
+              var20 = 0.036036212;
             }
           } else {
-            if (input[0] >= 41.5) {
-              var20 = 0.079852924;
+            var20 = 0.20515391;
+          }
+        }
+      } else {
+        if (input[5] >= 0.45) {
+          var20 = -0.39112297;
+        } else {
+          if (input[4] >= 0.35000002) {
+            if (input[1] >= 0.55) {
+              var20 = 0.2862054;
             } else {
-              var20 = -0.0040085237;
+              var20 = -0.25295392;
+            }
+          } else {
+            if (input[1] >= 0.45) {
+              var20 = -0.43597454;
+            } else {
+              var20 = 0.088721484;
             }
           }
         }
@@ -2736,299 +2880,179 @@ List<double> score(List<double> input) {
     }
   }
   double var21;
-  if (input[2] >= 0.85) {
-    if (input[1] >= 0.15) {
-      if (input[1] >= 0.85) {
-        if (input[0] >= -33.5) {
-          if (input[4] >= 0.45) {
-            var21 = -0.2960963;
-          } else {
-            if (input[4] >= 0.35000002) {
-              var21 = 0.28102058;
+  if (input[2] >= 0.15) {
+    if (input[2] >= 0.35000002) {
+      if (input[0] >= 46.5) {
+        if (input[5] >= 0.35000002) {
+          if (input[5] >= 0.45) {
+            if (input[0] >= 51.5) {
+              var21 = -0.17080654;
             } else {
-              var21 = -0.18507436;
+              var21 = 0.061255682;
+            }
+          } else {
+            if (input[1] >= 0.65) {
+              var21 = 0.31533825;
+            } else {
+              var21 = 0.09890397;
+            }
+          }
+        } else {
+          if (input[0] >= 47.5) {
+            var21 = -0.28436998;
+          } else {
+            var21 = 0.100353315;
+          }
+        }
+      } else {
+        if (input[0] >= 44.5) {
+          var21 = -0.24799202;
+        } else {
+          if (input[4] >= 0.65) {
+            if (input[3] >= 0.75) {
+              var21 = -0.15960659;
+            } else {
+              var21 = 0.0021402596;
+            }
+          } else {
+            if (input[0] >= -34.5) {
+              var21 = -0.004289246;
+            } else {
+              var21 = 0.038365755;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[4] >= 0.15) {
+        if (input[0] >= 45.0) {
+          var21 = -0.22218858;
+        } else {
+          if (input[2] >= 0.25) {
+            if (input[0] >= 37.5) {
+              var21 = 0.12891695;
+            } else {
+              var21 = -0.17804027;
+            }
+          } else {
+            if (input[3] >= 0.4) {
+              var21 = 0.032443516;
+            } else {
+              var21 = 0.30468434;
+            }
+          }
+        }
+      } else {
+        var21 = -0.33886918;
+      }
+    }
+  } else {
+    if (input[3] >= 0.55) {
+      var21 = -0.06889651;
+    } else {
+      var21 = 0.1959019;
+    }
+  }
+  double var22;
+  if (input[4] >= 0.95) {
+    if (input[0] >= -20.5) {
+      if (input[0] >= -18.5) {
+        var22 = -0.19235978;
+      } else {
+        var22 = 0.19487418;
+      }
+    } else {
+      var22 = -0.20724295;
+    }
+  } else {
+    if (input[4] >= 0.85) {
+      if (input[5] >= 0.75) {
+        if (input[0] >= -33.5) {
+          if (input[0] >= -20.5) {
+            if (input[0] >= -0.5) {
+              var22 = -0.18710226;
+            } else {
+              var22 = 0.21709205;
+            }
+          } else {
+            var22 = -0.35513356;
+          }
+        } else {
+          if (input[3] >= 0.65) {
+            if (input[1] >= 0.85) {
+              var22 = 0.28413045;
+            } else {
+              var22 = 0.102141194;
+            }
+          } else {
+            if (input[1] >= 0.55) {
+              var22 = -0.289912;
+            } else {
+              var22 = 0.22289294;
+            }
+          }
+        }
+      } else {
+        if (input[0] >= -27.5) {
+          if (input[0] >= -24.0) {
+            if (input[2] >= 0.65) {
+              var22 = -0.32372487;
+            } else {
+              var22 = 0.21871899;
+            }
+          } else {
+            var22 = 0.2817587;
+          }
+        } else {
+          var22 = -0.26265502;
+        }
+      }
+    } else {
+      if (input[1] >= 0.95) {
+        if (input[0] >= 38.5) {
+          if (input[0] >= 47.0) {
+            var22 = 0.035352472;
+          } else {
+            var22 = -0.31671685;
+          }
+        } else {
+          if (input[2] >= 0.75) {
+            var22 = -0.25681677;
+          } else {
+            if (input[0] >= -30.0) {
+              var22 = 0.1577235;
+            } else {
+              var22 = -0.018771581;
+            }
+          }
+        }
+      } else {
+        if (input[4] >= 0.65) {
+          if (input[0] >= -33.5) {
+            if (input[0] >= -32.5) {
+              var22 = -0.011737695;
+            } else {
+              var22 = 0.3294332;
+            }
+          } else {
+            if (input[5] >= 0.35000002) {
+              var22 = -0.39314982;
+            } else {
+              var22 = 0.15550667;
             }
           }
         } else {
           if (input[4] >= 0.55) {
-            var21 = -0.113152824;
-          } else {
-            if (input[0] >= -35.5) {
-              var21 = 0.3236708;
+            if (input[3] >= 0.15) {
+              var22 = -0.0064146915;
             } else {
-              var21 = 0.10948198;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= -21.5) {
-          if (input[4] >= 0.45) {
-            if (input[5] >= 0.75) {
-              var21 = -0.38467094;
-            } else {
-              var21 = 0.041525956;
+              var22 = 0.34540763;
             }
           } else {
-            if (input[5] >= 0.75) {
-              var21 = 0.09386872;
+            if (input[1] >= 0.75) {
+              var22 = 0.031258058;
             } else {
-              var21 = -0.09826055;
-            }
-          }
-        } else {
-          if (input[4] >= 0.65) {
-            if (input[3] >= 0.25) {
-              var21 = 0.11696016;
-            } else {
-              var21 = -0.25744697;
-            }
-          } else {
-            if (input[3] >= 0.05) {
-              var21 = -0.17249095;
-            } else {
-              var21 = 0.2727663;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[5] >= 0.65) {
-        if (input[3] >= 0.25) {
-          if (input[4] >= 0.15) {
-            if (input[5] >= 0.75) {
-              var21 = 0.29707277;
-            } else {
-              var21 = 0.036069084;
-            }
-          } else {
-            var21 = -0.33234268;
-          }
-        } else {
-          if (input[5] >= 0.75) {
-            var21 = 0.17108782;
-          } else {
-            var21 = 0.44507778;
-          }
-        }
-      } else {
-        if (input[5] >= 0.45) {
-          var21 = -0.4277794;
-        } else {
-          var21 = 0.11196436;
-        }
-      }
-    }
-  } else {
-    if (input[1] >= 0.15) {
-      if (input[0] >= -25.5) {
-        if (input[0] >= -11.5) {
-          if (input[3] >= 0.95) {
-            if (input[4] >= 0.35000002) {
-              var21 = -0.057684988;
-            } else {
-              var21 = 0.20798953;
-            }
-          } else {
-            if (input[4] >= 0.35000002) {
-              var21 = 0.025808169;
-            } else {
-              var21 = -0.0175711;
-            }
-          }
-        } else {
-          var21 = -0.3262452;
-        }
-      } else {
-        if (input[0] >= -28.5) {
-          if (input[1] >= 0.35000002) {
-            if (input[1] >= 0.65) {
-              var21 = 0.24417226;
-            } else {
-              var21 = -0.2557202;
-            }
-          } else {
-            if (input[4] >= 0.79999995) {
-              var21 = -0.058961738;
-            } else {
-              var21 = 0.25870976;
-            }
-          }
-        } else {
-          if (input[4] >= 0.35000002) {
-            if (input[4] >= 0.85) {
-              var21 = 0.1274393;
-            } else {
-              var21 = -0.13682438;
-            }
-          } else {
-            if (input[1] >= 0.25) {
-              var21 = 0.05161604;
-            } else {
-              var21 = -0.29580233;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[0] >= -19.0) {
-        if (input[3] >= 0.15) {
-          if (input[3] >= 0.35000002) {
-            if (input[4] >= 0.65) {
-              var21 = 0.15018411;
-            } else {
-              var21 = -0.080045715;
-            }
-          } else {
-            var21 = -0.3549578;
-          }
-        } else {
-          var21 = 0.2569573;
-        }
-      } else {
-        var21 = -0.39009646;
-      }
-    }
-  }
-  double var22;
-  if (input[0] >= 40.5) {
-    if (input[3] >= 0.95) {
-      if (input[0] >= 41.5) {
-        if (input[4] >= 0.70000005) {
-          var22 = 0.19285704;
-        } else {
-          var22 = -0.19853471;
-        }
-      } else {
-        var22 = 0.23531868;
-      }
-    } else {
-      if (input[5] >= 0.85) {
-        if (input[0] >= 41.5) {
-          if (input[1] >= 0.45) {
-            if (input[3] >= 0.75) {
-              var22 = -0.20195706;
-            } else {
-              var22 = 0.15789501;
-            }
-          } else {
-            var22 = -0.32832336;
-          }
-        } else {
-          var22 = -0.3911019;
-        }
-      } else {
-        if (input[3] >= 0.85) {
-          if (input[0] >= 42.5) {
-            if (input[5] >= 0.55) {
-              var22 = 0.12834042;
-            } else {
-              var22 = -0.25811577;
-            }
-          } else {
-            var22 = -0.35180986;
-          }
-        } else {
-          if (input[1] >= 0.95) {
-            var22 = -0.2354977;
-          } else {
-            if (input[2] >= 0.85) {
-              var22 = -0.06216052;
-            } else {
-              var22 = 0.026949061;
-            }
-          }
-        }
-      }
-    }
-  } else {
-    if (input[0] >= 39.5) {
-      if (input[3] >= 0.35000002) {
-        if (input[1] >= 0.70000005) {
-          var22 = -0.45164317;
-        } else {
-          if (input[3] >= 0.55) {
-            if (input[2] >= 0.35000002) {
-              var22 = -0.30076778;
-            } else {
-              var22 = 0.21023694;
-            }
-          } else {
-            var22 = 0.1896079;
-          }
-        }
-      } else {
-        if (input[5] >= 0.65) {
-          if (input[2] >= 0.79999995) {
-            var22 = 0.05206392;
-          } else {
-            if (input[5] >= 0.75) {
-              var22 = 0.10377594;
-            } else {
-              var22 = 0.39680102;
-            }
-          }
-        } else {
-          if (input[5] >= 0.4) {
-            var22 = -0.32259956;
-          } else {
-            var22 = 0.1978803;
-          }
-        }
-      }
-    } else {
-      if (input[3] >= 0.35000002) {
-        if (input[0] >= 37.5) {
-          if (input[3] >= 0.65) {
-            if (input[5] >= 0.9) {
-              var22 = 0.25531965;
-            } else {
-              var22 = -0.41595677;
-            }
-          } else {
-            if (input[4] >= 0.45) {
-              var22 = -0.29951817;
-            } else {
-              var22 = 0.31991708;
-            }
-          }
-        } else {
-          if (input[0] >= 36.5) {
-            if (input[3] >= 0.65) {
-              var22 = 0.08381887;
-            } else {
-              var22 = -0.3031105;
-            }
-          } else {
-            if (input[5] >= 0.95) {
-              var22 = -0.15101886;
-            } else {
-              var22 = 0.017459009;
-            }
-          }
-        }
-      } else {
-        if (input[4] >= 0.25) {
-          if (input[0] >= 36.0) {
-            var22 = -0.3794224;
-          } else {
-            if (input[0] >= -27.5) {
-              var22 = 0.012660908;
-            } else {
-              var22 = -0.2159917;
-            }
-          }
-        } else {
-          if (input[0] >= -27.5) {
-            if (input[4] >= 0.15) {
-              var22 = 0.24077345;
-            } else {
-              var22 = -0.09837293;
-            }
-          } else {
-            if (input[4] >= 0.15) {
-              var22 = -0.2917166;
-            } else {
-              var22 = 0.07520129;
+              var22 = -0.01019732;
             }
           }
         }
@@ -3036,421 +3060,557 @@ List<double> score(List<double> input) {
     }
   }
   double var23;
-  if (input[3] >= 0.85) {
-    if (input[0] >= 5.5) {
-      if (input[0] >= 13.5) {
-        if (input[0] >= 35.5) {
-          if (input[0] >= 36.5) {
-            if (input[3] >= 0.95) {
-              var23 = 0.08693298;
+  if (input[3] >= 0.35000002) {
+    if (input[4] >= 0.25) {
+      if (input[3] >= 0.45) {
+        if (input[0] >= -32.5) {
+          if (input[0] >= -28.5) {
+            if (input[1] >= 0.25) {
+              var23 = -0.037630316;
             } else {
-              var23 = -0.13400686;
+              var23 = 0.018141644;
             }
           } else {
-            var23 = 0.26051372;
+            var23 = -0.33457482;
           }
         } else {
-          if (input[2] >= 0.65) {
-            var23 = -0.33985955;
-          } else {
-            if (input[5] >= 0.85) {
-              var23 = -0.34236437;
+          if (input[4] >= 0.55) {
+            if (input[4] >= 0.85) {
+              var23 = 0.04400246;
             } else {
-              var23 = 0.0914413;
+              var23 = -0.24617092;
+            }
+          } else {
+            if (input[1] >= 0.45) {
+              var23 = 0.05303488;
+            } else {
+              var23 = 0.3265283;
             }
           }
         }
       } else {
-        if (input[2] >= 0.55) {
-          if (input[2] >= 0.85) {
-            if (input[4] >= 0.45) {
-              var23 = 0.16928652;
+        if (input[0] >= -27.5) {
+          if (input[5] >= 0.55) {
+            if (input[2] >= 0.95) {
+              var23 = -0.013676618;
             } else {
-              var23 = -0.08959238;
+              var23 = 0.27089146;
             }
           } else {
-            if (input[3] >= 0.95) {
-              var23 = 0.042004466;
-            } else {
-              var23 = 0.26934448;
-            }
+            var23 = -0.31171426;
           }
         } else {
-          if (input[2] >= 0.35000002) {
-            if (input[5] >= 0.75) {
-              var23 = -0.2236504;
+          if (input[1] >= 0.45) {
+            if (input[2] >= 0.55) {
+              var23 = 0.049986947;
             } else {
-              var23 = 0.07733481;
+              var23 = -0.28607136;
             }
           } else {
-            var23 = 0.16198893;
+            var23 = -0.361013;
           }
         }
       }
     } else {
-      if (input[1] >= 0.25) {
-        if (input[0] >= 2.0) {
-          if (input[4] >= 0.75) {
-            var23 = 0.18524638;
-          } else {
-            var23 = -0.4828365;
-          }
-        } else {
-          if (input[0] >= -10.0) {
-            if (input[2] >= 0.55) {
-              var23 = 0.043684512;
+      if (input[5] >= 0.65) {
+        if (input[5] >= 0.75) {
+          if (input[2] >= 0.85) {
+            if (input[4] >= 0.05) {
+              var23 = -0.11365395;
             } else {
-              var23 = 0.25127584;
+              var23 = 0.19088463;
             }
           } else {
-            if (input[5] >= 0.65) {
-              var23 = -0.0024203868;
+            if (input[3] >= 0.75) {
+              var23 = 0.13397731;
             } else {
-              var23 = -0.25608656;
+              var23 = -0.18436441;
+            }
+          }
+        } else {
+          if (input[1] >= 0.85) {
+            if (input[2] >= 0.3) {
+              var23 = -0.058571663;
+            } else {
+              var23 = 0.17172989;
+            }
+          } else {
+            if (input[0] >= -35.5) {
+              var23 = -0.47432086;
+            } else {
+              var23 = 0.010343105;
             }
           }
         }
       } else {
-        if (input[2] >= 0.55) {
-          var23 = -0.38591704;
+        if (input[0] >= -28.5) {
+          if (input[0] >= -24.5) {
+            if (input[1] >= 0.55) {
+              var23 = 0.07064639;
+            } else {
+              var23 = -0.20504722;
+            }
+          } else {
+            if (input[4] >= 0.15) {
+              var23 = 0.489387;
+            } else {
+              var23 = 0.16455188;
+            }
+          }
         } else {
-          var23 = -0.014349258;
+          if (input[1] >= 0.85) {
+            var23 = 0.18880619;
+          } else {
+            if (input[2] >= 0.95) {
+              var23 = -0.005962821;
+            } else {
+              var23 = -0.3827068;
+            }
+          }
         }
       }
     }
   } else {
-    if (input[3] >= 0.35000002) {
-      if (input[0] >= -35.5) {
-        if (input[0] >= -32.5) {
-          if (input[0] >= -28.5) {
-            if (input[3] >= 0.45) {
-              var23 = -0.011450566;
+    if (input[4] >= 0.25) {
+      if (input[5] >= 0.55) {
+        if (input[2] >= 0.45) {
+          if (input[4] >= 0.55) {
+            if (input[4] >= 0.75) {
+              var23 = -0.3066728;
             } else {
-              var23 = 0.078949414;
+              var23 = -0.032782026;
             }
           } else {
-            var23 = -0.2968959;
+            if (input[1] >= 0.15) {
+              var23 = -0.39634883;
+            } else {
+              var23 = -0.0037451102;
+            }
           }
         } else {
-          if (input[4] >= 0.25) {
-            if (input[5] >= 0.45) {
-              var23 = 0.13822082;
+          if (input[3] >= 0.25) {
+            if (input[0] >= 25.0) {
+              var23 = 0.24306758;
             } else {
-              var23 = -0.24655382;
+              var23 = 0.075207524;
             }
           } else {
-            if (input[1] >= 0.85) {
-              var23 = 0.23144396;
-            } else {
-              var23 = -0.22195984;
-            }
+            var23 = -0.094810106;
           }
         }
       } else {
-        if (input[4] >= 0.45) {
-          if (input[4] >= 0.65) {
-            if (input[3] >= 0.65) {
-              var23 = -0.024406066;
-            } else {
-              var23 = -0.20993046;
-            }
+        if (input[3] >= 0.25) {
+          if (input[4] >= 0.75) {
+            var23 = 0.18016079;
           } else {
-            if (input[0] >= -40.0) {
-              var23 = 0.086563714;
-            } else {
-              var23 = 0.26136523;
-            }
+            var23 = -0.4305974;
           }
         } else {
-          if (input[1] >= 0.95) {
-            var23 = 0.0741469;
+          if (input[0] >= 35.5) {
+            if (input[4] >= 0.85) {
+              var23 = 0.10794101;
+            } else {
+              var23 = -0.31221968;
+            }
           } else {
-            var23 = -0.31572992;
+            if (input[4] >= 0.65) {
+              var23 = -0.017419059;
+            } else {
+              var23 = 0.3404626;
+            }
           }
         }
       }
     } else {
-      if (input[4] >= 0.25) {
-        if (input[2] >= 0.45) {
-          if (input[4] >= 0.45) {
-            if (input[3] >= 0.25) {
-              var23 = -0.23775916;
+      if (input[5] >= 0.65) {
+        if (input[0] >= 34.5) {
+          if (input[5] >= 0.85) {
+            if (input[4] >= 0.05) {
+              var23 = 0.22421534;
             } else {
-              var23 = 0.013050561;
+              var23 = -0.18431844;
             }
           } else {
-            if (input[1] >= 0.15) {
-              var23 = -0.4418836;
+            if (input[0] >= 39.5) {
+              var23 = 0.29790238;
             } else {
-              var23 = 0.17303707;
+              var23 = 0.09803555;
             }
           }
         } else {
-          if (input[2] >= 0.25) {
-            if (input[4] >= 0.85) {
-              var23 = 0.25401095;
-            } else {
-              var23 = -0.05962262;
-            }
+          if (input[0] >= 27.5) {
+            var23 = -0.4059978;
           } else {
-            var23 = 0.27504253;
+            if (input[2] >= 0.65) {
+              var23 = 0.06432228;
+            } else {
+              var23 = -0.08273184;
+            }
           }
         }
       } else {
-        if (input[2] >= 0.35000002) {
-          if (input[5] >= 0.65) {
-            if (input[0] >= 34.5) {
-              var23 = 0.14965434;
+        if (input[1] >= 0.15) {
+          if (input[1] >= 0.25) {
+            if (input[2] >= 0.45) {
+              var23 = -0.063013084;
             } else {
-              var23 = 0.0064753485;
+              var23 = -0.43168586;
             }
           } else {
-            if (input[4] >= 0.15) {
-              var23 = 0.18962523;
+            if (input[2] >= 0.85) {
+              var23 = -0.093357995;
             } else {
-              var23 = -0.13617282;
+              var23 = 0.25233364;
             }
           }
         } else {
-          var23 = -0.46510518;
+          if (input[3] >= 0.05) {
+            var23 = -0.37659135;
+          } else {
+            var23 = 0.166768;
+          }
         }
       }
     }
   }
   double var24;
-  if (input[5] >= 0.55) {
-    if (input[0] >= 49.5) {
-      if (input[4] >= 0.05) {
-        var24 = -0.27889457;
-      } else {
-        var24 = 0.065966524;
-      }
-    } else {
-      if (input[0] >= 46.5) {
-        if (input[1] >= 0.45) {
-          if (input[2] >= 0.55) {
-            var24 = 0.2635551;
+  if (input[3] >= 0.65) {
+    if (input[1] >= 0.65) {
+      if (input[5] >= 0.85) {
+        if (input[3] >= 0.75) {
+          if (input[0] >= 41.5) {
+            var24 = -0.19688846;
           } else {
-            var24 = 0.055517893;
+            if (input[0] >= -34.5) {
+              var24 = 0.19984664;
+            } else {
+              var24 = -0.09559258;
+            }
           }
         } else {
-          if (input[0] >= 48.5) {
-            var24 = 0.19109243;
+          if (input[0] >= 41.5) {
+            var24 = 0.21865152;
           } else {
-            var24 = -0.2614953;
+            if (input[5] >= 0.95) {
+              var24 = 0.08970307;
+            } else {
+              var24 = -0.43296334;
+            }
           }
         }
       } else {
-        if (input[0] >= 43.5) {
-          var24 = -0.29977626;
-        } else {
-          if (input[2] >= 0.15) {
-            if (input[0] >= 41.5) {
-              var24 = 0.052674416;
+        if (input[0] >= 36.5) {
+          if (input[0] >= 41.5) {
+            if (input[2] >= 0.75) {
+              var24 = -0.24803503;
             } else {
-              var24 = -0.008842974;
+              var24 = 0.029651403;
             }
           } else {
-            if (input[0] >= 4.0) {
-              var24 = 0.039238267;
+            var24 = -0.46215364;
+          }
+        } else {
+          if (input[2] >= 0.75) {
+            if (input[1] >= 0.75) {
+              var24 = 0.19788888;
             } else {
-              var24 = 0.18086517;
+              var24 = -0.13866976;
             }
+          } else {
+            if (input[3] >= 0.75) {
+              var24 = -0.4130163;
+            } else {
+              var24 = 0.13180012;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[5] >= 0.45) {
+        if (input[0] >= -35.5) {
+          if (input[0] >= -34.5) {
+            if (input[0] >= 38.0) {
+              var24 = -0.05546165;
+            } else {
+              var24 = 0.022820992;
+            }
+          } else {
+            var24 = 0.22424343;
+          }
+        } else {
+          var24 = -0.30467033;
+        }
+      } else {
+        if (input[4] >= 0.05) {
+          if (input[4] >= 0.35000002) {
+            if (input[0] >= 46.0) {
+              var24 = -0.28115976;
+            } else {
+              var24 = 0.2425077;
+            }
+          } else {
+            if (input[0] >= 43.0) {
+              var24 = 0.16940254;
+            } else {
+              var24 = -0.3461024;
+            }
+          }
+        } else {
+          if (input[3] >= 0.85) {
+            var24 = 0.026250642;
+          } else {
+            var24 = 0.30526766;
           }
         }
       }
     }
   } else {
-    if (input[1] >= 0.15) {
-      if (input[5] >= 0.25) {
-        if (input[0] >= 39.0) {
-          if (input[1] >= 0.55) {
-            if (input[3] >= 0.65) {
-              var24 = -0.24712816;
+    if (input[1] >= 0.65) {
+      if (input[5] >= 0.85) {
+        if (input[2] >= 0.25) {
+          if (input[5] >= 0.95) {
+            if (input[1] >= 0.85) {
+              var24 = -0.2859931;
             } else {
-              var24 = 0.048892554;
+              var24 = 0.09880491;
             }
           } else {
-            if (input[3] >= 0.65) {
-              var24 = 0.20331706;
+            if (input[3] >= 0.55) {
+              var24 = -0.036544252;
             } else {
-              var24 = -0.43342775;
+              var24 = -0.2676493;
             }
           }
         } else {
+          var24 = 0.25561994;
+        }
+      } else {
+        if (input[5] >= 0.65) {
           if (input[4] >= 0.85) {
-            var24 = -0.27276394;
+            var24 = -0.2761638;
           } else {
-            if (input[0] >= 13.0) {
-              var24 = 0.20025988;
+            if (input[4] >= 0.35000002) {
+              var24 = 0.19673909;
             } else {
-              var24 = 0.049267314;
+              var24 = 0.056195486;
+            }
+          }
+        } else {
+          if (input[5] >= 0.55) {
+            if (input[2] >= 0.55) {
+              var24 = -0.38114366;
+            } else {
+              var24 = -0.00029849858;
+            }
+          } else {
+            if (input[2] >= 0.65) {
+              var24 = -0.031009203;
+            } else {
+              var24 = 0.13247596;
             }
           }
         }
-      } else {
-        var24 = -0.2375712;
       }
     } else {
-      if (input[5] >= 0.45) {
-        var24 = -0.37594244;
-      } else {
-        if (input[4] >= 0.15) {
-          if (input[0] >= 6.5) {
-            var24 = 0.025228629;
+      if (input[0] >= 40.5) {
+        if (input[5] >= 0.65) {
+          if (input[2] >= 0.55) {
+            if (input[0] >= 41.5) {
+              var24 = 0.00019033841;
+            } else {
+              var24 = -0.35966697;
+            }
           } else {
-            var24 = 0.25301415;
+            if (input[3] >= 0.45) {
+              var24 = -0.30596885;
+            } else {
+              var24 = 0.26853344;
+            }
           }
         } else {
-          if (input[2] >= 0.65) {
-            var24 = -0.3482694;
+          var24 = -0.48048374;
+        }
+      } else {
+        if (input[1] >= 0.45) {
+          if (input[0] >= -27.5) {
+            if (input[5] >= 0.55) {
+              var24 = 0.06744562;
+            } else {
+              var24 = -0.50738025;
+            }
           } else {
-            var24 = 0.1631212;
+            if (input[3] >= 0.35000002) {
+              var24 = -0.3157199;
+            } else {
+              var24 = -0.052519325;
+            }
+          }
+        } else {
+          if (input[0] >= -26.5) {
+            if (input[3] >= 0.15) {
+              var24 = -0.09158235;
+            } else {
+              var24 = 0.09294954;
+            }
+          } else {
+            if (input[3] >= 0.55) {
+              var24 = 0.2241569;
+            } else {
+              var24 = 0.0068901903;
+            }
           }
         }
       }
     }
   }
   double var25;
-  if (input[0] >= 36.5) {
-    if (input[0] >= 37.5) {
-      if (input[3] >= 0.65) {
-        if (input[0] >= 41.5) {
-          if (input[4] >= 0.15) {
-            if (input[5] >= 0.75) {
-              var25 = -0.30387795;
-            } else {
-              var25 = 0.046830602;
-            }
-          } else {
-            if (input[5] >= 0.55) {
-              var25 = 0.258642;
-            } else {
-              var25 = -0.106121786;
-            }
-          }
+  if (input[0] >= 42.5) {
+    if (input[3] >= 0.55) {
+      if (input[5] >= 0.75) {
+        if (input[1] >= 0.55) {
+          var25 = -0.27158484;
         } else {
-          if (input[1] >= 0.55) {
-            if (input[5] >= 0.85) {
-              var25 = 0.15146446;
-            } else {
-              var25 = -0.3413098;
-            }
+          if (input[1] >= 0.45) {
+            var25 = 0.15450656;
           } else {
-            if (input[5] >= 0.55) {
-              var25 = -0.3505745;
-            } else {
-              var25 = 0.21391661;
-            }
+            var25 = -0.027820133;
           }
         }
       } else {
-        if (input[1] >= 0.65) {
-          if (input[5] >= 0.85) {
-            if (input[5] >= 0.95) {
-              var25 = 0.07721542;
-            } else {
-              var25 = -0.17777878;
-            }
+        if (input[0] >= 47.5) {
+          if (input[4] >= 0.75) {
+            var25 = 0.26472595;
           } else {
-            if (input[1] >= 0.75) {
-              var25 = 0.025067598;
+            if (input[0] >= 50.5) {
+              var25 = 0.028641226;
             } else {
-              var25 = 0.15915072;
+              var25 = -0.2768348;
             }
           }
         } else {
-          if (input[5] >= 0.65) {
-            if (input[2] >= 0.95) {
-              var25 = -0.3527155;
-            } else {
-              var25 = 0.057999253;
-            }
+          if (input[1] >= 0.75) {
+            var25 = -0.22605114;
           } else {
-            if (input[3] >= 0.05) {
-              var25 = -0.43639866;
+            if (input[1] >= 0.45) {
+              var25 = 0.2679637;
             } else {
-              var25 = 0.053236146;
+              var25 = 0.110075854;
             }
           }
         }
       }
     } else {
-      if (input[1] >= 0.65) {
-        var25 = -0.32017133;
-      } else {
-        if (input[1] >= 0.55) {
-          if (input[4] >= 0.05) {
-            if (input[3] >= 0.75) {
-              var25 = 0.15933362;
-            } else {
-              var25 = -0.2773911;
-            }
+      if (input[0] >= 46.5) {
+        if (input[1] >= 0.45) {
+          if (input[5] >= 0.75) {
+            var25 = 0.22996895;
           } else {
-            var25 = 0.28226164;
+            var25 = -0.024869783;
           }
         } else {
-          if (input[5] >= 0.95) {
-            var25 = 0.2303981;
-          } else {
-            if (input[5] >= 0.75) {
-              var25 = -0.4417486;
-            } else {
-              var25 = 0.025250409;
-            }
-          }
+          var25 = -0.21182452;
         }
+      } else {
+        var25 = -0.27067927;
       }
     }
   } else {
-    if (input[0] >= 34.5) {
-      if (input[1] >= 0.65) {
-        var25 = 0.2574828;
-      } else {
-        if (input[2] >= 0.70000005) {
-          var25 = -0.060017843;
+    if (input[0] >= 40.5) {
+      if (input[3] >= 0.95) {
+        if (input[5] >= 0.45) {
+          if (input[1] >= 0.25) {
+            var25 = 0.15552332;
+          } else {
+            var25 = 0.3692218;
+          }
         } else {
-          var25 = 0.16613474;
+          var25 = -0.25102857;
+        }
+      } else {
+        if (input[3] >= 0.45) {
+          if (input[4] >= 0.15) {
+            if (input[4] >= 0.35000002) {
+              var25 = -0.07698895;
+            } else {
+              var25 = -0.369642;
+            }
+          } else {
+            if (input[5] >= 0.45) {
+              var25 = -0.052539058;
+            } else {
+              var25 = 0.12045784;
+            }
+          }
+        } else {
+          if (input[4] >= 0.05) {
+            if (input[3] >= 0.35000002) {
+              var25 = 0.22366272;
+            } else {
+              var25 = -0.14835596;
+            }
+          } else {
+            if (input[5] >= 0.65) {
+              var25 = 0.033359393;
+            } else {
+              var25 = -0.28681174;
+            }
+          }
         }
       }
     } else {
-      if (input[0] >= 29.5) {
-        if (input[4] >= 0.05) {
-          if (input[1] >= 0.25) {
-            if (input[1] >= 0.75) {
-              var25 = -0.2531027;
+      if (input[0] >= 15.5) {
+        if (input[2] >= 0.75) {
+          if (input[3] >= 0.35000002) {
+            if (input[4] >= 0.75) {
+              var25 = -0.28921112;
             } else {
-              var25 = 0.1721276;
+              var25 = 0.18200961;
             }
           } else {
-            var25 = -0.5048977;
+            if (input[2] >= 0.95) {
+              var25 = -0.3727178;
+            } else {
+              var25 = 0.034916922;
+            }
           }
         } else {
-          var25 = -0.44613636;
+          if (input[5] >= 0.85) {
+            if (input[1] >= 0.25) {
+              var25 = -0.022063687;
+            } else {
+              var25 = 0.1882271;
+            }
+          } else {
+            if (input[1] >= 0.55) {
+              var25 = 0.023747068;
+            } else {
+              var25 = -0.22598998;
+            }
+          }
         }
       } else {
-        if (input[0] >= 20.0) {
-          if (input[2] >= 0.85) {
-            var25 = -0.04273199;
-          } else {
-            if (input[0] >= 24.0) {
-              var25 = 0.32730895;
+        if (input[0] >= 9.0) {
+          if (input[4] >= 0.15) {
+            if (input[4] >= 0.25) {
+              var25 = -0.028755257;
             } else {
-              var25 = 0.09356451;
+              var25 = 0.18177138;
+            }
+          } else {
+            if (input[2] >= 0.55) {
+              var25 = -0.42173228;
+            } else {
+              var25 = 0.056954328;
             }
           }
         } else {
-          if (input[5] >= 0.35000002) {
-            if (input[5] >= 0.75) {
-              var25 = 0.008296518;
-            } else {
-              var25 = -0.028781552;
-            }
+          if (input[0] >= 6.5) {
+            var25 = 0.29213968;
           } else {
-            if (input[1] >= 0.65) {
-              var25 = -0.1911337;
+            if (input[2] >= 0.45) {
+              var25 = -0.008780374;
             } else {
-              var25 = 0.14922412;
+              var25 = 0.05990429;
             }
           }
         }
@@ -3458,283 +3618,263 @@ List<double> score(List<double> input) {
     }
   }
   double var26;
-  if (input[0] >= 40.5) {
-    if (input[5] >= 0.85) {
-      if (input[0] >= 41.5) {
-        if (input[1] >= 0.45) {
-          if (input[3] >= 0.55) {
-            if (input[4] >= 0.25) {
-              var26 = -0.22021922;
+  if (input[1] >= 0.05) {
+    if (input[5] >= 0.15) {
+      if (input[0] >= -28.5) {
+        if (input[5] >= 0.95) {
+          if (input[1] >= 0.45) {
+            if (input[3] >= 0.45) {
+              var26 = -0.12261804;
             } else {
-              var26 = 0.16520977;
+              var26 = 0.09180919;
             }
           } else {
-            if (input[4] >= 0.2) {
-              var26 = 0.21118893;
+            if (input[3] >= 0.65) {
+              var26 = -0.0952994;
             } else {
-              var26 = -0.07162515;
+              var26 = -0.32295245;
             }
           }
         } else {
-          var26 = -0.27284333;
+          if (input[0] >= -27.5) {
+            if (input[1] >= 0.95) {
+              var26 = -0.14013712;
+            } else {
+              var26 = 0.0058765486;
+            }
+          } else {
+            if (input[4] >= 0.35000002) {
+              var26 = -0.35328105;
+            } else {
+              var26 = 0.25138742;
+            }
+          }
         }
       } else {
-        if (input[3] >= 0.95) {
-          var26 = 0.21085924;
+        if (input[5] >= 0.75) {
+          if (input[1] >= 0.55) {
+            if (input[1] >= 0.65) {
+              var26 = 0.016434781;
+            } else {
+              var26 = -0.19452062;
+            }
+          } else {
+            if (input[3] >= 0.25) {
+              var26 = 0.098326445;
+            } else {
+              var26 = -0.011906373;
+            }
+          }
         } else {
-          var26 = -0.3376155;
+          if (input[0] >= -34.5) {
+            if (input[1] >= 0.35000002) {
+              var26 = -0.06769832;
+            } else {
+              var26 = -0.29775864;
+            }
+          } else {
+            if (input[4] >= 0.65) {
+              var26 = -0.254654;
+            } else {
+              var26 = 0.022979887;
+            }
+          }
         }
       }
     } else {
-      if (input[1] >= 0.95) {
-        var26 = -0.22118117;
-      } else {
-        if (input[5] >= 0.35000002) {
-          if (input[4] >= 0.85) {
-            var26 = -0.2627413;
-          } else {
-            if (input[2] >= 0.25) {
-              var26 = 0.02005057;
-            } else {
-              var26 = -0.13334687;
-            }
-          }
-        } else {
-          if (input[4] >= 0.85) {
-            var26 = 0.26663393;
-          } else {
-            if (input[1] >= 0.75) {
-              var26 = -0.41395697;
-            } else {
-              var26 = -0.057039198;
-            }
-          }
-        }
-      }
+      var26 = -0.25851783;
     }
   } else {
-    if (input[0] >= 39.5) {
-      if (input[3] >= 0.35000002) {
-        if (input[1] >= 0.70000005) {
-          var26 = -0.35268465;
-        } else {
-          if (input[2] >= 0.35000002) {
-            if (input[3] >= 0.55) {
-              var26 = -0.20599827;
-            } else {
-              var26 = 0.15709925;
-            }
-          } else {
-            var26 = 0.26864666;
-          }
-        }
+    if (input[5] >= 0.25) {
+      if (input[0] >= -37.0) {
+        var26 = -0.23373471;
       } else {
-        if (input[2] >= 0.75) {
-          if (input[1] >= 0.35000002) {
-            var26 = -0.3256158;
-          } else {
-            var26 = 0.26526472;
-          }
-        } else {
-          if (input[5] >= 0.65) {
-            if (input[5] >= 0.75) {
-              var26 = 0.105204485;
-            } else {
-              var26 = 0.32317337;
-            }
-          } else {
-            if (input[4] >= 0.05) {
-              var26 = -0.053096097;
-            } else {
-              var26 = 0.11386596;
-            }
-          }
-        }
+        var26 = 0.23039587;
       }
     } else {
-      if (input[4] >= 0.65) {
-        if (input[2] >= 0.75) {
-          if (input[2] >= 0.85) {
-            if (input[0] >= -26.5) {
-              var26 = -0.35402665;
-            } else {
-              var26 = 0.03973315;
-            }
-          } else {
-            if (input[1] >= 0.35000002) {
-              var26 = 0.20932724;
-            } else {
-              var26 = -0.0053867777;
-            }
-          }
-        } else {
-          if (input[2] >= 0.65) {
-            var26 = -0.3858498;
-          } else {
-            if (input[0] >= 36.5) {
-              var26 = -0.32401168;
-            } else {
-              var26 = -0.029370243;
-            }
-          }
-        }
-      } else {
-        if (input[3] >= 0.95) {
-          if (input[2] >= 0.45) {
-            if (input[1] >= 0.25) {
-              var26 = -0.33342117;
-            } else {
-              var26 = -0.10282747;
-            }
-          } else {
-            if (input[2] >= 0.35000002) {
-              var26 = 0.029479714;
-            } else {
-              var26 = 0.16516241;
-            }
-          }
-        } else {
-          if (input[3] >= 0.75) {
-            if (input[2] >= 0.95) {
-              var26 = -0.254526;
-            } else {
-              var26 = 0.06572476;
-            }
-          } else {
-            if (input[2] >= 0.75) {
-              var26 = -0.029554943;
-            } else {
-              var26 = 0.026881712;
-            }
-          }
-        }
-      }
+      var26 = 0.24965404;
     }
   }
   double var27;
-  if (input[0] >= 9.0) {
-    if (input[0] >= 10.5) {
-      if (input[4] >= 0.85) {
+  if (input[1] >= 0.35000002) {
+    if (input[0] >= -34.5) {
+      if (input[5] >= 0.75) {
         if (input[3] >= 0.35000002) {
-          if (input[5] >= 0.35000002) {
-            if (input[0] >= 14.5) {
-              var27 = -0.42398936;
+          if (input[1] >= 0.75) {
+            if (input[3] >= 0.95) {
+              var27 = 0.19732921;
             } else {
-              var27 = -0.014336255;
+              var27 = -0.17284107;
             }
           } else {
-            var27 = 0.23185442;
+            if (input[2] >= 0.65) {
+              var27 = 0.044630393;
+            } else {
+              var27 = -0.08151263;
+            }
           }
         } else {
-          if (input[1] >= 0.55) {
-            var27 = 0.23091029;
+          if (input[3] >= 0.15) {
+            if (input[1] >= 0.45) {
+              var27 = -0.08838907;
+            } else {
+              var27 = -0.44201633;
+            }
           } else {
-            var27 = -0.06739578;
+            if (input[2] >= 0.65) {
+              var27 = -0.20812781;
+            } else {
+              var27 = 0.19105558;
+            }
           }
         }
       } else {
-        if (input[4] >= 0.35000002) {
-          if (input[3] >= 0.35000002) {
-            if (input[5] >= 0.95) {
-              var27 = -0.18015274;
-            } else {
-              var27 = 0.055108223;
-            }
+        if (input[3] >= 0.95) {
+          if (input[4] >= 0.75) {
+            var27 = 0.16074619;
           } else {
-            if (input[2] >= 0.95) {
-              var27 = 0.13321576;
-            } else {
-              var27 = -0.18204291;
-            }
+            var27 = -0.31260997;
           }
         } else {
-          if (input[0] >= 14.5) {
-            if (input[0] >= 26.0) {
-              var27 = -0.015406959;
+          if (input[5] >= 0.65) {
+            if (input[0] >= -29.5) {
+              var27 = 0.08220635;
             } else {
-              var27 = 0.061398905;
+              var27 = -0.17856678;
             }
           } else {
-            if (input[2] >= 0.75) {
-              var27 = -0.52407646;
+            if (input[0] >= 38.5) {
+              var27 = -0.04407621;
             } else {
-              var27 = -0.06746583;
+              var27 = 0.041375685;
             }
           }
         }
       }
     } else {
-      if (input[3] >= 0.85) {
-        if (input[1] >= 0.25) {
-          var27 = 0.1566524;
-        } else {
-          if (input[4] >= 0.55) {
-            var27 = 0.17662781;
+      if (input[4] >= 0.05) {
+        if (input[1] >= 0.45) {
+          if (input[2] >= 0.55) {
+            if (input[3] >= 0.75) {
+              var27 = 0.11581259;
+            } else {
+              var27 = -0.0579615;
+            }
           } else {
-            var27 = -0.21640629;
+            if (input[0] >= -41.5) {
+              var27 = -0.32607257;
+            } else {
+              var27 = 0.08967093;
+            }
           }
+        } else {
+          var27 = -0.31283328;
         }
       } else {
-        var27 = -0.5835306;
+        if (input[1] >= 0.45) {
+          if (input[1] >= 0.75) {
+            if (input[2] >= 0.75) {
+              var27 = 0.31508398;
+            } else {
+              var27 = -0.07875001;
+            }
+          } else {
+            if (input[5] >= 0.95) {
+              var27 = 0.1863892;
+            } else {
+              var27 = -0.21796484;
+            }
+          }
+        } else {
+          if (input[0] >= -35.5) {
+            var27 = 0.3403238;
+          } else {
+            if (input[2] >= 0.75) {
+              var27 = -0.21027036;
+            } else {
+              var27 = 0.3026996;
+            }
+          }
+        }
       }
     }
   } else {
-    if (input[0] >= 6.5) {
-      var27 = 0.26858166;
-    } else {
-      if (input[3] >= 0.75) {
-        if (input[0] >= -33.5) {
-          if (input[2] >= 0.45) {
-            if (input[4] >= 0.55) {
-              var27 = -0.012299768;
-            } else {
-              var27 = -0.22222523;
-            }
-          } else {
-            if (input[0] >= 5.5) {
-              var27 = -0.06981983;
-            } else {
-              var27 = 0.18842717;
-            }
-          }
+    if (input[0] >= -34.5) {
+      if (input[2] >= 0.95) {
+        if (input[3] >= 0.75) {
+          var27 = -0.53609455;
         } else {
-          if (input[2] >= 0.65) {
-            if (input[4] >= 0.45) {
-              var27 = 0.20002566;
+          if (input[3] >= 0.55) {
+            if (input[1] >= 0.25) {
+              var27 = 0.2885944;
             } else {
-              var27 = 0.031882912;
+              var27 = -0.01369172;
             }
           } else {
-            var27 = -0.29495248;
+            if (input[1] >= 0.15) {
+              var27 = -0.25262225;
+            } else {
+              var27 = 0.18274102;
+            }
           }
         }
       } else {
-        if (input[0] >= -17.5) {
-          if (input[5] >= 0.75) {
-            if (input[2] >= 0.45) {
-              var27 = 0.2660238;
+        if (input[3] >= 0.45) {
+          if (input[2] >= 0.65) {
+            if (input[3] >= 0.65) {
+              var27 = -0.0064149457;
             } else {
-              var27 = -0.11677497;
+              var27 = -0.17344518;
             }
           } else {
-            if (input[4] >= 0.55) {
-              var27 = 0.16459307;
+            if (input[0] >= 4.5) {
+              var27 = 0.09804704;
             } else {
-              var27 = -0.15487511;
+              var27 = -0.03941604;
             }
           }
         } else {
-          if (input[1] >= 0.45) {
-            if (input[3] >= 0.25) {
-              var27 = -0.0127858175;
+          if (input[1] >= 0.15) {
+            if (input[0] >= -26.5) {
+              var27 = 0.034764405;
             } else {
-              var27 = -0.21817012;
+              var27 = 0.13176213;
             }
           } else {
-            if (input[0] >= -35.5) {
-              var27 = 0.03331225;
+            if (input[4] >= 0.15) {
+              var27 = 0.079103015;
             } else {
-              var27 = -0.25311664;
+              var27 = -0.19844146;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[5] >= 0.65) {
+        if (input[1] >= 0.05) {
+          if (input[4] >= 0.15) {
+            if (input[4] >= 0.45) {
+              var27 = -0.21222332;
+            } else {
+              var27 = 0.06531299;
+            }
+          } else {
+            var27 = -0.39009085;
+          }
+        } else {
+          var27 = 0.11929041;
+        }
+      } else {
+        if (input[1] >= 0.25) {
+          var27 = -0.22694275;
+        } else {
+          if (input[5] >= 0.55) {
+            var27 = 0.27241138;
+          } else {
+            if (input[2] >= 0.75) {
+              var27 = -0.2043598;
+            } else {
+              var27 = 0.19080463;
             }
           }
         }
@@ -3743,1042 +3883,782 @@ List<double> score(List<double> input) {
   }
   double var28;
   if (input[5] >= 0.55) {
-    if (input[0] >= 49.5) {
-      if (input[3] >= 0.85) {
-        var28 = 0.017910216;
-      } else {
-        var28 = -0.259728;
-      }
-    } else {
-      if (input[0] >= 46.5) {
-        if (input[1] >= 0.45) {
-          if (input[2] >= 0.55) {
-            var28 = 0.24260052;
-          } else {
-            var28 = 0.03676745;
-          }
-        } else {
-          var28 = -0.03946767;
-        }
-      } else {
-        if (input[0] >= 43.5) {
-          var28 = -0.27163228;
-        } else {
-          if (input[2] >= 0.15) {
-            if (input[5] >= 0.85) {
-              var28 = 0.008888161;
+    if (input[0] >= 40.5) {
+      if (input[0] >= 41.5) {
+        if (input[4] >= 0.15) {
+          if (input[1] >= 0.45) {
+            if (input[2] >= 0.95) {
+              var28 = 0.2208811;
             } else {
-              var28 = -0.013941523;
+              var28 = -0.05969364;
             }
           } else {
-            var28 = 0.14082974;
+            var28 = -0.29377654;
+          }
+        } else {
+          if (input[2] >= 0.55) {
+            if (input[3] >= 0.65) {
+              var28 = 0.28976548;
+            } else {
+              var28 = 0.085370995;
+            }
+          } else {
+            if (input[0] >= 51.5) {
+              var28 = 0.14220938;
+            } else {
+              var28 = -0.2509;
+            }
+          }
+        }
+      } else {
+        if (input[1] >= 0.65) {
+          if (input[4] >= 0.65) {
+            if (input[1] >= 0.75) {
+              var28 = 0.084273845;
+            } else {
+              var28 = 0.3466031;
+            }
+          } else {
+            if (input[3] >= 0.95) {
+              var28 = 0.29516053;
+            } else {
+              var28 = -0.1262233;
+            }
+          }
+        } else {
+          if (input[2] >= 0.55) {
+            var28 = -0.398041;
+          } else {
+            if (input[3] >= 0.45) {
+              var28 = -0.24558792;
+            } else {
+              var28 = 0.10081787;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[2] >= 0.95) {
+        if (input[5] >= 0.65) {
+          if (input[3] >= 0.05) {
+            if (input[1] >= 0.15) {
+              var28 = -0.09002422;
+            } else {
+              var28 = 0.18559346;
+            }
+          } else {
+            var28 = 0.45587513;
+          }
+        } else {
+          var28 = -0.35900134;
+        }
+      } else {
+        if (input[0] >= 39.5) {
+          if (input[3] >= 0.55) {
+            var28 = -0.30537075;
+          } else {
+            if (input[5] >= 0.65) {
+              var28 = 0.22300005;
+            } else {
+              var28 = -0.21624179;
+            }
+          }
+        } else {
+          if (input[3] >= 0.95) {
+            if (input[4] >= 0.55) {
+              var28 = 0.16945024;
+            } else {
+              var28 = -0.22866456;
+            }
+          } else {
+            if (input[3] >= 0.75) {
+              var28 = 0.039424315;
+            } else {
+              var28 = -0.004932838;
+            }
           }
         }
       }
     }
   } else {
     if (input[2] >= 0.45) {
-      if (input[4] >= 0.35000002) {
-        if (input[1] >= 0.55) {
-          if (input[0] >= 51.5) {
-            var28 = 0.17886801;
-          } else {
-            if (input[4] >= 0.85) {
-              var28 = 0.13440658;
+      if (input[0] >= 13.0) {
+        if (input[0] >= 22.0) {
+          if (input[0] >= 34.5) {
+            if (input[0] >= 38.5) {
+              var28 = 0.022837752;
             } else {
-              var28 = -0.26872632;
+              var28 = 0.14843066;
             }
+          } else {
+            var28 = -0.34774902;
           }
         } else {
-          if (input[1] >= 0.45) {
-            if (input[0] >= 5.0) {
-              var28 = 0.26731932;
-            } else {
-              var28 = 0.08735196;
-            }
-          } else {
-            if (input[3] >= 0.25) {
-              var28 = -0.1603047;
-            } else {
-              var28 = 0.17961456;
-            }
-          }
+          var28 = 0.32691365;
         }
       } else {
-        if (input[1] >= 0.65) {
-          if (input[3] >= 0.65) {
-            var28 = -0.30874032;
-          } else {
-            if (input[5] >= 0.35000002) {
-              var28 = 0.1651034;
+        if (input[3] >= 0.55) {
+          if (input[3] >= 0.75) {
+            if (input[2] >= 0.75) {
+              var28 = 0.09182519;
             } else {
-              var28 = -0.16002485;
+              var28 = -0.27487478;
             }
+          } else {
+            var28 = -0.34695974;
           }
         } else {
-          if (input[1] >= 0.45) {
-            if (input[0] >= 42.5) {
-              var28 = 0.1754892;
+          if (input[4] >= 0.05) {
+            if (input[3] >= 0.25) {
+              var28 = 0.037401408;
             } else {
-              var28 = -0.24594422;
+              var28 = 0.22129151;
             }
           } else {
-            if (input[4] >= 0.05) {
-              var28 = 0.1449342;
+            if (input[1] >= 0.55) {
+              var28 = 0.1330183;
             } else {
-              var28 = -0.22074284;
+              var28 = -0.3761342;
             }
           }
         }
       }
     } else {
-      if (input[4] >= 0.35000002) {
-        if (input[1] >= 0.65) {
-          var28 = 0.20612656;
-        } else {
-          if (input[2] >= 0.35000002) {
-            var28 = -0.2058301;
-          } else {
-            var28 = 0.21279438;
-          }
-        }
+      if (input[5] >= 0.45) {
+        var28 = -0.30517867;
       } else {
-        if (input[2] >= 0.25) {
-          var28 = -0.39009467;
+        if (input[2] >= 0.35000002) {
+          if (input[0] >= 46.5) {
+            if (input[0] >= 52.5) {
+              var28 = 0.19551514;
+            } else {
+              var28 = 0.003704393;
+            }
+          } else {
+            if (input[1] >= 0.25) {
+              var28 = -0.36295143;
+            } else {
+              var28 = 0.11362741;
+            }
+          }
         } else {
-          var28 = -0.011798017;
+          if (input[3] >= 0.85) {
+            var28 = 0.20108426;
+          } else {
+            var28 = 0.028061995;
+          }
         }
       }
     }
   }
   double var29;
-  if (input[5] >= 0.45) {
-    if (input[0] >= 43.5) {
-      if (input[0] >= 46.5) {
-        if (input[2] >= 0.45) {
-          if (input[4] >= 0.35000002) {
-            if (input[0] >= 49.5) {
-              var29 = -0.23978503;
+  if (input[2] >= 0.65) {
+    if (input[1] >= 0.55) {
+      if (input[5] >= 0.65) {
+        if (input[3] >= 0.15) {
+          if (input[2] >= 0.85) {
+            if (input[2] >= 0.95) {
+              var29 = 0.12204064;
             } else {
-              var29 = 0.15033866;
+              var29 = -0.13936076;
             }
           } else {
-            if (input[3] >= 0.55) {
-              var29 = 0.12709297;
+            if (input[5] >= 0.95) {
+              var29 = -0.21340613;
             } else {
-              var29 = -0.027881904;
+              var29 = 0.083926514;
             }
           }
         } else {
-          if (input[3] >= 0.85) {
-            var29 = 0.12769513;
-          } else {
-            var29 = -0.32511395;
-          }
+          var29 = -0.31454307;
         }
       } else {
-        var29 = -0.3136317;
+        if (input[2] >= 0.75) {
+          if (input[1] >= 0.85) {
+            if (input[0] >= 39.0) {
+              var29 = -0.38800752;
+            } else {
+              var29 = 0.05705591;
+            }
+          } else {
+            if (input[0] >= 34.5) {
+              var29 = 0.09347518;
+            } else {
+              var29 = -0.2650987;
+            }
+          }
+        } else {
+          if (input[1] >= 0.85) {
+            if (input[5] >= 0.45) {
+              var29 = -0.28084525;
+            } else {
+              var29 = 0.12516658;
+            }
+          } else {
+            var29 = -0.42182553;
+          }
+        }
       }
     } else {
-      if (input[4] >= 0.65) {
-        if (input[5] >= 0.55) {
-          if (input[2] >= 0.75) {
-            if (input[3] >= 0.45) {
-              var29 = -0.023928264;
-            } else {
-              var29 = 0.13625401;
-            }
+      if (input[0] >= 37.5) {
+        if (input[2] >= 0.95) {
+          var29 = -0.2556846;
+        } else {
+          if (input[4] >= 0.65) {
+            var29 = -0.25094476;
           } else {
-            if (input[2] >= 0.65) {
-              var29 = -0.33942583;
+            if (input[5] >= 0.35000002) {
+              var29 = 0.16608916;
             } else {
-              var29 = -0.03189582;
+              var29 = -0.2254165;
             }
           }
-        } else {
-          var29 = -0.33594447;
         }
       } else {
-        if (input[4] >= 0.55) {
-          if (input[0] >= 3.0) {
-            if (input[2] >= 0.65) {
-              var29 = -0.19281955;
-            } else {
-              var29 = 0.1519009;
-            }
+        if (input[0] >= 30.5) {
+          if (input[5] >= 0.95) {
+            var29 = 0.10332966;
           } else {
-            if (input[0] >= -26.5) {
-              var29 = 0.2745036;
+            if (input[5] >= 0.75) {
+              var29 = -0.43802044;
             } else {
-              var29 = 0.041737884;
+              var29 = -0.12370964;
             }
           }
         } else {
-          if (input[1] >= 0.75) {
-            if (input[5] >= 0.55) {
-              var29 = 0.0053995606;
+          if (input[3] >= 0.95) {
+            if (input[5] >= 0.75) {
+              var29 = -0.38213024;
             } else {
-              var29 = 0.13321956;
+              var29 = 0.011069313;
             }
           } else {
-            if (input[5] >= 0.75) {
-              var29 = 0.008058554;
+            if (input[1] >= 0.35000002) {
+              var29 = 0.03314837;
             } else {
-              var29 = -0.05164204;
+              var29 = -0.012336398;
             }
           }
         }
       }
     }
   } else {
-    if (input[1] >= 0.75) {
-      if (input[4] >= 0.35000002) {
-        if (input[0] >= 51.5) {
-          var29 = 0.24464206;
-        } else {
-          if (input[0] >= 39.0) {
-            if (input[4] >= 0.85) {
-              var29 = 0.17460576;
+    if (input[0] >= 36.5) {
+      if (input[5] >= 0.75) {
+        if (input[1] >= 0.85) {
+          if (input[2] >= 0.55) {
+            var29 = -0.27051115;
+          } else {
+            if (input[3] >= 0.75) {
+              var29 = 0.25171506;
             } else {
-              var29 = -0.29911625;
+              var29 = -0.08006939;
+            }
+          }
+        } else {
+          if (input[0] >= 41.5) {
+            if (input[4] >= 0.45) {
+              var29 = 0.20057078;
+            } else {
+              var29 = -0.14079876;
             }
           } else {
-            var29 = 0.15933019;
+            if (input[1] >= 0.55) {
+              var29 = -0.14000854;
+            } else {
+              var29 = -0.44785097;
+            }
           }
         }
       } else {
-        if (input[3] >= 0.45) {
-          var29 = -0.3798189;
-        } else {
-          if (input[4] >= 0.05) {
-            var29 = 0.12401787;
+        if (input[4] >= 0.05) {
+          if (input[4] >= 0.15) {
+            if (input[4] >= 0.25) {
+              var29 = -0.046479926;
+            } else {
+              var29 = 0.23158021;
+            }
           } else {
-            var29 = -0.22945406;
+            if (input[0] >= 46.5) {
+              var29 = 0.021904001;
+            } else {
+              var29 = -0.4689421;
+            }
+          }
+        } else {
+          if (input[2] >= 0.45) {
+            if (input[3] >= 0.55) {
+              var29 = 0.1782727;
+            } else {
+              var29 = 0.042543903;
+            }
+          } else {
+            if (input[1] >= 0.25) {
+              var29 = -0.18257764;
+            } else {
+              var29 = 0.13562012;
+            }
           }
         }
       }
     } else {
-      if (input[0] >= 47.5) {
-        if (input[5] >= 0.35000002) {
-          var29 = 0.074436314;
-        } else {
-          var29 = -0.25596344;
-        }
-      } else {
-        if (input[3] >= 0.15) {
-          if (input[3] >= 0.55) {
-            if (input[4] >= 0.35000002) {
-              var29 = 0.19672737;
+      if (input[0] >= 14.5) {
+        if (input[4] >= 0.55) {
+          if (input[4] >= 0.65) {
+            if (input[1] >= 0.15) {
+              var29 = 0.0035291952;
             } else {
-              var29 = -0.11994896;
+              var29 = 0.23866828;
             }
           } else {
-            if (input[4] >= 0.35000002) {
-              var29 = -0.035104897;
+            var29 = 0.32528412;
+          }
+        } else {
+          if (input[1] >= 0.15) {
+            if (input[4] >= 0.45) {
+              var29 = -0.3247119;
             } else {
-              var29 = 0.22715105;
+              var29 = 0.13156146;
+            }
+          } else {
+            var29 = -0.37677863;
+          }
+        }
+      } else {
+        if (input[4] >= 0.25) {
+          if (input[4] >= 0.35000002) {
+            if (input[3] >= 0.75) {
+              var29 = -0.25002003;
+            } else {
+              var29 = 0.05178701;
+            }
+          } else {
+            if (input[0] >= 10.5) {
+              var29 = -0.08820593;
+            } else {
+              var29 = 0.1286323;
             }
           }
         } else {
-          if (input[0] >= 4.0) {
-            var29 = 0.1272819;
+          if (input[5] >= 0.95) {
+            if (input[2] >= 0.45) {
+              var29 = 0.27645224;
+            } else {
+              var29 = -0.25822502;
+            }
           } else {
-            var29 = -0.256011;
+            if (input[2] >= 0.45) {
+              var29 = -0.1828241;
+            } else {
+              var29 = 0.09908073;
+            }
           }
         }
       }
     }
   }
   double var30;
-  if (input[1] >= 0.35000002) {
-    if (input[5] >= 0.75) {
-      if (input[0] >= -34.5) {
-        if (input[1] >= 0.45) {
-          if (input[4] >= 0.05) {
-            if (input[5] >= 0.85) {
-              var30 = 0.04854111;
+  if (input[4] >= 0.85) {
+    if (input[0] >= 9.0) {
+      if (input[3] >= 0.35000002) {
+        if (input[1] >= 0.85) {
+          var30 = 0.025778998;
+        } else {
+          if (input[3] >= 0.65) {
+            if (input[3] >= 0.75) {
+              var30 = -0.27684954;
             } else {
-              var30 = -0.07856384;
+              var30 = 0.009824924;
             }
           } else {
-            if (input[2] >= 0.55) {
-              var30 = -0.09208374;
+            var30 = -0.3130575;
+          }
+        }
+      } else {
+        if (input[1] >= 0.55) {
+          var30 = 0.24872245;
+        } else {
+          var30 = -0.10704063;
+        }
+      }
+    } else {
+      if (input[5] >= 0.55) {
+        if (input[5] >= 0.75) {
+          if (input[3] >= 0.65) {
+            if (input[3] >= 0.85) {
+              var30 = -0.022085309;
             } else {
-              var30 = -0.44568723;
+              var30 = 0.1719;
+            }
+          } else {
+            if (input[5] >= 0.85) {
+              var30 = 0.039322488;
+            } else {
+              var30 = -0.22726539;
             }
           }
         } else {
           if (input[3] >= 0.45) {
-            if (input[0] >= 7.0) {
-              var30 = -0.37781045;
+            if (input[0] >= -0.5) {
+              var30 = 0.2369623;
             } else {
-              var30 = 0.20833369;
+              var30 = -0.025523908;
             }
           } else {
-            if (input[3] >= 0.05) {
-              var30 = -0.35517186;
-            } else {
-              var30 = 0.315213;
-            }
+            var30 = 0.2692895;
           }
         }
       } else {
-        if (input[5] >= 0.85) {
+        var30 = -0.19909586;
+      }
+    }
+  } else {
+    if (input[1] >= 0.35000002) {
+      if (input[4] >= 0.75) {
+        if (input[0] >= 47.5) {
+          var30 = 0.21513057;
+        } else {
+          var30 = -0.30686378;
+        }
+      } else {
+        if (input[0] >= -34.5) {
           if (input[3] >= 0.35000002) {
-            if (input[4] >= 0.45) {
-              var30 = -0.062357407;
+            if (input[4] >= 0.05) {
+              var30 = 0.012876747;
             } else {
-              var30 = -0.32833236;
+              var30 = -0.067723244;
             }
           } else {
-            if (input[0] >= -35.5) {
-              var30 = 0.22144563;
+            if (input[4] >= 0.15) {
+              var30 = -0.13801521;
             } else {
-              var30 = -0.04536107;
+              var30 = -0.015180003;
             }
           }
         } else {
           if (input[4] >= 0.05) {
-            if (input[3] >= 0.65) {
-              var30 = 0.2030693;
+            if (input[5] >= 0.85) {
+              var30 = -0.20322718;
             } else {
-              var30 = -0.29276007;
+              var30 = -0.013906655;
             }
           } else {
-            if (input[2] >= 0.75) {
-              var30 = 0.31201506;
+            if (input[1] >= 0.45) {
+              var30 = 0.02546102;
             } else {
-              var30 = 0.1165653;
+              var30 = 0.24528027;
             }
           }
         }
       }
     } else {
-      if (input[0] >= -33.5) {
-        if (input[0] >= 36.5) {
-          if (input[0] >= 37.5) {
-            if (input[5] >= 0.65) {
-              var30 = 0.07849877;
-            } else {
-              var30 = -0.033851855;
-            }
+      if (input[0] >= -34.5) {
+        if (input[2] >= 0.95) {
+          if (input[3] >= 0.75) {
+            var30 = -0.42650366;
           } else {
-            var30 = -0.30445766;
+            if (input[3] >= 0.55) {
+              var30 = 0.1178616;
+            } else {
+              var30 = -0.13573603;
+            }
           }
         } else {
-          if (input[5] >= 0.55) {
-            if (input[5] >= 0.65) {
-              var30 = 0.030285927;
+          if (input[3] >= 0.45) {
+            if (input[1] >= 0.25) {
+              var30 = -0.0719002;
             } else {
-              var30 = 0.2841532;
+              var30 = 0.02100168;
             }
           } else {
-            if (input[0] >= 13.0) {
-              var30 = 0.12606263;
+            if (input[1] >= 0.15) {
+              var30 = 0.06813066;
             } else {
-              var30 = -0.31627104;
+              var30 = -0.042963132;
             }
           }
         }
       } else {
-        if (input[5] >= 0.55) {
-          if (input[5] >= 0.65) {
-            if (input[4] >= 0.25) {
-              var30 = 0.06356632;
+        if (input[5] >= 0.65) {
+          if (input[0] >= -37.5) {
+            if (input[5] >= 0.75) {
+              var30 = -0.34989637;
             } else {
-              var30 = -0.2730094;
+              var30 = -0.03166963;
             }
           } else {
-            var30 = -0.32016596;
+            if (input[1] >= 0.15) {
+              var30 = -0.22200967;
+            } else {
+              var30 = 0.15035295;
+            }
           }
         } else {
-          if (input[3] >= 0.55) {
-            if (input[3] >= 0.75) {
-              var30 = 0.02127321;
+          if (input[3] >= 0.15) {
+            if (input[4] >= 0.1) {
+              var30 = -0.017435146;
             } else {
-              var30 = -0.2717633;
+              var30 = 0.2599889;
             }
           } else {
-            if (input[4] >= 0.35000002) {
-              var30 = -0.02795167;
-            } else {
-              var30 = 0.12789623;
-            }
+            var30 = -0.20579475;
           }
         }
       }
     }
-  } else {
-    if (input[0] >= -34.5) {
-      if (input[5] >= 0.35000002) {
-        if (input[0] >= 13.5) {
-          if (input[3] >= 0.65) {
-            if (input[2] >= 0.45) {
-              var30 = 0.052614007;
+  }
+  double var31;
+  if (input[5] >= 0.55) {
+    if (input[0] >= 40.5) {
+      if (input[3] >= 0.55) {
+        if (input[4] >= 0.25) {
+          if (input[3] >= 0.85) {
+            if (input[4] >= 0.45) {
+              var31 = -0.2578488;
             } else {
-              var30 = -0.39966848;
+              var31 = 0.0676583;
             }
           } else {
-            if (input[3] >= 0.25) {
-              var30 = -0.18437123;
+            if (input[0] >= 46.5) {
+              var31 = -0.065401085;
             } else {
-              var30 = 0.05061836;
+              var31 = -0.3913574;
             }
           }
         } else {
           if (input[2] >= 0.75) {
-            if (input[3] >= 0.15) {
-              var30 = 0.02010307;
-            } else {
-              var30 = -0.11095419;
-            }
+            var31 = -0.25345185;
           } else {
-            if (input[3] >= 0.45) {
-              var30 = 0.012712671;
+            if (input[2] >= 0.55) {
+              var31 = 0.17952323;
             } else {
-              var30 = 0.17098892;
+              var31 = -0.041251235;
             }
           }
         }
       } else {
-        if (input[0] >= 44.5) {
-          var30 = -0.19873412;
+        if (input[5] >= 0.65) {
+          if (input[5] >= 0.85) {
+            if (input[0] >= 41.5) {
+              var31 = 0.09061291;
+            } else {
+              var31 = -0.34972578;
+            }
+          } else {
+            if (input[4] >= 0.65) {
+              var31 = 0.2797734;
+            } else {
+              var31 = 0.08317977;
+            }
+          }
         } else {
-          var30 = 0.25737888;
+          var31 = -0.28914437;
         }
       }
     } else {
-      var30 = -0.23991744;
-    }
-  }
-  double var31;
-  if (input[3] >= 0.05) {
-    if (input[1] >= 0.75) {
-      if (input[3] >= 0.25) {
-        if (input[4] >= 0.55) {
-          if (input[2] >= 0.55) {
-            if (input[0] >= 47.5) {
-              var31 = 0.14614637;
+      if (input[2] >= 0.95) {
+        if (input[5] >= 0.65) {
+          if (input[3] >= 0.05) {
+            if (input[3] >= 0.45) {
+              var31 = 0.028999673;
             } else {
-              var31 = -0.25799805;
+              var31 = -0.15721522;
             }
+          } else {
+            var31 = 0.3327019;
+          }
+        } else {
+          var31 = -0.31389296;
+        }
+      } else {
+        if (input[0] >= 39.5) {
+          if (input[3] >= 0.55) {
+            var31 = -0.25507188;
           } else {
             if (input[1] >= 0.85) {
-              var31 = 0.21161346;
+              var31 = 0.26996803;
             } else {
-              var31 = -0.23100379;
+              var31 = 0.07869219;
             }
           }
         } else {
-          if (input[5] >= 0.35000002) {
-            if (input[2] >= 0.35000002) {
-              var31 = 0.008764352;
+          if (input[3] >= 0.75) {
+            if (input[4] >= 0.65) {
+              var31 = -0.12838197;
             } else {
-              var31 = 0.16091858;
+              var31 = 0.042749636;
             }
           } else {
-            var31 = -0.30631432;
-          }
-        }
-      } else {
-        if (input[0] >= 40.5) {
-          var31 = -0.38951743;
-        } else {
-          if (input[0] >= 34.5) {
-            if (input[3] >= 0.15) {
-              var31 = -0.057855334;
+            if (input[5] >= 0.65) {
+              var31 = -0.01888912;
             } else {
-              var31 = 0.19628601;
-            }
-          } else {
-            var31 = -0.27361017;
-          }
-        }
-      }
-    } else {
-      if (input[0] >= 15.5) {
-        if (input[3] >= 0.85) {
-          if (input[0] >= 39.5) {
-            if (input[1] >= 0.55) {
-              var31 = 0.080373734;
-            } else {
-              var31 = -0.095084056;
-            }
-          } else {
-            var31 = -0.326384;
-          }
-        } else {
-          if (input[0] >= 29.5) {
-            if (input[1] >= 0.25) {
-              var31 = 0.031337388;
-            } else {
-              var31 = -0.13042964;
-            }
-          } else {
-            if (input[2] >= 0.45) {
-              var31 = 0.13783164;
-            } else {
-              var31 = -0.41583318;
-            }
-          }
-        }
-      } else {
-        if (input[2] >= 0.75) {
-          if (input[1] >= 0.55) {
-            if (input[4] >= 0.55) {
-              var31 = 0.12444253;
-            } else {
-              var31 = -0.34241098;
-            }
-          } else {
-            if (input[0] >= 14.5) {
-              var31 = -0.11718967;
-            } else {
-              var31 = -0.00050435937;
-            }
-          }
-        } else {
-          if (input[4] >= 0.45) {
-            if (input[3] >= 0.45) {
-              var31 = -0.12080733;
-            } else {
-              var31 = 0.14833017;
-            }
-          } else {
-            if (input[3] >= 0.55) {
-              var31 = 0.10345389;
-            } else {
-              var31 = -0.023871042;
+              var31 = 0.06544808;
             }
           }
         }
       }
     }
   } else {
-    if (input[2] >= 0.85) {
-      if (input[0] >= -29.0) {
-        var31 = -0.27675337;
-      } else {
-        if (input[1] >= 0.35000002) {
-          var31 = 0.27414834;
+    if (input[2] >= 0.55) {
+      if (input[4] >= 0.05) {
+        if (input[4] >= 0.85) {
+          var31 = -0.22115648;
         } else {
-          var31 = 0.084820285;
+          if (input[3] >= 0.25) {
+            if (input[1] >= 0.15) {
+              var31 = 0.064608164;
+            } else {
+              var31 = -0.26638556;
+            }
+          } else {
+            if (input[1] >= 0.45) {
+              var31 = -0.015883474;
+            } else {
+              var31 = 0.21516325;
+            }
+          }
+        }
+      } else {
+        if (input[2] >= 0.65) {
+          if (input[3] >= 0.65) {
+            if (input[2] >= 0.85) {
+              var31 = 0.2037797;
+            } else {
+              var31 = -0.27604398;
+            }
+          } else {
+            if (input[0] >= 39.0) {
+              var31 = -0.41509208;
+            } else {
+              var31 = -0.13542861;
+            }
+          }
+        } else {
+          if (input[1] >= 0.55) {
+            if (input[3] >= 0.55) {
+              var31 = 0.08248183;
+            } else {
+              var31 = 0.2611327;
+            }
+          } else {
+            if (input[3] >= 0.65) {
+              var31 = 0.14297687;
+            } else {
+              var31 = -0.3331147;
+            }
+          }
         }
       }
     } else {
-      if (input[0] >= 38.5) {
-        var31 = 0.08669042;
-      } else {
-        if (input[2] >= 0.45) {
-          var31 = -0.3911107;
+      if (input[0] >= 13.0) {
+        if (input[3] >= 0.45) {
+          if (input[3] >= 0.65) {
+            if (input[5] >= 0.45) {
+              var31 = -0.2855157;
+            } else {
+              var31 = 0.04098385;
+            }
+          } else {
+            if (input[1] >= 0.65) {
+              var31 = 0.1543805;
+            } else {
+              var31 = -0.059885215;
+            }
+          }
         } else {
-          var31 = 0.07444343;
+          if (input[0] >= 40.5) {
+            var31 = -0.36354393;
+          } else {
+            if (input[3] >= 0.15) {
+              var31 = 0.05160042;
+            } else {
+              var31 = -0.17522183;
+            }
+          }
         }
+      } else {
+        var31 = -0.31477654;
       }
     }
   }
   double var32;
-  if (input[1] >= 0.35000002) {
-    if (input[4] >= 0.85) {
-      if (input[5] >= 0.65) {
-        if (input[0] >= 35.5) {
-          if (input[2] >= 0.45) {
-            var32 = -0.2532457;
-          } else {
-            var32 = 0.18643548;
-          }
+  if (input[4] >= 0.75) {
+    if (input[5] >= 0.75) {
+      if (input[2] >= 0.85) {
+        if (input[0] >= -33.5) {
+          var32 = -0.34811765;
         } else {
-          if (input[5] >= 0.75) {
-            if (input[0] >= -33.5) {
-              var32 = -0.0819302;
+          if (input[5] >= 0.85) {
+            if (input[3] >= 0.45) {
+              var32 = -0.025094362;
             } else {
-              var32 = 0.17559077;
+              var32 = 0.18667954;
             }
           } else {
-            var32 = 0.22727217;
+            var32 = -0.19204256;
           }
         }
       } else {
-        if (input[5] >= 0.35000002) {
-          var32 = -0.2525653;
-        } else {
-          var32 = 0.100377105;
-        }
-      }
-    } else {
-      if (input[4] >= 0.75) {
-        if (input[0] >= 47.5) {
-          var32 = 0.15404609;
-        } else {
-          var32 = -0.30840477;
-        }
-      } else {
-        if (input[4] >= 0.55) {
-          if (input[1] >= 0.75) {
-            if (input[2] >= 0.55) {
-              var32 = -0.24259673;
-            } else {
-              var32 = 0.114077784;
-            }
-          } else {
-            if (input[2] >= 0.85) {
-              var32 = -0.06018842;
-            } else {
-              var32 = 0.14240299;
-            }
-          }
-        } else {
-          if (input[3] >= 0.65) {
-            if (input[1] >= 0.45) {
-              var32 = -0.032804176;
-            } else {
-              var32 = -0.27079982;
-            }
-          } else {
-            if (input[3] >= 0.25) {
-              var32 = 0.020274738;
-            } else {
-              var32 = -0.06593448;
-            }
-          }
-        }
-      }
-    }
-  } else {
-    if (input[0] >= -34.5) {
-      if (input[5] >= 0.85) {
-        if (input[4] >= 0.45) {
-          if (input[4] >= 0.75) {
-            if (input[4] >= 0.85) {
-              var32 = -0.3392464;
-            } else {
-              var32 = 0.259331;
-            }
-          } else {
-            if (input[2] >= 0.75) {
-              var32 = -0.42927316;
-            } else {
-              var32 = -0.07695157;
-            }
-          }
-        } else {
-          if (input[0] >= -30.0) {
-            if (input[5] >= 0.95) {
-              var32 = -0.21068136;
-            } else {
-              var32 = 0.07456733;
-            }
-          } else {
-            if (input[1] >= 0.25) {
-              var32 = 0.08199492;
-            } else {
-              var32 = 0.2837896;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= -28.5) {
-          if (input[0] >= 39.5) {
-            if (input[5] >= 0.75) {
-              var32 = 0.24204163;
-            } else {
-              var32 = 0.0008462624;
-            }
-          } else {
-            if (input[4] >= 0.15) {
-              var32 = 0.022863774;
-            } else {
-              var32 = -0.11347786;
-            }
-          }
-        } else {
-          if (input[4] >= 0.75) {
-            var32 = 0.17060316;
-          } else {
-            if (input[5] >= 0.65) {
-              var32 = -0.07848518;
-            } else {
-              var32 = -0.33111966;
-            }
-          }
-        }
-      }
-    } else {
-      var32 = -0.20778167;
-    }
-  }
-  double var33;
-  if (input[0] >= 40.5) {
-    if (input[5] >= 0.85) {
-      if (input[3] >= 0.95) {
-        var33 = 0.12616731;
-      } else {
-        if (input[0] >= 41.5) {
-          if (input[2] >= 0.95) {
-            var33 = 0.19461076;
-          } else {
-            if (input[4] >= 0.45) {
-              var33 = 0.13713829;
-            } else {
-              var33 = -0.118163005;
-            }
-          }
-        } else {
-          var33 = -0.3091367;
-        }
-      }
-    } else {
-      if (input[1] >= 0.95) {
-        var33 = -0.1945749;
-      } else {
-        if (input[1] >= 0.35000002) {
-          if (input[2] >= 0.75) {
-            if (input[3] >= 0.55) {
-              var33 = -0.20998953;
-            } else {
-              var33 = 0.00831833;
-            }
-          } else {
-            if (input[4] >= 0.15) {
-              var33 = 0.05390721;
-            } else {
-              var33 = -0.033393335;
-            }
-          }
-        } else {
-          if (input[5] >= 0.75) {
-            if (input[3] >= 0.25) {
-              var33 = 0.06610252;
-            } else {
-              var33 = 0.25608784;
-            }
-          } else {
-            if (input[3] >= 0.65) {
-              var33 = 0.10224968;
-            } else {
-              var33 = -0.3138367;
-            }
-          }
-        }
-      }
-    }
-  } else {
-    if (input[0] >= 34.5) {
-      if (input[0] >= 36.5) {
-        if (input[2] >= 0.75) {
-          if (input[3] >= 0.25) {
-            if (input[0] >= 37.5) {
-              var33 = 0.18707512;
-            } else {
-              var33 = 0.016318632;
-            }
-          } else {
-            if (input[1] >= 0.35000002) {
-              var33 = -0.33083287;
-            } else {
-              var33 = 0.18751106;
-            }
-          }
-        } else {
-          if (input[3] >= 0.15) {
-            if (input[5] >= 0.45) {
-              var33 = -0.19246523;
-            } else {
-              var33 = 0.19103973;
-            }
-          } else {
-            if (input[3] >= 0.05) {
-              var33 = 0.1536658;
-            } else {
-              var33 = -0.28195503;
-            }
-          }
-        }
-      } else {
-        if (input[3] >= 0.25) {
-          if (input[5] >= 0.65) {
-            var33 = -0.14069541;
-          } else {
-            var33 = 0.1768379;
-          }
-        } else {
-          if (input[5] >= 0.75) {
-            var33 = 0.069866784;
-          } else {
-            var33 = 0.30292735;
-          }
-        }
-      }
-    } else {
-      if (input[0] >= 32.5) {
-        if (input[4] >= 0.05) {
-          if (input[3] >= 0.15) {
-            if (input[1] >= 0.55) {
-              var33 = 0.15890399;
-            } else {
-              var33 = -0.068217196;
-            }
-          } else {
-            var33 = -0.28856158;
-          }
-        } else {
-          var33 = -0.34757423;
-        }
-      } else {
-        if (input[0] >= 30.5) {
-          if (input[0] >= 31.5) {
-            var33 = 0.23427899;
-          } else {
-            var33 = 0.06893668;
-          }
-        } else {
-          if (input[0] >= 29.5) {
-            if (input[4] >= 0.55) {
-              var33 = 0.058366172;
-            } else {
-              var33 = -0.37315804;
-            }
-          } else {
-            if (input[0] >= 20.0) {
-              var33 = 0.1347091;
-            } else {
-              var33 = -0.004393694;
-            }
-          }
-        }
-      }
-    }
-  }
-  double var34;
-  if (input[0] >= 40.5) {
-    if (input[3] >= 0.15) {
-      if (input[2] >= 0.25) {
-        if (input[2] >= 0.35000002) {
-          if (input[3] >= 0.45) {
-            if (input[0] >= 41.5) {
-              var34 = 0.017285991;
-            } else {
-              var34 = -0.076879725;
-            }
-          } else {
-            if (input[0] >= 41.5) {
-              var34 = -0.08621751;
-            } else {
-              var34 = 0.0716887;
-            }
-          }
-        } else {
-          var34 = 0.19126773;
-        }
-      } else {
-        var34 = -0.13813657;
-      }
-    } else {
-      if (input[1] >= 0.2) {
-        var34 = -0.26710594;
-      } else {
-        var34 = 0.09051014;
-      }
-    }
-  } else {
-    if (input[5] >= 0.35000002) {
-      if (input[0] >= 34.5) {
-        if (input[0] >= 36.5) {
-          if (input[2] >= 0.75) {
-            if (input[3] >= 0.15) {
-              var34 = 0.089614116;
-            } else {
-              var34 = -0.08818927;
-            }
-          } else {
-            if (input[3] >= 0.15) {
-              var34 = -0.110991634;
-            } else {
-              var34 = 0.061080094;
-            }
-          }
-        } else {
-          if (input[3] >= 0.25) {
-            if (input[3] >= 0.85) {
-              var34 = 0.16031346;
-            } else {
-              var34 = -0.16136229;
-            }
-          } else {
-            if (input[5] >= 0.75) {
-              var34 = 0.05663885;
-            } else {
-              var34 = 0.2786008;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= 32.5) {
-          if (input[4] >= 0.05) {
-            if (input[3] >= 0.15) {
-              var34 = 0.0798834;
-            } else {
-              var34 = -0.25170875;
-            }
-          } else {
-            var34 = -0.30288827;
-          }
-        } else {
-          if (input[0] >= 30.5) {
-            if (input[0] >= 31.5) {
-              var34 = 0.20992324;
-            } else {
-              var34 = 0.0571839;
-            }
-          } else {
-            if (input[0] >= 29.5) {
-              var34 = -0.21580693;
-            } else {
-              var34 = -0.0024171981;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[1] >= 0.35000002) {
-        if (input[1] >= 0.55) {
+        if (input[3] >= 0.75) {
           if (input[1] >= 0.65) {
-            var34 = 0.0028344307;
+            var32 = 0.11277266;
           } else {
-            var34 = 0.20671447;
+            var32 = -0.3961945;
           }
         } else {
-          if (input[3] >= 0.75) {
-            var34 = 0.16506998;
-          } else {
-            if (input[1] >= 0.45) {
-              var34 = -0.3226291;
+          if (input[3] >= 0.55) {
+            if (input[0] >= 14.5) {
+              var32 = -0.16710722;
             } else {
-              var34 = 0.002991487;
-            }
-          }
-        }
-      } else {
-        var34 = 0.19706996;
-      }
-    }
-  }
-  double var35;
-  if (input[5] >= 0.25) {
-    if (input[2] >= 0.15) {
-      if (input[0] >= 52.5) {
-        var35 = 0.104844995;
-      } else {
-        if (input[0] >= 49.5) {
-          if (input[4] >= 0.05) {
-            if (input[1] >= 0.85) {
-              var35 = 0.05246285;
-            } else {
-              var35 = -0.19394368;
-            }
-          } else {
-            var35 = 0.13102125;
-          }
-        } else {
-          if (input[5] >= 0.35000002) {
-            if (input[4] >= 0.65) {
-              var35 = -0.027527362;
-            } else {
-              var35 = 0.000986685;
-            }
-          } else {
-            if (input[1] >= 0.75) {
-              var35 = -0.14482027;
-            } else {
-              var35 = 0.096698396;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[0] >= 28.0) {
-        var35 = -0.021072976;
-      } else {
-        var35 = 0.15536274;
-      }
-    }
-  } else {
-    var35 = -0.088769585;
-  }
-  double var36;
-  if (input[2] >= 0.65) {
-    if (input[5] >= 0.95) {
-      if (input[2] >= 0.95) {
-        if (input[1] >= 0.15) {
-          if (input[0] >= 41.0) {
-            var36 = 0.18689921;
-          } else {
-            var36 = -0.10655383;
-          }
-        } else {
-          var36 = 0.28045443;
-        }
-      } else {
-        if (input[4] >= 0.65) {
-          if (input[3] >= 0.3) {
-            var36 = 0.0073975786;
-          } else {
-            var36 = 0.12593664;
-          }
-        } else {
-          var36 = -0.34509334;
-        }
-      }
-    } else {
-      if (input[0] >= 4.0) {
-        if (input[0] >= 5.5) {
-          if (input[4] >= 0.05) {
-            if (input[4] >= 0.85) {
-              var36 = -0.26829323;
-            } else {
-              var36 = 0.017941507;
+              var32 = 0.21638547;
             }
           } else {
             if (input[3] >= 0.25) {
-              var36 = -0.24821572;
+              var32 = -0.31307277;
             } else {
-              var36 = 0.02762565;
+              var32 = 0.06330982;
             }
           }
-        } else {
-          if (input[4] >= 0.15) {
-            var36 = -0.43626562;
+        }
+      }
+    } else {
+      if (input[0] >= 9.0) {
+        if (input[2] >= 0.55) {
+          if (input[0] >= 45.5) {
+            var32 = 0.19209486;
           } else {
-            var36 = 0.19732186;
+            var32 = -0.33903944;
+          }
+        } else {
+          if (input[5] >= 0.65) {
+            var32 = 0.1892726;
+          } else {
+            if (input[0] >= 39.5) {
+              var32 = 0.041814137;
+            } else {
+              var32 = -0.07086371;
+            }
           }
         }
       } else {
-        if (input[2] >= 0.75) {
-          if (input[4] >= 0.45) {
-            if (input[3] >= 0.35000002) {
-              var36 = 0.099208504;
-            } else {
-              var36 = -0.105211936;
-            }
+        if (input[1] >= 0.45) {
+          if (input[3] >= 0.45) {
+            var32 = -0.23660529;
           } else {
-            if (input[4] >= 0.25) {
-              var36 = -0.16828558;
-            } else {
-              var36 = 0.02494125;
-            }
+            var32 = 0.026646376;
           }
         } else {
-          if (input[3] >= 0.65) {
-            if (input[4] >= 0.35000002) {
-              var36 = -0.28498513;
+          if (input[2] >= 0.65) {
+            if (input[0] >= -24.0) {
+              var32 = -0.26954356;
             } else {
-              var36 = -0.03329436;
+              var32 = 0.22390549;
             }
           } else {
-            if (input[3] >= 0.55) {
-              var36 = 0.2921172;
+            if (input[2] >= 0.55) {
+              var32 = 0.4094752;
             } else {
-              var36 = 0.048979614;
+              var32 = 0.015169167;
             }
           }
         }
@@ -4786,73 +4666,529 @@ List<double> score(List<double> input) {
     }
   } else {
     if (input[0] >= -16.5) {
-      if (input[0] >= -2.5) {
-        if (input[0] >= 2.0) {
-          if (input[0] >= 38.5) {
-            if (input[5] >= 0.75) {
-              var36 = -0.13739413;
+      if (input[0] >= 2.0) {
+        if (input[0] >= 5.5) {
+          if (input[0] >= 9.0) {
+            if (input[2] >= 0.45) {
+              var32 = 0.0044047046;
             } else {
-              var36 = 0.01772945;
+              var32 = -0.061663467;
             }
           } else {
-            if (input[1] >= 0.15) {
-              var36 = 0.061811723;
+            if (input[3] >= 0.85) {
+              var32 = 0.18923026;
             } else {
-              var36 = -0.19626004;
+              var32 = -0.10004145;
             }
           }
         } else {
-          if (input[3] >= 0.65) {
-            var36 = -0.38922969;
+          if (input[5] >= 0.85) {
+            if (input[0] >= 4.5) {
+              var32 = 0.23501343;
+            } else {
+              var32 = 0.00017955;
+            }
           } else {
-            var36 = 0.18754262;
+            if (input[0] >= 4.5) {
+              var32 = -0.55411893;
+            } else {
+              var32 = 0.0202827;
+            }
           }
         }
       } else {
-        if (input[5] >= 0.75) {
-          if (input[0] >= -4.5) {
-            var36 = 0.15411538;
+        if (input[5] >= 0.65) {
+          if (input[4] >= 0.35000002) {
+            if (input[2] >= 0.70000005) {
+              var32 = 0.23542468;
+            } else {
+              var32 = -0.13910235;
+            }
           } else {
-            var36 = -0.006025523;
+            if (input[0] >= -2.5) {
+              var32 = -0.74719757;
+            } else {
+              var32 = 0.059957925;
+            }
           }
         } else {
-          var36 = 0.23317958;
+          var32 = 0.31613606;
         }
       }
     } else {
-      if (input[5] >= 0.95) {
-        if (input[2] >= 0.55) {
-          var36 = 0.21439332;
-        } else {
-          var36 = -0.008483509;
-        }
-      } else {
-        if (input[3] >= 0.55) {
+      if (input[4] >= 0.35000002) {
+        if (input[0] >= -25.5) {
           if (input[5] >= 0.65) {
-            if (input[4] >= 0.85) {
-              var36 = 0.01764102;
-            } else {
-              var36 = -0.38045195;
-            }
+            var32 = -0.38406754;
           } else {
-            if (input[1] >= 0.75) {
-              var36 = 0.04335385;
+            if (input[2] >= 0.85) {
+              var32 = 0.19425075;
             } else {
-              var36 = -0.2515558;
+              var32 = -0.32098272;
             }
           }
         } else {
-          if (input[3] >= 0.35000002) {
-            if (input[5] >= 0.85) {
-              var36 = -0.21082336;
+          if (input[0] >= -27.5) {
+            if (input[4] >= 0.55) {
+              var32 = 0.18634689;
             } else {
-              var36 = 0.09589989;
+              var32 = -0.16607754;
             }
           } else {
-            if (input[2] >= 0.25) {
-              var36 = -0.21606031;
+            if (input[0] >= -32.5) {
+              var32 = -0.34358665;
             } else {
-              var36 = 0.21687491;
+              var32 = -0.033638082;
+            }
+          }
+        }
+      } else {
+        if (input[2] >= 0.75) {
+          if (input[2] >= 0.85) {
+            if (input[1] >= 0.45) {
+              var32 = -0.1413638;
+            } else {
+              var32 = 0.05083454;
+            }
+          } else {
+            if (input[5] >= 0.85) {
+              var32 = -0.34153736;
+            } else {
+              var32 = -0.048492458;
+            }
+          }
+        } else {
+          if (input[1] >= 0.25) {
+            if (input[2] >= 0.55) {
+              var32 = 0.109290905;
+            } else {
+              var32 = -0.08502196;
+            }
+          } else {
+            if (input[3] >= 0.15) {
+              var32 = 0.05165041;
+            } else {
+              var32 = -0.35778892;
+            }
+          }
+        }
+      }
+    }
+  }
+  double var33;
+  if (input[1] >= 0.05) {
+    if (input[5] >= 0.15) {
+      if (input[2] >= 0.15) {
+        if (input[0] >= 46.5) {
+          if (input[3] >= 0.75) {
+            if (input[2] >= 0.75) {
+              var33 = -0.24201897;
+            } else {
+              var33 = 0.021281585;
+            }
+          } else {
+            if (input[4] >= 0.25) {
+              var33 = 0.16925353;
+            } else {
+              var33 = -0.04734737;
+            }
+          }
+        } else {
+          if (input[0] >= 43.5) {
+            if (input[5] >= 0.45) {
+              var33 = -0.30152673;
+            } else {
+              var33 = 0.17819858;
+            }
+          } else {
+            if (input[0] >= 42.5) {
+              var33 = 0.11204051;
+            } else {
+              var33 = -0.00524329;
+            }
+          }
+        }
+      } else {
+        if (input[4] >= 0.15) {
+          var33 = 0.028607875;
+        } else {
+          var33 = 0.14553231;
+        }
+      }
+    } else {
+      var33 = -0.21959554;
+    }
+  } else {
+    if (input[0] >= -37.0) {
+      if (input[5] >= 0.25) {
+        var33 = -0.18530494;
+      } else {
+        var33 = 0.18976498;
+      }
+    } else {
+      var33 = 0.21871424;
+    }
+  }
+  double var34;
+  if (input[1] >= 0.05) {
+    if (input[5] >= 0.15) {
+      if (input[0] >= -35.5) {
+        if (input[3] >= 0.85) {
+          if (input[4] >= 0.25) {
+            if (input[1] >= 0.65) {
+              var34 = -0.08743946;
+            } else {
+              var34 = 0.015274196;
+            }
+          } else {
+            if (input[0] >= 49.0) {
+              var34 = 0.109627225;
+            } else {
+              var34 = -0.2421911;
+            }
+          }
+        } else {
+          if (input[1] >= 0.95) {
+            if (input[0] >= -29.5) {
+              var34 = -0.009447357;
+            } else {
+              var34 = -0.2580712;
+            }
+          } else {
+            if (input[5] >= 0.55) {
+              var34 = -0.0013705486;
+            } else {
+              var34 = 0.0232275;
+            }
+          }
+        }
+      } else {
+        if (input[0] >= -37.5) {
+          if (input[2] >= 0.65) {
+            if (input[4] >= 0.85) {
+              var34 = 0.011780114;
+            } else {
+              var34 = -0.27390343;
+            }
+          } else {
+            if (input[5] >= 0.95) {
+              var34 = 0.11613914;
+            } else {
+              var34 = -0.087581836;
+            }
+          }
+        } else {
+          if (input[4] >= 0.65) {
+            var34 = -0.19984876;
+          } else {
+            if (input[4] >= 0.35000002) {
+              var34 = 0.10189192;
+            } else {
+              var34 = -0.033784594;
+            }
+          }
+        }
+      }
+    } else {
+      var34 = -0.19790913;
+    }
+  } else {
+    if (input[0] >= -37.0) {
+      if (input[5] >= 0.25) {
+        var34 = -0.16991086;
+      } else {
+        var34 = 0.17332521;
+      }
+    } else {
+      var34 = 0.19868992;
+    }
+  }
+  double var35;
+  if (input[1] >= 0.05) {
+    if (input[4] >= 0.85) {
+      if (input[3] >= 0.15) {
+        if (input[3] >= 0.45) {
+          if (input[1] >= 0.25) {
+            if (input[1] >= 0.45) {
+              var35 = -0.024730166;
+            } else {
+              var35 = 0.15261616;
+            }
+          } else {
+            if (input[0] >= 7.0) {
+              var35 = -0.043995846;
+            } else {
+              var35 = -0.27568483;
+            }
+          }
+        } else {
+          if (input[5] >= 0.55) {
+            if (input[5] >= 0.75) {
+              var35 = 0.043837182;
+            } else {
+              var35 = 0.25101647;
+            }
+          } else {
+            var35 = -0.051903903;
+          }
+        }
+      } else {
+        var35 = -0.21396907;
+      }
+    } else {
+      if (input[3] >= 0.15) {
+        if (input[5] >= 0.75) {
+          if (input[2] >= 0.75) {
+            if (input[4] >= 0.05) {
+              var35 = 0.00069650536;
+            } else {
+              var35 = 0.101382084;
+            }
+          } else {
+            if (input[0] >= 36.5) {
+              var35 = -0.114602275;
+            } else {
+              var35 = -0.009520058;
+            }
+          }
+        } else {
+          if (input[0] >= -28.5) {
+            if (input[0] >= -25.5) {
+              var35 = -0.020305619;
+            } else {
+              var35 = 0.112970464;
+            }
+          } else {
+            if (input[0] >= -32.5) {
+              var35 = -0.33303264;
+            } else {
+              var35 = -0.04094252;
+            }
+          }
+        }
+      } else {
+        if (input[2] >= 0.75) {
+          if (input[0] >= -31.5) {
+            if (input[1] >= 0.15) {
+              var35 = -0.08703026;
+            } else {
+              var35 = 0.2514859;
+            }
+          } else {
+            if (input[4] >= 0.55) {
+              var35 = 0.22884129;
+            } else {
+              var35 = -0.38060737;
+            }
+          }
+        } else {
+          if (input[5] >= 0.85) {
+            if (input[1] >= 0.25) {
+              var35 = 0.25521806;
+            } else {
+              var35 = -0.040185317;
+            }
+          } else {
+            if (input[0] >= 34.5) {
+              var35 = 0.03575201;
+            } else {
+              var35 = -0.13224374;
+            }
+          }
+        }
+      }
+    }
+  } else {
+    if (input[0] >= -37.0) {
+      var35 = 0.00006224736;
+    } else {
+      var35 = 0.18127117;
+    }
+  }
+  double var36;
+  if (input[2] >= 0.65) {
+    if (input[3] >= 0.05) {
+      if (input[5] >= 0.85) {
+        if (input[1] >= 0.75) {
+          if (input[1] >= 0.95) {
+            if (input[4] >= 0.85) {
+              var36 = 0.17775041;
+            } else {
+              var36 = -0.00081841537;
+            }
+          } else {
+            var36 = -0.33201385;
+          }
+        } else {
+          if (input[4] >= 0.45) {
+            if (input[1] >= 0.45) {
+              var36 = 0.074603625;
+            } else {
+              var36 = -0.19248225;
+            }
+          } else {
+            if (input[1] >= 0.25) {
+              var36 = 0.015426493;
+            } else {
+              var36 = 0.13079934;
+            }
+          }
+        }
+      } else {
+        if (input[1] >= 0.25) {
+          if (input[2] >= 0.75) {
+            if (input[0] >= -34.5) {
+              var36 = 0.0019922;
+            } else {
+              var36 = 0.10830955;
+            }
+          } else {
+            if (input[0] >= 39.5) {
+              var36 = 0.0701622;
+            } else {
+              var36 = -0.12363208;
+            }
+          }
+        } else {
+          if (input[0] >= 14.5) {
+            if (input[3] >= 0.95) {
+              var36 = 0.21882392;
+            } else {
+              var36 = -0.26421186;
+            }
+          } else {
+            if (input[0] >= -28.5) {
+              var36 = 0.0044975323;
+            } else {
+              var36 = -0.21926895;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[1] >= 0.45) {
+        var36 = -0.21127655;
+      } else {
+        if (input[2] >= 0.85) {
+          if (input[1] >= 0.35000002) {
+            var36 = 0.44803044;
+          } else {
+            var36 = 0.15133524;
+          }
+        } else {
+          if (input[0] >= 6.5) {
+            var36 = 0.2567869;
+          } else {
+            var36 = -0.26610962;
+          }
+        }
+      }
+    }
+  } else {
+    if (input[1] >= 0.55) {
+      if (input[4] >= 0.35000002) {
+        if (input[1] >= 0.65) {
+          if (input[5] >= 0.45) {
+            if (input[4] >= 0.55) {
+              var36 = -0.04979106;
+            } else {
+              var36 = -0.41655174;
+            }
+          } else {
+            if (input[0] >= 44.0) {
+              var36 = 0.22695649;
+            } else {
+              var36 = -0.01959207;
+            }
+          }
+        } else {
+          if (input[2] >= 0.45) {
+            if (input[5] >= 0.4) {
+              var36 = -0.3460805;
+            } else {
+              var36 = 0.26439995;
+            }
+          } else {
+            if (input[4] >= 0.45) {
+              var36 = 0.35235578;
+            } else {
+              var36 = 0.051578425;
+            }
+          }
+        }
+      } else {
+        if (input[2] >= 0.55) {
+          if (input[0] >= 43.0) {
+            var36 = -0.22028454;
+          } else {
+            if (input[3] >= 0.85) {
+              var36 = -0.08921137;
+            } else {
+              var36 = 0.16343114;
+            }
+          }
+        } else {
+          if (input[1] >= 0.65) {
+            if (input[0] >= -33.5) {
+              var36 = 0.0767487;
+            } else {
+              var36 = -0.15740941;
+            }
+          } else {
+            if (input[3] >= 0.75) {
+              var36 = 0.13707794;
+            } else {
+              var36 = -0.282563;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[1] >= 0.35000002) {
+        if (input[3] >= 0.75) {
+          var36 = -0.45684326;
+        } else {
+          if (input[0] >= 40.5) {
+            if (input[2] >= 0.45) {
+              var36 = 0.17199382;
+            } else {
+              var36 = -0.25823405;
+            }
+          } else {
+            if (input[5] >= 0.85) {
+              var36 = 0.014363969;
+            } else {
+              var36 = -0.29601803;
+            }
+          }
+        }
+      } else {
+        if (input[3] >= 0.35000002) {
+          if (input[3] >= 0.45) {
+            if (input[0] >= 4.5) {
+              var36 = 0.06563014;
+            } else {
+              var36 = -0.03945267;
+            }
+          } else {
+            if (input[5] >= 0.75) {
+              var36 = 0.30886084;
+            } else {
+              var36 = 0.06598504;
+            }
+          }
+        } else {
+          if (input[2] >= 0.45) {
+            if (input[0] >= 32.0) {
+              var36 = 0.114308745;
+            } else {
+              var36 = -0.23219636;
+            }
+          } else {
+            if (input[1] >= 0.25) {
+              var36 = -0.12179402;
+            } else {
+              var36 = 0.13229579;
             }
           }
         }
@@ -4860,745 +5196,613 @@ List<double> score(List<double> input) {
     }
   }
   double var37;
-  if (input[3] >= 0.65) {
-    if (input[1] >= 0.15) {
-      if (input[4] >= 0.65) {
-        if (input[3] >= 0.95) {
-          if (input[0] >= 9.5) {
-            var37 = 0.025849672;
-          } else {
-            var37 = 0.26114124;
-          }
-        } else {
-          if (input[3] >= 0.75) {
-            if (input[2] >= 0.45) {
-              var37 = -0.41132787;
+  if (input[2] >= 0.15) {
+    if (input[0] >= -41.5) {
+      if (input[3] >= 0.75) {
+        if (input[4] >= 0.15) {
+          if (input[0] >= 38.5) {
+            if (input[3] >= 0.95) {
+              var37 = 0.12781446;
             } else {
-              var37 = 0.020318486;
+              var37 = -0.12988327;
             }
           } else {
-            if (input[0] >= 14.5) {
-              var37 = -0.30436504;
+            if (input[0] >= 20.0) {
+              var37 = 0.136134;
             } else {
-              var37 = 0.1371396;
+              var37 = -0.0018178199;
+            }
+          }
+        } else {
+          if (input[5] >= 0.85) {
+            var37 = 0.25331452;
+          } else {
+            if (input[0] >= 40.5) {
+              var37 = 0.091746815;
+            } else {
+              var37 = -0.31779018;
             }
           }
         }
       } else {
-        if (input[1] >= 0.65) {
-          if (input[5] >= 0.85) {
-            if (input[4] >= 0.35000002) {
-              var37 = -0.080721006;
+        if (input[4] >= 0.75) {
+          if (input[0] >= 14.5) {
+            if (input[1] >= 0.45) {
+              var37 = 0.055712346;
             } else {
-              var37 = 0.120861866;
+              var37 = -0.25924575;
             }
           } else {
-            if (input[1] >= 0.75) {
-              var37 = -0.025018625;
+            if (input[1] >= 0.35000002) {
+              var37 = -0.03646095;
             } else {
-              var37 = -0.3240492;
+              var37 = 0.13906465;
             }
           }
         } else {
-          if (input[2] >= 0.55) {
-            if (input[3] >= 0.95) {
-              var37 = -0.11296884;
+          if (input[0] >= 14.5) {
+            if (input[4] >= 0.05) {
+              var37 = 0.035044335;
             } else {
-              var37 = 0.047234695;
+              var37 = -0.035789665;
             }
           } else {
-            if (input[0] >= 9.0) {
-              var37 = -0.17704985;
+            if (input[0] >= 5.5) {
+              var37 = -0.12201147;
             } else {
-              var37 = 0.079590335;
+              var37 = -0.012246502;
             }
           }
         }
       }
     } else {
-      if (input[4] >= 0.45) {
-        if (input[0] >= 4.0) {
-          var37 = 0.28917685;
-        } else {
-          var37 = 0.069833845;
-        }
+      if (input[2] >= 0.65) {
+        var37 = -0.18137553;
       } else {
-        if (input[0] >= 14.5) {
-          if (input[4] >= 0.25) {
-            var37 = -0.08872004;
-          } else {
-            var37 = 0.22565077;
-          }
-        } else {
-          var37 = -0.4027924;
-        }
+        var37 = 0.19750485;
       }
     }
   } else {
-    if (input[0] >= 41.5) {
-      if (input[5] >= 0.75) {
-        if (input[1] >= 0.55) {
-          if (input[5] >= 0.95) {
-            var37 = 0.112987265;
-          } else {
-            if (input[0] >= 43.5) {
-              var37 = -0.07583;
-            } else {
-              var37 = -0.29594907;
-            }
-          }
-        } else {
-          if (input[2] >= 0.75) {
-            var37 = 0.2009112;
-          } else {
-            if (input[2] >= 0.55) {
-              var37 = -0.0361519;
-            } else {
-              var37 = 0.20579277;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= 46.5) {
-          if (input[3] >= 0.55) {
-            if (input[2] >= 0.65) {
-              var37 = 0.16554128;
-            } else {
-              var37 = -0.0050270227;
-            }
-          } else {
-            var37 = -0.13481805;
-          }
-        } else {
-          var37 = -0.40517133;
-        }
-      }
+    if (input[3] >= 0.55) {
+      var37 = -0.06556947;
     } else {
-      if (input[0] >= 37.5) {
-        if (input[3] >= 0.25) {
-          if (input[4] >= 0.05) {
-            if (input[1] >= 0.75) {
-              var37 = 0.034076102;
-            } else {
-              var37 = 0.19795452;
-            }
-          } else {
-            if (input[2] >= 0.65) {
-              var37 = -0.22949125;
-            } else {
-              var37 = 0.0533519;
-            }
-          }
-        } else {
-          if (input[1] >= 0.25) {
-            if (input[0] >= 39.5) {
-              var37 = 0.020936511;
-            } else {
-              var37 = -0.26686525;
-            }
-          } else {
-            if (input[0] >= 39.5) {
-              var37 = -0.0362732;
-            } else {
-              var37 = 0.19969897;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= 1.0) {
-          if (input[3] >= 0.25) {
-            if (input[2] >= 0.55) {
-              var37 = -0.19087625;
-            } else {
-              var37 = 0.04824698;
-            }
-          } else {
-            if (input[1] >= 0.25) {
-              var37 = 0.108197436;
-            } else {
-              var37 = -0.13799103;
-            }
-          }
-        } else {
-          if (input[0] >= -4.5) {
-            var37 = 0.2807694;
-          } else {
-            if (input[2] >= 0.55) {
-              var37 = 0.0026209564;
-            } else {
-              var37 = -0.15434;
-            }
-          }
-        }
-      }
+      var37 = 0.17843837;
     }
   }
   double var38;
-  if (input[4] >= 0.05) {
-    if (input[3] >= 0.15) {
-      if (input[3] >= 0.35000002) {
+  if (input[2] >= 0.25) {
+    if (input[0] >= -17.5) {
+      if (input[5] >= 0.65) {
         if (input[3] >= 0.45) {
-          if (input[0] >= 5.5) {
-            if (input[2] >= 0.45) {
-              var38 = 0.013883207;
+          if (input[2] >= 0.45) {
+            if (input[0] >= 32.5) {
+              var38 = -0.04728269;
             } else {
-              var38 = -0.08709696;
+              var38 = 0.02368486;
             }
           } else {
-            if (input[4] >= 0.15) {
-              var38 = -0.022854181;
+            if (input[3] >= 0.65) {
+              var38 = -0.062481936;
             } else {
-              var38 = -0.38411438;
+              var38 = -0.43883595;
             }
           }
         } else {
-          if (input[5] >= 0.75) {
-            if (input[2] >= 0.65) {
-              var38 = -0.13670258;
+          if (input[0] >= 13.5) {
+            if (input[0] >= 17.5) {
+              var38 = 0.059221443;
             } else {
-              var38 = 0.13595635;
+              var38 = -0.3695164;
             }
           } else {
-            if (input[0] >= -27.5) {
-              var38 = 0.16553655;
+            if (input[2] >= 0.85) {
+              var38 = 0.35353976;
             } else {
-              var38 = -0.06316789;
+              var38 = 0.11674969;
             }
           }
         }
       } else {
-        if (input[5] >= 0.45) {
-          if (input[5] >= 0.85) {
-            if (input[0] >= 38.5) {
-              var38 = -0.25140083;
+        if (input[5] >= 0.55) {
+          if (input[0] >= 1.5) {
+            if (input[0] >= 29.5) {
+              var38 = -0.11029644;
             } else {
-              var38 = 0.05445615;
+              var38 = -0.46472326;
             }
           } else {
-            if (input[0] >= -27.5) {
-              var38 = -0.083192624;
+            if (input[0] >= -14.5) {
+              var38 = 0.29241467;
             } else {
-              var38 = -0.3636849;
+              var38 = -0.04529841;
             }
           }
         } else {
-          if (input[2] >= 0.95) {
-            if (input[4] >= 0.35000002) {
-              var38 = 0.012664006;
+          if (input[5] >= 0.35000002) {
+            if (input[2] >= 0.55) {
+              var38 = 0.05577757;
             } else {
-              var38 = 0.26270208;
+              var38 = -0.06862393;
             }
           } else {
-            var38 = -0.1432689;
+            if (input[1] >= 0.75) {
+              var38 = -0.2821677;
+            } else {
+              var38 = 0.019247888;
+            }
           }
         }
       }
     } else {
-      if (input[4] >= 0.25) {
+      if (input[2] >= 0.75) {
         if (input[4] >= 0.45) {
-          if (input[4] >= 0.65) {
-            var38 = -0.24880677;
-          } else {
-            if (input[4] >= 0.55) {
-              var38 = 0.21401058;
+          if (input[5] >= 0.85) {
+            if (input[1] >= 0.45) {
+              var38 = 0.061281625;
             } else {
-              var38 = -0.046811562;
+              var38 = -0.3148132;
+            }
+          } else {
+            if (input[2] >= 0.95) {
+              var38 = 0.15825656;
+            } else {
+              var38 = 0.01826872;
             }
           }
         } else {
-          var38 = -0.29651362;
-        }
-      } else {
-        if (input[5] >= 0.85) {
-          var38 = 0.24063861;
-        } else {
-          if (input[4] >= 0.15) {
-            if (input[0] >= -24.0) {
-              var38 = 0.29312325;
+          if (input[0] >= -34.5) {
+            if (input[1] >= 0.55) {
+              var38 = -0.3512484;
             } else {
-              var38 = 0.08008164;
+              var38 = -0.04016629;
             }
           } else {
-            if (input[2] >= 0.85) {
-              var38 = 0.025706759;
+            if (input[5] >= 0.85) {
+              var38 = -0.2478761;
             } else {
-              var38 = -0.3235691;
+              var38 = 0.10698683;
+            }
+          }
+        }
+      } else {
+        if (input[1] >= 0.85) {
+          if (input[1] >= 0.95) {
+            if (input[0] >= -30.0) {
+              var38 = 0.13015419;
+            } else {
+              var38 = -0.021322168;
+            }
+          } else {
+            if (input[4] >= 0.05) {
+              var38 = -0.36956635;
+            } else {
+              var38 = 0.02871474;
+            }
+          }
+        } else {
+          if (input[5] >= 0.65) {
+            if (input[1] >= 0.25) {
+              var38 = 0.037509084;
+            } else {
+              var38 = -0.15984753;
+            }
+          } else {
+            if (input[0] >= -33.5) {
+              var38 = 0.29902327;
+            } else {
+              var38 = -0.020863399;
             }
           }
         }
       }
     }
   } else {
-    if (input[2] >= 0.45) {
-      if (input[3] >= 0.15) {
-        if (input[2] >= 0.95) {
-          if (input[3] >= 0.65) {
-            var38 = 0.15735255;
-          } else {
-            var38 = -0.3316108;
-          }
-        } else {
-          if (input[1] >= 0.35000002) {
-            if (input[0] >= -37.5) {
-              var38 = 0.0020425105;
-            } else {
-              var38 = 0.18417928;
-            }
-          } else {
-            if (input[0] >= -27.5) {
-              var38 = 0.046241224;
-            } else {
-              var38 = 0.25451702;
-            }
-          }
-        }
+    if (input[3] >= 0.55) {
+      if (input[5] >= 0.6) {
+        var38 = -0.21564455;
       } else {
-        if (input[0] >= -31.5) {
-          if (input[0] >= -30.0) {
-            if (input[0] >= 22.0) {
-              var38 = 0.040183056;
-            } else {
-              var38 = -0.37172955;
-            }
-          } else {
-            if (input[2] >= 0.95) {
-              var38 = 0.21207729;
-            } else {
-              var38 = 0.053056076;
-            }
-          }
-        } else {
-          var38 = -0.29687732;
-        }
+        var38 = -0.044681758;
       }
     } else {
-      if (input[5] >= 0.75) {
-        var38 = -0.31253296;
+      if (input[0] >= 25.5) {
+        var38 = -0.058202803;
       } else {
-        if (input[5] >= 0.65) {
-          if (input[2] >= 0.3) {
-            if (input[0] >= 39.5) {
-              var38 = 0.1881829;
-            } else {
-              var38 = 0.055269163;
-            }
-          } else {
-            var38 = -0.07312244;
-          }
+        if (input[0] >= -32.5) {
+          var38 = 0.27438167;
         } else {
-          var38 = -0.29423687;
+          var38 = 0.076823786;
         }
       }
     }
   }
   double var39;
-  if (input[5] >= 0.55) {
-    if (input[0] >= 49.5) {
-      if (input[4] >= 0.25) {
-        var39 = -0.21168078;
-      } else {
-        var39 = 0.009638465;
-      }
-    } else {
-      if (input[0] >= 46.5) {
-        if (input[1] >= 0.45) {
-          if (input[2] >= 0.55) {
-            var39 = 0.22805454;
-          } else {
-            var39 = 0.038580325;
-          }
-        } else {
-          var39 = -0.04091535;
-        }
-      } else {
-        if (input[0] >= 43.5) {
-          var39 = -0.20242687;
-        } else {
-          if (input[2] >= 0.15) {
-            if (input[3] >= 0.75) {
-              var39 = 0.013319238;
-            } else {
-              var39 = -0.011709873;
-            }
-          } else {
-            var39 = 0.1265712;
-          }
-        }
-      }
-    }
-  } else {
-    if (input[1] >= 0.15) {
-      if (input[1] >= 0.25) {
-        if (input[2] >= 0.95) {
-          if (input[1] >= 0.45) {
-            if (input[3] >= 0.55) {
-              var39 = 0.08238494;
-            } else {
-              var39 = -0.26644453;
-            }
-          } else {
-            if (input[4] >= 0.35000002) {
-              var39 = 0.059316266;
-            } else {
-              var39 = 0.25580046;
-            }
-          }
-        } else {
-          if (input[1] >= 0.45) {
-            if (input[2] >= 0.85) {
-              var39 = -0.1654677;
-            } else {
-              var39 = 0.03028398;
-            }
-          } else {
-            if (input[2] >= 0.85) {
-              var39 = 0.07697591;
-            } else {
-              var39 = -0.25437924;
-            }
-          }
-        }
-      } else {
-        if (input[2] >= 0.85) {
-          var39 = -0.2514813;
-        } else {
-          if (input[4] >= 0.35000002) {
-            var39 = 0.10233296;
-          } else {
-            var39 = 0.26939672;
-          }
-        }
-      }
-    } else {
-      if (input[5] >= 0.45) {
-        var39 = -0.26820967;
-      } else {
-        if (input[2] >= 0.65) {
-          var39 = -0.03649225;
-        } else {
-          var39 = 0.14888093;
-        }
-      }
-    }
-  }
-  double var40;
-  if (input[0] >= 15.5) {
-    if (input[0] >= 29.5) {
-      if (input[5] >= 0.95) {
-        if (input[0] >= 38.5) {
-          if (input[0] >= 41.5) {
-            if (input[2] >= 0.65) {
-              var40 = 0.13591844;
-            } else {
-              var40 = 0.012010272;
-            }
-          } else {
-            var40 = -0.20441587;
-          }
-        } else {
-          if (input[3] >= 0.45) {
-            var40 = 0.06135814;
-          } else {
-            if (input[3] >= 0.35000002) {
-              var40 = 0.2561414;
-            } else {
-              var40 = 0.07438717;
-            }
-          }
-        }
-      } else {
-        if (input[5] >= 0.75) {
-          if (input[1] >= 0.75) {
-            if (input[3] >= 0.95) {
-              var40 = 0.15028833;
-            } else {
-              var40 = -0.22879927;
-            }
-          } else {
-            if (input[1] >= 0.55) {
-              var40 = 0.06753086;
-            } else {
-              var40 = -0.090494946;
-            }
-          }
-        } else {
-          if (input[0] >= 36.5) {
-            if (input[5] >= 0.65) {
-              var40 = 0.04260301;
-            } else {
-              var40 = -0.02114736;
-            }
-          } else {
-            if (input[5] >= 0.65) {
-              var40 = -0.04783516;
-            } else {
-              var40 = 0.17409512;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[2] >= 0.45) {
-        if (input[5] >= 0.95) {
-          var40 = -0.2452732;
-        } else {
-          if (input[1] >= 0.15) {
-            if (input[3] >= 0.25) {
-              var40 = 0.099849865;
-            } else {
-              var40 = 0.28965575;
-            }
-          } else {
-            if (input[4] >= 0.2) {
-              var40 = 0.046097394;
-            } else {
-              var40 = -0.24721043;
-            }
-          }
-        }
-      } else {
-        var40 = -0.2920642;
-      }
-    }
-  } else {
-    if (input[0] >= 11.5) {
-      if (input[3] >= 0.65) {
-        if (input[1] >= 0.25) {
-          if (input[1] >= 0.85) {
-            var40 = 0.18617557;
-          } else {
-            var40 = -0.29919595;
-          }
-        } else {
-          if (input[2] >= 0.65) {
-            if (input[5] >= 0.75) {
-              var40 = 0.011259907;
-            } else {
-              var40 = -0.33327967;
-            }
-          } else {
-            if (input[2] >= 0.55) {
-              var40 = 0.1999546;
-            } else {
-              var40 = -0.027932573;
-            }
-          }
-        }
-      } else {
+  if (input[2] >= 0.15) {
+    if (input[0] >= -41.5) {
+      if (input[3] >= 0.75) {
         if (input[2] >= 0.55) {
-          if (input[2] >= 0.95) {
-            var40 = 0.10434778;
-          } else {
-            var40 = -0.36659926;
-          }
-        } else {
-          if (input[4] >= 0.45) {
-            if (input[5] >= 0.85) {
-              var40 = 0.031336267;
+          if (input[0] >= -33.5) {
+            if (input[0] >= 5.5) {
+              var39 = 0.007523742;
             } else {
-              var40 = 0.36446887;
+              var39 = -0.14457147;
             }
           } else {
-            if (input[1] >= 0.45) {
-              var40 = -0.32561642;
+            if (input[5] >= 0.65) {
+              var39 = 0.13721687;
             } else {
-              var40 = 0.03011327;
+              var39 = -0.19458252;
             }
           }
-        }
-      }
-    } else {
-      if (input[0] >= 10.5) {
-        if (input[4] >= 0.35000002) {
-          if (input[4] >= 0.55) {
-            var40 = -0.020280037;
-          } else {
-            var40 = 0.2674641;
-          }
         } else {
-          var40 = -0.11699926;
-        }
-      } else {
-        if (input[0] >= 9.0) {
-          if (input[3] >= 0.85) {
-            if (input[1] >= 0.25) {
-              var40 = 0.13226575;
-            } else {
-              var40 = -0.06535058;
-            }
-          } else {
-            var40 = -0.4309002;
-          }
-        } else {
-          if (input[0] >= 6.5) {
-            var40 = 0.24610369;
-          } else {
+          if (input[0] >= -22.0) {
             if (input[4] >= 0.35000002) {
-              var40 = -0.024676777;
+              var39 = -0.044624265;
             } else {
-              var40 = 0.012021477;
+              var39 = 0.15571032;
             }
-          }
-        }
-      }
-    }
-  }
-  double var41;
-  if (input[1] >= 0.65) {
-    if (input[4] >= 0.45) {
-      if (input[2] >= 0.95) {
-        if (input[4] >= 0.75) {
-          var41 = -0.04077856;
-        } else {
-          if (input[0] >= -30.5) {
-            var41 = 0.089525506;
           } else {
-            var41 = 0.30475342;
+            var39 = -0.26320425;
           }
         }
       } else {
-        if (input[4] >= 0.55) {
-          if (input[2] >= 0.85) {
-            var41 = -0.254803;
-          } else {
-            if (input[2] >= 0.75) {
-              var41 = 0.11934133;
+        if (input[0] >= 46.5) {
+          if (input[4] >= 0.25) {
+            if (input[0] >= 51.5) {
+              var39 = -0.054742772;
             } else {
-              var41 = -0.041541;
-            }
-          }
-        } else {
-          var41 = -0.30007732;
-        }
-      }
-    } else {
-      if (input[2] >= 0.95) {
-        if (input[0] >= 41.5) {
-          var41 = 0.10640494;
-        } else {
-          if (input[5] >= 0.55) {
-            var41 = -0.26836726;
-          } else {
-            var41 = 0.02814317;
-          }
-        }
-      } else {
-        if (input[0] >= 42.5) {
-          if (input[5] >= 0.45) {
-            if (input[0] >= 47.5) {
-              var41 = -0.033561017;
-            } else {
-              var41 = -0.2600794;
+              var39 = 0.1816837;
             }
           } else {
             if (input[1] >= 0.75) {
-              var41 = 0.043473188;
+              var39 = -0.20595545;
             } else {
-              var41 = 0.15578498;
+              var39 = 0.041710112;
             }
           }
         } else {
-          if (input[5] >= 0.35000002) {
-            if (input[4] >= 0.15) {
-              var41 = 0.06542648;
+          if (input[0] >= 42.5) {
+            if (input[5] >= 0.45) {
+              var39 = -0.2892731;
             } else {
-              var41 = 0.0054594115;
+              var39 = 0.14871484;
             }
           } else {
-            if (input[3] >= 0.35000002) {
-              var41 = -0.26213568;
+            if (input[1] >= 0.95) {
+              var39 = -0.07553916;
             } else {
-              var41 = 0.049345724;
+              var39 = -0.0053139976;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[4] >= 0.55) {
+        var39 = 0.21222234;
+      } else {
+        if (input[2] >= 0.55) {
+          var39 = -0.17490584;
+        } else {
+          var39 = 0.083979376;
+        }
+      }
+    }
+  } else {
+    if (input[3] >= 0.55) {
+      var39 = -0.043013904;
+    } else {
+      var39 = 0.15249597;
+    }
+  }
+  double var40;
+  if (input[1] >= 0.05) {
+    if (input[0] >= 36.5) {
+      if (input[0] >= 37.5) {
+        if (input[0] >= 38.5) {
+          if (input[2] >= 0.85) {
+            if (input[0] >= 40.5) {
+              var40 = -0.030235767;
+            } else {
+              var40 = -0.26328474;
+            }
+          } else {
+            if (input[5] >= 0.95) {
+              var40 = -0.1949437;
+            } else {
+              var40 = 0.00922208;
+            }
+          }
+        } else {
+          if (input[1] >= 0.45) {
+            if (input[4] >= 0.35000002) {
+              var40 = -0.14769863;
+            } else {
+              var40 = 0.18915221;
+            }
+          } else {
+            var40 = -0.38445255;
+          }
+        }
+      } else {
+        if (input[1] >= 0.65) {
+          var40 = -0.3662583;
+        } else {
+          if (input[4] >= 0.05) {
+            if (input[4] >= 0.55) {
+              var40 = 0.073288895;
+            } else {
+              var40 = -0.40993;
+            }
+          } else {
+            if (input[1] >= 0.55) {
+              var40 = 0.24507408;
+            } else {
+              var40 = -0.025302282;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[0] >= 34.5) {
+        if (input[1] >= 0.45) {
+          if (input[3] >= 0.95) {
+            var40 = 0.03733693;
+          } else {
+            if (input[5] >= 0.79999995) {
+              var40 = 0.066644505;
+            } else {
+              var40 = 0.2781517;
+            }
+          }
+        } else {
+          var40 = -0.28649274;
+        }
+      } else {
+        if (input[0] >= 32.5) {
+          if (input[4] >= 0.55) {
+            if (input[2] >= 0.6) {
+              var40 = -0.0553507;
+            } else {
+              var40 = 0.2304525;
+            }
+          } else {
+            if (input[5] >= 0.65) {
+              var40 = -0.37272382;
+            } else {
+              var40 = -0.045247678;
+            }
+          }
+        } else {
+          if (input[0] >= 22.0) {
+            if (input[4] >= 0.05) {
+              var40 = 0.20065197;
+            } else {
+              var40 = -0.0987093;
+            }
+          } else {
+            if (input[5] >= 0.35000002) {
+              var40 = -0.0059236293;
+            } else {
+              var40 = 0.10633235;
             }
           }
         }
       }
     }
   } else {
-    if (input[0] >= 42.5) {
-      if (input[4] >= 0.35000002) {
-        if (input[0] >= 47.5) {
-          var41 = -0.22917801;
-        } else {
-          if (input[2] >= 0.85) {
-            var41 = 0.1383888;
+    if (input[0] >= -37.0) {
+      var40 = -0.0050095106;
+    } else {
+      var40 = 0.17727569;
+    }
+  }
+  double var41;
+  if (input[3] >= 0.15) {
+    if (input[3] >= 0.35000002) {
+      if (input[4] >= 0.25) {
+        if (input[3] >= 0.45) {
+          if (input[0] >= -32.5) {
+            if (input[0] >= -26.5) {
+              var41 = 0.0022003208;
+            } else {
+              var41 = -0.12080332;
+            }
           } else {
-            var41 = -0.043610435;
+            if (input[4] >= 0.55) {
+              var41 = -0.118284605;
+            } else {
+              var41 = 0.09266695;
+            }
+          }
+        } else {
+          if (input[0] >= -19.0) {
+            if (input[5] >= 0.65) {
+              var41 = 0.1826474;
+            } else {
+              var41 = -0.24732839;
+            }
+          } else {
+            if (input[4] >= 0.65) {
+              var41 = 0.09179639;
+            } else {
+              var41 = -0.12025339;
+            }
           }
         }
       } else {
-        if (input[1] >= 0.45) {
-          if (input[0] >= 49.0) {
-            var41 = 0.018395528;
-          } else {
-            if (input[5] >= 0.75) {
-              var41 = 0.092391565;
+        if (input[5] >= 0.65) {
+          if (input[4] >= 0.15) {
+            if (input[1] >= 0.15) {
+              var41 = -0.3897885;
             } else {
-              var41 = 0.26370925;
+              var41 = 0.073865406;
+            }
+          } else {
+            if (input[5] >= 0.85) {
+              var41 = 0.04662274;
+            } else {
+              var41 = -0.13411374;
             }
           }
         } else {
-          if (input[0] >= 48.5) {
-            if (input[4] >= 0.2) {
-              var41 = -0.006670141;
+          if (input[0] >= -28.5) {
+            if (input[0] >= -24.5) {
+              var41 = 0.008313904;
             } else {
-              var41 = 0.16594034;
+              var41 = 0.26486948;
             }
           } else {
-            var41 = -0.105705254;
+            if (input[1] >= 0.85) {
+              var41 = 0.106747195;
+            } else {
+              var41 = -0.22936165;
+            }
           }
         }
       }
     } else {
-      if (input[0] >= 40.5) {
-        if (input[2] >= 0.55) {
-          if (input[3] >= 0.65) {
-            if (input[5] >= 0.55) {
-              var41 = -0.24567597;
+      if (input[4] >= 0.05) {
+        if (input[5] >= 0.45) {
+          if (input[0] >= -11.5) {
+            if (input[2] >= 0.75) {
+              var41 = 0.14598651;
             } else {
-              var41 = 0.08516436;
+              var41 = -0.15258487;
             }
           } else {
-            if (input[1] >= 0.35000002) {
-              var41 = -0.39274016;
+            if (input[2] >= 0.25) {
+              var41 = -0.1771867;
             } else {
-              var41 = -0.0065893526;
+              var41 = 0.20679595;
             }
           }
         } else {
-          if (input[3] >= 0.75) {
-            var41 = -0.23017062;
-          } else {
-            if (input[1] >= 0.45) {
-              var41 = 0.027746428;
+          if (input[2] >= 0.95) {
+            if (input[4] >= 0.35000002) {
+              var41 = 0.023855103;
             } else {
-              var41 = 0.2611307;
+              var41 = 0.2674934;
+            }
+          } else {
+            if (input[4] >= 0.65) {
+              var41 = 0.06270164;
+            } else {
+              var41 = -0.21214417;
             }
           }
         }
       } else {
-        if (input[0] >= 39.5) {
-          if (input[4] >= 0.65) {
-            var41 = 0.23524956;
-          } else {
-            if (input[1] >= 0.55) {
-              var41 = -0.2587261;
+        if (input[0] >= -27.5) {
+          if (input[1] >= 0.45) {
+            if (input[5] >= 0.65) {
+              var41 = 0.16884518;
             } else {
-              var41 = 0.13753039;
+              var41 = -0.14310901;
+            }
+          } else {
+            if (input[0] >= 17.5) {
+              var41 = -0.028628984;
+            } else {
+              var41 = -0.4148499;
             }
           }
         } else {
-          if (input[0] >= 32.5) {
-            if (input[1] >= 0.55) {
-              var41 = 0.0711742;
+          if (input[1] >= 0.25) {
+            if (input[5] >= 0.85) {
+              var41 = -0.2199071;
             } else {
-              var41 = -0.11528566;
+              var41 = 0.11540394;
             }
           } else {
-            if (input[0] >= 30.5) {
-              var41 = 0.15183108;
+            if (input[1] >= 0.15) {
+              var41 = 0.24985723;
             } else {
-              var41 = -0.0018312925;
+              var41 = -0.20321189;
+            }
+          }
+        }
+      }
+    }
+  } else {
+    if (input[1] >= 0.45) {
+      if (input[0] >= 38.5) {
+        if (input[2] >= 0.45) {
+          var41 = -0.410948;
+        } else {
+          var41 = 0.09142396;
+        }
+      } else {
+        if (input[0] >= 34.5) {
+          if (input[3] >= 0.05) {
+            if (input[1] >= 0.75) {
+              var41 = -0.07897678;
+            } else {
+              var41 = 0.19039817;
+            }
+          } else {
+            var41 = -0.12638883;
+          }
+        } else {
+          if (input[4] >= 0.25) {
+            var41 = 0.029510124;
+          } else {
+            var41 = -0.309447;
+          }
+        }
+      }
+    } else {
+      if (input[2] >= 0.75) {
+        if (input[3] >= 0.05) {
+          if (input[1] >= 0.15) {
+            if (input[5] >= 0.55) {
+              var41 = -0.38442594;
+            } else {
+              var41 = 0.22418255;
+            }
+          } else {
+            if (input[5] >= 0.65) {
+              var41 = 0.18823196;
+            } else {
+              var41 = -0.27409372;
+            }
+          }
+        } else {
+          if (input[2] >= 0.85) {
+            if (input[1] >= 0.35000002) {
+              var41 = 0.36811954;
+            } else {
+              var41 = 0.13359931;
+            }
+          } else {
+            if (input[0] >= 6.5) {
+              var41 = 0.22871247;
+            } else {
+              var41 = -0.21493743;
+            }
+          }
+        }
+      } else {
+        if (input[1] >= 0.25) {
+          if (input[4] >= 0.45000002) {
+            var41 = -0.22263914;
+          } else {
+            if (input[5] >= 0.85) {
+              var41 = 0.3184303;
+            } else {
+              var41 = 0.045388103;
+            }
+          }
+        } else {
+          if (input[4] >= 0.15) {
+            if (input[2] >= 0.65) {
+              var41 = 0.31922126;
+            } else {
+              var41 = 0.022071926;
+            }
+          } else {
+            if (input[5] >= 0.3) {
+              var41 = -0.35196653;
+            } else {
+              var41 = 0.11215736;
             }
           }
         }
@@ -5606,595 +5810,895 @@ List<double> score(List<double> input) {
     }
   }
   double var42;
-  if (input[0] >= 15.5) {
-    if (input[0] >= 18.5) {
-      if (input[4] >= 0.75) {
-        if (input[0] >= 39.5) {
+  if (input[2] >= 0.15) {
+    if (input[0] >= 36.5) {
+      if (input[0] >= 37.5) {
+        if (input[4] >= 0.45) {
           if (input[2] >= 0.55) {
-            var42 = -0.052375082;
+            if (input[1] >= 0.75) {
+              var42 = -0.27258193;
+            } else {
+              var42 = -0.045403637;
+            }
           } else {
-            var42 = 0.17828766;
+            if (input[1] >= 0.65) {
+              var42 = -0.018473106;
+            } else {
+              var42 = 0.17957513;
+            }
           }
         } else {
           if (input[1] >= 0.65) {
-            if (input[5] >= 0.75) {
-              var42 = 0.056621175;
+            if (input[3] >= 0.65) {
+              var42 = -0.114641115;
             } else {
-              var42 = -0.20664741;
-            }
-          } else {
-            var42 = -0.42190158;
-          }
-        }
-      } else {
-        if (input[2] >= 0.25) {
-          if (input[3] >= 0.85) {
-            if (input[2] >= 0.55) {
-              var42 = -0.13280298;
-            } else {
-              var42 = 0.08272992;
-            }
-          } else {
-            if (input[3] >= 0.75) {
-              var42 = 0.0910107;
-            } else {
-              var42 = 0.008979377;
-            }
-          }
-        } else {
-          if (input[1] >= 0.85) {
-            var42 = -0.018125385;
-          } else {
-            var42 = -0.2264157;
-          }
-        }
-      }
-    } else {
-      if (input[4] >= 0.35000002) {
-        var42 = 0.23442982;
-      } else {
-        var42 = -0.1273372;
-      }
-    }
-  } else {
-    if (input[2] >= 0.25) {
-      if (input[0] >= 11.5) {
-        if (input[3] >= 0.65) {
-          if (input[1] >= 0.25) {
-            if (input[1] >= 0.75) {
-              var42 = 0.056212246;
-            } else {
-              var42 = -0.253836;
-            }
-          } else {
-            if (input[5] >= 0.75) {
-              var42 = 0.04444614;
-            } else {
-              var42 = -0.10973298;
-            }
-          }
-        } else {
-          if (input[2] >= 0.55) {
-            if (input[2] >= 0.95) {
-              var42 = 0.0881541;
-            } else {
-              var42 = -0.33203888;
-            }
-          } else {
-            if (input[4] >= 0.45) {
-              var42 = 0.20085968;
-            } else {
-              var42 = -0.28748795;
-            }
-          }
-        }
-      } else {
-        if (input[4] >= 0.05) {
-          if (input[4] >= 0.15) {
-            if (input[4] >= 0.25) {
-              var42 = -0.009089399;
-            } else {
-              var42 = 0.103817396;
+              var42 = 0.08137612;
             }
           } else {
             if (input[2] >= 0.75) {
-              var42 = -0.26827204;
+              var42 = 0.061208095;
             } else {
-              var42 = 0.0863102;
-            }
-          }
-        } else {
-          if (input[3] >= 0.15) {
-            if (input[0] >= -33.5) {
-              var42 = 0.10842172;
-            } else {
-              var42 = -0.024868673;
-            }
-          } else {
-            if (input[0] >= -30.0) {
-              var42 = -0.32433644;
-            } else {
-              var42 = 0.0060461345;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[1] >= 0.65) {
-        var42 = 0.18832605;
-      } else {
-        var42 = -0.03984573;
-      }
-    }
-  }
-  double var43;
-  if (input[5] >= 0.55) {
-    if (input[0] >= 49.5) {
-      if (input[0] >= 51.5) {
-        var43 = -0.018354293;
-      } else {
-        var43 = -0.18481447;
-      }
-    } else {
-      if (input[0] >= 46.5) {
-        if (input[1] >= 0.45) {
-          if (input[2] >= 0.55) {
-            var43 = 0.20669414;
-          } else {
-            var43 = 0.02219685;
-          }
-        } else {
-          var43 = -0.04066639;
-        }
-      } else {
-        if (input[0] >= 43.5) {
-          var43 = -0.17770053;
-        } else {
-          if (input[1] >= 0.15) {
-            if (input[0] >= -37.5) {
-              var43 = -0.01026978;
-            } else {
-              var43 = 0.057955056;
-            }
-          } else {
-            if (input[2] >= 0.85) {
-              var43 = 0.15906614;
-            } else {
-              var43 = -0.05789699;
-            }
-          }
-        }
-      }
-    }
-  } else {
-    if (input[3] >= 0.25) {
-      if (input[0] >= -5.0) {
-        if (input[0] >= 39.0) {
-          if (input[1] >= 0.55) {
-            if (input[3] >= 0.65) {
-              var43 = -0.14890541;
-            } else {
-              var43 = 0.029935526;
-            }
-          } else {
-            if (input[3] >= 0.65) {
-              var43 = 0.13001052;
-            } else {
-              var43 = -0.22606799;
-            }
-          }
-        } else {
-          if (input[2] >= 0.45) {
-            var43 = 0.20431794;
-          } else {
-            var43 = 0.02750886;
-          }
-        }
-      } else {
-        if (input[3] >= 0.55) {
-          if (input[3] >= 0.75) {
-            var43 = -0.019234644;
-          } else {
-            var43 = -0.3091712;
-          }
-        } else {
-          if (input[0] >= -27.5) {
-            var43 = -0.27155226;
-          } else {
-            if (input[4] >= 0.35000002) {
-              var43 = -0.119745;
-            } else {
-              var43 = 0.08753452;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[2] >= 0.55) {
-        if (input[1] >= 0.15) {
-          var43 = 0.18153028;
-        } else {
-          if (input[4] >= 0.15) {
-            var43 = 0.14678998;
-          } else {
-            var43 = -0.21909104;
-          }
-        }
-      } else {
-        var43 = -0.3112701;
-      }
-    }
-  }
-  double var44;
-  if (input[5] >= 0.25) {
-    if (input[5] >= 0.35000002) {
-      if (input[0] >= 46.5) {
-        if (input[1] >= 0.45) {
-          if (input[1] >= 0.55) {
-            if (input[4] >= 0.35000002) {
-              var44 = 0.116406724;
-            } else {
-              var44 = -0.037479077;
-            }
-          } else {
-            var44 = 0.19133128;
-          }
-        } else {
-          if (input[4] >= 0.35000002) {
-            var44 = -0.1872328;
-          } else {
-            if (input[5] >= 0.65) {
-              var44 = -0.08217098;
-            } else {
-              var44 = 0.14574425;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= 43.5) {
-          if (input[1] >= 0.55) {
-            var44 = -0.21331248;
-          } else {
-            var44 = 0.06484414;
-          }
-        } else {
-          if (input[5] >= 0.45) {
-            if (input[0] >= 41.5) {
-              var44 = 0.04422447;
-            } else {
-              var44 = -0.003308648;
-            }
-          } else {
-            if (input[4] >= 0.05) {
-              var44 = 0.011938514;
-            } else {
-              var44 = -0.26992008;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[0] >= 47.5) {
-        var44 = -0.19043188;
-      } else {
-        if (input[1] >= 0.75) {
-          if (input[2] >= 0.55) {
-            var44 = -0.23571911;
-          } else {
-            var44 = 0.05637146;
-          }
-        } else {
-          if (input[1] >= 0.55) {
-            var44 = 0.22818908;
-          } else {
-            if (input[1] >= 0.35000002) {
-              var44 = -0.035596553;
-            } else {
-              var44 = 0.17030427;
-            }
-          }
-        }
-      }
-    }
-  } else {
-    var44 = -0.104863;
-  }
-  double var45;
-  if (input[5] >= 0.25) {
-    if (input[2] >= 0.15) {
-      if (input[0] >= 52.5) {
-        var45 = 0.08473333;
-      } else {
-        if (input[0] >= -32.5) {
-          if (input[4] >= 0.25) {
-            if (input[0] >= -27.5) {
-              var45 = -0.0071939067;
-            } else {
-              var45 = -0.19722266;
-            }
-          } else {
-            if (input[1] >= 0.25) {
-              var45 = 0.036554784;
-            } else {
-              var45 = -0.039194666;
-            }
-          }
-        } else {
-          if (input[4] >= 0.25) {
-            if (input[5] >= 0.45) {
-              var45 = 0.052773226;
-            } else {
-              var45 = -0.10179798;
-            }
-          } else {
-            if (input[3] >= 0.35000002) {
-              var45 = -0.118260846;
-            } else {
-              var45 = 0.023164323;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[1] >= 0.75) {
-        var45 = -0.021759385;
-      } else {
-        var45 = 0.13911678;
-      }
-    }
-  } else {
-    var45 = -0.08967121;
-  }
-  double var46;
-  if (input[0] >= 40.5) {
-    if (input[3] >= 0.95) {
-      if (input[0] >= 41.5) {
-        var46 = -0.00817433;
-      } else {
-        var46 = 0.15676613;
-      }
-    } else {
-      if (input[5] >= 0.85) {
-        if (input[0] >= 41.5) {
-          if (input[4] >= 0.45) {
-            var46 = 0.13226579;
-          } else {
-            if (input[2] >= 0.65) {
-              var46 = 0.06400102;
-            } else {
-              var46 = -0.16641685;
-            }
-          }
-        } else {
-          var46 = -0.26154608;
-        }
-      } else {
-        if (input[5] >= 0.65) {
-          if (input[3] >= 0.55) {
-            if (input[0] >= 42.5) {
-              var46 = 0.09866536;
-            } else {
-              var46 = -0.23515502;
-            }
-          } else {
-            if (input[2] >= 0.65) {
-              var46 = 0.15423515;
-            } else {
-              var46 = 0.0018954069;
-            }
-          }
-        } else {
-          if (input[3] >= 0.35000002) {
-            if (input[4] >= 0.25) {
-              var46 = -0.07876907;
-            } else {
-              var46 = 0.048049867;
-            }
-          } else {
-            if (input[4] >= 0.15) {
-              var46 = 0.02157966;
-            } else {
-              var46 = -0.36411852;
-            }
-          }
-        }
-      }
-    }
-  } else {
-    if (input[5] >= 0.35000002) {
-      if (input[1] >= 0.85) {
-        if (input[0] >= 38.5) {
-          if (input[3] >= 0.3) {
-            var46 = 0.07281989;
-          } else {
-            var46 = 0.21626972;
-          }
-        } else {
-          if (input[2] >= 0.85) {
-            if (input[0] >= -33.5) {
-              var46 = -0.11878387;
-            } else {
-              var46 = 0.17346185;
-            }
-          } else {
-            if (input[0] >= -32.5) {
-              var46 = 0.03440421;
-            } else {
-              var46 = -0.15331611;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= 38.5) {
-          if (input[1] >= 0.65) {
-            var46 = -0.36956975;
-          } else {
-            if (input[4] >= 0.65) {
-              var46 = 0.21124454;
-            } else {
-              var46 = -0.02271277;
-            }
-          }
-        } else {
-          if (input[0] >= 37.5) {
-            if (input[4] >= 0.35000002) {
-              var46 = -0.2602082;
-            } else {
-              var46 = 0.15066054;
-            }
-          } else {
-            if (input[0] >= 36.5) {
-              var46 = -0.05772034;
-            } else {
-              var46 = -0.0006878331;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[1] >= 0.35000002) {
-        if (input[4] >= 0.15) {
-          if (input[3] >= 0.65) {
-            var46 = 0.076762915;
-          } else {
-            var46 = -0.10774743;
-          }
-        } else {
-          if (input[1] >= 0.55) {
-            var46 = 0.17735131;
-          } else {
-            var46 = -0.040125474;
-          }
-        }
-      } else {
-        var46 = 0.17992774;
-      }
-    }
-  }
-  double var47;
-  if (input[1] >= 0.45) {
-    if (input[3] >= 0.05) {
-      if (input[3] >= 0.75) {
-        if (input[2] >= 0.75) {
-          if (input[4] >= 0.45) {
-            if (input[3] >= 0.85) {
-              var47 = -0.11824942;
-            } else {
-              var47 = 0.24220942;
-            }
-          } else {
-            if (input[3] >= 0.85) {
-              var47 = 0.0802674;
-            } else {
-              var47 = -0.13157174;
-            }
-          }
-        } else {
-          if (input[0] >= 41.5) {
-            if (input[3] >= 0.85) {
-              var47 = -0.059504624;
-            } else {
-              var47 = 0.20151564;
-            }
-          } else {
-            if (input[1] >= 0.55) {
-              var47 = -0.027253248;
-            } else {
-              var47 = -0.29587668;
+              var42 = -0.09013459;
             }
           }
         }
       } else {
         if (input[1] >= 0.65) {
-          if (input[1] >= 0.75) {
-            if (input[3] >= 0.65) {
-              var47 = -0.11224733;
-            } else {
-              var47 = -0.0061775097;
-            }
-          } else {
-            if (input[4] >= 0.05) {
-              var47 = 0.11363305;
-            } else {
-              var47 = -0.10155923;
-            }
-          }
-        } else {
-          if (input[3] >= 0.45) {
-            if (input[0] >= 27.5) {
-              var47 = 0.021087166;
-            } else {
-              var47 = -0.29995865;
-            }
-          } else {
-            if (input[0] >= 38.5) {
-              var47 = -0.1287268;
-            } else {
-              var47 = 0.06735569;
-            }
-          }
-        }
-      }
-    } else {
-      var47 = -0.18316598;
-    }
-  } else {
-    if (input[5] >= 0.95) {
-      if (input[1] >= 0.15) {
-        if (input[3] >= 0.6) {
-          var47 = 0.035168946;
-        } else {
-          var47 = -0.29178944;
-        }
-      } else {
-        var47 = 0.13104612;
-      }
-    } else {
-      if (input[2] >= 0.75) {
-        if (input[5] >= 0.55) {
-          if (input[3] >= 0.05) {
-            if (input[3] >= 0.15) {
-              var47 = -0.010790029;
-            } else {
-              var47 = -0.2364299;
-            }
-          } else {
-            if (input[1] >= 0.35000002) {
-              var47 = 0.22325645;
-            } else {
-              var47 = 0.065443344;
-            }
-          }
+          var42 = -0.3175685;
         } else {
           if (input[4] >= 0.05) {
-            if (input[4] >= 0.65) {
-              var47 = -0.063476;
+            if (input[4] >= 0.55) {
+              var42 = 0.04187924;
             } else {
-              var47 = 0.13162172;
+              var42 = -0.3491232;
             }
           } else {
-            var47 = -0.2161968;
+            if (input[1] >= 0.55) {
+              var42 = 0.20238967;
+            } else {
+              var42 = -0.03616888;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[0] >= 34.5) {
+        if (input[1] >= 0.45) {
+          if (input[2] >= 0.65) {
+            if (input[5] >= 0.65) {
+              var42 = -0.058573466;
+            } else {
+              var42 = 0.1656619;
+            }
+          } else {
+            var42 = 0.25441647;
+          }
+        } else {
+          var42 = -0.2509545;
+        }
+      } else {
+        if (input[0] >= 32.5) {
+          if (input[4] >= 0.55) {
+            if (input[2] >= 0.6) {
+              var42 = -0.05231606;
+            } else {
+              var42 = 0.22200328;
+            }
+          } else {
+            if (input[0] >= 33.5) {
+              var42 = -0.01601149;
+            } else {
+              var42 = -0.35045254;
+            }
+          }
+        } else {
+          if (input[0] >= 30.5) {
+            if (input[0] >= 31.5) {
+              var42 = 0.24682714;
+            } else {
+              var42 = 0.07152477;
+            }
+          } else {
+            if (input[5] >= 0.35000002) {
+              var42 = -0.0025245643;
+            } else {
+              var42 = 0.08121996;
+            }
+          }
+        }
+      }
+    }
+  } else {
+    if (input[3] >= 0.55) {
+      var42 = -0.03868577;
+    } else {
+      var42 = 0.14626586;
+    }
+  }
+  double var43;
+  if (input[0] >= 42.5) {
+    if (input[0] >= 49.5) {
+      if (input[5] >= 0.65) {
+        var43 = -0.19208081;
+      } else {
+        if (input[5] >= 0.35000002) {
+          if (input[5] >= 0.45) {
+            if (input[4] >= 0.35000002) {
+              var43 = -0.18817191;
+            } else {
+              var43 = 0.06138486;
+            }
+          } else {
+            if (input[0] >= 51.5) {
+              var43 = 0.16506894;
+            } else {
+              var43 = -0.013231788;
+            }
+          }
+        } else {
+          var43 = -0.1926885;
+        }
+      }
+    } else {
+      if (input[3] >= 0.75) {
+        if (input[0] >= 45.0) {
+          if (input[1] >= 0.55) {
+            var43 = 0.1577552;
+          } else {
+            var43 = -0.118149176;
+          }
+        } else {
+          var43 = 0.22297066;
+        }
+      } else {
+        if (input[0] >= 46.5) {
+          if (input[2] >= 0.45) {
+            if (input[5] >= 0.65) {
+              var43 = 0.20656368;
+            } else {
+              var43 = 0.019213328;
+            }
+          } else {
+            var43 = -0.078398846;
+          }
+        } else {
+          if (input[5] >= 0.45) {
+            var43 = -0.2595391;
+          } else {
+            var43 = 0.120154396;
+          }
+        }
+      }
+    }
+  } else {
+    if (input[0] >= 36.5) {
+      if (input[2] >= 0.85) {
+        if (input[4] >= 0.15) {
+          if (input[3] >= 0.45) {
+            var43 = -0.35637593;
+          } else {
+            if (input[5] >= 0.75) {
+              var43 = -0.10088207;
+            } else {
+              var43 = 0.088501655;
+            }
+          }
+        } else {
+          if (input[1] >= 0.65) {
+            if (input[2] >= 0.95) {
+              var43 = 0.04445267;
+            } else {
+              var43 = -0.31518584;
+            }
+          } else {
+            if (input[3] >= 0.15) {
+              var43 = 0.18686676;
+            } else {
+              var43 = -0.26864377;
+            }
           }
         }
       } else {
-        if (input[0] >= -25.5) {
-          if (input[0] >= -19.0) {
-            if (input[5] >= 0.65) {
-              var47 = 0.03574559;
+        if (input[2] >= 0.75) {
+          if (input[0] >= 40.5) {
+            if (input[1] >= 0.35000002) {
+              var43 = -0.15963742;
             } else {
-              var47 = -0.10891806;
+              var43 = 0.2009608;
             }
           } else {
-            var47 = -0.23911718;
+            if (input[3] >= 0.35000002) {
+              var43 = 0.20241837;
+            } else {
+              var43 = -0.07695471;
+            }
+          }
+        } else {
+          if (input[1] >= 0.65) {
+            if (input[4] >= 0.45) {
+              var43 = -0.15879574;
+            } else {
+              var43 = 0.042370066;
+            }
+          } else {
+            if (input[5] >= 0.75) {
+              var43 = -0.21504608;
+            } else {
+              var43 = -0.0047910507;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[0] >= 34.5) {
+        if (input[1] >= 0.65) {
+          if (input[5] >= 0.79999995) {
+            var43 = 0.007207155;
+          } else {
+            if (input[3] >= 0.85) {
+              var43 = 0.060379345;
+            } else {
+              var43 = 0.2525779;
+            }
+          }
+        } else {
+          if (input[5] >= 0.65) {
+            var43 = 0.10573101;
+          } else {
+            var43 = -0.27366266;
+          }
+        }
+      } else {
+        if (input[0] >= 32.5) {
+          if (input[4] >= 0.55) {
+            if (input[2] >= 0.6) {
+              var43 = -0.04232789;
+            } else {
+              var43 = 0.19928469;
+            }
+          } else {
+            if (input[0] >= 33.5) {
+              var43 = -0.0126538;
+            } else {
+              var43 = -0.307917;
+            }
+          }
+        } else {
+          if (input[0] >= 22.0) {
+            if (input[4] >= 0.05) {
+              var43 = 0.15226398;
+            } else {
+              var43 = -0.11397543;
+            }
+          } else {
+            if (input[2] >= 0.25) {
+              var43 = -0.0025981772;
+            } else {
+              var43 = 0.11809149;
+            }
+          }
+        }
+      }
+    }
+  }
+  double var44;
+  if (input[3] >= 0.45) {
+    if (input[0] >= -36.5) {
+      if (input[0] >= -32.5) {
+        if (input[0] >= -28.5) {
+          if (input[2] >= 0.35000002) {
+            if (input[2] >= 0.45) {
+              var44 = 0.0037413416;
+            } else {
+              var44 = -0.0716183;
+            }
+          } else {
+            if (input[0] >= 46.5) {
+              var44 = -0.18212345;
+            } else {
+              var44 = 0.16915168;
+            }
+          }
+        } else {
+          var44 = -0.29259253;
+        }
+      } else {
+        if (input[5] >= 0.45) {
+          if (input[4] >= 0.55) {
+            if (input[2] >= 0.85) {
+              var44 = -0.25007328;
+            } else {
+              var44 = 0.08299183;
+            }
+          } else {
+            if (input[2] >= 0.55) {
+              var44 = 0.09273516;
+            } else {
+              var44 = -0.13069524;
+            }
+          }
+        } else {
+          var44 = -0.26094046;
+        }
+      }
+    } else {
+      if (input[1] >= 0.85) {
+        if (input[3] >= 0.85) {
+          var44 = 0.18459512;
+        } else {
+          if (input[1] >= 0.95) {
+            var44 = 0.10938436;
+          } else {
+            var44 = -0.2724354;
+          }
+        }
+      } else {
+        if (input[2] >= 0.55) {
+          if (input[5] >= 0.35000002) {
+            var44 = -0.33033022;
+          } else {
+            var44 = 0.036943737;
+          }
+        } else {
+          var44 = 0.108197875;
+        }
+      }
+    }
+  } else {
+    if (input[1] >= 0.35000002) {
+      if (input[4] >= 0.45) {
+        if (input[1] >= 0.45) {
+          if (input[1] >= 0.75) {
+            if (input[2] >= 0.55) {
+              var44 = -0.25790003;
+            } else {
+              var44 = 0.07245515;
+            }
+          } else {
+            if (input[5] >= 0.65) {
+              var44 = 0.18838139;
+            } else {
+              var44 = -0.12497173;
+            }
+          }
+        } else {
+          if (input[5] >= 0.55) {
+            var44 = -0.3046378;
+          } else {
+            var44 = 0.17507869;
+          }
+        }
+      } else {
+        if (input[4] >= 0.35000002) {
+          if (input[1] >= 0.85) {
+            var44 = 0.08686145;
+          } else {
+            var44 = -0.42046788;
+          }
+        } else {
+          if (input[5] >= 0.75) {
+            if (input[3] >= 0.35000002) {
+              var44 = -0.26888886;
+            } else {
+              var44 = -0.011581185;
+            }
+          } else {
+            if (input[1] >= 0.55) {
+              var44 = -0.03403511;
+            } else {
+              var44 = 0.062288858;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[2] >= 0.95) {
+        if (input[4] >= 0.75) {
+          var44 = 0.19444269;
+        } else {
+          if (input[1] >= 0.15) {
+            var44 = -0.37367988;
+          } else {
+            if (input[5] >= 0.95) {
+              var44 = 0.27330568;
+            } else {
+              var44 = -0.08151065;
+            }
+          }
+        }
+      } else {
+        if (input[3] >= 0.25) {
+          if (input[5] >= 0.55) {
+            if (input[0] >= 13.5) {
+              var44 = -0.13173652;
+            } else {
+              var44 = 0.07928784;
+            }
+          } else {
+            var44 = -0.30580592;
           }
         } else {
           if (input[4] >= 0.65) {
-            var47 = -0.22448137;
+            if (input[2] >= 0.55) {
+              var44 = -0.28515863;
+            } else {
+              var44 = 0.00049763167;
+            }
+          } else {
+            if (input[5] >= 0.75) {
+              var44 = 0.021549612;
+            } else {
+              var44 = 0.13507947;
+            }
+          }
+        }
+      }
+    }
+  }
+  double var45;
+  if (input[2] >= 0.65) {
+    if (input[5] >= 0.75) {
+      if (input[4] >= 0.55) {
+        if (input[0] >= 14.5) {
+          if (input[1] >= 0.45) {
+            if (input[0] >= 37.5) {
+              var45 = -0.18453357;
+            } else {
+              var45 = 0.18788783;
+            }
+          } else {
+            var45 = -0.50186914;
+          }
+        } else {
+          if (input[2] >= 0.85) {
+            if (input[2] >= 0.95) {
+              var45 = 0.006669565;
+            } else {
+              var45 = -0.23761122;
+            }
+          } else {
+            if (input[2] >= 0.75) {
+              var45 = 0.21648555;
+            } else {
+              var45 = -0.19635935;
+            }
+          }
+        }
+      } else {
+        if (input[3] >= 0.95) {
+          var45 = -0.32494137;
+        } else {
+          if (input[0] >= -22.0) {
+            if (input[1] >= 0.75) {
+              var45 = -0.19850892;
+            } else {
+              var45 = 0.07498138;
+            }
+          } else {
+            if (input[0] >= -27.5) {
+              var45 = -0.26520866;
+            } else {
+              var45 = 0.02302353;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[4] >= 0.55) {
+        if (input[1] >= 0.85) {
+          if (input[4] >= 0.75) {
+            var45 = 0.0010706771;
+          } else {
+            var45 = -0.21675585;
+          }
+        } else {
+          if (input[1] >= 0.25) {
+            if (input[0] >= -8.0) {
+              var45 = 0.20539099;
+            } else {
+              var45 = 0.03145657;
+            }
+          } else {
+            if (input[3] >= 0.75) {
+              var45 = -0.37931737;
+            } else {
+              var45 = 0.08301695;
+            }
+          }
+        }
+      } else {
+        if (input[3] >= 0.25) {
+          if (input[1] >= 0.35000002) {
+            if (input[0] >= 39.5) {
+              var45 = -0.08728981;
+            } else {
+              var45 = 0.002727457;
+            }
+          } else {
+            if (input[3] >= 0.85) {
+              var45 = -0.021251485;
+            } else {
+              var45 = -0.21205479;
+            }
+          }
+        } else {
+          if (input[1] >= 0.45) {
+            if (input[0] >= 34.5) {
+              var45 = -0.07982146;
+            } else {
+              var45 = -0.2392189;
+            }
+          } else {
+            if (input[2] >= 0.95) {
+              var45 = -0.10401895;
+            } else {
+              var45 = 0.12873909;
+            }
+          }
+        }
+      }
+    }
+  } else {
+    if (input[5] >= 0.95) {
+      if (input[0] >= -32.5) {
+        if (input[3] >= 0.65) {
+          if (input[1] >= 0.85) {
+            var45 = 0.1891806;
+          } else {
+            var45 = 0.0049218656;
+          }
+        } else {
+          if (input[2] >= 0.55) {
+            if (input[1] >= 0.75) {
+              var45 = 0.051272668;
+            } else {
+              var45 = -0.06800485;
+            }
+          } else {
+            var45 = -0.25697744;
+          }
+        }
+      } else {
+        var45 = 0.22101629;
+      }
+    } else {
+      if (input[5] >= 0.85) {
+        if (input[0] >= -22.0) {
+          if (input[1] >= 0.85) {
+            if (input[2] >= 0.55) {
+              var45 = -0.22112155;
+            } else {
+              var45 = 0.18439542;
+            }
+          } else {
+            if (input[1] >= 0.65) {
+              var45 = -0.28032678;
+            } else {
+              var45 = -0.013938919;
+            }
+          }
+        } else {
+          if (input[4] >= 0.85) {
+            var45 = 0.121364474;
+          } else {
+            if (input[2] >= 0.25) {
+              var45 = -0.35724252;
+            } else {
+              var45 = 0.11224771;
+            }
+          }
+        }
+      } else {
+        if (input[1] >= 0.35000002) {
+          if (input[1] >= 0.55) {
+            if (input[1] >= 0.65) {
+              var45 = 0.0115109645;
+            } else {
+              var45 = 0.09423045;
+            }
+          } else {
+            if (input[0] >= 40.5) {
+              var45 = -0.00071921875;
+            } else {
+              var45 = -0.25551543;
+            }
+          }
+        } else {
+          if (input[4] >= 0.55) {
+            if (input[2] >= 0.45) {
+              var45 = 0.16239703;
+            } else {
+              var45 = -0.06478289;
+            }
+          } else {
+            if (input[4] >= 0.35000002) {
+              var45 = -0.0895298;
+            } else {
+              var45 = 0.064927734;
+            }
+          }
+        }
+      }
+    }
+  }
+  double var46;
+  if (input[0] >= 42.5) {
+    if (input[0] >= 43.5) {
+      if (input[5] >= 0.45) {
+        if (input[0] >= 46.5) {
+          if (input[0] >= 51.5) {
+            if (input[2] >= 0.55) {
+              var46 = -0.193629;
+            } else {
+              var46 = 0.042892646;
+            }
+          } else {
+            if (input[5] >= 0.65) {
+              var46 = 0.10453166;
+            } else {
+              var46 = -0.014162582;
+            }
+          }
+        } else {
+          var46 = -0.22288074;
+        }
+      } else {
+        if (input[5] >= 0.35000002) {
+          if (input[3] >= 0.85) {
+            var46 = -0.010063591;
+          } else {
+            if (input[3] >= 0.75) {
+              var46 = 0.064442396;
+            } else {
+              var46 = 0.21280368;
+            }
+          }
+        } else {
+          if (input[0] >= 47.5) {
+            var46 = -0.19555515;
+          } else {
+            var46 = 0.08706472;
+          }
+        }
+      }
+    } else {
+      if (input[5] >= 0.55) {
+        var46 = 0.044191733;
+      } else {
+        var46 = 0.2019866;
+      }
+    }
+  } else {
+    if (input[2] >= 0.65) {
+      if (input[3] >= 0.05) {
+        if (input[5] >= 0.75) {
+          if (input[0] >= 41.5) {
+            if (input[4] >= 0.2) {
+              var46 = -0.028256094;
+            } else {
+              var46 = 0.26989454;
+            }
+          } else {
+            if (input[3] >= 0.45) {
+              var46 = 0.018714236;
+            } else {
+              var46 = -0.039468296;
+            }
+          }
+        } else {
+          if (input[0] >= 41.5) {
+            var46 = -0.31821555;
+          } else {
+            if (input[0] >= -28.5) {
+              var46 = 0.002258914;
+            } else {
+              var46 = -0.09370748;
+            }
+          }
+        }
+      } else {
+        if (input[2] >= 0.85) {
+          if (input[1] >= 0.15) {
+            var46 = 0.06889636;
+          } else {
+            var46 = 0.2797512;
+          }
+        } else {
+          if (input[0] >= 38.0) {
+            var46 = 0.20043275;
+          } else {
+            var46 = -0.22615854;
+          }
+        }
+      }
+    } else {
+      if (input[4] >= 0.25) {
+        if (input[4] >= 0.35000002) {
+          if (input[1] >= 0.75) {
+            if (input[4] >= 0.65) {
+              var46 = 0.034653015;
+            } else {
+              var46 = -0.27797633;
+            }
+          } else {
+            if (input[3] >= 0.65) {
+              var46 = -0.03978354;
+            } else {
+              var46 = 0.07721156;
+            }
+          }
+        } else {
+          if (input[0] >= 38.5) {
+            if (input[3] >= 0.95) {
+              var46 = 0.1528259;
+            } else {
+              var46 = -0.21552868;
+            }
+          } else {
+            if (input[0] >= 13.5) {
+              var46 = 0.20094211;
+            } else {
+              var46 = 0.044729497;
+            }
+          }
+        }
+      } else {
+        if (input[1] >= 0.55) {
+          if (input[3] >= 0.55) {
+            if (input[5] >= 0.75) {
+              var46 = -0.08427794;
+            } else {
+              var46 = 0.13585015;
+            }
+          } else {
+            if (input[3] >= 0.35000002) {
+              var46 = -0.11763175;
+            } else {
+              var46 = 0.046003737;
+            }
+          }
+        } else {
+          if (input[0] >= -31.5) {
+            if (input[3] >= 0.65) {
+              var46 = -0.022920735;
+            } else {
+              var46 = -0.23503208;
+            }
+          } else {
+            if (input[3] >= 0.35000002) {
+              var46 = 0.16803804;
+            } else {
+              var46 = -0.027480861;
+            }
+          }
+        }
+      }
+    }
+  }
+  double var47;
+  if (input[0] >= 42.5) {
+    if (input[2] >= 0.35000002) {
+      if (input[5] >= 0.35000002) {
+        if (input[5] >= 0.45) {
+          if (input[1] >= 0.65) {
+            if (input[2] >= 0.65) {
+              var47 = 0.014180166;
+            } else {
+              var47 = -0.20126407;
+            }
+          } else {
+            if (input[1] >= 0.45) {
+              var47 = 0.1628418;
+            } else {
+              var47 = -0.037389867;
+            }
+          }
+        } else {
+          if (input[3] >= 0.75) {
+            if (input[0] >= 53.0) {
+              var47 = 0.13302487;
+            } else {
+              var47 = -0.0714848;
+            }
+          } else {
+            var47 = 0.23424391;
+          }
+        }
+      } else {
+        if (input[0] >= 47.5) {
+          var47 = -0.17427707;
+        } else {
+          var47 = 0.040116854;
+        }
+      }
+    } else {
+      var47 = -0.10723093;
+    }
+  } else {
+    if (input[0] >= 9.0) {
+      if (input[2] >= 0.45) {
+        if (input[2] >= 0.65) {
+          if (input[0] >= 10.5) {
+            if (input[0] >= 13.5) {
+              var47 = -0.028004164;
+            } else {
+              var47 = 0.115922414;
+            }
           } else {
             if (input[1] >= 0.25) {
-              var47 = 0.19091582;
+              var47 = 0.014781737;
             } else {
-              var47 = 0.034477055;
+              var47 = -0.51409894;
+            }
+          }
+        } else {
+          if (input[0] >= 13.5) {
+            if (input[0] >= 36.5) {
+              var47 = 0.0028447474;
+            } else {
+              var47 = 0.08536125;
+            }
+          } else {
+            if (input[3] >= 0.75) {
+              var47 = 0.056053795;
+            } else {
+              var47 = -0.37718588;
+            }
+          }
+        }
+      } else {
+        if (input[3] >= 0.65) {
+          if (input[5] >= 0.45) {
+            var47 = -0.39687723;
+          } else {
+            var47 = 0.0015803482;
+          }
+        } else {
+          if (input[4] >= 0.45) {
+            if (input[0] >= 15.5) {
+              var47 = -0.07399523;
+            } else {
+              var47 = 0.21772937;
+            }
+          } else {
+            if (input[0] >= 13.5) {
+              var47 = 0.0010390589;
+            } else {
+              var47 = -0.2761752;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[0] >= 6.5) {
+        var47 = 0.28192765;
+      } else {
+        if (input[2] >= 0.45) {
+          if (input[2] >= 0.55) {
+            if (input[3] >= 0.65) {
+              var47 = -0.03325436;
+            } else {
+              var47 = 0.012528573;
+            }
+          } else {
+            if (input[3] >= 0.55) {
+              var47 = 0.008515706;
+            } else {
+              var47 = -0.20640275;
+            }
+          }
+        } else {
+          if (input[0] >= -32.5) {
+            if (input[4] >= 0.35000002) {
+              var47 = -0.1001765;
+            } else {
+              var47 = 0.16547813;
+            }
+          } else {
+            if (input[5] >= 0.95) {
+              var47 = 0.080600776;
+            } else {
+              var47 = -0.25569898;
             }
           }
         }
@@ -6202,669 +6706,665 @@ List<double> score(List<double> input) {
     }
   }
   double var48;
-  if (input[4] >= 0.85) {
-    if (input[1] >= 0.25) {
-      if (input[1] >= 0.65) {
-        if (input[1] >= 0.85) {
-          if (input[3] >= 0.65) {
-            var48 = 0.18509902;
-          } else {
-            var48 = -0.009534089;
-          }
+  if (input[0] >= -41.5) {
+    if (input[4] >= 0.85) {
+      if (input[1] >= 0.25) {
+        if (input[3] >= 0.95) {
+          var48 = 0.20264968;
         } else {
-          if (input[5] >= 0.85) {
-            var48 = -0.0028405227;
+          if (input[2] >= 0.55) {
+            if (input[2] >= 0.65) {
+              var48 = 0.03146059;
+            } else {
+              var48 = -0.25300726;
+            }
           } else {
-            var48 = -0.20429893;
+            if (input[0] >= 38.5) {
+              var48 = 0.22594808;
+            } else {
+              var48 = 0.039176174;
+            }
           }
         }
       } else {
-        if (input[5] >= 0.75) {
-          if (input[0] >= -31.5) {
-            var48 = -0.249775;
+        if (input[3] >= 0.45) {
+          if (input[0] >= 7.0) {
+            if (input[0] >= 12.0) {
+              var48 = -0.08103426;
+            } else {
+              var48 = 0.062164567;
+            }
           } else {
-            var48 = 0.19230193;
+            var48 = -0.24142069;
           }
         } else {
-          if (input[5] >= 0.65) {
-            var48 = 0.25237316;
+          if (input[2] >= 0.85) {
+            var48 = 0.09072334;
           } else {
-            var48 = 0.078933336;
+            var48 = 0.011093832;
           }
         }
       }
     } else {
-      if (input[5] >= 0.65) {
-        if (input[0] >= 14.5) {
-          var48 = -0.28652173;
-        } else {
-          if (input[3] >= 0.75) {
-            var48 = -0.09887627;
+      if (input[3] >= 0.95) {
+        if (input[2] >= 0.55) {
+          if (input[5] >= 0.75) {
+            var48 = -0.33687806;
           } else {
-            if (input[3] >= 0.65) {
-              var48 = 0.1823278;
+            if (input[4] >= 0.35000002) {
+              var48 = 0.10889171;
             } else {
-              var48 = 0.04227657;
+              var48 = -0.104632385;
             }
+          }
+        } else {
+          if (input[5] >= 0.75) {
+            var48 = 0.19140196;
+          } else {
+            var48 = -0.12786095;
           }
         }
       } else {
-        var48 = -0.35047716;
-      }
-    }
-  } else {
-    if (input[2] >= 0.35000002) {
-      if (input[1] >= 0.25) {
-        if (input[4] >= 0.15) {
-          if (input[3] >= 0.35000002) {
-            if (input[5] >= 0.85) {
-              var48 = -0.0756939;
+        if (input[2] >= 0.55) {
+          if (input[5] >= 0.45) {
+            if (input[0] >= -34.5) {
+              var48 = -0.007753792;
             } else {
-              var48 = 0.0061346414;
+              var48 = 0.03437451;
             }
           } else {
-            if (input[4] >= 0.55) {
-              var48 = 0.03527921;
+            if (input[1] >= 0.75) {
+              var48 = -0.08911763;
             } else {
-              var48 = -0.26107743;
+              var48 = 0.08321003;
             }
           }
         } else {
           if (input[0] >= -33.5) {
             if (input[0] >= 36.5) {
-              var48 = -0.0088583715;
+              var48 = -0.05272135;
             } else {
-              var48 = 0.103866875;
+              var48 = 0.030440073;
             }
           } else {
-            if (input[0] >= -34.5) {
-              var48 = -0.15286121;
-            } else {
-              var48 = 0.038086668;
-            }
-          }
-        }
-      } else {
-        if (input[4] >= 0.15) {
-          if (input[3] >= 0.15) {
-            if (input[0] >= 26.5) {
-              var48 = -0.22437586;
-            } else {
-              var48 = 0.030232824;
-            }
-          } else {
-            if (input[0] >= -23.5) {
-              var48 = 0.26902154;
-            } else {
-              var48 = 0.04566156;
-            }
-          }
-        } else {
-          if (input[4] >= 0.05) {
-            if (input[2] >= 0.55) {
-              var48 = -0.3612116;
-            } else {
-              var48 = 0.13573729;
-            }
-          } else {
-            if (input[3] >= 0.55) {
-              var48 = -0.20543908;
-            } else {
-              var48 = 0.06486611;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[4] >= 0.15) {
-        if (input[4] >= 0.25) {
-          if (input[3] >= 0.55) {
-            if (input[3] >= 0.85) {
-              var48 = 0.14271574;
-            } else {
-              var48 = -0.23506823;
-            }
-          } else {
-            var48 = 0.15359657;
-          }
-        } else {
-          var48 = 0.22077706;
-        }
-      } else {
-        if (input[3] >= 0.4) {
-          var48 = 0.09667713;
-        } else {
-          var48 = -0.30782235;
-        }
-      }
-    }
-  }
-  double var49;
-  if (input[2] >= 0.65) {
-    if (input[4] >= 0.35000002) {
-      if (input[3] >= 0.35000002) {
-        if (input[0] >= 15.5) {
-          if (input[4] >= 0.75) {
-            if (input[0] >= 40.5) {
-              var49 = 0.046905383;
-            } else {
-              var49 = -0.30915686;
-            }
-          } else {
-            if (input[5] >= 0.65) {
-              var49 = 0.19966799;
-            } else {
-              var49 = -0.035392147;
-            }
-          }
-        } else {
-          if (input[0] >= 14.5) {
-            if (input[2] >= 0.75) {
-              var49 = -0.2577813;
-            } else {
-              var49 = 0.12895374;
-            }
-          } else {
-            if (input[2] >= 0.75) {
-              var49 = 0.060264904;
-            } else {
-              var49 = -0.14540184;
-            }
-          }
-        }
-      } else {
-        if (input[5] >= 0.55) {
-          if (input[1] >= 0.65) {
-            if (input[4] >= 0.65) {
-              var49 = 0.16139022;
-            } else {
-              var49 = -0.17855294;
-            }
-          } else {
-            if (input[3] >= 0.15) {
-              var49 = -0.25645682;
-            } else {
-              var49 = -0.02183476;
-            }
-          }
-        } else {
-          if (input[3] >= 0.25) {
-            if (input[4] >= 0.75) {
-              var49 = 0.16950306;
-            } else {
-              var49 = -0.24183293;
-            }
-          } else {
-            if (input[4] >= 0.55) {
-              var49 = 0.03277455;
-            } else {
-              var49 = 0.1949993;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[0] >= -27.5) {
-        if (input[5] >= 0.85) {
-          if (input[4] >= 0.15) {
-            if (input[3] >= 0.55) {
-              var49 = -0.27062914;
-            } else {
-              var49 = 0.07801162;
-            }
-          } else {
-            if (input[3] >= 0.15) {
-              var49 = 0.14025202;
-            } else {
-              var49 = -0.13582371;
-            }
-          }
-        } else {
-          if (input[1] >= 0.15) {
-            if (input[5] >= 0.65) {
-              var49 = -0.1764396;
-            } else {
-              var49 = -0.005036354;
-            }
-          } else {
-            if (input[0] >= -11.5) {
-              var49 = -0.2121261;
-            } else {
-              var49 = 0.16945803;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= -28.5) {
-          if (input[2] >= 0.85) {
-            if (input[5] >= 0.75) {
-              var49 = 0.20157759;
-            } else {
-              var49 = -0.24783698;
-            }
-          } else {
-            var49 = 0.21985061;
-          }
-        } else {
-          if (input[5] >= 0.65) {
-            if (input[2] >= 0.75) {
-              var49 = -0.015757943;
-            } else {
-              var49 = 0.062079277;
-            }
-          } else {
-            if (input[2] >= 0.95) {
-              var49 = 0.044739723;
-            } else {
-              var49 = -0.2864869;
-            }
+            var48 = -0.28817102;
           }
         }
       }
     }
   } else {
-    if (input[4] >= 0.35000002) {
-      if (input[3] >= 0.45) {
-        if (input[5] >= 0.45) {
-          if (input[4] >= 0.75) {
-            if (input[1] >= 0.55) {
-              var49 = -0.22824036;
+    if (input[4] >= 0.55) {
+      var48 = 0.17858218;
+    } else {
+      var48 = -0.004648473;
+    }
+  }
+  double var49;
+  if (input[1] >= 0.75) {
+    if (input[5] >= 0.35000002) {
+      if (input[3] >= 0.65) {
+        if (input[3] >= 0.75) {
+          if (input[0] >= 4.5) {
+            if (input[3] >= 0.85) {
+              var49 = -0.012019861;
             } else {
-              var49 = 0.10314621;
+              var49 = 0.15945102;
             }
           } else {
             if (input[3] >= 0.85) {
-              var49 = -0.038077943;
+              var49 = 0.06376268;
             } else {
-              var49 = -0.2980921;
+              var49 = -0.3030694;
             }
           }
         } else {
-          if (input[3] >= 0.75) {
-            var49 = 0.01638636;
+          if (input[0] >= -32.5) {
+            if (input[0] >= 51.5) {
+              var49 = 0.016154861;
+            } else {
+              var49 = -0.33912483;
+            }
           } else {
-            var49 = 0.18762282;
+            if (input[0] >= -33.5) {
+              var49 = 0.19107132;
+            } else {
+              var49 = -0.08103523;
+            }
           }
         }
       } else {
-        if (input[5] >= 0.95) {
-          var49 = -0.23196408;
+        if (input[4] >= 0.55) {
+          if (input[2] >= 0.55) {
+            var49 = -0.209373;
+          } else {
+            var49 = 0.077084705;
+          }
         } else {
-          if (input[5] >= 0.65) {
-            if (input[0] >= 35.0) {
-              var49 = 0.024192078;
+          if (input[5] >= 0.55) {
+            if (input[4] >= 0.45) {
+              var49 = 0.210114;
             } else {
-              var49 = 0.19151534;
+              var49 = 0.0010572578;
             }
           } else {
-            var49 = -0.1719008;
+            if (input[2] >= 0.65) {
+              var49 = 0.030742936;
+            } else {
+              var49 = 0.19837923;
+            }
           }
         }
       }
     } else {
-      if (input[5] >= 0.95) {
-        if (input[3] >= 0.25) {
-          if (input[2] >= 0.55) {
-            if (input[0] >= 17.0) {
-              var49 = 0.07149716;
+      if (input[4] >= 0.6) {
+        var49 = 0.052182;
+      } else {
+        var49 = -0.32577404;
+      }
+    }
+  } else {
+    if (input[5] >= 0.45) {
+      if (input[1] >= 0.55) {
+        if (input[5] >= 0.65) {
+          if (input[2] >= 0.75) {
+            if (input[0] >= -27.5) {
+              var49 = 0.03204342;
             } else {
-              var49 = 0.28381068;
+              var49 = -0.29577523;
             }
           } else {
-            if (input[1] >= 0.9) {
-              var49 = 0.18108088;
+            if (input[3] >= 0.45) {
+              var49 = 0.08736692;
             } else {
-              var49 = -0.031639528;
+              var49 = -0.05008068;
             }
           }
         } else {
-          var49 = -0.061211694;
+          if (input[3] >= 0.15) {
+            if (input[2] >= 0.65) {
+              var49 = -0.34230393;
+            } else {
+              var49 = -0.18827617;
+            }
+          } else {
+            var49 = -0.0077383164;
+          }
         }
       } else {
-        if (input[5] >= 0.75) {
-          if (input[3] >= 0.75) {
-            if (input[0] >= 4.0) {
-              var49 = 0.18875334;
+        if (input[2] >= 0.35000002) {
+          if (input[2] >= 0.95) {
+            if (input[1] >= 0.45) {
+              var49 = -0.4014136;
             } else {
-              var49 = -0.10169646;
+              var49 = 0.0059817755;
             }
           } else {
-            if (input[2] >= 0.45) {
-              var49 = -0.206364;
+            if (input[0] >= -25.5) {
+              var49 = -0.0060350522;
             } else {
-              var49 = 0.0028931987;
+              var49 = 0.024655933;
             }
           }
         } else {
-          if (input[5] >= 0.45) {
-            if (input[0] >= 42.5) {
-              var49 = -0.1261211;
+          var49 = -0.26713625;
+        }
+      }
+    } else {
+      if (input[2] >= 0.95) {
+        if (input[4] >= 0.35000002) {
+          if (input[4] >= 0.75) {
+            var49 = 0.17118062;
+          } else {
+            var49 = -0.14322673;
+          }
+        } else {
+          if (input[1] >= 0.45) {
+            var49 = 0.024411092;
+          } else {
+            var49 = 0.25991973;
+          }
+        }
+      } else {
+        if (input[1] >= 0.55) {
+          if (input[4] >= 0.15) {
+            if (input[4] >= 0.35000002) {
+              var49 = 0.097518735;
             } else {
-              var49 = 0.086638615;
+              var49 = -0.26988056;
             }
           } else {
-            if (input[1] >= 0.75) {
-              var49 = -0.32206795;
+            if (input[3] >= 0.55) {
+              var49 = 0.039268043;
             } else {
-              var49 = 0.046835013;
+              var49 = 0.1899785;
             }
+          }
+        } else {
+          if (input[0] >= 13.0) {
+            if (input[3] >= 0.75) {
+              var49 = -0.11875126;
+            } else {
+              var49 = 0.082046755;
+            }
+          } else {
+            var49 = -0.27308303;
           }
         }
       }
     }
   }
   double var50;
-  if (input[0] >= 46.5) {
-    if (input[5] >= 0.35000002) {
-      if (input[2] >= 0.45) {
-        if (input[4] >= 0.35000002) {
-          if (input[1] >= 0.75) {
-            var50 = 0.07092337;
+  if (input[4] >= 0.85) {
+    if (input[1] >= 0.25) {
+      if (input[2] >= 0.85) {
+        if (input[5] >= 0.85) {
+          if (input[3] >= 0.45) {
+            var50 = 0.025091076;
           } else {
-            var50 = -0.13807096;
+            var50 = 0.115620874;
           }
         } else {
-          if (input[1] >= 0.75) {
-            var50 = 0.04338318;
+          if (input[5] >= 0.75) {
+            var50 = -0.2318853;
           } else {
-            var50 = 0.16161987;
+            if (input[2] >= 0.95) {
+              var50 = 0.07114044;
+            } else {
+              var50 = -0.03664491;
+            }
           }
         }
       } else {
-        if (input[5] >= 0.45) {
-          var50 = -0.075990014;
+        if (input[2] >= 0.75) {
+          var50 = 0.17428355;
         } else {
-          var50 = 0.0697012;
+          if (input[0] >= -20.5) {
+            if (input[0] >= 8.5) {
+              var50 = 0.0017035278;
+            } else {
+              var50 = 0.2236879;
+            }
+          } else {
+            if (input[2] >= 0.55) {
+              var50 = -0.24592634;
+            } else {
+              var50 = 0.111991644;
+            }
+          }
         }
       }
     } else {
-      var50 = -0.111997835;
+      if (input[5] >= 0.65) {
+        if (input[3] >= 0.45) {
+          if (input[2] >= 0.65) {
+            var50 = -0.178469;
+          } else {
+            if (input[2] >= 0.5) {
+              var50 = 0.030742453;
+            } else {
+              var50 = -0.030050572;
+            }
+          }
+        } else {
+          var50 = 0.14602599;
+        }
+      } else {
+        var50 = -0.20652656;
+      }
     }
   } else {
-    if (input[5] >= 0.35000002) {
-      if (input[0] >= 43.5) {
-        if (input[2] >= 0.85) {
-          var50 = 0.032832943;
+    if (input[3] >= 0.95) {
+      if (input[2] >= 0.55) {
+        if (input[5] >= 0.55) {
+          if (input[2] >= 0.85) {
+            var50 = -0.034800626;
+          } else {
+            var50 = -0.34682882;
+          }
         } else {
-          var50 = -0.18192126;
+          if (input[1] >= 0.25) {
+            var50 = -0.09770484;
+          } else {
+            var50 = 0.18376032;
+          }
         }
       } else {
-        if (input[0] >= -35.5) {
-          if (input[3] >= 0.35000002) {
-            if (input[2] >= 0.35000002) {
-              var50 = -0.00058153836;
-            } else {
-              var50 = 0.095982075;
-            }
+        if (input[5] >= 0.75) {
+          if (input[1] >= 0.79999995) {
+            var50 = 0.203031;
           } else {
-            if (input[4] >= 0.65) {
-              var50 = -0.14066093;
-            } else {
-              var50 = -0.0038152067;
-            }
+            var50 = 0.063792564;
           }
         } else {
-          if (input[5] >= 0.85) {
-            if (input[0] >= -36.5) {
-              var50 = -0.00801171;
-            } else {
-              var50 = -0.24449278;
-            }
-          } else {
-            if (input[0] >= -37.5) {
-              var50 = -0.17451447;
-            } else {
-              var50 = 0.07449306;
-            }
-          }
+          var50 = -0.10247284;
         }
       }
     } else {
-      if (input[1] >= 0.75) {
-        var50 = -0.1008593;
-      } else {
-        if (input[1] >= 0.35000002) {
-          if (input[3] >= 0.55) {
-            var50 = -0.08883206;
-          } else {
-            if (input[2] >= 0.65) {
-              var50 = -0.033250444;
+      if (input[0] >= 42.5) {
+        if (input[3] >= 0.55) {
+          if (input[1] >= 0.75) {
+            if (input[4] >= 0.35000002) {
+              var50 = 0.061408095;
             } else {
-              var50 = 0.14926094;
+              var50 = -0.12525281;
+            }
+          } else {
+            if (input[4] >= 0.35000002) {
+              var50 = -0.02158469;
+            } else {
+              var50 = 0.11722543;
             }
           }
         } else {
-          var50 = 0.17099348;
+          if (input[1] >= 0.45) {
+            if (input[5] >= 0.85) {
+              var50 = 0.15322968;
+            } else {
+              var50 = -0.08963981;
+            }
+          } else {
+            var50 = -0.19895324;
+          }
+        }
+      } else {
+        if (input[3] >= 0.15) {
+          if (input[0] >= -34.5) {
+            if (input[3] >= 0.35000002) {
+              var50 = 0.00016866431;
+            } else {
+              var50 = -0.04335265;
+            }
+          } else {
+            if (input[4] >= 0.05) {
+              var50 = -0.03469989;
+            } else {
+              var50 = 0.08039148;
+            }
+          }
+        } else {
+          if (input[1] >= 0.45) {
+            if (input[0] >= 38.5) {
+              var50 = -0.24676988;
+            } else {
+              var50 = -0.026957413;
+            }
+          } else {
+            if (input[2] >= 0.75) {
+              var50 = -0.036075912;
+            } else {
+              var50 = 0.11980448;
+            }
+          }
         }
       }
     }
   }
   double var51;
-  if (input[0] >= -35.5) {
-    if (input[0] >= -32.5) {
-      if (input[0] >= -28.5) {
-        if (input[3] >= 0.05) {
-          if (input[3] >= 0.15) {
-            if (input[2] >= 0.95) {
-              var51 = 0.023922982;
+  if (input[0] >= -41.5) {
+    if (input[0] >= -33.5) {
+      if (input[0] >= -32.5) {
+        if (input[0] >= -28.5) {
+          if (input[0] >= -27.5) {
+            if (input[5] >= 0.95) {
+              var51 = -0.06868998;
             } else {
-              var51 = -0.006551398;
+              var51 = 0.0008966392;
             }
           } else {
-            if (input[2] >= 0.75) {
-              var51 = -0.07947473;
+            if (input[4] >= 0.35000002) {
+              var51 = -0.24569502;
             } else {
-              var51 = 0.095543824;
+              var51 = 0.17936663;
             }
           }
         } else {
-          if (input[1] >= 0.25) {
-            if (input[1] >= 0.55) {
-              var51 = -0.06546101;
+          if (input[4] >= 0.05) {
+            if (input[2] >= 0.35000002) {
+              var51 = -0.31280154;
             } else {
-              var51 = -0.32195574;
+              var51 = 0.04723129;
             }
           } else {
-            var51 = 0.15177917;
+            if (input[1] >= 0.15) {
+              var51 = -0.027278183;
+            } else {
+              var51 = 0.24829178;
+            }
           }
         }
       } else {
-        if (input[2] >= 0.85) {
-          if (input[3] >= 0.05) {
-            if (input[5] >= 0.95) {
-              var51 = 0.17697194;
+        if (input[3] >= 0.25) {
+          if (input[1] >= 0.55) {
+            if (input[2] >= 0.65) {
+              var51 = -0.32966635;
             } else {
-              var51 = -0.2590943;
+              var51 = 0.14225022;
             }
           } else {
-            if (input[5] >= 0.75) {
-              var51 = 0.04293616;
+            if (input[2] >= 0.85) {
+              var51 = 0.065751195;
             } else {
-              var51 = 0.2106275;
+              var51 = 0.29289666;
             }
           }
         } else {
-          if (input[2] >= 0.25) {
-            if (input[1] >= 0.35000002) {
-              var51 = -0.29580927;
-            } else {
-              var51 = -0.074941024;
-            }
+          if (input[5] >= 0.95) {
+            var51 = 0.046547625;
           } else {
-            var51 = 0.15790835;
+            var51 = -0.3690694;
           }
         }
       }
     } else {
-      if (input[3] >= 0.45) {
-        if (input[1] >= 0.45) {
-          if (input[4] >= 0.25) {
-            if (input[2] >= 0.75) {
-              var51 = -0.002704543;
+      if (input[2] >= 0.55) {
+        if (input[3] >= 0.75) {
+          if (input[2] >= 0.65) {
+            if (input[2] >= 0.85) {
+              var51 = 0.15067202;
             } else {
-              var51 = 0.09527927;
+              var51 = 0.03967076;
             }
           } else {
-            if (input[1] >= 0.85) {
-              var51 = 0.16807193;
-            } else {
-              var51 = -0.31608546;
-            }
+            var51 = -0.24169141;
           }
         } else {
-          if (input[0] >= -33.5) {
-            var51 = 0.2560594;
+          if (input[3] >= 0.65) {
+            if (input[2] >= 0.85) {
+              var51 = -0.40940785;
+            } else {
+              var51 = -0.007524615;
+            }
           } else {
-            var51 = 0.09521599;
+            if (input[2] >= 0.75) {
+              var51 = -0.042636685;
+            } else {
+              var51 = 0.04130196;
+            }
           }
         }
       } else {
-        if (input[1] >= 0.55) {
-          if (input[5] >= 0.55) {
-            if (input[5] >= 0.95) {
-              var51 = -0.030536434;
-            } else {
-              var51 = -0.3242861;
-            }
-          } else {
-            if (input[5] >= 0.35000002) {
-              var51 = 0.040279258;
-            } else {
-              var51 = 0.16347364;
-            }
-          }
+        if (input[4] >= 0.85) {
+          var51 = 0.10645337;
         } else {
-          if (input[4] >= 0.75) {
-            var51 = 0.16247158;
-          } else {
-            if (input[4] >= 0.15) {
-              var51 = -0.1922301;
-            } else {
-              var51 = 0.03600997;
-            }
-          }
+          var51 = -0.26827273;
         }
       }
     }
   } else {
-    if (input[5] >= 0.85) {
-      if (input[2] >= 0.65) {
-        var51 = -0.22471175;
-      } else {
-        var51 = -0.0058422945;
-      }
+    if (input[4] >= 0.55) {
+      var51 = 0.17105706;
     } else {
-      if (input[0] >= -37.5) {
-        var51 = -0.1539501;
-      } else {
-        if (input[3] >= 0.45) {
-          if (input[3] >= 0.75) {
-            var51 = 0.16946776;
-          } else {
-            if (input[1] >= 0.95) {
-              var51 = 0.062050696;
-            } else {
-              var51 = -0.24481608;
-            }
-          }
-        } else {
-          if (input[5] >= 0.75) {
-            var51 = 0.17732616;
-          } else {
-            var51 = -0.0016145542;
-          }
-        }
-      }
+      var51 = -0.0024531428;
     }
   }
   double var52;
-  if (input[0] >= 46.5) {
-    if (input[5] >= 0.35000002) {
-      if (input[1] >= 0.45) {
-        if (input[1] >= 0.55) {
-          if (input[4] >= 0.25) {
-            if (input[1] >= 0.85) {
-              var52 = 0.12637575;
+  if (input[0] >= 15.5) {
+    if (input[4] >= 0.05) {
+      if (input[5] >= 0.35000002) {
+        if (input[3] >= 0.85) {
+          if (input[0] >= 35.5) {
+            if (input[3] >= 0.95) {
+              var52 = 0.0659525;
             } else {
-              var52 = -0.020693447;
+              var52 = -0.08138053;
             }
           } else {
-            var52 = -0.088405006;
+            var52 = -0.23603411;
           }
         } else {
-          var52 = 0.17675975;
+          if (input[5] >= 0.45) {
+            if (input[5] >= 0.85) {
+              var52 = 0.079875536;
+            } else {
+              var52 = 0.0013907092;
+            }
+          } else {
+            if (input[3] >= 0.55) {
+              var52 = 0.00161577;
+            } else {
+              var52 = 0.25000024;
+            }
+          }
         }
       } else {
-        if (input[4] >= 0.2) {
-          var52 = -0.09987951;
+        if (input[3] >= 0.85) {
+          var52 = 0.095188536;
         } else {
-          var52 = 0.090043716;
+          if (input[4] >= 0.75) {
+            var52 = 0.0681224;
+          } else {
+            if (input[1] >= 0.35000002) {
+              var52 = -0.27402538;
+            } else {
+              var52 = 0.01120875;
+            }
+          }
         }
       }
     } else {
-      var52 = -0.09417539;
+      if (input[3] >= 0.25) {
+        if (input[5] >= 0.65) {
+          if (input[1] >= 0.75) {
+            if (input[3] >= 0.35000002) {
+              var52 = -0.08450969;
+            } else {
+              var52 = 0.22621265;
+            }
+          } else {
+            if (input[2] >= 0.85) {
+              var52 = -0.023058798;
+            } else {
+              var52 = -0.44849813;
+            }
+          }
+        } else {
+          if (input[2] >= 0.65) {
+            if (input[2] >= 0.75) {
+              var52 = -0.0152367735;
+            } else {
+              var52 = -0.32392573;
+            }
+          } else {
+            if (input[2] >= 0.45) {
+              var52 = 0.07581465;
+            } else {
+              var52 = -0.19775675;
+            }
+          }
+        }
+      } else {
+        if (input[5] >= 0.65) {
+          if (input[5] >= 0.75) {
+            if (input[1] >= 0.35000002) {
+              var52 = -0.047832403;
+            } else {
+              var52 = 0.10995545;
+            }
+          } else {
+            if (input[0] >= 35.5) {
+              var52 = 0.17778504;
+            } else {
+              var52 = 0.0028097667;
+            }
+          }
+        } else {
+          if (input[2] >= 0.55) {
+            if (input[2] >= 0.75) {
+              var52 = -0.020266823;
+            } else {
+              var52 = -0.26868114;
+            }
+          } else {
+            if (input[0] >= 39.0) {
+              var52 = -0.05254398;
+            } else {
+              var52 = 0.06961967;
+            }
+          }
+        }
+      }
     }
   } else {
-    if (input[1] >= 0.45) {
-      if (input[0] >= 43.5) {
-        var52 = -0.1930839;
-      } else {
-        if (input[0] >= 42.5) {
-          if (input[2] >= 0.95) {
-            var52 = 0.16331276;
-          } else {
-            var52 = -0.019813024;
-          }
-        } else {
-          if (input[2] >= 0.95) {
-            if (input[1] >= 0.55) {
-              var52 = 0.00021914304;
+    if (input[5] >= 0.35000002) {
+      if (input[0] >= 9.0) {
+        if (input[3] >= 0.65) {
+          if (input[5] >= 0.65) {
+            if (input[2] >= 0.45) {
+              var52 = 0.03573043;
             } else {
-              var52 = -0.22654799;
+              var52 = -0.31459084;
             }
           } else {
-            if (input[2] >= 0.75) {
-              var52 = 0.022379886;
+            var52 = -0.46662384;
+          }
+        } else {
+          if (input[2] >= 0.55) {
+            if (input[2] >= 0.85) {
+              var52 = 0.08702052;
             } else {
-              var52 = -0.017822001;
+              var52 = -0.4302654;
+            }
+          } else {
+            if (input[4] >= 0.45) {
+              var52 = 0.2730762;
+            } else {
+              var52 = -0.3119191;
+            }
+          }
+        }
+      } else {
+        if (input[0] >= 6.5) {
+          var52 = 0.25776464;
+        } else {
+          if (input[2] >= 0.45) {
+            if (input[4] >= 0.55) {
+              var52 = 0.024254687;
+            } else {
+              var52 = -0.015592225;
+            }
+          } else {
+            if (input[0] >= -32.5) {
+              var52 = 0.09307728;
+            } else {
+              var52 = -0.11018195;
             }
           }
         }
       }
     } else {
-      if (input[5] >= 0.95) {
-        if (input[1] >= 0.15) {
-          if (input[3] >= 0.6) {
-            var52 = 0.007470936;
-          } else {
-            var52 = -0.2653902;
-          }
-        } else {
-          var52 = 0.10490668;
-        }
+      if (input[3] >= 0.75) {
+        var52 = 0.17246622;
       } else {
-        if (input[0] >= 39.5) {
-          if (input[3] >= 0.25) {
-            if (input[2] >= 0.55) {
-              var52 = -0.11165144;
-            } else {
-              var52 = 0.13437338;
-            }
-          } else {
-            var52 = 0.19409221;
-          }
+        if (input[3] >= 0.45) {
+          var52 = -0.071354106;
         } else {
-          if (input[0] >= 29.5) {
-            if (input[2] >= 0.55) {
-              var52 = -0.12549515;
-            } else {
-              var52 = 0.13424397;
-            }
+          if (input[1] >= 0.55) {
+            var52 = 0.16042112;
           } else {
-            if (input[0] >= 22.0) {
-              var52 = 0.14402393;
+            if (input[4] >= 0.70000005) {
+              var52 = 0.1710133;
             } else {
-              var52 = 0.0039346656;
+              var52 = -0.104866974;
             }
           }
         }
@@ -6872,811 +7372,831 @@ List<double> score(List<double> input) {
     }
   }
   double var53;
-  if (input[5] >= 0.55) {
-    if (input[5] >= 0.65) {
-      if (input[1] >= 0.15) {
-        if (input[0] >= 5.5) {
-          if (input[0] >= 9.0) {
-            if (input[2] >= 0.35000002) {
-              var53 = 0.012098816;
+  if (input[1] >= 0.65) {
+    if (input[3] >= 0.65) {
+      if (input[5] >= 0.85) {
+        if (input[3] >= 0.85) {
+          if (input[3] >= 0.95) {
+            if (input[4] >= 0.65) {
+              var53 = 0.1730098;
             } else {
-              var53 = -0.1889294;
+              var53 = 0.035392985;
             }
           } else {
-            if (input[3] >= 0.85) {
-              var53 = 0.15645787;
+            var53 = -0.2686911;
+          }
+        } else {
+          if (input[3] >= 0.75) {
+            if (input[4] >= 0.35000002) {
+              var53 = 0.08570698;
             } else {
-              var53 = 0.01352882;
+              var53 = 0.1927074;
+            }
+          } else {
+            if (input[0] >= 41.5) {
+              var53 = 0.15726002;
+            } else {
+              var53 = -0.1492089;
+            }
+          }
+        }
+      } else {
+        if (input[1] >= 0.75) {
+          if (input[0] >= 36.5) {
+            if (input[0] >= 41.5) {
+              var53 = 0.014560236;
+            } else {
+              var53 = -0.30250055;
+            }
+          } else {
+            if (input[2] >= 0.75) {
+              var53 = 0.103209175;
+            } else {
+              var53 = -0.08329898;
             }
           }
         } else {
-          if (input[0] >= -27.5) {
-            if (input[3] >= 0.35000002) {
-              var53 = -0.038167577;
+          if (input[4] >= 0.55) {
+            var53 = 0.06667505;
+          } else {
+            var53 = -0.3913905;
+          }
+        }
+      }
+    } else {
+      if (input[3] >= 0.35000002) {
+        if (input[5] >= 0.85) {
+          if (input[1] >= 0.75) {
+            if (input[0] >= 37.5) {
+              var53 = -0.04826916;
             } else {
-              var53 = -0.25031033;
+              var53 = -0.24949035;
             }
           } else {
-            if (input[0] >= -28.5) {
-              var53 = 0.10614421;
+            if (input[3] >= 0.55) {
+              var53 = 0.22995237;
             } else {
-              var53 = 0.0025446853;
+              var53 = -0.08579342;
+            }
+          }
+        } else {
+          if (input[2] >= 0.55) {
+            if (input[4] >= 0.65) {
+              var53 = -0.20643128;
+            } else {
+              var53 = 0.12921879;
+            }
+          } else {
+            if (input[3] >= 0.45) {
+              var53 = 0.06453634;
+            } else {
+              var53 = -0.18784417;
+            }
+          }
+        }
+      } else {
+        if (input[2] >= 0.55) {
+          if (input[4] >= 0.65) {
+            var53 = 0.15980628;
+          } else {
+            if (input[1] >= 0.75) {
+              var53 = -0.021942688;
+            } else {
+              var53 = -0.28476253;
+            }
+          }
+        } else {
+          if (input[1] >= 0.85) {
+            if (input[4] >= 0.05) {
+              var53 = 0.029037857;
+            } else {
+              var53 = -0.26810727;
+            }
+          } else {
+            if (input[4] >= 0.1) {
+              var53 = -0.11510775;
+            } else {
+              var53 = 0.15554377;
+            }
+          }
+        }
+      }
+    }
+  } else {
+    if (input[3] >= 0.65) {
+      if (input[4] >= 0.05) {
+        if (input[4] >= 0.25) {
+          if (input[3] >= 0.75) {
+            if (input[5] >= 0.85) {
+              var53 = -0.14310129;
+            } else {
+              var53 = 0.021817219;
+            }
+          } else {
+            if (input[1] >= 0.55) {
+              var53 = -0.170713;
+            } else {
+              var53 = 0.06252057;
+            }
+          }
+        } else {
+          if (input[3] >= 0.75) {
+            if (input[3] >= 0.85) {
+              var53 = -0.20391782;
+            } else {
+              var53 = 0.14707415;
+            }
+          } else {
+            if (input[1] >= 0.15) {
+              var53 = -0.43541324;
+            } else {
+              var53 = 0.023712402;
             }
           }
         }
       } else {
         if (input[2] >= 0.85) {
-          if (input[4] >= 0.15) {
-            var53 = 0.27408788;
+          if (input[1] >= 0.55) {
+            var53 = 0.27876616;
           } else {
-            if (input[0] >= -29.0) {
-              var53 = -0.21609908;
+            if (input[2] >= 0.95) {
+              var53 = 0.19447601;
             } else {
-              var53 = 0.11203432;
+              var53 = -0.014272149;
             }
           }
         } else {
-          if (input[3] >= 0.75) {
-            if (input[4] >= 0.55) {
-              var53 = 0.24739969;
+          if (input[2] >= 0.65) {
+            if (input[0] >= 9.5) {
+              var53 = -0.26474017;
             } else {
-              var53 = 0.004925194;
+              var53 = 0.026651885;
             }
           } else {
-            if (input[0] >= -11.0) {
-              var53 = -0.25237936;
+            if (input[5] >= 0.5) {
+              var53 = -0.063285396;
             } else {
-              var53 = 0.011989143;
+              var53 = 0.16044965;
             }
           }
         }
       }
     } else {
-      if (input[0] >= -33.5) {
+      if (input[1] >= 0.55) {
+        if (input[0] >= 37.5) {
+          if (input[2] >= 0.45) {
+            var53 = -0.46506208;
+          } else {
+            if (input[3] >= 0.25) {
+              var53 = -0.18402724;
+            } else {
+              var53 = 0.22561647;
+            }
+          }
+        } else {
+          if (input[2] >= 0.65) {
+            if (input[2] >= 0.95) {
+              var53 = 0.10993368;
+            } else {
+              var53 = -0.26293418;
+            }
+          } else {
+            if (input[4] >= 0.15) {
+              var53 = -0.049393825;
+            } else {
+              var53 = 0.18272483;
+            }
+          }
+        }
+      } else {
         if (input[0] >= 1.5) {
-          if (input[4] >= 0.25) {
-            if (input[2] >= 0.75) {
-              var53 = -0.08619827;
-            } else {
-              var53 = -0.34696153;
-            }
-          } else {
-            if (input[2] >= 0.65) {
-              var53 = -0.28551218;
-            } else {
-              var53 = 0.11560962;
-            }
-          }
-        } else {
-          if (input[2] >= 0.95) {
-            var53 = -0.28219336;
-          } else {
+          if (input[0] >= 12.5) {
             if (input[1] >= 0.15) {
-              var53 = 0.19533962;
+              var53 = 0.0013037358;
             } else {
-              var53 = -0.105921365;
-            }
-          }
-        }
-      } else {
-        var53 = -0.28944397;
-      }
-    }
-  } else {
-    if (input[2] >= 0.95) {
-      if (input[0] >= 39.0) {
-        var53 = -0.12420244;
-      } else {
-        if (input[1] >= 0.25) {
-          if (input[1] >= 0.45) {
-            if (input[5] >= 0.4) {
-              var53 = 0.006943229;
-            } else {
-              var53 = 0.03969235;
+              var53 = -0.24773599;
             }
           } else {
-            if (input[4] >= 0.35000002) {
-              var53 = 0.06384433;
-            } else {
-              var53 = 0.2481634;
-            }
+            var53 = -0.412186;
           }
         } else {
-          var53 = -0.060080912;
-        }
-      }
-    } else {
-      if (input[0] >= -29.5) {
-        if (input[1] >= 0.15) {
-          if (input[1] >= 0.35000002) {
-            if (input[1] >= 0.65) {
-              var53 = 0.036462963;
-            } else {
-              var53 = -0.078058004;
-            }
+          if (input[0] >= -2.5) {
+            var53 = 0.25903997;
           } else {
-            if (input[0] >= 45.5) {
-              var53 = -0.03389191;
+            if (input[2] >= 0.75) {
+              var53 = -0.022853538;
             } else {
-              var53 = 0.2022877;
+              var53 = 0.04449179;
             }
           }
-        } else {
-          if (input[0] >= 11.5) {
-            var53 = 0.01817661;
-          } else {
-            var53 = -0.19964142;
-          }
-        }
-      } else {
-        if (input[1] >= 0.55) {
-          if (input[4] >= 0.35000002) {
-            var53 = -0.18391326;
-          } else {
-            if (input[1] >= 0.85) {
-              var53 = -0.043888;
-            } else {
-              var53 = 0.14788923;
-            }
-          }
-        } else {
-          var53 = -0.27022076;
         }
       }
     }
   }
   double var54;
-  if (input[0] >= 15.5) {
-    if (input[5] >= 0.85) {
-      if (input[3] >= 0.45) {
-        if (input[0] >= 18.5) {
-          if (input[1] >= 0.95) {
-            var54 = 0.13416511;
+  if (input[2] >= 0.15) {
+    if (input[0] >= -41.5) {
+      if (input[0] >= -35.5) {
+        if (input[1] >= 0.95) {
+          if (input[5] >= 0.95) {
+            var54 = 0.10069511;
           } else {
-            if (input[4] >= 0.35000002) {
-              var54 = -0.32598513;
+            if (input[0] >= -29.5) {
+              var54 = -0.03679222;
             } else {
-              var54 = -0.07757192;
+              var54 = -0.2502343;
             }
           }
         } else {
-          if (input[3] >= 0.65) {
-            var54 = 0.17565557;
+          if (input[0] >= -34.5) {
+            if (input[4] >= 0.05) {
+              var54 = 0.0029556185;
+            } else {
+              var54 = -0.018845689;
+            }
           } else {
-            var54 = 0.03626204;
+            if (input[3] >= 0.15) {
+              var54 = 0.05533764;
+            } else {
+              var54 = -0.25129947;
+            }
           }
         }
       } else {
-        if (input[2] >= 0.95) {
-          var54 = -0.08801305;
-        } else {
-          if (input[3] >= 0.35000002) {
-            if (input[1] >= 0.55) {
-              var54 = 0.004988044;
+        if (input[3] >= 0.35000002) {
+          if (input[2] >= 0.65) {
+            if (input[3] >= 0.75) {
+              var54 = 0.01058044;
             } else {
-              var54 = 0.21220182;
+              var54 = -0.31319243;
             }
           } else {
-            if (input[0] >= 40.5) {
-              var54 = -0.113718405;
+            if (input[1] >= 0.95) {
+              var54 = 0.16204946;
             } else {
-              var54 = 0.095858745;
+              var54 = -0.0898861;
+            }
+          }
+        } else {
+          if (input[2] >= 0.85) {
+            var54 = -0.2343562;
+          } else {
+            if (input[1] >= 0.35000002) {
+              var54 = 0.15541476;
+            } else {
+              var54 = -0.017623216;
             }
           }
         }
       }
     } else {
-      if (input[2] >= 0.75) {
-        if (input[1] >= 0.85) {
-          if (input[0] >= 39.5) {
-            if (input[4] >= 0.35000002) {
-              var54 = -0.037224274;
-            } else {
-              var54 = -0.31062925;
-            }
-          } else {
-            if (input[4] >= 0.35000002) {
-              var54 = 0.16686258;
-            } else {
-              var54 = -0.008577269;
-            }
-          }
-        } else {
-          if (input[0] >= 22.0) {
-            if (input[2] >= 0.85) {
-              var54 = -0.017839093;
-            } else {
-              var54 = 0.11657827;
-            }
-          } else {
-            var54 = 0.22827996;
-          }
-        }
+      if (input[4] >= 0.35000002) {
+        var54 = 0.003568913;
       } else {
-        if (input[0] >= 32.0) {
-          if (input[5] >= 0.75) {
-            if (input[4] >= 0.35000002) {
-              var54 = 0.11283845;
-            } else {
-              var54 = -0.22612469;
-            }
-          } else {
-            if (input[4] >= 0.55) {
-              var54 = 0.08964582;
-            } else {
-              var54 = -0.007100212;
-            }
-          }
-        } else {
-          if (input[4] >= 0.55) {
-            var54 = -0.03640178;
-          } else {
-            var54 = -0.35421464;
-          }
-        }
+        var54 = 0.10522443;
       }
     }
   } else {
-    if (input[2] >= 0.25) {
-      if (input[2] >= 0.35000002) {
-        if (input[2] >= 0.75) {
-          if (input[5] >= 0.75) {
-            if (input[3] >= 0.25) {
-              var54 = 0.029788682;
-            } else {
-              var54 = -0.15140681;
-            }
-          } else {
-            if (input[3] >= 0.45) {
-              var54 = -0.12399031;
-            } else {
-              var54 = 0.019211572;
-            }
-          }
-        } else {
-          if (input[4] >= 0.45) {
-            if (input[3] >= 0.45) {
-              var54 = -0.09375039;
-            } else {
-              var54 = 0.07007636;
-            }
-          } else {
-            if (input[3] >= 0.55) {
-              var54 = 0.06311514;
-            } else {
-              var54 = -0.02068276;
-            }
-          }
-        }
-      } else {
-        var54 = -0.118820734;
-      }
+    if (input[0] >= 40.5) {
+      var54 = 0.12272597;
     } else {
-      if (input[0] >= -32.5) {
-        var54 = 0.1547538;
-      } else {
-        var54 = -0.01442251;
-      }
+      var54 = 0.00076302025;
     }
   }
   double var55;
-  if (input[0] >= 42.5) {
-    if (input[3] >= 0.65) {
-      if (input[2] >= 0.85) {
-        if (input[3] >= 0.75) {
-          var55 = 0.065688886;
-        } else {
-          var55 = 0.18977313;
-        }
-      } else {
-        if (input[4] >= 0.2) {
-          if (input[1] >= 0.45) {
-            if (input[4] >= 0.35000002) {
-              var55 = 0.14625451;
+  if (input[0] >= -33.5) {
+    if (input[0] >= -32.5) {
+      if (input[0] >= -31.5) {
+        if (input[3] >= 0.15) {
+          if (input[0] >= -28.5) {
+            if (input[0] >= -27.5) {
+              var55 = -0.0056588287;
             } else {
-              var55 = -0.04070634;
+              var55 = 0.11274881;
             }
           } else {
-            var55 = -0.2168673;
+            var55 = -0.29212958;
           }
         } else {
-          var55 = 0.09537288;
+          if (input[4] >= 0.25) {
+            if (input[2] >= 0.75) {
+              var55 = -0.26520142;
+            } else {
+              var55 = -0.02232342;
+            }
+          } else {
+            if (input[4] >= 0.05) {
+              var55 = 0.15800911;
+            } else {
+              var55 = 0.022429464;
+            }
+          }
+        }
+      } else {
+        if (input[2] >= 0.45) {
+          var55 = -0.31230173;
+        } else {
+          if (input[5] >= 0.85) {
+            var55 = -0.056055028;
+          } else {
+            var55 = 0.2283016;
+          }
         }
       }
     } else {
-      if (input[0] >= 46.5) {
-        if (input[1] >= 0.65) {
-          if (input[3] >= 0.55) {
-            var55 = 0.12009722;
+      if (input[3] >= 0.25) {
+        if (input[5] >= 0.55) {
+          if (input[1] >= 0.55) {
+            if (input[2] >= 0.65) {
+              var55 = -0.27606583;
+            } else {
+              var55 = 0.15327366;
+            }
           } else {
-            var55 = -0.0125732785;
+            if (input[2] >= 0.85) {
+              var55 = 0.094664045;
+            } else {
+              var55 = 0.2693056;
+            }
           }
         } else {
-          var55 = -0.03040983;
+          var55 = -0.22391427;
         }
       } else {
-        var55 = -0.20296104;
+        if (input[5] >= 0.95) {
+          var55 = 0.039164655;
+        } else {
+          var55 = -0.32724816;
+        }
       }
     }
   } else {
-    if (input[2] >= 0.65) {
-      if (input[5] >= 0.75) {
-        if (input[4] >= 0.05) {
-          if (input[0] >= -33.5) {
-            if (input[0] >= -26.5) {
-              var55 = -0.002396061;
+    if (input[2] >= 0.45) {
+      if (input[4] >= 0.75) {
+        if (input[0] >= -35.5) {
+          if (input[1] >= 0.55) {
+            if (input[1] >= 0.85) {
+              var55 = 0.11874429;
             } else {
-              var55 = -0.22975315;
+              var55 = -0.16696435;
             }
           } else {
-            if (input[4] >= 0.25) {
-              var55 = 0.07608305;
+            if (input[1] >= 0.45) {
+              var55 = 0.22476496;
             } else {
-              var55 = -0.12635705;
+              var55 = 0.013875718;
             }
           }
         } else {
-          if (input[3] >= 0.15) {
-            if (input[5] >= 0.95) {
-              var55 = -0.22869517;
-            } else {
-              var55 = 0.08997496;
-            }
-          } else {
-            if (input[2] >= 0.95) {
-              var55 = 0.13128337;
-            } else {
-              var55 = -0.1149965;
-            }
-          }
+          var55 = -0.04135232;
         }
       } else {
-        if (input[4] >= 0.05) {
-          if (input[4] >= 0.25) {
-            if (input[4] >= 0.55) {
-              var55 = 0.044268563;
-            } else {
-              var55 = -0.08825283;
-            }
-          } else {
-            if (input[2] >= 0.75) {
-              var55 = 0.12047095;
-            } else {
-              var55 = -0.129713;
-            }
-          }
+        if (input[4] >= 0.65) {
+          var55 = -0.29379305;
         } else {
-          if (input[0] >= 40.5) {
-            var55 = -0.30206302;
-          } else {
-            if (input[0] >= 39.5) {
-              var55 = 0.13551717;
+          if (input[4] >= 0.25) {
+            if (input[5] >= 0.65) {
+              var55 = 0.055615366;
             } else {
-              var55 = -0.11944345;
+              var55 = -0.07152977;
+            }
+          } else {
+            if (input[0] >= -34.5) {
+              var55 = -0.10329341;
+            } else {
+              var55 = 0.025579428;
             }
           }
         }
       }
     } else {
-      if (input[0] >= -16.5) {
-        if (input[1] >= 0.85) {
-          if (input[4] >= 0.35000002) {
-            if (input[4] >= 0.65) {
-              var55 = 0.1497099;
-            } else {
-              var55 = -0.23609534;
-            }
-          } else {
-            if (input[3] >= 0.45) {
-              var55 = 0.15696116;
-            } else {
-              var55 = 0.0292006;
-            }
-          }
-        } else {
-          if (input[0] >= 38.5) {
-            if (input[5] >= 0.75) {
-              var55 = -0.18993828;
-            } else {
-              var55 = -0.030494457;
-            }
-          } else {
-            if (input[5] >= 0.85) {
-              var55 = -0.024396941;
-            } else {
-              var55 = 0.058298398;
-            }
-          }
-        }
-      } else {
-        if (input[3] >= 0.75) {
-          var55 = -0.25494567;
-        } else {
-          if (input[5] >= 0.95) {
-            if (input[4] >= 0.05) {
-              var55 = 0.2128878;
-            } else {
-              var55 = -0.009987865;
-            }
-          } else {
-            if (input[2] >= 0.25) {
-              var55 = -0.05423528;
-            } else {
-              var55 = 0.14081554;
-            }
-          }
-        }
-      }
+      var55 = -0.18375997;
     }
   }
   double var56;
-  if (input[3] >= 0.15) {
-    if (input[0] >= 42.5) {
-      if (input[1] >= 0.75) {
-        if (input[0] >= 47.5) {
-          if (input[5] >= 0.55) {
-            var56 = -0.05986559;
-          } else {
-            var56 = 0.07221407;
-          }
-        } else {
-          var56 = -0.19241457;
-        }
-      } else {
-        if (input[0] >= 47.5) {
-          if (input[4] >= 0.2) {
-            if (input[2] >= 0.85) {
-              var56 = 0.020782376;
+  if (input[2] >= 0.95) {
+    if (input[1] >= 0.25) {
+      if (input[1] >= 0.45) {
+        if (input[1] >= 0.55) {
+          if (input[4] >= 0.45) {
+            if (input[3] >= 0.55) {
+              var56 = -0.032143567;
             } else {
-              var56 = -0.16912067;
+              var56 = 0.2563562;
             }
           } else {
-            var56 = 0.13820684;
+            if (input[0] >= 3.0) {
+              var56 = 0.0873449;
+            } else {
+              var56 = -0.23773852;
+            }
           }
         } else {
-          if (input[5] >= 0.75) {
-            var56 = -0.041911278;
+          if (input[0] >= -34.5) {
+            var56 = -0.35038212;
           } else {
-            if (input[1] >= 0.45) {
-              var56 = 0.21985449;
+            var56 = 0.036484282;
+          }
+        }
+      } else {
+        if (input[5] >= 0.85) {
+          if (input[0] >= -23.5) {
+            var56 = 0.112851545;
+          } else {
+            var56 = -0.25591168;
+          }
+        } else {
+          if (input[3] >= 0.55) {
+            if (input[0] >= -30.0) {
+              var56 = 0.2640817;
             } else {
-              var56 = 0.020295823;
+              var56 = 0.044612978;
+            }
+          } else {
+            if (input[0] >= -29.5) {
+              var56 = -0.27009392;
+            } else {
+              var56 = 0.15449353;
             }
           }
         }
       }
     } else {
-      if (input[4] >= 0.85) {
-        if (input[1] >= 0.25) {
-          if (input[1] >= 0.65) {
-            if (input[3] >= 0.55) {
-              var56 = 0.05744009;
-            } else {
-              var56 = -0.13336287;
-            }
+      if (input[1] >= 0.15) {
+        if (input[4] >= 0.25) {
+          if (input[3] >= 0.75) {
+            var56 = -0.3108092;
           } else {
-            if (input[5] >= 0.75) {
-              var56 = -0.0074130828;
+            if (input[5] >= 0.65) {
+              var56 = 0.12880719;
             } else {
-              var56 = 0.20543814;
+              var56 = -0.2507225;
             }
           }
         } else {
-          if (input[5] >= 0.65) {
-            if (input[3] >= 0.75) {
-              var56 = -0.12707257;
-            } else {
-              var56 = 0.030548027;
-            }
-          } else {
-            var56 = -0.31739235;
-          }
+          var56 = -0.31337813;
         }
       } else {
-        if (input[2] >= 0.35000002) {
-          if (input[1] >= 0.35000002) {
-            if (input[4] >= 0.75) {
-              var56 = -0.25033483;
-            } else {
-              var56 = -0.013527577;
-            }
-          } else {
-            if (input[5] >= 0.75) {
-              var56 = 0.024618872;
-            } else {
-              var56 = -0.040720843;
-            }
-          }
+        if (input[5] >= 0.95) {
+          var56 = 0.22714491;
         } else {
-          if (input[3] >= 0.45) {
-            if (input[0] >= 37.0) {
-              var56 = 0.21693048;
+          if (input[4] >= 0.25) {
+            if (input[0] >= 4.0) {
+              var56 = 0.005121542;
             } else {
-              var56 = 0.015688453;
+              var56 = 0.17003961;
             }
           } else {
-            var56 = -0.1169504;
+            var56 = -0.18465064;
           }
         }
       }
     }
   } else {
-    if (input[2] >= 0.75) {
-      if (input[5] >= 0.85) {
-        if (input[5] >= 0.95) {
-          var56 = 0.08789633;
-        } else {
-          var56 = -0.3131461;
-        }
-      } else {
-        if (input[0] >= -23.5) {
-          if (input[1] >= 0.25) {
-            if (input[0] >= 36.5) {
-              var56 = -0.21666682;
+    if (input[5] >= 0.95) {
+      if (input[2] >= 0.65) {
+        if (input[2] >= 0.75) {
+          if (input[3] >= 0.35000002) {
+            if (input[3] >= 0.85) {
+              var56 = 0.098923594;
             } else {
-              var56 = 0.1308129;
+              var56 = -0.24393335;
             }
           } else {
-            var56 = 0.21726713;
+            if (input[0] >= -32.0) {
+              var56 = -0.12353717;
+            } else {
+              var56 = 0.14308682;
+            }
           }
         } else {
-          if (input[1] >= 0.35000002) {
-            if (input[3] >= 0.05) {
-              var56 = 0.021392155;
+          var56 = -0.361198;
+        }
+      } else {
+        if (input[0] >= -32.5) {
+          if (input[0] >= 37.5) {
+            if (input[0] >= 38.5) {
+              var56 = -0.09416509;
             } else {
-              var56 = 0.19139458;
+              var56 = 0.13410811;
             }
           } else {
-            if (input[5] >= 0.75) {
-              var56 = -0.25800952;
+            if (input[1] >= 0.25) {
+              var56 = -0.26325697;
             } else {
-              var56 = -0.044091683;
+              var56 = 0.025184972;
+            }
+          }
+        } else {
+          if (input[4] >= 0.05) {
+            if (input[2] >= 0.55) {
+              var56 = 0.25673884;
+            } else {
+              var56 = 0.07771899;
+            }
+          } else {
+            if (input[3] >= 0.15) {
+              var56 = -0.09126307;
+            } else {
+              var56 = 0.20533913;
             }
           }
         }
       }
     } else {
-      if (input[3] >= 0.05) {
-        if (input[5] >= 0.85) {
-          if (input[1] >= 0.25) {
-            if (input[0] >= 27.5) {
-              var56 = 0.019478632;
+      if (input[0] >= 17.0) {
+        if (input[0] >= 29.5) {
+          if (input[0] >= 34.5) {
+            if (input[0] >= 36.5) {
+              var56 = 0.00036614;
             } else {
-              var56 = 0.2876613;
+              var56 = 0.117462866;
             }
           } else {
-            if (input[0] >= 38.0) {
-              var56 = 0.16858557;
+            if (input[2] >= 0.55) {
+              var56 = -0.20159246;
             } else {
-              var56 = -0.24111089;
+              var56 = 0.1243168;
             }
           }
         } else {
-          if (input[5] >= 0.65) {
-            if (input[1] >= 0.65) {
-              var56 = -0.2624233;
+          if (input[3] >= 0.25) {
+            if (input[3] >= 0.35000002) {
+              var56 = 0.08912766;
             } else {
-              var56 = 0.01785498;
+              var56 = -0.35680512;
             }
           } else {
-            if (input[0] >= 37.5) {
-              var56 = 0.268213;
-            } else {
-              var56 = -0.031125618;
-            }
+            var56 = 0.1801434;
           }
         }
       } else {
-        if (input[0] >= 37.0) {
-          var56 = -0.22960423;
+        if (input[0] >= 11.5) {
+          if (input[1] >= 0.25) {
+            if (input[3] >= 0.45) {
+              var56 = -0.26158747;
+            } else {
+              var56 = 0.12789916;
+            }
+          } else {
+            if (input[3] >= 0.65) {
+              var56 = 0.04821202;
+            } else {
+              var56 = -0.18730086;
+            }
+          }
         } else {
-          var56 = -0.024140464;
+          if (input[5] >= 0.45) {
+            if (input[0] >= 10.5) {
+              var56 = 0.08314748;
+            } else {
+              var56 = 0.0006387611;
+            }
+          } else {
+            if (input[3] >= 0.25) {
+              var56 = -0.2900692;
+            } else {
+              var56 = 0.024304869;
+            }
+          }
         }
       }
     }
   }
   double var57;
-  if (input[5] >= 0.55) {
-    if (input[0] >= 49.5) {
-      var57 = -0.11605202;
-    } else {
-      if (input[0] >= 46.5) {
-        if (input[1] >= 0.45) {
-          var57 = 0.14088891;
-        } else {
-          var57 = -0.00866677;
-        }
+  if (input[2] >= 0.15) {
+    if (input[0] >= 46.5) {
+      if (input[4] >= 0.75) {
+        var57 = 0.16043672;
       } else {
-        if (input[0] >= 11.5) {
-          if (input[5] >= 0.65) {
-            if (input[3] >= 0.25) {
-              var57 = -0.020003542;
+        if (input[3] >= 0.75) {
+          if (input[2] >= 0.65) {
+            if (input[0] >= 51.5) {
+              var57 = 0.04036321;
             } else {
-              var57 = 0.0460583;
+              var57 = -0.35519162;
             }
           } else {
-            if (input[3] >= 0.55) {
-              var57 = 0.019758359;
+            if (input[5] >= 0.65) {
+              var57 = 0.182239;
             } else {
-              var57 = -0.20805763;
+              var57 = -0.039242573;
             }
           }
         } else {
-          if (input[0] >= 10.5) {
-            if (input[4] >= 0.35000002) {
-              var57 = 0.18575075;
+          if (input[4] >= 0.25) {
+            if (input[2] >= 0.65) {
+              var57 = 0.16520715;
             } else {
-              var57 = -0.00842287;
+              var57 = -0.014395765;
             }
           } else {
-            if (input[2] >= 0.45) {
-              var57 = -0.008853081;
+            if (input[0] >= 47.5) {
+              var57 = -0.13520946;
             } else {
-              var57 = 0.08030373;
+              var57 = 0.044355456;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[0] >= 43.5) {
+        if (input[1] >= 0.35000002) {
+          var57 = -0.18556595;
+        } else {
+          var57 = 0.04660301;
+        }
+      } else {
+        if (input[0] >= 42.5) {
+          if (input[5] >= 0.55) {
+            var57 = 0.014806551;
+          } else {
+            var57 = 0.15241146;
+          }
+        } else {
+          if (input[1] >= 0.95) {
+            if (input[0] >= -27.5) {
+              var57 = -0.12432639;
+            } else {
+              var57 = 0.043092526;
+            }
+          } else {
+            if (input[0] >= -35.5) {
+              var57 = -0.0018205806;
+            } else {
+              var57 = -0.02681469;
             }
           }
         }
       }
     }
   } else {
-    if (input[2] >= 0.55) {
-      if (input[4] >= 0.85) {
-        var57 = -0.1880361;
-      } else {
-        if (input[3] >= 0.25) {
-          if (input[1] >= 0.15) {
-            if (input[3] >= 0.85) {
-              var57 = -0.06391042;
-            } else {
-              var57 = 0.034504857;
-            }
-          } else {
-            var57 = -0.1425537;
-          }
-        } else {
-          if (input[4] >= 0.15) {
-            var57 = 0.18654464;
-          } else {
-            if (input[1] >= 0.55) {
-              var57 = 0.16933882;
-            } else {
-              var57 = -0.23042966;
-            }
-          }
-        }
-      }
+    if (input[0] >= 40.5) {
+      var57 = 0.10754035;
     } else {
-      if (input[3] >= 0.45) {
-        if (input[4] >= 0.2) {
-          if (input[4] >= 0.35000002) {
-            if (input[4] >= 0.65) {
-              var57 = 0.15418623;
-            } else {
-              var57 = 0.008904501;
-            }
-          } else {
-            if (input[1] >= 0.45) {
-              var57 = -0.2384835;
-            } else {
-              var57 = 0.045780133;
-            }
-          }
-        } else {
-          if (input[1] >= 0.75) {
-            var57 = 0.1369357;
-          } else {
-            var57 = -0.040011294;
-          }
-        }
-      } else {
-        if (input[5] >= 0.45) {
-          var57 = -0.2966091;
-        } else {
-          var57 = -0.05029854;
-        }
-      }
+      var57 = 0.005501154;
     }
   }
   double var58;
-  if (input[0] >= 34.5) {
-    if (input[0] >= 36.5) {
-      if (input[1] >= 0.25) {
-        if (input[3] >= 0.05) {
-          if (input[5] >= 0.95) {
-            if (input[3] >= 0.35000002) {
-              var58 = 0.1339555;
-            } else {
-              var58 = -0.054752007;
-            }
+  if (input[0] >= 37.5) {
+    if (input[4] >= 0.05) {
+      if (input[3] >= 0.55) {
+        if (input[4] >= 0.35000002) {
+          if (input[5] >= 0.75) {
+            var58 = -0.21937084;
           } else {
-            if (input[1] >= 0.35000002) {
-              var58 = -0.016480245;
+            if (input[2] >= 0.85) {
+              var58 = -0.15905516;
             } else {
-              var58 = 0.067953534;
+              var58 = 0.085029624;
             }
           }
         } else {
-          var58 = -0.23766221;
+          if (input[0] >= 41.5) {
+            if (input[2] >= 0.65) {
+              var58 = 0.08287473;
+            } else {
+              var58 = -0.16223103;
+            }
+          } else {
+            if (input[1] >= 0.85) {
+              var58 = 0.07601042;
+            } else {
+              var58 = -0.25520894;
+            }
+          }
         }
       } else {
-        if (input[4] >= 0.25) {
-          if (input[3] >= 0.85) {
-            var58 = 0.061700165;
-          } else {
-            var58 = -0.18370743;
-          }
-        } else {
-          if (input[3] >= 0.05) {
-            if (input[0] >= 40.5) {
-              var58 = 0.16295397;
+        if (input[3] >= 0.25) {
+          if (input[5] >= 0.35000002) {
+            if (input[4] >= 0.55) {
+              var58 = -0.025659123;
             } else {
-              var58 = -0.041050464;
+              var58 = 0.15373482;
             }
           } else {
-            var58 = 0.2003039;
+            var58 = -0.19122607;
+          }
+        } else {
+          if (input[1] >= 0.25) {
+            if (input[4] >= 0.65) {
+              var58 = -0.025647487;
+            } else {
+              var58 = -0.23239614;
+            }
+          } else {
+            var58 = 0.1853973;
           }
         }
       }
     } else {
-      if (input[1] >= 0.65) {
-        var58 = 0.18800537;
-      } else {
-        if (input[5] >= 0.85) {
-          var58 = 0.11614276;
+      if (input[5] >= 0.85) {
+        if (input[5] >= 0.95) {
+          var58 = 0.021528635;
         } else {
-          var58 = -0.056610588;
+          var58 = -0.28204674;
+        }
+      } else {
+        if (input[3] >= 0.25) {
+          if (input[3] >= 0.55) {
+            if (input[2] >= 0.65) {
+              var58 = -0.069016956;
+            } else {
+              var58 = 0.07426129;
+            }
+          } else {
+            if (input[1] >= 0.65) {
+              var58 = -0.057342965;
+            } else {
+              var58 = -0.3195159;
+            }
+          }
+        } else {
+          if (input[0] >= 39.5) {
+            if (input[5] >= 0.65) {
+              var58 = 0.20827186;
+            } else {
+              var58 = -0.1065119;
+            }
+          } else {
+            if (input[1] >= 0.75) {
+              var58 = 0.1404802;
+            } else {
+              var58 = -0.13577539;
+            }
+          }
         }
       }
     }
   } else {
-    if (input[0] >= 32.5) {
-      if (input[4] >= 0.05) {
-        if (input[2] >= 0.65) {
-          var58 = -0.10640915;
-        } else {
-          var58 = 0.080845796;
-        }
+    if (input[0] >= 36.5) {
+      if (input[1] >= 0.65) {
+        var58 = -0.27260548;
       } else {
-        var58 = -0.2485026;
+        if (input[4] >= 0.05) {
+          if (input[4] >= 0.55) {
+            if (input[2] >= 0.75) {
+              var58 = 0.17487621;
+            } else {
+              var58 = -0.19361952;
+            }
+          } else {
+            var58 = -0.30818975;
+          }
+        } else {
+          if (input[1] >= 0.35000002) {
+            if (input[1] >= 0.55) {
+              var58 = 0.16367918;
+            } else {
+              var58 = -0.23564027;
+            }
+          } else {
+            var58 = 0.19451039;
+          }
+        }
       }
     } else {
-      if (input[5] >= 0.95) {
-        if (input[2] >= 0.65) {
-          if (input[2] >= 0.95) {
-            var58 = 0.083680525;
-          } else {
-            var58 = -0.28402233;
-          }
-        } else {
-          if (input[0] >= -32.0) {
-            if (input[3] >= 0.6) {
-              var58 = 0.030631993;
+      if (input[5] >= 0.35000002) {
+        if (input[0] >= 22.0) {
+          if (input[4] >= 0.45) {
+            if (input[4] >= 0.75) {
+              var58 = -0.090355426;
             } else {
-              var58 = -0.22329439;
+              var58 = 0.21513705;
             }
           } else {
-            if (input[2] >= 0.55) {
-              var58 = 0.17969969;
+            if (input[1] >= 0.55) {
+              var58 = 0.088495106;
             } else {
-              var58 = 0.013829848;
+              var58 = -0.12320832;
+            }
+          }
+        } else {
+          if (input[3] >= 0.05) {
+            if (input[4] >= 0.45) {
+              var58 = -0.020002976;
+            } else {
+              var58 = -0.0029110792;
+            }
+          } else {
+            if (input[2] >= 0.85) {
+              var58 = 0.19085085;
+            } else {
+              var58 = -0.19117685;
             }
           }
         }
       } else {
-        if (input[0] >= 30.5) {
-          var58 = 0.13371678;
+        if (input[3] >= 0.75) {
+          var58 = 0.17158194;
         } else {
-          if (input[2] >= 0.25) {
-            if (input[1] >= 0.55) {
-              var58 = -0.02448867;
-            } else {
-              var58 = 0.0042263847;
-            }
+          if (input[3] >= 0.45) {
+            var58 = -0.042153876;
           } else {
-            if (input[5] >= 0.75) {
-              var58 = 0.14444768;
+            if (input[1] >= 0.55) {
+              var58 = 0.13792479;
             } else {
-              var58 = 0.0033706652;
+              var58 = 0.028235571;
             }
           }
         }
@@ -7684,697 +8204,601 @@ List<double> score(List<double> input) {
     }
   }
   double var59;
-  if (input[0] >= -32.5) {
-    if (input[0] >= -28.5) {
-      if (input[3] >= 0.45) {
-        if (input[2] >= 0.95) {
-          if (input[3] >= 0.75) {
-            if (input[0] >= 42.5) {
-              var59 = 0.09059815;
-            } else {
-              var59 = -0.35088456;
-            }
-          } else {
-            if (input[3] >= 0.55) {
-              var59 = 0.18589352;
-            } else {
-              var59 = -0.24920362;
-            }
-          }
-        } else {
-          if (input[0] >= -26.5) {
-            if (input[3] >= 0.75) {
-              var59 = 0.014617723;
-            } else {
-              var59 = -0.024159927;
-            }
-          } else {
-            if (input[1] >= 0.85) {
-              var59 = 0.09718221;
-            } else {
-              var59 = -0.25834253;
-            }
-          }
-        }
-      } else {
-        if (input[2] >= 0.95) {
-          if (input[4] >= 0.65) {
-            var59 = 0.15763955;
-          } else {
-            if (input[1] >= 0.65) {
-              var59 = 0.007745648;
-            } else {
-              var59 = -0.25083223;
-            }
-          }
-        } else {
-          if (input[2] >= 0.85) {
-            if (input[4] >= 0.45) {
-              var59 = -0.18301736;
-            } else {
-              var59 = 0.12042012;
-            }
-          } else {
-            if (input[4] >= 0.45) {
-              var59 = 0.08762869;
-            } else {
-              var59 = -0.018602908;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[3] >= 0.15) {
-        if (input[2] >= 0.35000002) {
-          var59 = -0.25954673;
-        } else {
-          var59 = 0.049809977;
-        }
-      } else {
-        if (input[2] >= 0.85) {
-          if (input[3] >= 0.05) {
-            var59 = -0.010524197;
-          } else {
-            if (input[5] >= 0.75) {
-              var59 = 0.035201788;
-            } else {
-              var59 = 0.19375445;
-            }
-          }
-        } else {
-          if (input[1] >= 0.25) {
-            var59 = 0.07812244;
-          } else {
-            var59 = -0.2072917;
-          }
-        }
-      }
-    }
-  } else {
-    if (input[3] >= 0.45) {
-      if (input[1] >= 0.45) {
-        if (input[4] >= 0.25) {
-          if (input[0] >= -35.5) {
-            if (input[1] >= 0.85) {
-              var59 = -0.037557542;
-            } else {
-              var59 = 0.06683672;
-            }
-          } else {
-            if (input[2] >= 0.75) {
-              var59 = 0.04793951;
-            } else {
-              var59 = -0.11349701;
-            }
-          }
-        } else {
-          if (input[1] >= 0.85) {
-            if (input[2] >= 0.85) {
-              var59 = 0.24112655;
-            } else {
-              var59 = -0.016401483;
-            }
-          } else {
-            var59 = -0.2820844;
-          }
-        }
-      } else {
-        if (input[0] >= -33.5) {
-          var59 = 0.21671127;
-        } else {
-          var59 = 0.03552666;
-        }
-      }
-    } else {
-      if (input[1] >= 0.85) {
-        var59 = -0.21638794;
-      } else {
-        if (input[1] >= 0.25) {
-          if (input[2] >= 0.85) {
-            if (input[4] >= 0.55) {
-              var59 = 0.14505692;
-            } else {
-              var59 = -0.22917391;
-            }
-          } else {
+  if (input[2] >= 0.15) {
+    if (input[4] >= 0.85) {
+      if (input[1] >= 0.35000002) {
+        if (input[5] >= 0.75) {
+          if (input[0] >= -33.5) {
             if (input[5] >= 0.85) {
-              var59 = -0.09054504;
+              var59 = 0.00222528;
             } else {
-              var59 = 0.086591706;
-            }
-          }
-        } else {
-          var59 = 0.13168748;
-        }
-      }
-    }
-  }
-  double var60;
-  if (input[5] >= 0.55) {
-    if (input[0] >= 49.5) {
-      var60 = -0.1070743;
-    } else {
-      if (input[0] >= 46.5) {
-        if (input[3] >= 0.65) {
-          var60 = 0.11744066;
-        } else {
-          var60 = 0.04151218;
-        }
-      } else {
-        if (input[0] >= 11.5) {
-          if (input[3] >= 0.85) {
-            if (input[1] >= 0.75) {
-              var60 = 0.017587746;
-            } else {
-              var60 = -0.13007835;
+              var59 = -0.20334984;
             }
           } else {
-            if (input[3] >= 0.75) {
-              var60 = 0.06786885;
-            } else {
-              var60 = -0.017871676;
-            }
-          }
-        } else {
-          if (input[0] >= 10.5) {
-            if (input[4] >= 0.55) {
-              var60 = -0.035140797;
-            } else {
-              var60 = 0.14530014;
-            }
-          } else {
-            if (input[4] >= 0.85) {
-              var60 = 0.0625764;
-            } else {
-              var60 = -0.007025919;
-            }
-          }
-        }
-      }
-    }
-  } else {
-    if (input[4] >= 0.65) {
-      if (input[5] >= 0.45) {
-        var60 = -0.21993732;
-      } else {
-        if (input[2] >= 0.55) {
-          if (input[3] >= 0.55) {
-            var60 = -0.060489696;
-          } else {
-            var60 = 0.053222407;
-          }
-        } else {
-          var60 = 0.13603815;
-        }
-      }
-    } else {
-      if (input[3] >= 0.85) {
-        if (input[3] >= 0.95) {
-          var60 = 0.08257185;
-        } else {
-          var60 = -0.22952755;
-        }
-      } else {
-        if (input[2] >= 0.55) {
-          if (input[4] >= 0.05) {
             if (input[1] >= 0.55) {
-              var60 = 0.01718362;
+              var59 = 0.030706765;
             } else {
-              var60 = 0.09771975;
-            }
-          } else {
-            if (input[2] >= 0.65) {
-              var60 = -0.15652859;
-            } else {
-              var60 = 0.1072217;
+              var59 = 0.15705872;
             }
           }
         } else {
-          if (input[3] >= 0.25) {
-            if (input[4] >= 0.2) {
-              var60 = -0.062427863;
+          if (input[2] >= 0.55) {
+            if (input[1] >= 0.45) {
+              var59 = -0.06664346;
             } else {
-              var60 = 0.05999448;
+              var59 = 0.1360849;
             }
           } else {
-            var60 = -0.23923117;
+            var59 = 0.19885358;
           }
-        }
-      }
-    }
-  }
-  double var61;
-  if (input[3] >= 0.55) {
-    if (input[2] >= 0.95) {
-      if (input[3] >= 0.75) {
-        if (input[1] >= 0.45) {
-          if (input[5] >= 0.75) {
-            var61 = -0.11329385;
-          } else {
-            var61 = 0.18672869;
-          }
-        } else {
-          var61 = -0.31376526;
-        }
-      } else {
-        if (input[0] >= -27.5) {
-          if (input[0] >= 19.5) {
-            if (input[5] >= 0.65) {
-              var61 = -0.06963606;
-            } else {
-              var61 = 0.038091425;
-            }
-          } else {
-            if (input[5] >= 0.85) {
-              var61 = 0.02985004;
-            } else {
-              var61 = 0.22259162;
-            }
-          }
-        } else {
-          var61 = -0.21066777;
-        }
-      }
-    } else {
-      if (input[2] >= 0.85) {
-        if (input[3] >= 0.65) {
-          if (input[4] >= 0.65) {
-            var61 = -0.24426666;
-          } else {
-            if (input[4] >= 0.35000002) {
-              var61 = 0.09938816;
-            } else {
-              var61 = -0.063563846;
-            }
-          }
-        } else {
-          var61 = -0.36106718;
         }
       } else {
         if (input[5] >= 0.85) {
-          if (input[3] >= 0.85) {
-            if (input[1] >= 0.85) {
-              var61 = 0.08332987;
+          var59 = -0.23487084;
+        } else {
+          if (input[0] >= -20.5) {
+            if (input[0] >= 5.5) {
+              var59 = -0.017081827;
             } else {
-              var61 = -0.17456387;
+              var59 = 0.17409806;
             }
           } else {
-            if (input[1] >= 0.75) {
-              var61 = -0.09614107;
+            if (input[3] >= 0.45) {
+              var59 = -0.21912256;
             } else {
-              var61 = 0.10078252;
+              var59 = 0.02417412;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[1] >= 0.95) {
+        if (input[4] >= 0.25) {
+          if (input[0] >= -27.5) {
+            if (input[2] >= 0.55) {
+              var59 = -0.18394168;
+            } else {
+              var59 = 0.077775076;
+            }
+          } else {
+            if (input[0] >= -30.0) {
+              var59 = 0.15783554;
+            } else {
+              var59 = -0.012938684;
             }
           }
         } else {
-          if (input[5] >= 0.75) {
-            if (input[0] >= -34.5) {
-              var61 = -0.106406085;
+          if (input[3] >= 0.15) {
+            var59 = -0.23953322;
+          } else {
+            var59 = 0.032067887;
+          }
+        }
+      } else {
+        if (input[4] >= 0.65) {
+          if (input[2] >= 0.75) {
+            if (input[0] >= 12.5) {
+              var59 = 0.12964395;
             } else {
-              var61 = 0.10862922;
+              var59 = -0.05438889;
             }
           } else {
-            if (input[2] >= 0.55) {
-              var61 = 0.038703606;
+            if (input[4] >= 0.75) {
+              var59 = 0.00069848436;
             } else {
-              var61 = -0.06686559;
+              var59 = -0.21000013;
+            }
+          }
+        } else {
+          if (input[4] >= 0.55) {
+            if (input[2] >= 0.85) {
+              var59 = -0.07072334;
+            } else {
+              var59 = 0.07260573;
+            }
+          } else {
+            if (input[5] >= 0.75) {
+              var59 = 0.009494112;
+            } else {
+              var59 = -0.018537337;
             }
           }
         }
       }
     }
   } else {
-    if (input[2] >= 0.95) {
-      if (input[0] >= -29.5) {
-        if (input[4] >= 0.65) {
-          if (input[0] >= 39.5) {
-            var61 = 0.1543862;
-          } else {
-            var61 = 0.04104489;
-          }
-        } else {
-          if (input[5] >= 0.45) {
-            if (input[0] >= 40.5) {
-              var61 = -0.039556824;
+    if (input[0] >= 40.5) {
+      var59 = 0.10172346;
+    } else {
+      var59 = 0.015215053;
+    }
+  }
+  double var60;
+  if (input[2] >= 0.15) {
+    if (input[0] >= -41.5) {
+      if (input[0] >= -28.5) {
+        if (input[0] >= -27.5) {
+          if (input[1] >= 0.95) {
+            if (input[0] >= 35.5) {
+              var60 = 0.0073142787;
             } else {
-              var61 = -0.31171334;
+              var60 = -0.22930343;
             }
           } else {
-            var61 = 0.04379045;
+            if (input[1] >= 0.45) {
+              var60 = 0.012729441;
+            } else {
+              var60 = -0.008476612;
+            }
+          }
+        } else {
+          if (input[4] >= 0.25) {
+            if (input[2] >= 0.75) {
+              var60 = -0.2925037;
+            } else {
+              var60 = 0.13723518;
+            }
+          } else {
+            if (input[1] >= 0.25) {
+              var60 = 0.25929195;
+            } else {
+              var60 = 0.08256905;
+            }
           }
         }
       } else {
-        if (input[1] >= 0.35000002) {
-          if (input[1] >= 0.45) {
-            if (input[1] >= 0.85) {
-              var61 = 0.11338012;
+        if (input[5] >= 0.75) {
+          if (input[1] >= 0.75) {
+            if (input[2] >= 0.75) {
+              var60 = 0.13123056;
             } else {
-              var61 = -0.20571388;
+              var60 = -0.10697431;
             }
           } else {
-            if (input[4] >= 0.15) {
-              var61 = -0.01659969;
+            if (input[1] >= 0.55) {
+              var60 = -0.09621125;
             } else {
-              var61 = 0.20256035;
+              var60 = 0.013187804;
             }
           }
         } else {
-          if (input[5] >= 0.85) {
-            var61 = 0.09462439;
-          } else {
-            if (input[4] >= 0.15) {
-              var61 = -0.033564076;
+          if (input[0] >= -34.5) {
+            if (input[3] >= 0.65) {
+              var60 = 0.056623224;
             } else {
-              var61 = -0.23074245;
+              var60 = -0.12225688;
+            }
+          } else {
+            if (input[1] >= 0.45) {
+              var60 = -0.06318477;
+            } else {
+              var60 = 0.082330525;
             }
           }
         }
       }
     } else {
-      if (input[4] >= 0.65) {
-        if (input[3] >= 0.25) {
-          if (input[3] >= 0.45) {
-            if (input[0] >= -24.0) {
-              var61 = -0.2890904;
+      if (input[4] >= 0.35000002) {
+        var60 = -0.00207633;
+      } else {
+        var60 = 0.09327227;
+      }
+    }
+  } else {
+    if (input[0] >= 40.5) {
+      var60 = 0.088012025;
+    } else {
+      var60 = 0.012843178;
+    }
+  }
+  double var61;
+  if (input[5] >= 0.35000002) {
+    if (input[0] >= -33.5) {
+      if (input[0] >= -25.5) {
+        if (input[0] >= -21.5) {
+          if (input[5] >= 0.85) {
+            if (input[4] >= 0.45) {
+              var61 = -0.07945022;
             } else {
-              var61 = -0.0125487195;
+              var61 = 0.05282436;
             }
           } else {
-            if (input[5] >= 0.75) {
-              var61 = -0.035686847;
+            if (input[4] >= 0.35000002) {
+              var61 = 0.012518908;
             } else {
-              var61 = 0.1399011;
+              var61 = -0.02803915;
             }
           }
         } else {
-          if (input[1] >= 0.65) {
-            var61 = 0.036107205;
+          var61 = -0.2783661;
+        }
+      } else {
+        if (input[2] >= 0.85) {
+          if (input[1] >= 0.15) {
+            if (input[4] >= 0.65) {
+              var61 = 0.09216962;
+            } else {
+              var61 = -0.12797904;
+            }
           } else {
-            var61 = -0.3292481;
+            if (input[5] >= 0.65) {
+              var61 = 0.26013207;
+            } else {
+              var61 = -0.1472462;
+            }
+          }
+        } else {
+          if (input[5] >= 0.75) {
+            if (input[3] >= 0.25) {
+              var61 = 0.044851866;
+            } else {
+              var61 = -0.08574794;
+            }
+          } else {
+            if (input[1] >= 0.15) {
+              var61 = 0.17857608;
+            } else {
+              var61 = -0.24724187;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[4] >= 0.05) {
+        if (input[3] >= 0.15) {
+          if (input[5] >= 0.65) {
+            if (input[0] >= -34.5) {
+              var61 = 0.050570544;
+            } else {
+              var61 = -0.040331848;
+            }
+          } else {
+            if (input[5] >= 0.55) {
+              var61 = -0.29888806;
+            } else {
+              var61 = 0.010656002;
+            }
+          }
+        } else {
+          if (input[0] >= -34.5) {
+            var61 = 0.2381026;
+          } else {
+            if (input[0] >= -35.5) {
+              var61 = -0.19112346;
+            } else {
+              var61 = 0.023668988;
+            }
           }
         }
       } else {
-        if (input[1] >= 0.35000002) {
-          if (input[0] >= -21.5) {
-            if (input[0] >= -19.0) {
-              var61 = 0.011636483;
-            } else {
-              var61 = 0.23642813;
-            }
+        if (input[0] >= -34.5) {
+          if (input[1] >= 0.25) {
+            var61 = -0.41036233;
           } else {
-            if (input[5] >= 0.85) {
-              var61 = -0.1451304;
-            } else {
-              var61 = 0.02196465;
-            }
+            var61 = 0.16321035;
           }
         } else {
-          if (input[5] >= 0.95) {
-            var61 = -0.21961881;
-          } else {
-            if (input[5] >= 0.85) {
-              var61 = 0.10325818;
+          if (input[3] >= 0.45) {
+            if (input[2] >= 0.79999995) {
+              var61 = 0.26767588;
             } else {
-              var61 = 0.031626843;
+              var61 = 0.039727975;
             }
+          } else {
+            if (input[3] >= 0.35000002) {
+              var61 = -0.37633058;
+            } else {
+              var61 = 0.033665534;
+            }
+          }
+        }
+      }
+    }
+  } else {
+    if (input[1] >= 0.75) {
+      if (input[4] >= 0.35000002) {
+        var61 = -0.058689762;
+      } else {
+        var61 = -0.23402266;
+      }
+    } else {
+      if (input[0] >= 24.0) {
+        if (input[2] >= 0.65) {
+          var61 = -0.19543001;
+        } else {
+          if (input[1] >= 0.65) {
+            var61 = 0.15569289;
+          } else {
+            if (input[3] >= 0.65) {
+              var61 = 0.13898338;
+            } else {
+              var61 = -0.15431051;
+            }
+          }
+        }
+      } else {
+        if (input[4] >= 0.35000002) {
+          if (input[4] >= 0.75) {
+            var61 = 0.14417607;
+          } else {
+            var61 = -0.03461835;
+          }
+        } else {
+          if (input[1] >= 0.45) {
+            var61 = 0.061654203;
+          } else {
+            var61 = 0.1903588;
           }
         }
       }
     }
   }
   double var62;
-  if (input[2] >= 0.65) {
-    if (input[0] >= -35.5) {
-      if (input[0] >= -34.5) {
-        if (input[5] >= 0.85) {
-          if (input[1] >= 0.75) {
-            var62 = -0.20708926;
-          } else {
-            if (input[1] >= 0.65) {
-              var62 = 0.17664573;
-            } else {
-              var62 = 0.0022737086;
-            }
-          }
-        } else {
-          if (input[0] >= -26.5) {
-            if (input[4] >= 0.75) {
-              var62 = -0.2552738;
-            } else {
-              var62 = -0.02236952;
-            }
-          } else {
-            if (input[3] >= 0.65) {
-              var62 = -0.106089786;
-            } else {
-              var62 = 0.029344773;
-            }
-          }
-        }
+  if (input[5] >= 0.45) {
+    if (input[0] >= 51.5) {
+      if (input[2] >= 0.55) {
+        var62 = -0.18008152;
       } else {
-        if (input[3] >= 0.45) {
-          if (input[2] >= 0.75) {
-            if (input[4] >= 0.65) {
-              var62 = 0.04024864;
-            } else {
-              var62 = 0.20222591;
-            }
-          } else {
-            var62 = -0.050040673;
-          }
-        } else {
-          if (input[3] >= 0.25) {
-            var62 = -0.2242646;
-          } else {
-            var62 = 0.11801406;
-          }
-        }
+        var62 = 0.039999038;
       }
     } else {
-      if (input[0] >= -37.5) {
-        var62 = -0.17922445;
-      } else {
-        if (input[4] >= 0.05) {
-          if (input[3] >= 0.75) {
-            var62 = 0.08692966;
+      if (input[1] >= 0.75) {
+        if (input[5] >= 0.55) {
+          if (input[2] >= 0.25) {
+            if (input[3] >= 0.25) {
+              var62 = -0.009114121;
+            } else {
+              var62 = -0.0824573;
+            }
           } else {
-            var62 = -0.22530241;
+            var62 = 0.15612832;
           }
         } else {
-          if (input[1] >= 0.75) {
-            var62 = 0.1362562;
+          if (input[4] >= 0.35000002) {
+            var62 = -0.2036391;
           } else {
-            var62 = -0.0068124454;
+            if (input[3] >= 0.65) {
+              var62 = -0.19458182;
+            } else {
+              var62 = 0.16419837;
+            }
+          }
+        }
+      } else {
+        if (input[2] >= 0.35000002) {
+          if (input[5] >= 0.55) {
+            if (input[0] >= -41.5) {
+              var62 = -0.0021058966;
+            } else {
+              var62 = 0.18010584;
+            }
+          } else {
+            if (input[4] >= 0.15) {
+              var62 = 0.037146375;
+            } else {
+              var62 = -0.24562533;
+            }
+          }
+        } else {
+          if (input[3] >= 0.45) {
+            var62 = -0.008083071;
+          } else {
+            var62 = -0.24083568;
           }
         }
       }
     }
   } else {
-    if (input[1] >= 0.35000002) {
-      if (input[4] >= 0.35000002) {
-        if (input[5] >= 0.45) {
-          if (input[4] >= 0.45) {
-            if (input[3] >= 0.45) {
-              var62 = -0.16306436;
-            } else {
-              var62 = 0.06014962;
-            }
+    if (input[1] >= 0.75) {
+      if (input[4] >= 0.05) {
+        if (input[4] >= 0.15) {
+          if (input[4] >= 0.75) {
+            var62 = 0.1405782;
           } else {
-            if (input[3] >= 0.75) {
-              var62 = -0.048905067;
+            if (input[0] >= 38.5) {
+              var62 = -0.19758861;
             } else {
-              var62 = -0.3636726;
+              var62 = 0.04358826;
             }
           }
         } else {
-          if (input[4] >= 0.45) {
-            var62 = 0.062127966;
-          } else {
-            var62 = 0.17339593;
-          }
+          var62 = 0.18042803;
         }
       } else {
-        if (input[1] >= 0.55) {
-          if (input[5] >= 0.45) {
-            if (input[0] >= 42.5) {
-              var62 = -0.1742745;
-            } else {
-              var62 = 0.068079956;
-            }
-          } else {
-            if (input[1] >= 0.75) {
-              var62 = -0.28730184;
-            } else {
-              var62 = 0.03584591;
-            }
-          }
-        } else {
-          if (input[1] >= 0.45) {
-            if (input[5] >= 0.95) {
-              var62 = 0.17987025;
-            } else {
-              var62 = -0.3435889;
-            }
-          } else {
-            if (input[2] >= 0.55) {
-              var62 = -0.2237526;
-            } else {
-              var62 = 0.11736429;
-            }
-          }
-        }
+        var62 = -0.3545025;
       }
     } else {
-      if (input[3] >= 0.25) {
-        if (input[3] >= 0.45) {
-          if (input[0] >= -11.5) {
-            if (input[0] >= 4.5) {
-              var62 = 0.066157505;
+      if (input[2] >= 0.85) {
+        if (input[4] >= 0.15) {
+          if (input[1] >= 0.35000002) {
+            if (input[3] >= 0.75) {
+              var62 = 0.039759178;
             } else {
-              var62 = -0.037709624;
+              var62 = -0.24878563;
             }
           } else {
-            var62 = -0.2502002;
+            var62 = 0.17939292;
           }
         } else {
-          if (input[5] >= 0.75) {
-            if (input[3] >= 0.35000002) {
-              var62 = 0.2911833;
-            } else {
-              var62 = 0.03460519;
-            }
+          if (input[5] >= 0.35000002) {
+            var62 = 0.21516429;
           } else {
-            var62 = 0.0034491324;
+            var62 = 0.035568696;
           }
         }
       } else {
-        if (input[5] >= 0.75) {
-          if (input[1] >= 0.15) {
-            var62 = -0.27676037;
+        if (input[2] >= 0.65) {
+          if (input[1] >= 0.65) {
+            var62 = 0.12499043;
           } else {
-            var62 = -0.0004674471;
+            if (input[0] >= 50.0) {
+              var62 = -0.0095081385;
+            } else {
+              var62 = -0.27272898;
+            }
           }
         } else {
-          var62 = 0.082310945;
+          if (input[4] >= 0.35000002) {
+            if (input[3] >= 0.65) {
+              var62 = 0.19327308;
+            } else {
+              var62 = -0.0716849;
+            }
+          } else {
+            if (input[5] >= 0.35000002) {
+              var62 = -0.14079684;
+            } else {
+              var62 = 0.07489487;
+            }
+          }
         }
       }
     }
   }
   double var63;
-  if (input[0] >= 34.5) {
-    if (input[0] >= 36.5) {
-      if (input[5] >= 0.65) {
-        if (input[3] >= 0.55) {
-          if (input[1] >= 0.55) {
-            if (input[4] >= 0.05) {
-              var63 = -0.049483083;
+  if (input[3] >= 0.55) {
+    if (input[2] >= 0.25) {
+      if (input[2] >= 0.95) {
+        if (input[0] >= -27.5) {
+          if (input[1] >= 0.25) {
+            if (input[1] >= 0.65) {
+              var63 = -0.09610866;
             } else {
-              var63 = 0.15809368;
+              var63 = 0.18836294;
             }
-          } else {
-            if (input[0] >= 46.5) {
-              var63 = 0.019605756;
-            } else {
-              var63 = -0.24616307;
-            }
-          }
-        } else {
-          if (input[0] >= 39.5) {
-            if (input[0] >= 40.5) {
-              var63 = 0.058206692;
-            } else {
-              var63 = 0.16864844;
-            }
-          } else {
-            if (input[2] >= 0.55) {
-              var63 = -0.0025690873;
-            } else {
-              var63 = -0.28450072;
-            }
-          }
-        }
-      } else {
-        if (input[5] >= 0.55) {
-          if (input[4] >= 0.25) {
-            var63 = -0.26730832;
           } else {
             if (input[3] >= 0.75) {
-              var63 = 0.21703644;
+              var63 = -0.2813079;
             } else {
-              var63 = -0.09462864;
+              var63 = 0.054859053;
             }
           }
         } else {
-          if (input[3] >= 0.25) {
-            if (input[0] >= 39.0) {
-              var63 = 0.00532882;
+          if (input[0] >= -34.5) {
+            if (input[3] >= 0.65) {
+              var63 = -0.2974129;
             } else {
-              var63 = 0.17293364;
+              var63 = -0.031787235;
             }
           } else {
-            if (input[3] >= 0.15) {
-              var63 = -0.22361447;
+            var63 = 0.05331261;
+          }
+        }
+      } else {
+        if (input[3] >= 0.65) {
+          if (input[5] >= 0.85) {
+            if (input[4] >= 0.45) {
+              var63 = -0.07766387;
             } else {
-              var63 = 0.01102011;
+              var63 = 0.06809876;
+            }
+          } else {
+            if (input[1] >= 0.65) {
+              var63 = -0.100828364;
+            } else {
+              var63 = 0.0017969118;
+            }
+          }
+        } else {
+          if (input[2] >= 0.75) {
+            if (input[5] >= 0.85) {
+              var63 = -0.36378223;
+            } else {
+              var63 = -0.12240732;
+            }
+          } else {
+            if (input[0] >= 2.0) {
+              var63 = -0.04654073;
+            } else {
+              var63 = 0.13872313;
             }
           }
         }
       }
     } else {
-      if (input[1] >= 0.65) {
-        if (input[1] >= 0.85) {
-          var63 = 0.06539272;
-        } else {
-          var63 = 0.20643489;
-        }
-      } else {
-        if (input[5] >= 0.85) {
-          var63 = 0.093765445;
-        } else {
-          var63 = -0.059351627;
-        }
-      }
+      var63 = -0.16830902;
     }
   } else {
-    if (input[0] >= 32.5) {
-      if (input[4] >= 0.05) {
-        if (input[2] >= 0.65) {
-          var63 = -0.094714284;
+    if (input[4] >= 0.75) {
+      if (input[5] >= 0.75) {
+        if (input[0] >= -33.5) {
+          if (input[3] >= 0.25) {
+            var63 = -0.2839692;
+          } else {
+            var63 = 0.026323996;
+          }
         } else {
-          var63 = 0.0802215;
+          var63 = 0.03409606;
         }
       } else {
-        var63 = -0.21762498;
-      }
-    } else {
-      if (input[0] >= 30.5) {
-        var63 = 0.11951565;
-      } else {
-        if (input[1] >= 0.55) {
-          if (input[4] >= 0.25) {
-            if (input[2] >= 0.85) {
-              var63 = -0.08015061;
-            } else {
-              var63 = 0.021384465;
-            }
+        if (input[3] >= 0.25) {
+          if (input[3] >= 0.45) {
+            var63 = -0.0818105;
           } else {
-            if (input[1] >= 0.75) {
-              var63 = -0.017541071;
+            if (input[0] >= -29.0) {
+              var63 = 0.17218034;
             } else {
-              var63 = -0.21939735;
+              var63 = 0.010227998;
             }
           }
         } else {
-          if (input[2] >= 0.45) {
-            if (input[4] >= 0.55) {
-              var63 = 0.033495225;
+          if (input[2] >= 0.65) {
+            var63 = -0.18444978;
+          } else {
+            var63 = -0.043688286;
+          }
+        }
+      }
+    } else {
+      if (input[0] >= -28.5) {
+        if (input[2] >= 0.95) {
+          if (input[0] >= 40.5) {
+            var63 = 0.04086305;
+          } else {
+            if (input[1] >= 0.15) {
+              var63 = -0.2901114;
             } else {
-              var63 = -0.007896457;
+              var63 = 0.008154074;
+            }
+          }
+        } else {
+          if (input[0] >= -11.0) {
+            if (input[0] >= 11.5) {
+              var63 = 0.014001027;
+            } else {
+              var63 = -0.20217252;
             }
           } else {
-            if (input[5] >= 0.75) {
-              var63 = -0.24689437;
+            if (input[3] >= 0.35000002) {
+              var63 = 0.1829822;
             } else {
-              var63 = 0.11649596;
+              var63 = 0.0057275463;
+            }
+          }
+        }
+      } else {
+        if (input[1] >= 0.75) {
+          if (input[3] >= 0.25) {
+            if (input[5] >= 0.75) {
+              var63 = 0.13056459;
+            } else {
+              var63 = 0.00933056;
+            }
+          } else {
+            var63 = -0.17082913;
+          }
+        } else {
+          if (input[3] >= 0.35000002) {
+            if (input[5] >= 0.85) {
+              var63 = -0.39571065;
+            } else {
+              var63 = -0.041767213;
+            }
+          } else {
+            if (input[2] >= 0.85) {
+              var63 = 0.049833216;
+            } else {
+              var63 = -0.029988222;
             }
           }
         }
@@ -8382,231 +8806,283 @@ List<double> score(List<double> input) {
     }
   }
   double var64;
-  if (input[0] >= 46.5) {
-    if (input[1] >= 0.45) {
-      if (input[0] >= 49.5) {
-        if (input[1] >= 0.85) {
-          if (input[4] >= 0.35000002) {
-            var64 = 0.12368978;
-          } else {
-            var64 = 0.030530931;
-          }
-        } else {
-          var64 = -0.11086083;
-        }
-      } else {
-        if (input[2] >= 0.45) {
-          var64 = 0.13755906;
-        } else {
-          var64 = 0.03701145;
-        }
-      }
-    } else {
-      if (input[4] >= 0.2) {
-        var64 = -0.09060855;
-      } else {
-        var64 = 0.029250994;
-      }
-    }
+  if (input[0] >= 52.5) {
+    var64 = 0.06166357;
   } else {
-    if (input[5] >= 0.35000002) {
-      if (input[0] >= 43.5) {
-        var64 = -0.0752055;
-      } else {
-        if (input[0] >= 34.5) {
-          if (input[4] >= 0.75) {
-            if (input[1] >= 0.65) {
-              var64 = -0.18365191;
+    if (input[2] >= 0.15) {
+      if (input[3] >= 0.45) {
+        if (input[0] >= -32.5) {
+          if (input[0] >= -26.5) {
+            if (input[2] >= 0.35000002) {
+              var64 = -0.009789025;
             } else {
-              var64 = -0.03648236;
+              var64 = 0.1152608;
             }
           } else {
-            if (input[0] >= 36.5) {
-              var64 = 0.0034961244;
+            if (input[4] >= 0.65) {
+              var64 = 0.053737123;
             } else {
-              var64 = 0.10878433;
+              var64 = -0.1846368;
             }
           }
         } else {
-          if (input[0] >= 11.5) {
-            if (input[4] >= 0.25) {
-              var64 = -0.004812475;
+          if (input[4] >= 0.55) {
+            if (input[0] >= -34.5) {
+              var64 = -0.21051387;
             } else {
-              var64 = -0.09223329;
+              var64 = 0.037095133;
             }
           } else {
-            if (input[0] >= 5.5) {
-              var64 = 0.041987676;
+            if (input[1] >= 0.45) {
+              var64 = -0.0028817253;
             } else {
-              var64 = -0.005138643;
+              var64 = 0.1015088;
+            }
+          }
+        }
+      } else {
+        if (input[0] >= 39.5) {
+          if (input[5] >= 0.85) {
+            if (input[0] >= 41.5) {
+              var64 = 0.08373572;
+            } else {
+              var64 = -0.18248373;
+            }
+          } else {
+            if (input[0] >= 41.5) {
+              var64 = -0.09278452;
+            } else {
+              var64 = 0.07320092;
+            }
+          }
+        } else {
+          if (input[1] >= 0.85) {
+            if (input[2] >= 0.45) {
+              var64 = -0.2240447;
+            } else {
+              var64 = 0.051473815;
+            }
+          } else {
+            if (input[1] >= 0.45) {
+              var64 = 0.033636145;
+            } else {
+              var64 = -0.010757854;
             }
           }
         }
       }
     } else {
-      if (input[1] >= 0.75) {
-        var64 = -0.095691465;
-      } else {
-        if (input[4] >= 0.35000002) {
-          if (input[3] >= 0.35000002) {
-            var64 = 0.006338276;
-          } else {
-            var64 = -0.026772922;
-          }
-        } else {
-          if (input[1] >= 0.45) {
-            if (input[3] >= 0.25) {
-              var64 = -0.073059015;
-            } else {
-              var64 = 0.079353616;
-            }
-          } else {
-            var64 = 0.15742491;
-          }
-        }
-      }
+      var64 = 0.068953976;
     }
   }
   double var65;
-  if (input[0] >= 42.5) {
-    if (input[5] >= 0.75) {
-      if (input[1] >= 0.55) {
-        var65 = -0.13097087;
-      } else {
-        var65 = 0.0330151;
-      }
-    } else {
-      if (input[3] >= 0.55) {
-        if (input[2] >= 0.85) {
-          var65 = 0.18640041;
+  if (input[4] >= 0.55) {
+    if (input[2] >= 0.85) {
+      if (input[0] >= -0.5) {
+        if (input[3] >= 0.35000002) {
+          var65 = -0.37147665;
         } else {
-          if (input[1] >= 0.45) {
-            if (input[4] >= 0.35000002) {
-              var65 = 0.13522454;
+          var65 = 0.008074106;
+        }
+      } else {
+        if (input[5] >= 0.75) {
+          if (input[2] >= 0.95) {
+            if (input[3] >= 0.55) {
+              var65 = 0.10910722;
             } else {
-              var65 = -0.00074060267;
+              var65 = -0.1746867;
             }
           } else {
-            var65 = -0.1028615;
+            if (input[4] >= 0.85) {
+              var65 = -0.019237926;
+            } else {
+              var65 = -0.24524641;
+            }
+          }
+        } else {
+          if (input[3] >= 0.65) {
+            var65 = 0.22351453;
+          } else {
+            if (input[2] >= 0.95) {
+              var65 = 0.11378209;
+            } else {
+              var65 = -0.119826466;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[2] >= 0.75) {
+        if (input[1] >= 0.25) {
+          if (input[0] >= 37.5) {
+            var65 = -0.09598631;
+          } else {
+            if (input[4] >= 0.75) {
+              var65 = 0.049900237;
+            } else {
+              var65 = 0.24089147;
+            }
+          }
+        } else {
+          if (input[0] >= 14.5) {
+            var65 = -0.41424274;
+          } else {
+            if (input[0] >= 10.5) {
+              var65 = 0.20787573;
+            } else {
+              var65 = -0.14224505;
+            }
           }
         }
       } else {
-        var65 = -0.116373174;
+        if (input[2] >= 0.55) {
+          if (input[5] >= 0.65) {
+            if (input[2] >= 0.65) {
+              var65 = -0.23734705;
+            } else {
+              var65 = -0.05990438;
+            }
+          } else {
+            if (input[1] >= 0.55) {
+              var65 = -0.09908168;
+            } else {
+              var65 = 0.18166886;
+            }
+          }
+        } else {
+          if (input[0] >= 13.5) {
+            if (input[3] >= 0.25) {
+              var65 = 0.222848;
+            } else {
+              var65 = -0.06269434;
+            }
+          } else {
+            if (input[0] >= 10.5) {
+              var65 = -0.29898533;
+            } else {
+              var65 = 0.01167744;
+            }
+          }
+        }
       }
     }
   } else {
-    if (input[5] >= 0.75) {
-      if (input[4] >= 0.55) {
-        if (input[0] >= 14.5) {
-          if (input[1] >= 0.45) {
-            if (input[2] >= 0.75) {
-              var65 = 0.11847774;
+    if (input[2] >= 0.85) {
+      if (input[0] >= -21.5) {
+        if (input[0] >= 38.5) {
+          if (input[3] >= 0.65) {
+            if (input[5] >= 0.55) {
+              var65 = -0.09548786;
             } else {
-              var65 = -0.048994113;
+              var65 = 0.116209604;
             }
           } else {
-            if (input[2] >= 0.65) {
-              var65 = -0.41822046;
+            if (input[3] >= 0.45) {
+              var65 = -0.28322446;
             } else {
-              var65 = -0.026575949;
+              var65 = -0.025867175;
             }
           }
         } else {
-          if (input[2] >= 0.45) {
-            if (input[2] >= 0.55) {
-              var65 = -0.0009035515;
+          if (input[3] >= 0.55) {
+            if (input[0] >= -14.5) {
+              var65 = 0.051856462;
             } else {
-              var65 = 0.24155007;
+              var65 = -0.12721108;
             }
           } else {
-            if (input[1] >= 0.65) {
-              var65 = -0.061218005;
+            if (input[4] >= 0.15) {
+              var65 = 0.35243937;
             } else {
-              var65 = -0.2808144;
+              var65 = 0.04790181;
             }
           }
         }
       } else {
-        if (input[4] >= 0.35000002) {
-          if (input[0] >= -16.5) {
-            if (input[3] >= 0.85) {
-              var65 = -0.10654175;
+        if (input[0] >= -27.5) {
+          if (input[1] >= 0.45) {
+            if (input[5] >= 0.65) {
+              var65 = -0.18654591;
             } else {
-              var65 = 0.10344281;
+              var65 = 0.3355344;
             }
           } else {
-            if (input[0] >= -33.5) {
-              var65 = -0.30482033;
+            if (input[1] >= 0.15) {
+              var65 = -0.37301672;
             } else {
-              var65 = 0.08138312;
+              var65 = 0.1057387;
             }
           }
         } else {
-          if (input[5] >= 0.85) {
-            if (input[3] >= 0.85) {
-              var65 = -0.15278032;
+          if (input[1] >= 0.85) {
+            if (input[4] >= 0.35000002) {
+              var65 = 0.20254597;
             } else {
-              var65 = 0.027787713;
+              var65 = 0.022788476;
             }
           } else {
-            if (input[0] >= -27.5) {
-              var65 = -0.081702515;
+            if (input[1] >= 0.55) {
+              var65 = -0.26664746;
             } else {
-              var65 = 0.036729064;
+              var65 = 0.018532313;
             }
           }
         }
       }
     } else {
-      if (input[4] >= 0.55) {
-        if (input[0] >= -27.5) {
-          if (input[1] >= 0.25) {
-            if (input[0] >= 32.0) {
-              var65 = 0.016866367;
+      if (input[2] >= 0.75) {
+        if (input[0] >= 37.5) {
+          if (input[0] >= 39.5) {
+            if (input[1] >= 0.85) {
+              var65 = -0.19777967;
             } else {
-              var65 = 0.1933867;
+              var65 = 0.048170343;
             }
           } else {
-            if (input[0] >= -2.5) {
-              var65 = -0.22048543;
-            } else {
-              var65 = 0.07307311;
-            }
+            var65 = 0.24109997;
           }
         } else {
-          if (input[0] >= -33.5) {
-            var65 = -0.26398042;
-          } else {
-            if (input[4] >= 0.65) {
-              var65 = -0.1181964;
+          if (input[5] >= 0.55) {
+            if (input[5] >= 0.75) {
+              var65 = -0.058394548;
             } else {
-              var65 = 0.060545444;
+              var65 = -0.25189263;
+            }
+          } else {
+            if (input[1] >= 0.25) {
+              var65 = -0.2350782;
+            } else {
+              var65 = 0.21670596;
             }
           }
         }
       } else {
         if (input[4] >= 0.45) {
-          if (input[3] >= 0.25) {
-            if (input[3] >= 0.75) {
-              var65 = -0.042606153;
+          if (input[3] >= 0.45) {
+            if (input[0] >= 14.5) {
+              var65 = -0.04850374;
             } else {
-              var65 = -0.3117157;
+              var65 = -0.40382203;
             }
           } else {
-            var65 = 0.023654785;
+            if (input[3] >= 0.35000002) {
+              var65 = 0.26480046;
+            } else {
+              var65 = -0.06290858;
+            }
           }
         } else {
-          if (input[2] >= 0.65) {
-            if (input[0] >= -34.5) {
-              var65 = -0.027228313;
+          if (input[0] >= -25.5) {
+            if (input[0] >= -17.5) {
+              var65 = 0.0029029404;
             } else {
-              var65 = -0.22465251;
+              var65 = -0.2647301;
             }
           } else {
-            if (input[2] >= 0.55) {
-              var65 = 0.052008517;
+            if (input[0] >= -26.5) {
+              var65 = 0.22058807;
             } else {
-              var65 = -0.021648074;
+              var65 = 0.016171468;
             }
           }
         }
@@ -8614,291 +9090,291 @@ List<double> score(List<double> input) {
     }
   }
   double var66;
-  if (input[0] >= 46.5) {
-    if (input[1] >= 0.45) {
-      if (input[1] >= 0.55) {
-        if (input[1] >= 0.85) {
-          if (input[2] >= 0.65) {
-            var66 = 0.11377965;
-          } else {
-            var66 = -0.031750098;
-          }
+  if (input[4] >= 0.85) {
+    if (input[5] >= 0.65) {
+      if (input[0] >= 14.5) {
+        if (input[5] >= 0.85) {
+          var66 = -0.012447643;
         } else {
-          if (input[5] >= 0.55) {
-            var66 = 0.022277758;
-          } else {
-            var66 = -0.06512857;
-          }
+          var66 = -0.07971073;
         }
       } else {
-        var66 = 0.13172096;
+        if (input[3] >= 0.65) {
+          if (input[5] >= 0.85) {
+            var66 = 0.0051966007;
+          } else {
+            if (input[0] >= -20.5) {
+              var66 = 0.17805019;
+            } else {
+              var66 = 0.043750614;
+            }
+          }
+        } else {
+          if (input[5] >= 0.75) {
+            if (input[3] >= 0.45) {
+              var66 = -0.22479634;
+            } else {
+              var66 = 0.0035719895;
+            }
+          } else {
+            var66 = 0.13713212;
+          }
+        }
       }
     } else {
-      if (input[0] >= 50.5) {
-        var66 = 0.022614203;
+      if (input[1] >= 0.65) {
+        var66 = 0.08877896;
       } else {
-        var66 = -0.089587994;
+        var66 = -0.17700483;
       }
     }
   } else {
-    if (input[4] >= 0.45) {
-      if (input[0] >= 14.5) {
-        if (input[1] >= 0.35000002) {
-          if (input[1] >= 0.55) {
-            if (input[2] >= 0.55) {
-              var66 = -0.12737657;
+    if (input[1] >= 0.35000002) {
+      if (input[2] >= 0.95) {
+        if (input[3] >= 0.15) {
+          if (input[0] >= 9.0) {
+            if (input[0] >= 33.5) {
+              var66 = -0.0059535927;
             } else {
-              var66 = 0.082880385;
+              var66 = 0.2506042;
             }
           } else {
-            if (input[3] >= 0.75) {
-              var66 = -0.06892725;
+            if (input[0] >= -33.5) {
+              var66 = -0.2853121;
             } else {
-              var66 = 0.14635769;
+              var66 = 0.02675362;
             }
           }
         } else {
-          if (input[1] >= 0.15) {
-            if (input[3] >= 0.65) {
-              var66 = -0.350587;
-            } else {
-              var66 = -0.039535172;
-            }
-          } else {
-            var66 = 0.11182334;
-          }
+          var66 = 0.23754083;
         }
       } else {
-        if (input[0] >= 10.5) {
-          if (input[5] >= 0.85) {
-            if (input[4] >= 0.75) {
-              var66 = 0.14273416;
+        if (input[3] >= 0.25) {
+          if (input[2] >= 0.55) {
+            if (input[1] >= 0.45) {
+              var66 = 0.019072589;
             } else {
-              var66 = -0.33343747;
+              var66 = -0.046801135;
             }
           } else {
-            if (input[4] >= 0.55) {
-              var66 = 0.054989558;
+            if (input[4] >= 0.15) {
+              var66 = 0.00045941776;
             } else {
-              var66 = 0.27862075;
+              var66 = -0.11416189;
             }
           }
         } else {
-          if (input[2] >= 0.95) {
-            if (input[3] >= 0.45) {
-              var66 = 0.13530363;
+          if (input[2] >= 0.75) {
+            if (input[3] >= 0.15) {
+              var66 = -0.37349558;
             } else {
-              var66 = -0.015582129;
+              var66 = -0.10401216;
             }
           } else {
-            if (input[4] >= 0.55) {
-              var66 = -0.016329786;
+            if (input[4] >= 0.15) {
+              var66 = -0.17245236;
             } else {
-              var66 = -0.11961121;
+              var66 = 0.030614482;
             }
           }
         }
       }
     } else {
-      if (input[2] >= 0.75) {
-        if (input[3] >= 0.55) {
-          if (input[0] >= 14.5) {
-            if (input[0] >= 22.0) {
-              var66 = -0.04917476;
+      if (input[5] >= 0.85) {
+        if (input[2] >= 0.45) {
+          if (input[4] >= 0.45) {
+            if (input[4] >= 0.75) {
+              var66 = 0.1520359;
             } else {
-              var66 = 0.080838375;
+              var66 = -0.14896609;
             }
           } else {
-            if (input[3] >= 0.85) {
-              var66 = 0.044581123;
+            if (input[3] >= 0.65) {
+              var66 = 0.10969735;
             } else {
-              var66 = -0.2216622;
+              var66 = 0.025423085;
             }
           }
         } else {
-          if (input[2] >= 0.95) {
-            if (input[1] >= 0.15) {
-              var66 = -0.16052982;
+          if (input[1] >= 0.25) {
+            if (input[4] >= 0.15) {
+              var66 = -0.016659718;
             } else {
-              var66 = 0.12106725;
+              var66 = 0.18958752;
             }
           } else {
-            if (input[0] >= -21.5) {
-              var66 = 0.10744271;
-            } else {
-              var66 = -0.009847198;
-            }
+            var66 = -0.34798598;
           }
         }
       } else {
-        if (input[1] >= 0.45) {
-          if (input[1] >= 0.55) {
-            if (input[4] >= 0.35000002) {
-              var66 = -0.0990717;
+        if (input[2] >= 0.65) {
+          if (input[0] >= -28.5) {
+            if (input[4] >= 0.75) {
+              var66 = -0.31090617;
             } else {
-              var66 = 0.019668892;
+              var66 = 0.0049532186;
             }
           } else {
-            if (input[0] >= -35.5) {
-              var66 = -0.24872045;
+            if (input[4] >= 0.65) {
+              var66 = 0.19947316;
             } else {
-              var66 = 0.1409583;
+              var66 = -0.15707529;
             }
           }
         } else {
-          if (input[3] >= 0.05) {
-            if (input[0] >= -25.5) {
-              var66 = 0.026874548;
+          if (input[0] >= -31.5) {
+            if (input[4] >= 0.25) {
+              var66 = 0.03911494;
             } else {
-              var66 = 0.12139706;
+              var66 = -0.089105375;
             }
           } else {
-            var66 = -0.1928846;
+            if (input[5] >= 0.75) {
+              var66 = 0.19601189;
+            } else {
+              var66 = -0.1824595;
+            }
           }
         }
       }
     }
   }
   double var67;
-  if (input[0] >= 9.0) {
-    if (input[0] >= 12.5) {
-      if (input[4] >= 0.65) {
-        if (input[0] >= 14.5) {
-          if (input[1] >= 0.35000002) {
-            if (input[2] >= 0.75) {
-              var67 = 0.13116838;
-            } else {
-              var67 = -0.014049363;
-            }
+  if (input[0] >= 42.5) {
+    if (input[1] >= 0.45) {
+      if (input[0] >= 49.5) {
+        if (input[1] >= 0.85) {
+          if (input[2] >= 0.65) {
+            var67 = 0.111871414;
           } else {
-            if (input[2] >= 0.65) {
-              var67 = -0.2596833;
-            } else {
-              var67 = -0.06226646;
-            }
+            var67 = 0.027144453;
           }
         } else {
-          if (input[3] >= 0.65) {
-            var67 = 0.26797673;
+          if (input[1] >= 0.55) {
+            var67 = -0.21678478;
           } else {
-            var67 = -0.0436577;
+            var67 = 0.029939279;
           }
         }
       } else {
-        if (input[0] >= 14.5) {
-          if (input[4] >= 0.45) {
-            if (input[2] >= 0.75) {
-              var67 = -0.15752049;
-            } else {
-              var67 = -0.008718593;
-            }
-          } else {
-            if (input[4] >= 0.25) {
-              var67 = 0.03096525;
-            } else {
-              var67 = -0.009536836;
-            }
-          }
+        if (input[1] >= 0.75) {
+          var67 = 0.0002754342;
         } else {
-          if (input[5] >= 0.85) {
-            if (input[3] >= 0.75) {
-              var67 = 0.06004033;
-            } else {
-              var67 = -0.37725952;
-            }
+          if (input[5] >= 0.75) {
+            var67 = 0.013641803;
           } else {
-            if (input[5] >= 0.75) {
-              var67 = 0.10276241;
+            if (input[1] >= 0.55) {
+              var67 = 0.18628617;
             } else {
-              var67 = -0.1943536;
+              var67 = -0.018975321;
             }
           }
         }
       }
     } else {
-      if (input[4] >= 0.65) {
-        var67 = -0.285729;
-      } else {
-        if (input[4] >= 0.35000002) {
-          if (input[0] >= 10.5) {
-            if (input[5] >= 0.85) {
-              var67 = -0.028055355;
-            } else {
-              var67 = 0.23677926;
-            }
+      if (input[3] >= 0.65) {
+        if (input[4] >= 0.15) {
+          if (input[3] >= 0.75) {
+            var67 = -0.1741791;
           } else {
-            if (input[1] >= 0.25) {
-              var67 = 0.124824814;
+            if (input[0] >= 50.5) {
+              var67 = 0.122536525;
             } else {
-              var67 = -0.18784015;
+              var67 = -0.027581373;
             }
           }
         } else {
-          if (input[2] >= 0.75) {
-            var67 = -0.31360006;
-          } else {
-            if (input[3] >= 0.75) {
-              var67 = 0.10892456;
-            } else {
-              var67 = -0.24284919;
-            }
-          }
+          var67 = 0.15884985;
         }
+      } else {
+        var67 = -0.19438119;
       }
     }
   } else {
-    if (input[0] >= 6.5) {
-      var67 = 0.2252784;
-    } else {
-      if (input[3] >= 0.75) {
-        if (input[0] >= -2.5) {
-          if (input[0] >= 2.0) {
-            if (input[1] >= 0.25) {
-              var67 = -0.12675273;
+    if (input[0] >= 11.5) {
+      if (input[0] >= 12.5) {
+        if (input[2] >= 0.65) {
+          if (input[0] >= 13.5) {
+            if (input[3] >= 0.85) {
+              var67 = -0.1584226;
             } else {
-              var67 = 0.053945467;
+              var67 = -0.016778838;
             }
           } else {
-            if (input[3] >= 0.85) {
-              var67 = 0.006586377;
+            if (input[2] >= 0.85) {
+              var67 = 0.23423193;
             } else {
-              var67 = -0.4771544;
+              var67 = -0.02568707;
             }
           }
         } else {
-          if (input[1] >= 0.65) {
-            if (input[2] >= 0.75) {
-              var67 = 0.086699314;
+          if (input[1] >= 0.15) {
+            if (input[3] >= 0.05) {
+              var67 = 0.023835996;
             } else {
-              var67 = -0.23032877;
+              var67 = -0.18904278;
             }
           } else {
-            if (input[5] >= 0.85) {
-              var67 = -0.2294491;
+            if (input[5] >= 0.35000002) {
+              var67 = -0.18002033;
             } else {
-              var67 = 0.12343078;
+              var67 = 0.055559058;
             }
           }
         }
       } else {
-        if (input[0] >= -4.5) {
+        if (input[1] >= 0.85) {
+          var67 = 0.052335244;
+        } else {
           if (input[4] >= 0.45) {
-            var67 = -0.07912047;
+            var67 = -0.0020513826;
           } else {
-            if (input[0] >= 5.5) {
-              var67 = -0.09022038;
+            var67 = -0.3046265;
+          }
+        }
+      }
+    } else {
+      if (input[0] >= 6.5) {
+        if (input[3] >= 0.75) {
+          if (input[4] >= 0.65) {
+            var67 = -0.15489265;
+          } else {
+            if (input[4] >= 0.35000002) {
+              var67 = 0.19729531;
             } else {
-              var67 = 0.2282113;
+              var67 = -0.024544373;
             }
           }
         } else {
-          if (input[0] >= -11.0) {
-            var67 = -0.26771578;
-          } else {
-            if (input[0] >= -21.5) {
-              var67 = 0.048456803;
+          var67 = -0.28428295;
+        }
+      } else {
+        if (input[4] >= 0.35000002) {
+          if (input[2] >= 0.75) {
+            if (input[3] >= 0.65) {
+              var67 = 0.082688995;
             } else {
-              var67 = -0.006966268;
+              var67 = -0.052063763;
+            }
+          } else {
+            if (input[3] >= 0.75) {
+              var67 = -0.33177352;
+            } else {
+              var67 = 0.008772641;
+            }
+          }
+        } else {
+          if (input[1] >= 0.85) {
+            if (input[3] >= 0.55) {
+              var67 = -0.19113165;
+            } else {
+              var67 = 0.015276207;
+            }
+          } else {
+            if (input[0] >= -2.5) {
+              var67 = -0.06993086;
+            } else {
+              var67 = 0.02112924;
             }
           }
         }
@@ -8906,287 +9382,351 @@ List<double> score(List<double> input) {
     }
   }
   double var68;
-  if (input[2] >= 0.95) {
-    if (input[4] >= 0.65) {
-      if (input[1] >= 0.35000002) {
-        if (input[0] >= -26.5) {
-          var68 = 0.09450821;
-        } else {
-          var68 = -0.10003782;
-        }
-      } else {
-        var68 = 0.22346984;
-      }
-    } else {
-      if (input[3] >= 0.55) {
-        if (input[3] >= 0.75) {
-          if (input[1] >= 0.45) {
-            if (input[0] >= 42.5) {
-              var68 = 0.10043017;
-            } else {
-              var68 = -0.031038018;
-            }
+  if (input[4] >= 0.85) {
+    if (input[5] >= 0.65) {
+      if (input[0] >= 9.0) {
+        if (input[2] >= 0.55) {
+          if (input[0] >= 14.5) {
+            var68 = -0.043750867;
           } else {
-            var68 = -0.2609953;
+            var68 = 0.06914602;
           }
         } else {
-          if (input[4] >= 0.35000002) {
-            if (input[1] >= 0.15) {
-              var68 = -0.1924745;
-            } else {
-              var68 = 0.17297295;
-            }
-          } else {
-            if (input[5] >= 0.75) {
-              var68 = 0.1730315;
-            } else {
-              var68 = -0.00683242;
-            }
-          }
+          var68 = -0.10386414;
         }
       } else {
-        if (input[0] >= -29.5) {
-          if (input[5] >= 0.45) {
-            if (input[1] >= 0.65) {
-              var68 = -0.028078893;
-            } else {
-              var68 = -0.27686;
-            }
+        if (input[0] >= -20.5) {
+          if (input[1] >= 0.25) {
+            var68 = 0.18651792;
           } else {
-            var68 = 0.040632125;
+            var68 = 0.041959494;
           }
         } else {
           if (input[1] >= 0.35000002) {
-            if (input[4] >= 0.45) {
-              var68 = 0.18063873;
+            if (input[2] >= 0.85) {
+              var68 = 0.021799106;
             } else {
-              var68 = 0.027627984;
+              var68 = 0.1255734;
             }
           } else {
-            if (input[1] >= 0.15) {
-              var68 = -0.23775236;
-            } else {
-              var68 = 0.06283637;
-            }
+            var68 = -0.11767653;
           }
-        }
-      }
-    }
-  } else {
-    if (input[4] >= 0.65) {
-      if (input[3] >= 0.35000002) {
-        if (input[2] >= 0.85) {
-          if (input[3] >= 0.45) {
-            var68 = -0.3036561;
-          } else {
-            var68 = 0.12863496;
-          }
-        } else {
-          if (input[0] >= 13.0) {
-            if (input[3] >= 0.55) {
-              var68 = 0.1032421;
-            } else {
-              var68 = -0.0865339;
-            }
-          } else {
-            if (input[1] >= 0.25) {
-              var68 = 0.060764477;
-            } else {
-              var68 = -0.14784671;
-            }
-          }
-        }
-      } else {
-        if (input[1] >= 0.45) {
-          if (input[4] >= 0.85) {
-            var68 = 0.110593945;
-          } else {
-            var68 = -0.1282056;
-          }
-        } else {
-          var68 = -0.28465554;
         }
       }
     } else {
-      if (input[1] >= 0.15) {
-        if (input[1] >= 0.25) {
-          if (input[3] >= 0.05) {
-            if (input[3] >= 0.15) {
-              var68 = -0.007183792;
+      if (input[5] >= 0.45) {
+        var68 = -0.14985158;
+      } else {
+        var68 = 0.08215189;
+      }
+    }
+  } else {
+    if (input[3] >= 0.15) {
+      if (input[1] >= 0.25) {
+        if (input[5] >= 0.85) {
+          if (input[0] >= -22.0) {
+            if (input[4] >= 0.15) {
+              var68 = -0.06493753;
             } else {
-              var68 = 0.046299398;
+              var68 = 0.15513036;
             }
           } else {
-            var68 = -0.20221351;
+            if (input[3] >= 0.55) {
+              var68 = 0.0054181935;
+            } else {
+              var68 = -0.21278618;
+            }
           }
         } else {
-          if (input[5] >= 0.65) {
-            if (input[0] >= 2.0) {
-              var68 = 0.03225213;
+          if (input[2] >= 0.55) {
+            if (input[0] >= -25.5) {
+              var68 = -0.01184793;
             } else {
-              var68 = -0.117137484;
+              var68 = 0.03409199;
             }
           } else {
-            if (input[0] >= -19.0) {
-              var68 = -0.08615209;
+            if (input[4] >= 0.45) {
+              var68 = 0.08956333;
             } else {
-              var68 = 0.20559701;
+              var68 = -0.074061975;
             }
           }
         }
       } else {
-        if (input[2] >= 0.85) {
-          if (input[4] >= 0.15) {
-            if (input[4] >= 0.25) {
-              var68 = 0.006915551;
+        if (input[0] >= -31.5) {
+          if (input[3] >= 0.35000002) {
+            if (input[2] >= 0.75) {
+              var68 = -0.027368514;
             } else {
-              var68 = 0.24405797;
+              var68 = 0.047610156;
             }
           } else {
-            if (input[3] >= 0.05) {
-              var68 = -0.24247453;
+            if (input[3] >= 0.25) {
+              var68 = -0.20343202;
             } else {
-              var68 = 0.10088586;
+              var68 = -0.031212332;
             }
           }
         } else {
-          if (input[0] >= -19.0) {
-            if (input[4] >= 0.05) {
-              var68 = -0.12016421;
+          if (input[2] >= 0.85) {
+            if (input[3] >= 0.25) {
+              var68 = 0.062967375;
             } else {
-              var68 = 0.10305367;
+              var68 = 0.27249295;
             }
           } else {
-            var68 = -0.2662121;
+            if (input[0] >= -32.5) {
+              var68 = 0.2532771;
+            } else {
+              var68 = -0.18140528;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[4] >= 0.05) {
+        if (input[2] >= 0.75) {
+          if (input[5] >= 0.75) {
+            var68 = -0.25678626;
+          } else {
+            if (input[0] >= -24.0) {
+              var68 = 0.2230045;
+            } else {
+              var68 = -0.015557044;
+            }
+          }
+        } else {
+          if (input[5] >= 0.85) {
+            if (input[4] >= 0.25) {
+              var68 = 0.020128591;
+            } else {
+              var68 = 0.30128056;
+            }
+          } else {
+            if (input[4] >= 0.45) {
+              var68 = 0.11855472;
+            } else {
+              var68 = -0.1966859;
+            }
+          }
+        }
+      } else {
+        if (input[2] >= 0.65) {
+          if (input[3] >= 0.05) {
+            if (input[0] >= -37.0) {
+              var68 = -0.1782813;
+            } else {
+              var68 = 0.11114449;
+            }
+          } else {
+            if (input[5] >= 0.75) {
+              var68 = 0.045632835;
+            } else {
+              var68 = 0.21026433;
+            }
+          }
+        } else {
+          if (input[3] >= 0.05) {
+            if (input[1] >= 0.25) {
+              var68 = 0.12334738;
+            } else {
+              var68 = -0.060457267;
+            }
+          } else {
+            var68 = -0.14715557;
           }
         }
       }
     }
   }
   double var69;
-  if (input[0] >= 9.0) {
-    if (input[0] >= 15.5) {
-      if (input[2] >= 0.25) {
-        if (input[4] >= 0.35000002) {
-          if (input[3] >= 0.35000002) {
-            if (input[0] >= 41.5) {
-              var69 = -0.04986192;
+  if (input[1] >= 0.65) {
+    if (input[3] >= 0.65) {
+      if (input[5] >= 0.85) {
+        if (input[2] >= 0.55) {
+          if (input[1] >= 0.75) {
+            if (input[5] >= 0.95) {
+              var69 = -0.06167493;
             } else {
-              var69 = 0.075410776;
+              var69 = -0.2388251;
+            }
+          } else {
+            if (input[3] >= 0.75) {
+              var69 = 0.11448948;
+            } else {
+              var69 = -0.052147176;
+            }
+          }
+        } else {
+          if (input[1] >= 0.85) {
+            if (input[0] >= 39.5) {
+              var69 = 0.047592554;
+            } else {
+              var69 = 0.24203919;
             }
           } else {
             if (input[2] >= 0.45) {
-              var69 = -0.12295326;
+              var69 = -0.19105963;
             } else {
-              var69 = 0.1272727;
-            }
-          }
-        } else {
-          if (input[3] >= 0.25) {
-            if (input[0] >= 37.5) {
-              var69 = -0.0005546532;
-            } else {
-              var69 = -0.08318279;
-            }
-          } else {
-            if (input[4] >= 0.25) {
-              var69 = -0.20278506;
-            } else {
-              var69 = 0.05164523;
+              var69 = 0.12741804;
             }
           }
         }
       } else {
-        var69 = -0.11347566;
+        if (input[1] >= 0.75) {
+          if (input[1] >= 0.85) {
+            if (input[4] >= 0.35000002) {
+              var69 = 0.023450973;
+            } else {
+              var69 = -0.2528506;
+            }
+          } else {
+            if (input[4] >= 0.35000002) {
+              var69 = -0.16774514;
+            } else {
+              var69 = 0.11678632;
+            }
+          }
+        } else {
+          if (input[4] >= 0.55) {
+            var69 = 0.0628482;
+          } else {
+            var69 = -0.3459711;
+          }
+        }
       }
     } else {
-      if (input[4] >= 0.15) {
-        if (input[5] >= 0.65) {
-          if (input[3] >= 0.65) {
-            if (input[2] >= 0.55) {
-              var69 = 0.02821741;
-            } else {
-              var69 = -0.080678016;
-            }
+      if (input[0] >= 37.5) {
+        if (input[5] >= 0.85) {
+          if (input[0] >= 41.5) {
+            var69 = 0.06769793;
           } else {
-            if (input[2] >= 0.55) {
-              var69 = -0.27948254;
+            if (input[0] >= 40.5) {
+              var69 = -0.26564786;
             } else {
-              var69 = 0.050449163;
+              var69 = 0.022176934;
             }
           }
         } else {
-          if (input[0] >= 14.5) {
-            var69 = 0.119606666;
+          if (input[2] >= 0.85) {
+            if (input[4] >= 0.35000002) {
+              var69 = 0.064450935;
+            } else {
+              var69 = -0.14539869;
+            }
           } else {
-            var69 = -0.302331;
+            if (input[2] >= 0.55) {
+              var69 = 0.11078665;
+            } else {
+              var69 = 0.031161243;
+            }
           }
         }
       } else {
-        if (input[0] >= 13.5) {
-          var69 = -0.29076076;
+        if (input[0] >= 36.5) {
+          var69 = -0.22895469;
         } else {
-          var69 = -0.014239491;
+          if (input[0] >= 34.5) {
+            var69 = 0.16652682;
+          } else {
+            if (input[0] >= -27.5) {
+              var69 = -0.18459561;
+            } else {
+              var69 = 0.012701077;
+            }
+          }
         }
       }
     }
   } else {
-    if (input[0] >= 6.5) {
-      var69 = 0.21238837;
-    } else {
-      if (input[4] >= 0.35000002) {
-        if (input[0] >= 3.5) {
-          if (input[4] >= 0.75) {
-            if (input[5] >= 0.75) {
-              var69 = -0.032603063;
+    if (input[3] >= 0.65) {
+      if (input[5] >= 0.45) {
+        if (input[0] >= -35.5) {
+          if (input[0] >= -34.5) {
+            if (input[0] >= -1.0) {
+              var69 = 0.011299229;
             } else {
-              var69 = 0.12782082;
+              var69 = -0.030203152;
             }
           } else {
-            var69 = -0.315763;
+            var69 = 0.17842048;
           }
         } else {
-          if (input[0] >= -2.5) {
-            if (input[3] >= 0.75) {
-              var69 = 0.04623341;
+          var69 = -0.25002396;
+        }
+      } else {
+        if (input[2] >= 0.55) {
+          if (input[3] >= 0.75) {
+            if (input[1] >= 0.55) {
+              var69 = 0.09603745;
             } else {
-              var69 = 0.23676349;
+              var69 = -0.06877474;
             }
           } else {
-            if (input[4] >= 0.45) {
-              var69 = 0.0007688405;
+            if (input[5] >= 0.35000002) {
+              var69 = 0.23528062;
             } else {
-              var69 = -0.160064;
+              var69 = 0.03704411;
+            }
+          }
+        } else {
+          if (input[1] >= 0.35000002) {
+            if (input[4] >= 0.05) {
+              var69 = -0.1394366;
+            } else {
+              var69 = -0.0014242884;
+            }
+          } else {
+            var69 = 0.06656861;
+          }
+        }
+      }
+    } else {
+      if (input[1] >= 0.55) {
+        if (input[0] >= 37.5) {
+          if (input[2] >= 0.45) {
+            var69 = -0.38054356;
+          } else {
+            var69 = 0.016296655;
+          }
+        } else {
+          if (input[2] >= 0.65) {
+            if (input[2] >= 0.85) {
+              var69 = 0.005014234;
+            } else {
+              var69 = -0.27644008;
+            }
+          } else {
+            if (input[0] >= -7.5) {
+              var69 = 0.14144073;
+            } else {
+              var69 = -0.08595297;
             }
           }
         }
       } else {
-        if (input[2] >= 0.45) {
-          if (input[0] >= -2.5) {
-            if (input[0] >= 4.0) {
-              var69 = 0.03988695;
+        if (input[0] >= 1.5) {
+          if (input[3] >= 0.45) {
+            if (input[4] >= 0.55) {
+              var69 = 0.05030809;
             } else {
-              var69 = -0.3891268;
+              var69 = -0.20629337;
             }
           } else {
-            if (input[0] >= -4.5) {
-              var69 = 0.18300542;
+            if (input[5] >= 0.65) {
+              var69 = 0.028206142;
             } else {
-              var69 = 0.009121561;
+              var69 = -0.15597785;
             }
           }
         } else {
-          if (input[3] >= 0.65) {
-            if (input[3] >= 0.85) {
-              var69 = 0.052611273;
-            } else {
-              var69 = 0.25690106;
-            }
+          if (input[0] >= -4.5) {
+            var69 = 0.21605673;
           } else {
-            if (input[5] >= 0.75) {
-              var69 = -0.09153029;
+            if (input[5] >= 0.85) {
+              var69 = -0.027625335;
             } else {
-              var69 = 0.047927182;
+              var69 = 0.021022879;
             }
           }
         }
@@ -9194,931 +9734,1019 @@ List<double> score(List<double> input) {
     }
   }
   double var70;
-  if (input[0] >= 9.0) {
-    if (input[0] >= 15.5) {
-      if (input[5] >= 0.85) {
-        if (input[3] >= 0.45) {
-          if (input[2] >= 0.45) {
-            if (input[2] >= 0.75) {
-              var70 = -0.09771394;
-            } else {
-              var70 = 0.09690409;
-            }
-          } else {
-            var70 = -0.23667042;
-          }
-        } else {
-          if (input[3] >= 0.35000002) {
-            if (input[2] >= 0.95) {
-              var70 = 0.0035444687;
-            } else {
-              var70 = 0.13879722;
-            }
-          } else {
-            if (input[3] >= 0.25) {
-              var70 = -0.086474545;
-            } else {
-              var70 = 0.06460318;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= 20.0) {
-          if (input[0] >= 22.0) {
-            if (input[5] >= 0.75) {
-              var70 = -0.053865567;
-            } else {
-              var70 = 0.0014163932;
-            }
-          } else {
-            var70 = 0.20964868;
-          }
-        } else {
-          if (input[4] >= 0.25) {
-            var70 = 0.03454829;
-          } else {
-            var70 = -0.23845921;
-          }
-        }
-      }
+  if (input[5] >= 0.25) {
+    if (input[0] >= 52.5) {
+      var70 = 0.06955913;
     } else {
-      if (input[4] >= 0.15) {
-        if (input[5] >= 0.85) {
+      if (input[2] >= 0.25) {
+        if (input[4] >= 0.85) {
           if (input[1] >= 0.25) {
-            if (input[3] >= 0.75) {
-              var70 = -0.050000418;
+            if (input[2] >= 0.85) {
+              var70 = -0.019614222;
             } else {
-              var70 = -0.22207192;
+              var70 = 0.07977472;
             }
           } else {
-            if (input[4] >= 0.75) {
-              var70 = 0.107508205;
+            if (input[2] >= 0.65) {
+              var70 = -0.12109468;
             } else {
-              var70 = -0.048858773;
+              var70 = 0.033240207;
             }
           }
         } else {
-          if (input[2] >= 0.75) {
-            if (input[2] >= 0.85) {
-              var70 = 0.026299477;
+          if (input[4] >= 0.65) {
+            if (input[0] >= 13.5) {
+              var70 = 0.040751718;
             } else {
-              var70 = -0.14465487;
+              var70 = -0.098197445;
             }
           } else {
-            if (input[5] >= 0.65) {
-              var70 = 0.087302886;
+            if (input[3] >= 0.75) {
+              var70 = 0.01246492;
             } else {
-              var70 = -0.14647032;
+              var70 = -0.0071397256;
             }
           }
         }
       } else {
-        if (input[0] >= 13.5) {
-          var70 = -0.26144558;
+        if (input[0] >= 24.5) {
+          var70 = -0.0718763;
         } else {
-          var70 = -0.012036311;
+          var70 = 0.12150709;
         }
       }
     }
   } else {
-    if (input[0] >= 6.5) {
-      var70 = 0.19589145;
+    if (input[1] >= 0.25) {
+      var70 = -0.05077133;
     } else {
-      if (input[3] >= 0.95) {
-        if (input[2] >= 0.45) {
-          var70 = -0.012843837;
-        } else {
-          var70 = 0.16543075;
-        }
+      if (input[5] >= 0.15) {
+        var70 = 0.15843698;
       } else {
-        if (input[3] >= 0.75) {
-          if (input[4] >= 0.65) {
-            var70 = -0.24199554;
-          } else {
-            if (input[5] >= 0.85) {
-              var70 = -0.1279842;
-            } else {
-              var70 = 0.02867356;
-            }
-          }
-        } else {
-          if (input[0] >= -4.5) {
-            if (input[5] >= 0.85) {
-              var70 = 0.19685909;
-            } else {
-              var70 = 0.020288873;
-            }
-          } else {
-            if (input[0] >= -11.0) {
-              var70 = -0.21037212;
-            } else {
-              var70 = 0.0023337945;
-            }
-          }
-        }
+        var70 = 0.03922701;
       }
     }
   }
   double var71;
-  if (input[3] >= 0.75) {
-    if (input[1] >= 0.15) {
-      if (input[4] >= 0.65) {
-        if (input[3] >= 0.95) {
-          if (input[0] >= 9.5) {
-            var71 = -0.009831287;
+  if (input[1] >= 0.05) {
+    if (input[0] >= 9.0) {
+      if (input[0] >= 12.5) {
+        if (input[1] >= 0.65) {
+          if (input[3] >= 0.65) {
+            if (input[0] >= 41.5) {
+              var71 = 0.045392357;
+            } else {
+              var71 = -0.12257627;
+            }
           } else {
-            var71 = 0.16671662;
+            if (input[5] >= 0.85) {
+              var71 = -0.049976744;
+            } else {
+              var71 = 0.04405421;
+            }
+          }
+        } else {
+          if (input[3] >= 0.65) {
+            if (input[2] >= 0.55) {
+              var71 = 0.027634801;
+            } else {
+              var71 = -0.11436177;
+            }
+          } else {
+            if (input[5] >= 0.85) {
+              var71 = 0.039151687;
+            } else {
+              var71 = -0.08395831;
+            }
+          }
+        }
+      } else {
+        if (input[5] >= 0.65) {
+          if (input[3] >= 0.75) {
+            if (input[0] >= 11.5) {
+              var71 = -0.070348084;
+            } else {
+              var71 = 0.06282642;
+            }
+          } else {
+            if (input[3] >= 0.45) {
+              var71 = -0.27124858;
+            } else {
+              var71 = -0.014547165;
+            }
+          }
+        } else {
+          var71 = -0.31687278;
+        }
+      }
+    } else {
+      if (input[0] >= 6.5) {
+        var71 = 0.24047574;
+      } else {
+        if (input[5] >= 0.65) {
+          if (input[1] >= 0.15) {
+            if (input[1] >= 0.25) {
+              var71 = 0.007341736;
+            } else {
+              var71 = -0.10450841;
+            }
+          } else {
+            if (input[0] >= -31.5) {
+              var71 = 0.14688858;
+            } else {
+              var71 = -0.15701182;
+            }
+          }
+        } else {
+          if (input[1] >= 0.25) {
+            if (input[3] >= 0.15) {
+              var71 = -0.053995006;
+            } else {
+              var71 = 0.17981187;
+            }
+          } else {
+            if (input[1] >= 0.15) {
+              var71 = 0.14368439;
+            } else {
+              var71 = -0.109850086;
+            }
+          }
+        }
+      }
+    }
+  } else {
+    var71 = 0.06938389;
+  }
+  double var72;
+  if (input[5] >= 0.25) {
+    if (input[0] >= 9.0) {
+      if (input[0] >= 12.5) {
+        if (input[4] >= 0.05) {
+          if (input[1] >= 0.35000002) {
+            if (input[0] >= 36.5) {
+              var72 = -0.000034211087;
+            } else {
+              var72 = 0.118438736;
+            }
+          } else {
+            if (input[3] >= 0.65) {
+              var72 = 0.003379754;
+            } else {
+              var72 = -0.07215478;
+            }
+          }
+        } else {
+          if (input[1] >= 0.35000002) {
+            if (input[1] >= 0.55) {
+              var72 = 0.0008912542;
+            } else {
+              var72 = -0.21035005;
+            }
+          } else {
+            if (input[2] >= 0.75) {
+              var72 = 0.13845265;
+            } else {
+              var72 = -0.025079286;
+            }
+          }
+        }
+      } else {
+        if (input[5] >= 0.65) {
+          if (input[4] >= 0.65) {
+            var72 = -0.2506943;
+          } else {
+            if (input[3] >= 0.75) {
+              var72 = 0.05142493;
+            } else {
+              var72 = -0.12737912;
+            }
+          }
+        } else {
+          var72 = -0.27821067;
+        }
+      }
+    } else {
+      if (input[0] >= 6.5) {
+        var72 = 0.22101668;
+      } else {
+        if (input[4] >= 0.35000002) {
+          if (input[0] >= 3.5) {
+            if (input[1] >= 0.25) {
+              var72 = 0.055719532;
+            } else {
+              var72 = -0.353798;
+            }
+          } else {
+            if (input[0] >= -1.0) {
+              var72 = 0.13954023;
+            } else {
+              var72 = -0.030254131;
+            }
           }
         } else {
           if (input[2] >= 0.45) {
-            if (input[1] >= 0.35000002) {
-              var71 = -0.063949734;
+            if (input[0] >= -2.5) {
+              var72 = -0.11912315;
             } else {
-              var71 = -0.32553303;
+              var72 = 0.011274207;
             }
           } else {
-            var71 = -0.0012165471;
+            if (input[0] >= -32.5) {
+              var72 = 0.11205821;
+            } else {
+              var72 = -0.09426859;
+            }
           }
         }
-      } else {
-        if (input[5] >= 0.45) {
-          if (input[2] >= 0.95) {
-            if (input[0] >= 42.5) {
-              var71 = 0.08512959;
-            } else {
-              var71 = -0.2589695;
-            }
-          } else {
-            if (input[1] >= 0.25) {
-              var71 = -0.000967355;
-            } else {
-              var71 = 0.063433595;
-            }
-          }
-        } else {
-          if (input[1] >= 0.55) {
-            var71 = -0.18245736;
-          } else {
-            var71 = -0.010516626;
-          }
-        }
-      }
-    } else {
-      if (input[5] >= 0.75) {
-        var71 = 0.1830523;
-      } else {
-        var71 = -0.029589374;
       }
     }
   } else {
-    if (input[2] >= 0.95) {
-      if (input[3] >= 0.55) {
-        if (input[1] >= 0.45) {
-          if (input[4] >= 0.15) {
-            var71 = -0.20516661;
-          } else {
-            var71 = 0.13248087;
-          }
-        } else {
-          if (input[4] >= 0.2) {
-            if (input[5] >= 0.65) {
-              var71 = 0.20555606;
-            } else {
-              var71 = -0.007954858;
-            }
-          } else {
-            var71 = -0.04854987;
-          }
-        }
-      } else {
-        if (input[5] >= 0.95) {
-          var71 = 0.13777928;
-        } else {
-          if (input[5] >= 0.85) {
-            var71 = -0.22519936;
-          } else {
-            if (input[4] >= 0.45) {
-              var71 = 0.06002432;
-            } else {
-              var71 = -0.06869066;
-            }
-          }
-        }
-      }
+    if (input[1] >= 0.25) {
+      var72 = -0.039231293;
     } else {
-      if (input[4] >= 0.45) {
-        if (input[2] >= 0.85) {
-          if (input[5] >= 0.65) {
-            if (input[4] >= 0.85) {
-              var71 = -0.0035255076;
-            } else {
-              var71 = -0.33233365;
-            }
-          } else {
-            if (input[3] >= 0.65) {
-              var71 = 0.17263395;
-            } else {
-              var71 = -0.19645981;
-            }
-          }
-        } else {
-          if (input[0] >= -27.5) {
-            if (input[3] >= 0.45) {
-              var71 = -0.049987752;
-            } else {
-              var71 = 0.07900849;
-            }
-          } else {
-            if (input[3] >= 0.65) {
-              var71 = 0.057982244;
-            } else {
-              var71 = -0.17117487;
-            }
-          }
-        }
+      if (input[5] >= 0.15) {
+        var72 = 0.14884165;
       } else {
-        if (input[0] >= -27.5) {
-          if (input[2] >= 0.85) {
-            if (input[3] >= 0.55) {
-              var71 = -0.049600028;
-            } else {
-              var71 = 0.09373808;
-            }
-          } else {
-            if (input[0] >= -17.5) {
-              var71 = -0.013495569;
-            } else {
-              var71 = -0.16236927;
-            }
-          }
-        } else {
-          if (input[0] >= -28.5) {
-            if (input[1] >= 0.25) {
-              var71 = 0.16146883;
-            } else {
-              var71 = 0.010605537;
-            }
-          } else {
-            if (input[4] >= 0.25) {
-              var71 = 0.056263346;
-            } else {
-              var71 = -0.015336157;
-            }
-          }
-        }
-      }
-    }
-  }
-  double var72;
-  if (input[1] >= 0.95) {
-    if (input[4] >= 0.25) {
-      if (input[0] >= -27.5) {
-        if (input[2] >= 0.55) {
-          var72 = -0.16576815;
-        } else {
-          var72 = 0.07835698;
-        }
-      } else {
-        if (input[0] >= -28.5) {
-          var72 = 0.12485027;
-        } else {
-          var72 = 0.021483455;
-        }
-      }
-    } else {
-      if (input[0] >= 36.5) {
-        var72 = -0.0034227709;
-      } else {
-        var72 = -0.23778717;
-      }
-    }
-  } else {
-    if (input[0] >= -32.5) {
-      if (input[2] >= 0.35000002) {
-        if (input[4] >= 0.05) {
-          if (input[0] >= -27.5) {
-            if (input[3] >= 0.45) {
-              var72 = -0.014227475;
-            } else {
-              var72 = 0.020235382;
-            }
-          } else {
-            if (input[5] >= 0.55) {
-              var72 = -0.32258135;
-            } else {
-              var72 = -0.0016194052;
-            }
-          }
-        } else {
-          if (input[0] >= -27.5) {
-            if (input[0] >= -21.5) {
-              var72 = 0.009440219;
-            } else {
-              var72 = -0.17547694;
-            }
-          } else {
-            if (input[1] >= 0.45) {
-              var72 = -0.178333;
-            } else {
-              var72 = 0.12802356;
-            }
-          }
-        }
-      } else {
-        if (input[3] >= 0.4) {
-          if (input[3] >= 0.65) {
-            var72 = -0.0014786363;
-          } else {
-            var72 = 0.17443396;
-          }
-        } else {
-          var72 = -0.07411961;
-        }
-      }
-    } else {
-      if (input[1] >= 0.25) {
-        if (input[3] >= 0.25) {
-          if (input[0] >= -33.5) {
-            if (input[1] >= 0.55) {
-              var72 = -0.019308805;
-            } else {
-              var72 = 0.2100096;
-            }
-          } else {
-            if (input[4] >= 0.05) {
-              var72 = 0.022179864;
-            } else {
-              var72 = -0.06556509;
-            }
-          }
-        } else {
-          if (input[2] >= 0.75) {
-            if (input[4] >= 0.25) {
-              var72 = 0.016480185;
-            } else {
-              var72 = -0.25828433;
-            }
-          } else {
-            if (input[0] >= -34.5) {
-              var72 = -0.075842075;
-            } else {
-              var72 = 0.07635125;
-            }
-          }
-        }
-      } else {
-        var72 = 0.11273196;
+        var72 = 0.033222534;
       }
     }
   }
   double var73;
-  if (input[0] >= 46.5) {
-    if (input[3] >= 0.45) {
-      if (input[1] >= 0.85) {
-        var73 = 0.087330036;
+  if (input[3] >= 0.55) {
+    if (input[4] >= 0.75) {
+      if (input[2] >= 0.85) {
+        var73 = -0.11473229;
       } else {
-        if (input[0] >= 49.5) {
-          if (input[1] >= 0.35000002) {
-            var73 = -0.093441;
+        if (input[0] >= 13.5) {
+          if (input[5] >= 0.85) {
+            var73 = 0.20976113;
           } else {
-            var73 = 0.015907958;
+            if (input[2] >= 0.55) {
+              var73 = -0.047302373;
+            } else {
+              var73 = 0.1601385;
+            }
           }
         } else {
-          var73 = 0.084033564;
+          if (input[0] >= -18.5) {
+            if (input[1] >= 0.25) {
+              var73 = 0.06676586;
+            } else {
+              var73 = -0.2899629;
+            }
+          } else {
+            if (input[0] >= -23.5) {
+              var73 = 0.17919928;
+            } else {
+              var73 = -0.007481543;
+            }
+          }
         }
       }
     } else {
-      var73 = -0.059228364;
-    }
-  } else {
-    if (input[1] >= 0.95) {
-      if (input[2] >= 0.75) {
-        var73 = -0.17893043;
-      } else {
-        if (input[4] >= 0.25) {
-          if (input[0] >= -27.5) {
-            var73 = -0.06799822;
-          } else {
-            if (input[0] >= -28.5) {
-              var73 = 0.20050259;
+      if (input[0] >= -14.5) {
+        if (input[0] >= -2.5) {
+          if (input[0] >= -1.0) {
+            if (input[0] >= 9.0) {
+              var73 = -0.014549156;
             } else {
-              var73 = 0.034377266;
+              var73 = 0.06488432;
             }
+          } else {
+            var73 = -0.31213874;
           }
         } else {
-          var73 = -0.118772395;
-        }
-      }
-    } else {
-      if (input[0] >= -2.5) {
-        if (input[4] >= 0.35000002) {
-          if (input[2] >= 0.45) {
-            if (input[0] >= 4.5) {
-              var73 = 0.005600898;
-            } else {
-              var73 = 0.1274245;
-            }
-          } else {
-            if (input[3] >= 0.45) {
-              var73 = -0.19728348;
-            } else {
-              var73 = 0.10037808;
-            }
-          }
-        } else {
-          if (input[0] >= 3.5) {
-            if (input[2] >= 0.65) {
-              var73 = -0.039171524;
-            } else {
-              var73 = 0.01734467;
-            }
-          } else {
-            var73 = -0.23348646;
-          }
+          var73 = 0.21551687;
         }
       } else {
-        if (input[0] >= -4.5) {
-          var73 = 0.21274927;
-        } else {
-          if (input[2] >= 0.55) {
-            if (input[3] >= 0.45) {
-              var73 = 0.021693679;
+        if (input[1] >= 0.25) {
+          if (input[4] >= 0.05) {
+            if (input[0] >= -25.5) {
+              var73 = -0.20219311;
             } else {
-              var73 = -0.007214984;
+              var73 = -0.00067849294;
             }
           } else {
             if (input[5] >= 0.85) {
-              var73 = 0.039058223;
+              var73 = 0.28460655;
             } else {
-              var73 = -0.18269244;
+              var73 = -0.14293908;
+            }
+          }
+        } else {
+          if (input[5] >= 0.65) {
+            var73 = -0.33395296;
+          } else {
+            if (input[3] >= 0.75) {
+              var73 = 0.07170367;
+            } else {
+              var73 = -0.036666673;
             }
           }
         }
+      }
+    }
+  } else {
+    if (input[2] >= 0.25) {
+      if (input[2] >= 0.35000002) {
+        if (input[5] >= 0.65) {
+          if (input[0] >= 39.5) {
+            if (input[0] >= 40.5) {
+              var73 = 0.041041724;
+            } else {
+              var73 = 0.17760907;
+            }
+          } else {
+            if (input[2] >= 0.85) {
+              var73 = 0.034717396;
+            } else {
+              var73 = -0.0223171;
+            }
+          }
+        } else {
+          if (input[0] >= -26.5) {
+            if (input[5] >= 0.55) {
+              var73 = -0.18223712;
+            } else {
+              var73 = -0.022863068;
+            }
+          } else {
+            if (input[2] >= 0.85) {
+              var73 = -0.040003467;
+            } else {
+              var73 = 0.078515515;
+            }
+          }
+        }
+      } else {
+        var73 = -0.19690189;
+      }
+    } else {
+      if (input[3] >= 0.4) {
+        var73 = 0.19799368;
+      } else {
+        var73 = -0.021436304;
       }
     }
   }
   double var74;
-  if (input[5] >= 0.45) {
-    if (input[3] >= 0.75) {
-      if (input[0] >= 5.5) {
-        if (input[2] >= 0.45) {
-          if (input[3] >= 0.95) {
-            if (input[0] >= 40.5) {
-              var74 = 0.115024775;
+  if (input[2] >= 0.65) {
+    if (input[1] >= 0.55) {
+      if (input[5] >= 0.65) {
+        if (input[4] >= 0.35000002) {
+          if (input[1] >= 0.65) {
+            if (input[0] >= -26.5) {
+              var74 = 0.15666583;
             } else {
-              var74 = -0.15270664;
+              var74 = -0.0012741223;
             }
           } else {
-            if (input[0] >= 37.5) {
-              var74 = -0.019165065;
+            if (input[4] >= 0.55) {
+              var74 = 0.022509288;
             } else {
-              var74 = 0.08180011;
+              var74 = -0.23398477;
             }
           }
         } else {
-          if (input[1] >= 0.55) {
-            var74 = 0.02295491;
+          if (input[0] >= 41.5) {
+            if (input[2] >= 0.95) {
+              var74 = 0.19325542;
+            } else {
+              var74 = 0.060394146;
+            }
           } else {
-            var74 = -0.17650035;
+            if (input[0] >= -27.5) {
+              var74 = -0.1878673;
+            } else {
+              var74 = -0.00716024;
+            }
           }
         }
       } else {
-        if (input[0] >= -2.5) {
-          if (input[2] >= 0.45) {
-            if (input[4] >= 0.35000002) {
-              var74 = -0.04197335;
+        if (input[2] >= 0.75) {
+          if (input[0] >= 38.5) {
+            if (input[1] >= 0.85) {
+              var74 = -0.28328684;
             } else {
-              var74 = -0.30628031;
+              var74 = 0.005117004;
             }
           } else {
-            var74 = 0.17310618;
+            if (input[0] >= 34.5) {
+              var74 = 0.24037914;
+            } else {
+              var74 = -0.15905616;
+            }
           }
         } else {
-          if (input[5] >= 0.65) {
-            if (input[0] >= -11.5) {
-              var74 = 0.12522763;
-            } else {
-              var74 = 0.023260044;
-            }
+          if (input[0] >= 50.5) {
+            var74 = 0.02381909;
           } else {
-            var74 = -0.20044605;
+            if (input[5] >= 0.45) {
+              var74 = -0.3638131;
+            } else {
+              var74 = -0.08540316;
+            }
           }
         }
       }
     } else {
-      if (input[0] >= 8.0) {
-        if (input[0] >= 13.5) {
-          if (input[1] >= 0.15) {
-            if (input[2] >= 0.95) {
-              var74 = 0.04641757;
-            } else {
-              var74 = -0.011741632;
-            }
-          } else {
-            if (input[2] >= 0.75) {
-              var74 = 0.04372836;
-            } else {
-              var74 = -0.24736889;
-            }
-          }
+      if (input[0] >= 37.5) {
+        if (input[2] >= 0.95) {
+          var74 = -0.16715388;
         } else {
-          if (input[1] >= 0.55) {
-            var74 = -0.05929302;
+          if (input[0] >= 40.5) {
+            if (input[5] >= 0.55) {
+              var74 = -0.14234196;
+            } else {
+              var74 = 0.14519343;
+            }
           } else {
-            var74 = -0.24119347;
+            if (input[5] >= 0.85) {
+              var74 = 0.20917541;
+            } else {
+              var74 = 0.027694987;
+            }
           }
         }
       } else {
-        if (input[0] >= -4.5) {
-          if (input[5] >= 0.85) {
-            var74 = 0.1737212;
+        if (input[0] >= 29.5) {
+          if (input[4] >= 0.65) {
+            var74 = 0.09624099;
           } else {
-            if (input[4] >= 0.35000002) {
-              var74 = 0.13757272;
+            if (input[1] >= 0.45) {
+              var74 = -0.09747305;
             } else {
-              var74 = -0.12626305;
+              var74 = -0.3462733;
             }
           }
         } else {
-          if (input[0] >= -11.0) {
-            var74 = -0.18062894;
-          } else {
-            if (input[2] >= 0.75) {
-              var74 = -0.018927816;
+          if (input[3] >= 0.35000002) {
+            if (input[1] >= 0.15) {
+              var74 = -0.020997968;
             } else {
-              var74 = 0.031814296;
+              var74 = 0.07513475;
+            }
+          } else {
+            if (input[0] >= -27.5) {
+              var74 = -0.031514477;
+            } else {
+              var74 = 0.04868503;
             }
           }
         }
       }
     }
   } else {
-    if (input[4] >= 0.15) {
-      if (input[1] >= 0.55) {
-        if (input[4] >= 0.65) {
-          var74 = 0.07943522;
-        } else {
-          if (input[0] >= 45.5) {
-            var74 = 0.015537362;
+    if (input[4] >= 0.35000002) {
+      if (input[3] >= 0.45) {
+        if (input[5] >= 0.45) {
+          if (input[4] >= 0.55) {
+            if (input[0] >= 36.5) {
+              var74 = -0.21683802;
+            } else {
+              var74 = 0.033179373;
+            }
           } else {
-            var74 = -0.23948601;
+            if (input[3] >= 0.85) {
+              var74 = 0.0112311;
+            } else {
+              var74 = -0.3035279;
+            }
+          }
+        } else {
+          if (input[4] >= 0.45) {
+            var74 = -0.027697867;
+          } else {
+            if (input[1] >= 0.55) {
+              var74 = 0.18448079;
+            } else {
+              var74 = 0.03770059;
+            }
           }
         }
       } else {
-        if (input[0] >= -30.0) {
-          if (input[5] >= 0.35000002) {
-            var74 = 0.16697668;
+        if (input[0] >= 36.0) {
+          if (input[2] >= 0.55) {
+            var74 = -0.22348802;
           } else {
-            var74 = 0.014244863;
+            if (input[0] >= 40.5) {
+              var74 = 0.15302815;
+            } else {
+              var74 = -0.13798063;
+            }
           }
         } else {
-          var74 = -0.064966075;
+          if (input[0] >= -19.0) {
+            if (input[4] >= 0.75) {
+              var74 = 0.018366583;
+            } else {
+              var74 = 0.24472058;
+            }
+          } else {
+            if (input[0] >= -37.0) {
+              var74 = -0.19654568;
+            } else {
+              var74 = 0.027159674;
+            }
+          }
         }
       }
     } else {
       if (input[3] >= 0.55) {
-        var74 = -0.11661037;
-      } else {
-        if (input[4] >= 0.05) {
-          if (input[3] >= 0.35000002) {
-            var74 = 0.23576452;
+        if (input[3] >= 0.85) {
+          if (input[1] >= 0.35000002) {
+            if (input[1] >= 0.55) {
+              var74 = -0.044632416;
+            } else {
+              var74 = -0.26427662;
+            }
           } else {
-            var74 = 0.06017146;
+            if (input[2] >= 0.55) {
+              var74 = -0.046048082;
+            } else {
+              var74 = 0.11108041;
+            }
           }
         } else {
-          if (input[5] >= 0.35000002) {
-            var74 = -0.19712293;
+          if (input[3] >= 0.75) {
+            if (input[0] >= -22.0) {
+              var74 = 0.15788537;
+            } else {
+              var74 = -0.18611148;
+            }
           } else {
-            var74 = 0.087123886;
+            if (input[5] >= 0.95) {
+              var74 = 0.19603388;
+            } else {
+              var74 = 0.0154012265;
+            }
+          }
+        }
+      } else {
+        if (input[5] >= 0.75) {
+          if (input[3] >= 0.45) {
+            if (input[4] >= 0.15) {
+              var74 = -0.43227476;
+            } else {
+              var74 = -0.042227186;
+            }
+          } else {
+            if (input[0] >= -26.5) {
+              var74 = -0.094121136;
+            } else {
+              var74 = 0.047462437;
+            }
+          }
+        } else {
+          if (input[4] >= 0.25) {
+            if (input[1] >= 0.85) {
+              var74 = 0.029900536;
+            } else {
+              var74 = 0.20087548;
+            }
+          } else {
+            if (input[0] >= 34.5) {
+              var74 = 0.031563252;
+            } else {
+              var74 = -0.15486346;
+            }
           }
         }
       }
     }
   }
   double var75;
-  if (input[0] >= -41.5) {
-    if (input[0] >= 34.5) {
-      if (input[0] >= 35.5) {
-        if (input[1] >= 0.25) {
-          if (input[3] >= 0.05) {
-            if (input[0] >= 38.5) {
-              var75 = -0.011560335;
+  if (input[5] >= 0.25) {
+    if (input[4] >= 0.85) {
+      if (input[1] >= 0.35000002) {
+        if (input[2] >= 0.55) {
+          if (input[5] >= 0.85) {
+            if (input[3] >= 0.45) {
+              var75 = -0.04576369;
             } else {
-              var75 = 0.036410905;
+              var75 = 0.12890898;
             }
           } else {
-            var75 = -0.15672208;
+            if (input[2] >= 0.85) {
+              var75 = -0.06841432;
+            } else {
+              var75 = 0.048378095;
+            }
           }
         } else {
-          if (input[4] >= 0.25) {
-            var75 = -0.062157582;
+          if (input[0] >= 38.0) {
+            var75 = 0.14837715;
           } else {
-            if (input[3] >= 0.05) {
-              var75 = 0.06216042;
-            } else {
-              var75 = 0.18382864;
-            }
+            var75 = 0.024254335;
           }
         }
       } else {
-        var75 = 0.116909795;
-      }
-    } else {
-      if (input[2] >= 0.25) {
-        if (input[1] >= 0.65) {
-          if (input[3] >= 0.45) {
-            if (input[0] >= -27.5) {
-              var75 = -0.087757155;
-            } else {
-              var75 = 0.012569789;
-            }
+        if (input[3] >= 0.65) {
+          if (input[2] >= 0.65) {
+            var75 = -0.06569932;
           } else {
-            if (input[5] >= 0.95) {
-              var75 = 0.03906352;
+            if (input[2] >= 0.55) {
+              var75 = 0.13580826;
             } else {
-              var75 = -0.15570575;
+              var75 = 0.005629757;
             }
           }
         } else {
           if (input[2] >= 0.75) {
-            if (input[1] >= 0.35000002) {
-              var75 = 0.030997494;
-            } else {
-              var75 = -0.030055352;
-            }
+            var75 = 0.024440387;
           } else {
-            if (input[4] >= 0.15) {
-              var75 = -0.008467197;
-            } else {
-              var75 = 0.05600646;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= -32.5) {
-          var75 = 0.10911791;
-        } else {
-          var75 = 0.015414669;
-        }
-      }
-    }
-  } else {
-    var75 = 0.05836444;
-  }
-  double var76;
-  if (input[0] >= 42.5) {
-    if (input[3] >= 0.65) {
-      if (input[1] >= 0.65) {
-        var76 = -0.04530963;
-      } else {
-        if (input[0] >= 47.5) {
-          if (input[2] >= 0.65) {
-            var76 = -0.011949809;
-          } else {
-            var76 = 0.0438249;
-          }
-        } else {
-          if (input[1] >= 0.45) {
-            var76 = 0.16039398;
-          } else {
-            var76 = 0.018806314;
+            var75 = -0.15835536;
           }
         }
       }
     } else {
-      if (input[0] >= 47.5) {
-        var76 = 0.029601684;
-      } else {
-        if (input[1] >= 0.55) {
-          var76 = -0.09591807;
-        } else {
-          var76 = -0.0026501263;
-        }
-      }
-    }
-  } else {
-    if (input[1] >= 0.95) {
-      if (input[5] >= 0.95) {
-        var76 = 0.08843142;
-      } else {
-        if (input[0] >= -37.5) {
-          if (input[0] >= 35.5) {
-            var76 = -0.015849484;
-          } else {
-            var76 = -0.13584542;
-          }
-        } else {
-          var76 = 0.044693332;
-        }
-      }
-    } else {
-      if (input[5] >= 0.95) {
-        if (input[4] >= 0.35000002) {
-          if (input[0] >= 31.5) {
-            var76 = -0.009783626;
-          } else {
-            var76 = -0.19892214;
-          }
-        } else {
-          if (input[2] >= 0.65) {
-            if (input[2] >= 0.95) {
-              var76 = 0.12739831;
+      if (input[4] >= 0.65) {
+        if (input[3] >= 0.65) {
+          if (input[0] >= 13.5) {
+            if (input[0] >= 14.5) {
+              var75 = -0.04843625;
             } else {
-              var76 = -0.2512212;
+              var75 = 0.14695236;
             }
           } else {
             if (input[2] >= 0.55) {
-              var76 = 0.13525634;
+              var75 = -0.3658932;
             } else {
-              var76 = -0.065946974;
+              var75 = -0.07926175;
+            }
+          }
+        } else {
+          if (input[3] >= 0.25) {
+            if (input[1] >= 0.35000002) {
+              var75 = -0.058297146;
+            } else {
+              var75 = 0.13708639;
+            }
+          } else {
+            if (input[1] >= 0.65) {
+              var75 = -0.0007619197;
+            } else {
+              var75 = -0.23186113;
             }
           }
         }
       } else {
-        if (input[2] >= 0.35000002) {
-          if (input[4] >= 0.05) {
-            if (input[0] >= 41.5) {
-              var76 = -0.15198109;
+        if (input[2] >= 0.75) {
+          if (input[5] >= 0.75) {
+            if (input[4] >= 0.55) {
+              var75 = -0.13903083;
             } else {
-              var76 = -0.0026581292;
+              var75 = 0.013630793;
             }
           } else {
-            if (input[0] >= 41.5) {
-              var76 = 0.12444919;
+            if (input[3] >= 0.25) {
+              var75 = -0.053568527;
             } else {
-              var76 = 0.0046839663;
+              var75 = 0.05356343;
             }
           }
         } else {
-          if (input[3] >= 0.45) {
-            if (input[0] >= 37.0) {
-              var76 = 0.20916171;
+          if (input[3] >= 0.15) {
+            if (input[1] >= 0.25) {
+              var75 = -0.017905869;
             } else {
-              var76 = 0.009600959;
+              var75 = 0.039813288;
             }
           } else {
-            var76 = -0.082580626;
+            if (input[5] >= 0.85) {
+              var75 = 0.122422576;
+            } else {
+              var75 = -0.022495167;
+            }
+          }
+        }
+      }
+    }
+  } else {
+    if (input[1] >= 0.25) {
+      var75 = -0.03246376;
+    } else {
+      if (input[5] >= 0.15) {
+        var75 = 0.13456123;
+      } else {
+        var75 = 0.022229958;
+      }
+    }
+  }
+  double var76;
+  if (input[0] >= 22.0) {
+    if (input[0] >= 26.0) {
+      if (input[5] >= 0.75) {
+        if (input[0] >= 30.5) {
+          if (input[3] >= 0.55) {
+            if (input[4] >= 0.15) {
+              var76 = -0.10933336;
+            } else {
+              var76 = 0.030516597;
+            }
+          } else {
+            if (input[2] >= 0.75) {
+              var76 = 0.08314714;
+            } else {
+              var76 = -0.02619153;
+            }
+          }
+        } else {
+          var76 = -0.22786024;
+        }
+      } else {
+        if (input[0] >= 36.5) {
+          if (input[2] >= 0.65) {
+            if (input[3] >= 0.95) {
+              var76 = 0.11853013;
+            } else {
+              var76 = -0.035104845;
+            }
+          } else {
+            if (input[4] >= 0.45) {
+              var76 = -0.07022091;
+            } else {
+              var76 = 0.037801567;
+            }
+          }
+        } else {
+          if (input[0] >= 33.5) {
+            if (input[1] >= 0.55) {
+              var76 = 0.16272286;
+            } else {
+              var76 = -0.019449743;
+            }
+          } else {
+            if (input[4] >= 0.45) {
+              var76 = 0.2026722;
+            } else {
+              var76 = -0.28857896;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[5] >= 0.85) {
+        var76 = 0.23893249;
+      } else {
+        var76 = -0.09182755;
+      }
+    }
+  } else {
+    if (input[5] >= 0.35000002) {
+      if (input[0] >= 11.5) {
+        if (input[5] >= 0.55) {
+          if (input[5] >= 0.75) {
+            if (input[1] >= 0.25) {
+              var76 = -0.06961913;
+            } else {
+              var76 = -0.0019733112;
+            }
+          } else {
+            if (input[2] >= 0.65) {
+              var76 = -0.30234012;
+            } else {
+              var76 = -0.04195455;
+            }
+          }
+        } else {
+          var76 = 0.18694657;
+        }
+      } else {
+        if (input[3] >= 0.25) {
+          if (input[5] >= 0.55) {
+            if (input[4] >= 0.05) {
+              var76 = -0.0011742316;
+            } else {
+              var76 = 0.057410102;
+            }
+          } else {
+            if (input[4] >= 0.35000002) {
+              var76 = -0.27118167;
+            } else {
+              var76 = -0.017486574;
+            }
+          }
+        } else {
+          if (input[1] >= 0.45) {
+            var76 = -0.26792622;
+          } else {
+            if (input[5] >= 0.75) {
+              var76 = -0.038130123;
+            } else {
+              var76 = 0.03631225;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[3] >= 0.75) {
+        var76 = 0.15376808;
+      } else {
+        if (input[3] >= 0.45) {
+          var76 = -0.027712142;
+        } else {
+          if (input[1] >= 0.55) {
+            var76 = 0.16630921;
+          } else {
+            if (input[3] >= 0.35000002) {
+              var76 = 0.05969642;
+            } else {
+              var76 = -0.031825185;
+            }
           }
         }
       }
     }
   }
   double var77;
-  if (input[5] >= 0.55) {
-    if (input[0] >= 9.0) {
-      if (input[5] >= 0.65) {
-        if (input[2] >= 0.35000002) {
-          if (input[0] >= 39.5) {
-            if (input[3] >= 0.55) {
-              var77 = -0.07136345;
+  if (input[4] >= 0.15) {
+    if (input[3] >= 0.35000002) {
+      if (input[4] >= 0.25) {
+        if (input[1] >= 0.15) {
+          if (input[3] >= 0.75) {
+            if (input[4] >= 0.65) {
+              var77 = -0.15226431;
             } else {
-              var77 = 0.077940546;
+              var77 = 0.0065337587;
             }
           } else {
-            if (input[4] >= 0.25) {
-              var77 = 0.012405867;
+            if (input[0] >= -34.5) {
+              var77 = 0.04149938;
             } else {
-              var77 = -0.05785757;
+              var77 = -0.04725414;
             }
           }
         } else {
-          var77 = -0.15630765;
+          if (input[3] >= 0.75) {
+            if (input[4] >= 0.6) {
+              var77 = 0.23157936;
+            } else {
+              var77 = -0.12985285;
+            }
+          } else {
+            if (input[2] >= 0.95) {
+              var77 = 0.083500355;
+            } else {
+              var77 = -0.26034066;
+            }
+          }
         }
       } else {
-        if (input[4] >= 0.25) {
-          if (input[2] >= 0.75) {
-            if (input[1] >= 0.75) {
-              var77 = 0.05037558;
+        if (input[5] >= 0.65) {
+          if (input[3] >= 0.65) {
+            if (input[0] >= -2.5) {
+              var77 = 0.09927565;
             } else {
-              var77 = -0.09742198;
+              var77 = -0.22533469;
             }
           } else {
-            var77 = -0.29282928;
+            var77 = -0.37380335;
           }
         } else {
-          if (input[2] >= 0.65) {
-            var77 = -0.21081983;
-          } else {
-            if (input[0] >= 38.5) {
-              var77 = -0.018661128;
+          if (input[0] >= -24.0) {
+            if (input[2] >= 0.4) {
+              var77 = -0.26531008;
             } else {
-              var77 = 0.16340527;
+              var77 = 0.18854985;
+            }
+          } else {
+            if (input[1] >= 0.4) {
+              var77 = 0.3056809;
+            } else {
+              var77 = 0.08277187;
             }
           }
         }
       }
     } else {
-      if (input[0] >= 6.5) {
-        var77 = 0.18094008;
-      } else {
-        if (input[3] >= 0.25) {
-          if (input[4] >= 0.05) {
-            if (input[4] >= 0.15) {
-              var77 = 0.0019510308;
-            } else {
-              var77 = -0.11478917;
-            }
+      if (input[5] >= 0.55) {
+        if (input[1] >= 0.35000002) {
+          if (input[4] >= 0.85) {
+            var77 = 0.046902455;
           } else {
-            if (input[0] >= -33.5) {
-              var77 = 0.12077088;
+            if (input[2] >= 0.35000002) {
+              var77 = -0.22981872;
             } else {
-              var77 = -0.07663876;
+              var77 = 0.02469564;
             }
           }
         } else {
-          if (input[1] >= 0.45) {
-            var77 = -0.22358532;
-          } else {
-            if (input[5] >= 0.65) {
-              var77 = 0.010548685;
+          if (input[4] >= 0.25) {
+            if (input[2] >= 0.45) {
+              var77 = -0.11268303;
             } else {
-              var77 = -0.15000215;
+              var77 = 0.15659906;
+            }
+          } else {
+            if (input[2] >= 0.85) {
+              var77 = 0.28163272;
+            } else {
+              var77 = -0.16579868;
+            }
+          }
+        }
+      } else {
+        if (input[2] >= 0.85) {
+          if (input[4] >= 0.55) {
+            if (input[3] >= 0.15) {
+              var77 = 0.009580961;
+            } else {
+              var77 = 0.1395337;
+            }
+          } else {
+            var77 = -0.111237615;
+          }
+        } else {
+          if (input[4] >= 0.55) {
+            var77 = -0.0637831;
+          } else {
+            if (input[1] >= 0.25) {
+              var77 = 0.06690434;
+            } else {
+              var77 = 0.23770484;
             }
           }
         }
       }
     }
   } else {
-    if (input[1] >= 0.75) {
-      if (input[3] >= 0.65) {
-        if (input[0] >= 51.5) {
-          var77 = 0.060515992;
-        } else {
-          var77 = -0.18841054;
-        }
-      } else {
-        if (input[2] >= 0.65) {
-          if (input[3] >= 0.45) {
-            if (input[0] >= 39.0) {
-              var77 = -0.2113522;
+    if (input[1] >= 0.25) {
+      if (input[0] >= -31.5) {
+        if (input[0] >= -19.5) {
+          if (input[3] >= 0.05) {
+            if (input[2] >= 0.45) {
+              var77 = 0.016506275;
             } else {
-              var77 = 0.15877333;
+              var77 = -0.11038594;
             }
           } else {
-            if (input[5] >= 0.45) {
-              var77 = -0.01492478;
-            } else {
-              var77 = 0.13598669;
-            }
+            var77 = -0.17833538;
           }
         } else {
-          if (input[5] >= 0.45) {
-            if (input[3] >= 0.25) {
-              var77 = 0.17721136;
+          if (input[3] >= 0.65) {
+            var77 = 0.2394453;
+          } else {
+            if (input[0] >= -27.5) {
+              var77 = 0.02923337;
             } else {
-              var77 = -0.043606076;
+              var77 = 0.18723041;
+            }
+          }
+        }
+      } else {
+        if (input[0] >= -32.5) {
+          var77 = -0.24423896;
+        } else {
+          if (input[3] >= 0.15) {
+            if (input[0] >= -34.5) {
+              var77 = -0.101852626;
+            } else {
+              var77 = 0.02017508;
             }
           } else {
-            if (input[4] >= 0.35000002) {
-              var77 = 0.10076175;
+            if (input[0] >= -34.5) {
+              var77 = 0.14737304;
             } else {
-              var77 = -0.22425516;
+              var77 = -0.023634123;
             }
           }
         }
       }
     } else {
-      if (input[5] >= 0.45) {
-        if (input[4] >= 0.15) {
-          if (input[2] >= 0.65) {
-            if (input[0] >= 40.5) {
-              var77 = 0.14579819;
-            } else {
-              var77 = -0.0127787795;
-            }
-          } else {
-            var77 = -0.18052664;
-          }
+      if (input[4] >= 0.05) {
+        if (input[0] >= 21.0) {
+          var77 = 0.037246846;
         } else {
-          if (input[1] >= 0.65) {
-            var77 = -0.05008873;
+          if (input[2] >= 0.55) {
+            var77 = -0.3542632;
           } else {
-            var77 = -0.24332379;
+            var77 = -0.07815688;
           }
         }
       } else {
-        if (input[2] >= 0.75) {
-          if (input[4] >= 0.35000002) {
-            if (input[3] >= 0.65) {
-              var77 = 0.09010371;
+        if (input[0] >= -19.0) {
+          if (input[0] >= 7.5) {
+            if (input[3] >= 0.25) {
+              var77 = -0.030999053;
             } else {
-              var77 = -0.06478532;
+              var77 = 0.11815138;
             }
           } else {
-            if (input[0] >= -29.0) {
-              var77 = 0.13825867;
-            } else {
-              var77 = 0.036952674;
-            }
+            var77 = 0.2102764;
           }
         } else {
-          if (input[2] >= 0.65) {
-            var77 = -0.1446266;
-          } else {
-            if (input[3] >= 0.75) {
-              var77 = -0.07983346;
+          if (input[0] >= -27.5) {
+            if (input[2] >= 0.75) {
+              var77 = -0.35909557;
             } else {
-              var77 = 0.08634534;
+              var77 = -0.029862493;
+            }
+          } else {
+            if (input[3] >= 0.15) {
+              var77 = 0.10365676;
+            } else {
+              var77 = -0.10361341;
             }
           }
         }
@@ -10126,821 +10754,1021 @@ List<double> score(List<double> input) {
     }
   }
   double var78;
-  if (input[0] >= 46.5) {
-    if (input[1] >= 0.45) {
-      if (input[0] >= 49.5) {
-        if (input[1] >= 0.85) {
-          var78 = 0.078092;
+  if (input[1] >= 0.35000002) {
+    if (input[2] >= 0.95) {
+      if (input[1] >= 0.45) {
+        if (input[1] >= 0.55) {
+          if (input[4] >= 0.45) {
+            if (input[1] >= 0.85) {
+              var78 = 0.19594522;
+            } else {
+              var78 = 0.017464243;
+            }
+          } else {
+            if (input[0] >= 41.5) {
+              var78 = 0.17059472;
+            } else {
+              var78 = -0.10530512;
+            }
+          }
         } else {
-          var78 = -0.077804595;
+          if (input[5] >= 0.55) {
+            var78 = -0.28989357;
+          } else {
+            var78 = -0.016306194;
+          }
         }
       } else {
-        if (input[2] >= 0.45) {
-          var78 = 0.11994006;
+        if (input[4] >= 0.35000002) {
+          if (input[3] >= 0.35000002) {
+            var78 = -0.09380282;
+          } else {
+            var78 = 0.030661194;
+          }
         } else {
-          var78 = 0.031956192;
+          if (input[3] >= 0.65) {
+            var78 = 0.0029570765;
+          } else {
+            if (input[0] >= -33.5) {
+              var78 = 0.062217426;
+            } else {
+              var78 = 0.2294631;
+            }
+          }
         }
       }
     } else {
-      if (input[4] >= 0.2) {
-        var78 = -0.08220193;
+      if (input[2] >= 0.85) {
+        if (input[3] >= 0.25) {
+          if (input[4] >= 0.35000002) {
+            if (input[3] >= 0.45) {
+              var78 = -0.16003466;
+            } else {
+              var78 = 0.04303405;
+            }
+          } else {
+            if (input[1] >= 0.65) {
+              var78 = -0.08730892;
+            } else {
+              var78 = 0.06771972;
+            }
+          }
+        } else {
+          if (input[3] >= 0.15) {
+            var78 = -0.34376994;
+          } else {
+            var78 = -0.031246113;
+          }
+        }
       } else {
-        var78 = 0.02900622;
+        if (input[2] >= 0.75) {
+          if (input[3] >= 0.25) {
+            if (input[0] >= 40.5) {
+              var78 = -0.076957755;
+            } else {
+              var78 = 0.08687317;
+            }
+          } else {
+            if (input[4] >= 0.15) {
+              var78 = -0.038589317;
+            } else {
+              var78 = -0.22365527;
+            }
+          }
+        } else {
+          if (input[5] >= 0.75) {
+            if (input[5] >= 0.85) {
+              var78 = 0.009608507;
+            } else {
+              var78 = -0.13980637;
+            }
+          } else {
+            if (input[0] >= -24.0) {
+              var78 = 0.006340833;
+            } else {
+              var78 = 0.06269428;
+            }
+          }
+        }
       }
     }
   } else {
-    if (input[0] >= 40.5) {
-      if (input[1] >= 0.35000002) {
-        if (input[2] >= 0.75) {
-          if (input[3] >= 0.45) {
-            if (input[5] >= 0.45) {
-              var78 = -0.21735187;
+    if (input[0] >= 38.5) {
+      if (input[2] >= 0.75) {
+        if (input[0] >= 45.5) {
+          var78 = -0.03720549;
+        } else {
+          if (input[2] >= 0.85) {
+            var78 = 0.06461082;
+          } else {
+            var78 = 0.2102587;
+          }
+        }
+      } else {
+        if (input[4] >= 0.25) {
+          var78 = -0.21823199;
+        } else {
+          if (input[4] >= 0.05) {
+            var78 = 0.15819612;
+          } else {
+            if (input[3] >= 0.65) {
+              var78 = 0.15906906;
             } else {
-              var78 = 0.042602856;
+              var78 = -0.1287754;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[2] >= 0.75) {
+        if (input[3] >= 0.15) {
+          if (input[3] >= 0.25) {
+            if (input[0] >= -33.5) {
+              var78 = -0.014700666;
+            } else {
+              var78 = -0.25018546;
             }
           } else {
-            if (input[3] >= 0.35000002) {
-              var78 = 0.12972513;
+            if (input[4] >= 0.55) {
+              var78 = -0.21223557;
             } else {
-              var78 = -0.12362718;
+              var78 = 0.117422126;
+            }
+          }
+        } else {
+          if (input[1] >= 0.15) {
+            if (input[5] >= 0.55) {
+              var78 = -0.31352693;
+            } else {
+              var78 = -0.030621747;
+            }
+          } else {
+            if (input[5] >= 0.65) {
+              var78 = 0.07527385;
+            } else {
+              var78 = -0.21563268;
+            }
+          }
+        }
+      } else {
+        if (input[4] >= 0.25) {
+          if (input[0] >= 14.5) {
+            if (input[4] >= 0.65) {
+              var78 = -0.082874425;
+            } else {
+              var78 = 0.15748017;
+            }
+          } else {
+            if (input[5] >= 0.85) {
+              var78 = -0.1302554;
+            } else {
+              var78 = 0.027474698;
             }
           }
         } else {
           if (input[4] >= 0.15) {
-            if (input[0] >= 41.5) {
-              var78 = -0.13331749;
+            if (input[3] >= 0.65) {
+              var78 = -0.08571486;
             } else {
-              var78 = 0.095728554;
+              var78 = -0.33084875;
             }
           } else {
-            if (input[3] >= 0.55) {
-              var78 = 0.03824354;
+            if (input[0] >= -34.5) {
+              var78 = 0.030006707;
             } else {
-              var78 = -0.09869914;
+              var78 = -0.24949665;
             }
-          }
-        }
-      } else {
-        if (input[0] >= 41.5) {
-          var78 = 0.12371415;
-        } else {
-          var78 = -0.020503843;
-        }
-      }
-    } else {
-      if (input[0] >= 37.5) {
-        if (input[2] >= 0.75) {
-          if (input[1] >= 0.55) {
-            if (input[5] >= 0.75) {
-              var78 = -0.1981555;
-            } else {
-              var78 = 0.12473681;
-            }
-          } else {
-            if (input[5] >= 0.85) {
-              var78 = 0.2018193;
-            } else {
-              var78 = 0.06867901;
-            }
-          }
-        } else {
-          if (input[5] >= 0.95) {
-            var78 = 0.15394557;
-          } else {
-            if (input[0] >= 39.5) {
-              var78 = 0.04962604;
-            } else {
-              var78 = -0.0940845;
-            }
-          }
-        }
-      } else {
-        if (input[2] >= 0.25) {
-          if (input[3] >= 0.75) {
-            if (input[0] >= 17.0) {
-              var78 = 0.10745169;
-            } else {
-              var78 = -0.0016442572;
-            }
-          } else {
-            if (input[2] >= 0.35000002) {
-              var78 = -0.007339134;
-            } else {
-              var78 = -0.1755625;
-            }
-          }
-        } else {
-          if (input[0] >= -32.5) {
-            var78 = 0.096024275;
-          } else {
-            var78 = 0.006894578;
           }
         }
       }
     }
   }
   double var79;
-  if (input[0] >= 42.5) {
-    if (input[3] >= 0.55) {
-      if (input[5] >= 0.75) {
-        var79 = -0.082683474;
-      } else {
-        if (input[2] >= 0.85) {
-          var79 = 0.16427884;
-        } else {
-          if (input[1] >= 0.45) {
-            if (input[1] >= 0.75) {
-              var79 = 0.018772062;
+  if (input[0] >= 15.5) {
+    if (input[3] >= 0.25) {
+      if (input[3] >= 0.35000002) {
+        if (input[5] >= 0.35000002) {
+          if (input[4] >= 0.05) {
+            if (input[3] >= 0.45) {
+              var79 = 0.011127622;
             } else {
-              var79 = 0.12438812;
+              var79 = 0.08907275;
             }
           } else {
-            var79 = -0.076797135;
+            if (input[5] >= 0.65) {
+              var79 = -0.12431311;
+            } else {
+              var79 = 0.026579114;
+            }
+          }
+        } else {
+          if (input[3] >= 0.65) {
+            if (input[4] >= 0.05) {
+              var79 = -0.08513642;
+            } else {
+              var79 = 0.15644161;
+            }
+          } else {
+            if (input[1] >= 0.65) {
+              var79 = 0.0015405028;
+            } else {
+              var79 = -0.274701;
+            }
+          }
+        }
+      } else {
+        if (input[2] >= 0.65) {
+          var79 = -0.25342053;
+        } else {
+          if (input[1] >= 0.75) {
+            if (input[1] >= 0.85) {
+              var79 = 0.023623675;
+            } else {
+              var79 = 0.19267033;
+            }
+          } else {
+            if (input[5] >= 0.35000002) {
+              var79 = -0.15659921;
+            } else {
+              var79 = 0.13575687;
+            }
           }
         }
       }
     } else {
-      if (input[5] >= 0.85) {
-        var79 = 0.0318936;
+      if (input[5] >= 0.65) {
+        if (input[5] >= 0.75) {
+          if (input[1] >= 0.55) {
+            if (input[0] >= 37.5) {
+              var79 = -0.0052622524;
+            } else {
+              var79 = 0.17233501;
+            }
+          } else {
+            if (input[0] >= 27.5) {
+              var79 = -0.07382704;
+            } else {
+              var79 = 0.07929507;
+            }
+          }
+        } else {
+          if (input[4] >= 0.2) {
+            var79 = -0.043576345;
+          } else {
+            if (input[2] >= 0.79999995) {
+              var79 = -0.0057617896;
+            } else {
+              var79 = 0.16404319;
+            }
+          }
+        }
       } else {
-        var79 = -0.116110116;
+        if (input[5] >= 0.25) {
+          if (input[1] >= 0.65) {
+            if (input[0] >= 38.5) {
+              var79 = -0.11636124;
+            } else {
+              var79 = 0.04812709;
+            }
+          } else {
+            var79 = -0.22816038;
+          }
+        } else {
+          var79 = 0.082036555;
+        }
       }
     }
   } else {
-    if (input[0] >= 40.5) {
-      if (input[3] >= 0.95) {
-        var79 = 0.08895141;
-      } else {
+    if (input[5] >= 0.35000002) {
+      if (input[0] >= 13.5) {
         if (input[3] >= 0.85) {
-          var79 = -0.19524464;
+          if (input[2] >= 0.65) {
+            var79 = -0.26888582;
+          } else {
+            var79 = -0.07323202;
+          }
         } else {
-          if (input[2] >= 0.75) {
-            if (input[3] >= 0.45) {
-              var79 = -0.17757905;
+          if (input[4] >= 0.15) {
+            if (input[2] >= 0.65) {
+              var79 = -0.03352273;
             } else {
-              var79 = 0.031297762;
+              var79 = 0.07110918;
             }
           } else {
-            if (input[4] >= 0.15) {
-              var79 = 0.03614245;
+            var79 = -0.23118384;
+          }
+        }
+      } else {
+        if (input[3] >= 0.85) {
+          if (input[4] >= 0.35000002) {
+            if (input[0] >= -0.5) {
+              var79 = 0.14147434;
             } else {
-              var79 = -0.024007075;
+              var79 = -0.09030895;
+            }
+          } else {
+            if (input[0] >= 10.5) {
+              var79 = -0.18677257;
+            } else {
+              var79 = 0.038589686;
+            }
+          }
+        } else {
+          if (input[5] >= 0.75) {
+            if (input[0] >= -20.5) {
+              var79 = 0.04685745;
+            } else {
+              var79 = -0.009732739;
+            }
+          } else {
+            if (input[0] >= -20.5) {
+              var79 = -0.14657985;
+            } else {
+              var79 = -0.0067725605;
             }
           }
         }
       }
     } else {
-      if (input[0] >= 37.5) {
-        if (input[4] >= 0.45) {
-          var79 = -0.11884236;
-        } else {
-          if (input[3] >= 0.65) {
-            var79 = -0.13064498;
-          } else {
-            if (input[3] >= 0.45) {
-              var79 = 0.17038523;
-            } else {
-              var79 = 0.017471423;
-            }
-          }
-        }
+      if (input[3] >= 0.55) {
+        var79 = 0.03191776;
       } else {
-        if (input[4] >= 0.55) {
-          if (input[0] >= 14.5) {
-            if (input[1] >= 0.25) {
-              var79 = 0.06502984;
-            } else {
-              var79 = -0.16522022;
-            }
-          } else {
-            if (input[1] >= 0.75) {
-              var79 = -0.1006271;
-            } else {
-              var79 = 0.042054392;
-            }
-          }
+        if (input[1] >= 0.55) {
+          var79 = 0.14929605;
         } else {
-          if (input[3] >= 0.95) {
-            if (input[2] >= 0.45) {
-              var79 = -0.2631425;
-            } else {
-              var79 = 0.14296527;
-            }
+          if (input[4] >= 0.2) {
+            var79 = 0.09236645;
           } else {
-            if (input[2] >= 0.85) {
-              var79 = 0.012768327;
-            } else {
-              var79 = -0.012046754;
-            }
+            var79 = -0.021517796;
           }
         }
       }
     }
   }
   double var80;
-  if (input[0] >= -37.5) {
-    if (input[5] >= 0.85) {
-      if (input[4] >= 0.15) {
-        if (input[1] >= 0.25) {
-          if (input[1] >= 0.45) {
-            if (input[1] >= 0.55) {
-              var80 = -0.01845456;
-            } else {
-              var80 = 0.113735355;
-            }
+  if (input[2] >= 0.15) {
+    if (input[0] >= 46.5) {
+      if (input[3] >= 0.75) {
+        if (input[2] >= 0.65) {
+          if (input[0] >= 51.5) {
+            var80 = 0.081296794;
           } else {
-            if (input[2] >= 0.45) {
-              var80 = -0.2898209;
-            } else {
-              var80 = 0.12748204;
-            }
+            var80 = -0.32874405;
           }
         } else {
-          if (input[3] >= 0.65) {
-            if (input[0] >= 6.5) {
-              var80 = 0.022464368;
-            } else {
-              var80 = -0.18657157;
-            }
+          if (input[5] >= 0.65) {
+            var80 = 0.1487697;
           } else {
-            if (input[2] >= 0.85) {
-              var80 = 0.24698141;
-            } else {
-              var80 = 0.014056497;
-            }
+            var80 = -0.036928013;
           }
         }
       } else {
-        if (input[4] >= 0.05) {
-          if (input[1] >= 0.25) {
-            if (input[0] >= -26.5) {
-              var80 = 0.20231201;
-            } else {
-              var80 = 0.055656154;
-            }
+        if (input[4] >= 0.25) {
+          if (input[0] >= 51.5) {
+            var80 = -0.019377204;
           } else {
-            if (input[2] >= 0.55) {
-              var80 = -0.20363186;
-            } else {
-              var80 = 0.11588718;
-            }
+            var80 = 0.15277359;
           }
         } else {
-          if (input[2] >= 0.85) {
-            if (input[3] >= 0.15) {
-              var80 = 0.12451122;
-            } else {
-              var80 = -0.14627914;
-            }
+          if (input[3] >= 0.45) {
+            var80 = -0.034754556;
           } else {
-            if (input[3] >= 0.25) {
-              var80 = -0.18463731;
-            } else {
-              var80 = 0.007620632;
-            }
+            var80 = 0.009701768;
           }
         }
       }
     } else {
-      if (input[4] >= 0.15) {
-        if (input[4] >= 0.25) {
-          if (input[3] >= 0.35000002) {
-            if (input[0] >= 5.5) {
-              var80 = 0.018502887;
-            } else {
-              var80 = -0.015839474;
-            }
-          } else {
-            if (input[4] >= 0.45) {
-              var80 = -0.0014515764;
-            } else {
-              var80 = -0.19550714;
-            }
-          }
-        } else {
-          if (input[5] >= 0.75) {
-            var80 = -0.2500643;
-          } else {
-            if (input[0] >= -19.0) {
-              var80 = 0.037313674;
-            } else {
-              var80 = 0.19583482;
-            }
-          }
-        }
+      if (input[0] >= 43.5) {
+        var80 = -0.09770801;
       } else {
-        if (input[3] >= 0.65) {
-          if (input[0] >= 41.5) {
-            var80 = 0.13992901;
-          } else {
-            var80 = -0.28716165;
-          }
-        } else {
-          if (input[1] >= 0.25) {
-            if (input[0] >= -27.5) {
-              var80 = -0.014903221;
+        if (input[2] >= 0.95) {
+          if (input[5] >= 0.45) {
+            if (input[0] >= -31.5) {
+              var80 = 0.03580295;
             } else {
-              var80 = 0.059300248;
+              var80 = -0.08150032;
             }
           } else {
-            if (input[4] >= 0.05) {
-              var80 = -0.27359858;
+            if (input[4] >= 0.35000002) {
+              var80 = 0.015806248;
             } else {
-              var80 = -0.026916506;
+              var80 = 0.18718131;
+            }
+          }
+        } else {
+          if (input[5] >= 0.95) {
+            if (input[1] >= 0.45) {
+              var80 = 0.039377466;
+            } else {
+              var80 = -0.10927295;
+            }
+          } else {
+            if (input[5] >= 0.85) {
+              var80 = 0.012595382;
+            } else {
+              var80 = -0.009040714;
             }
           }
         }
       }
     }
   } else {
-    if (input[5] >= 0.85) {
-      var80 = -0.1744528;
+    var80 = 0.07059915;
+  }
+  double var81;
+  if (input[4] >= 0.85) {
+    if (input[3] >= 0.95) {
+      var81 = 0.12547654;
     } else {
-      if (input[3] >= 0.45) {
-        if (input[3] >= 0.75) {
-          var80 = 0.13076533;
-        } else {
-          if (input[1] >= 0.95) {
-            var80 = 0.04633957;
+      if (input[2] >= 0.55) {
+        if (input[2] >= 0.75) {
+          if (input[1] >= 0.55) {
+            if (input[2] >= 0.85) {
+              var81 = -0.013666051;
+            } else {
+              var81 = 0.13793187;
+            }
           } else {
-            var80 = -0.18585211;
+            if (input[3] >= 0.45) {
+              var81 = -0.058692407;
+            } else {
+              var81 = 0.031186013;
+            }
+          }
+        } else {
+          if (input[3] >= 0.65) {
+            var81 = 0.028202882;
+          } else {
+            var81 = -0.21751617;
           }
         }
       } else {
         if (input[5] >= 0.75) {
-          if (input[1] >= 0.75) {
-            var80 = 0.20067441;
-          } else {
-            var80 = 0.03961895;
-          }
+          var81 = -0.0044973744;
         } else {
-          var80 = 0.037612602;
-        }
-      }
-    }
-  }
-  double var81;
-  if (input[2] >= 0.75) {
-    if (input[0] >= -34.5) {
-      if (input[4] >= 0.45) {
-        if (input[3] >= 0.75) {
-          if (input[5] >= 0.75) {
-            if (input[4] >= 0.65) {
-              var81 = -0.020599857;
-            } else {
-              var81 = 0.1826824;
-            }
-          } else {
-            if (input[3] >= 0.85) {
-              var81 = 0.06735201;
-            } else {
-              var81 = -0.1778355;
-            }
-          }
-        } else {
-          if (input[2] >= 0.95) {
-            if (input[5] >= 0.65) {
-              var81 = 0.13752471;
-            } else {
-              var81 = -0.046948098;
-            }
-          } else {
-            if (input[5] >= 0.65) {
-              var81 = -0.14460433;
-            } else {
-              var81 = 0.061746247;
-            }
-          }
-        }
-      } else {
-        if (input[3] >= 0.55) {
-          if (input[0] >= -21.5) {
-            if (input[1] >= 0.25) {
-              var81 = 0.03358092;
-            } else {
-              var81 = -0.096880175;
-            }
-          } else {
-            var81 = -0.33104172;
-          }
-        } else {
-          if (input[1] >= 0.55) {
-            if (input[5] >= 0.55) {
-              var81 = -0.16973399;
-            } else {
-              var81 = 0.09432062;
-            }
-          } else {
-            if (input[4] >= 0.35000002) {
-              var81 = -0.19305797;
-            } else {
-              var81 = 0.029945547;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[1] >= 0.75) {
-        if (input[4] >= 0.05) {
-          if (input[3] >= 0.65) {
-            var81 = 0.15092081;
-          } else {
-            var81 = -0.19635646;
-          }
-        } else {
-          var81 = 0.23953481;
-        }
-      } else {
-        if (input[3] >= 0.75) {
-          var81 = 0.09550575;
-        } else {
-          var81 = -0.23115857;
+          var81 = 0.14110069;
         }
       }
     }
   } else {
-    if (input[4] >= 0.45) {
-      if (input[2] >= 0.55) {
-        if (input[3] >= 0.15) {
-          if (input[4] >= 0.75) {
-            if (input[1] >= 0.35000002) {
-              var81 = -0.13096212;
+    if (input[3] >= 0.15) {
+      if (input[2] >= 0.35000002) {
+        if (input[0] >= 46.5) {
+          if (input[3] >= 0.75) {
+            if (input[2] >= 0.65) {
+              var81 = -0.13164017;
             } else {
-              var81 = 0.04499894;
+              var81 = 0.06929494;
             }
           } else {
-            if (input[3] >= 0.75) {
-              var81 = -0.2942657;
+            if (input[1] >= 0.45) {
+              var81 = 0.13349701;
             } else {
-              var81 = -0.08515631;
+              var81 = 0.014287285;
             }
           }
         } else {
-          var81 = 0.123021364;
+          if (input[2] >= 0.55) {
+            if (input[3] >= 0.95) {
+              var81 = -0.10413926;
+            } else {
+              var81 = 0.00028669572;
+            }
+          } else {
+            if (input[5] >= 0.45) {
+              var81 = -0.018484201;
+            } else {
+              var81 = -0.121845685;
+            }
+          }
         }
       } else {
-        if (input[2] >= 0.45) {
-          if (input[4] >= 0.55) {
-            if (input[3] >= 0.45) {
-              var81 = 0.19304246;
+        if (input[5] >= 0.65) {
+          if (input[1] >= 0.65) {
+            if (input[0] >= -30.5) {
+              var81 = -0.033776462;
             } else {
-              var81 = -0.033983517;
+              var81 = 0.103165634;
             }
           } else {
-            var81 = -0.066858746;
+            var81 = -0.12146546;
           }
         } else {
-          if (input[3] >= 0.55) {
-            if (input[3] >= 0.85) {
-              var81 = 0.027614107;
-            } else {
-              var81 = -0.24810405;
-            }
+          if (input[2] >= 0.25) {
+            var81 = 0.16363606;
           } else {
-            var81 = 0.0848487;
+            var81 = 0.03827778;
           }
         }
       }
     } else {
-      if (input[4] >= 0.25) {
-        if (input[0] >= 38.5) {
-          if (input[2] >= 0.65) {
-            if (input[3] >= 0.65) {
-              var81 = -0.036483407;
-            } else {
-              var81 = 0.19783218;
-            }
+      if (input[4] >= 0.05) {
+        if (input[2] >= 0.75) {
+          if (input[1] >= 0.35000002) {
+            var81 = 0.13582994;
           } else {
-            if (input[1] >= 0.55) {
-              var81 = -0.19440864;
+            if (input[0] >= -27.5) {
+              var81 = 0.018634405;
             } else {
-              var81 = 0.06011165;
+              var81 = -0.23221561;
             }
           }
         } else {
-          if (input[0] >= 37.5) {
-            var81 = 0.18664548;
-          } else {
-            if (input[3] >= 0.55) {
-              var81 = 0.054030646;
+          if (input[5] >= 0.85) {
+            if (input[4] >= 0.25) {
+              var81 = 0.053037178;
             } else {
-              var81 = -0.02194111;
+              var81 = 0.2529697;
+            }
+          } else {
+            if (input[1] >= 0.25) {
+              var81 = -0.20251001;
+            } else {
+              var81 = 0.095960535;
             }
           }
         }
       } else {
-        if (input[3] >= 0.15) {
-          if (input[1] >= 0.25) {
-            if (input[2] >= 0.65) {
-              var81 = -0.107102014;
+        if (input[2] >= 0.65) {
+          if (input[1] >= 0.15) {
+            if (input[1] >= 0.35000002) {
+              var81 = -0.010775567;
             } else {
-              var81 = -0.0064754593;
+              var81 = -0.18932027;
             }
           } else {
-            if (input[4] >= 0.15) {
-              var81 = -0.16827534;
+            if (input[0] >= -31.5) {
+              var81 = 0.15828706;
             } else {
-              var81 = 0.08171314;
+              var81 = -0.06958593;
             }
           }
         } else {
-          if (input[1] >= 0.25) {
-            if (input[0] >= 38.5) {
-              var81 = -0.06278506;
+          if (input[3] >= 0.05) {
+            if (input[1] >= 0.75) {
+              var81 = -0.084635556;
             } else {
-              var81 = 0.118826024;
+              var81 = 0.10442498;
             }
           } else {
-            if (input[4] >= 0.05) {
-              var81 = 0.06735208;
-            } else {
-              var81 = -0.23428485;
-            }
+            var81 = -0.12975396;
           }
         }
       }
     }
   }
   double var82;
-  if (input[0] >= 52.5) {
-    var82 = 0.06734675;
-  } else {
-    if (input[0] >= -41.5) {
+  if (input[1] >= 0.05) {
+    if (input[4] >= 0.15) {
       if (input[5] >= 0.85) {
-        if (input[4] >= 0.75) {
-          if (input[3] >= 0.55) {
-            if (input[0] >= 14.5) {
-              var82 = -0.010352613;
-            } else {
-              var82 = 0.18835744;
-            }
-          } else {
-            if (input[2] >= 0.85) {
-              var82 = 0.061097;
-            } else {
-              var82 = -0.06680861;
-            }
-          }
-        } else {
-          if (input[4] >= 0.55) {
-            if (input[3] >= 0.75) {
-              var82 = 0.10387949;
-            } else {
-              var82 = -0.2107791;
-            }
-          } else {
-            if (input[0] >= -23.0) {
-              var82 = 0.029056115;
-            } else {
-              var82 = -0.03281936;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= -37.5) {
-          if (input[0] >= -33.5) {
-            if (input[0] >= -32.5) {
-              var82 = -0.009543298;
-            } else {
-              var82 = 0.118543215;
-            }
-          } else {
-            if (input[4] >= 0.05) {
-              var82 = -0.004694236;
-            } else {
-              var82 = -0.11028442;
-            }
-          }
-        } else {
-          if (input[4] >= 0.05) {
-            if (input[3] >= 0.75) {
-              var82 = 0.10279214;
-            } else {
-              var82 = -0.08135837;
-            }
-          } else {
-            var82 = 0.10958709;
-          }
-        }
-      }
-    } else {
-      var82 = 0.06675948;
-    }
-  }
-  double var83;
-  if (input[1] >= 0.85) {
-    if (input[3] >= 0.15) {
-      if (input[3] >= 0.25) {
-        if (input[2] >= 0.35000002) {
-          if (input[4] >= 0.35000002) {
-            if (input[2] >= 0.75) {
-              var83 = 0.114491776;
-            } else {
-              var83 = -0.051398203;
-            }
-          } else {
-            if (input[2] >= 0.75) {
-              var83 = -0.114468224;
-            } else {
-              var83 = 0.023211896;
-            }
-          }
-        } else {
-          if (input[4] >= 0.25) {
-            var83 = 0.0044803573;
-          } else {
-            var83 = 0.16778702;
-          }
-        }
-      } else {
-        if (input[2] >= 0.65) {
-          var83 = 0.054698452;
-        } else {
-          var83 = -0.19459179;
-        }
-      }
-    } else {
-      var83 = 0.10428105;
-    }
-  } else {
-    if (input[4] >= 0.55) {
-      if (input[1] >= 0.75) {
-        var83 = -0.15900327;
-      } else {
         if (input[1] >= 0.25) {
-          if (input[2] >= 0.75) {
+          if (input[1] >= 0.35000002) {
             if (input[2] >= 0.85) {
-              var83 = 0.00004809156;
+              var82 = -0.13486128;
             } else {
-              var83 = 0.17072275;
+              var82 = 0.018324107;
+            }
+          } else {
+            if (input[2] >= 0.65) {
+              var82 = -0.35452777;
+            } else {
+              var82 = 0.04371034;
+            }
+          }
+        } else {
+          if (input[2] >= 0.45) {
+            if (input[4] >= 0.45) {
+              var82 = -0.023665361;
+            } else {
+              var82 = 0.13657713;
+            }
+          } else {
+            var82 = -0.2614298;
+          }
+        }
+      } else {
+        if (input[0] >= -26.5) {
+          if (input[0] >= 5.5) {
+            if (input[0] >= 13.5) {
+              var82 = -0.0050355876;
+            } else {
+              var82 = 0.06191065;
+            }
+          } else {
+            if (input[5] >= 0.65) {
+              var82 = -0.10950566;
+            } else {
+              var82 = 0.08394127;
+            }
+          }
+        } else {
+          if (input[0] >= -27.5) {
+            if (input[3] >= 0.45) {
+              var82 = -0.014045178;
+            } else {
+              var82 = 0.1519472;
+            }
+          } else {
+            if (input[3] >= 0.45) {
+              var82 = 0.0485456;
+            } else {
+              var82 = -0.051200837;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[1] >= 0.25) {
+        if (input[0] >= -31.5) {
+          if (input[0] >= -19.5) {
+            if (input[1] >= 0.55) {
+              var82 = 0.019996053;
+            } else {
+              var82 = -0.060555648;
             }
           } else {
             if (input[3] >= 0.65) {
-              var83 = 0.080761194;
+              var82 = 0.21536325;
             } else {
-              var83 = -0.07161334;
+              var82 = 0.07769347;
             }
           }
         } else {
-          if (input[2] >= 0.65) {
-            if (input[0] >= 14.5) {
-              var83 = -0.2592422;
+          if (input[0] >= -34.5) {
+            if (input[4] >= 0.05) {
+              var82 = 0.031375114;
             } else {
-              var83 = -0.020589115;
+              var82 = -0.13962628;
             }
           } else {
-            if (input[2] >= 0.45) {
-              var83 = 0.09048;
+            if (input[1] >= 0.35000002) {
+              var82 = 0.03937597;
             } else {
-              var83 = -0.10444717;
+              var82 = -0.20452654;
+            }
+          }
+        }
+      } else {
+        if (input[4] >= 0.05) {
+          if (input[2] >= 0.55) {
+            var82 = -0.29899096;
+          } else {
+            var82 = 0.003738485;
+          }
+        } else {
+          if (input[0] >= -19.0) {
+            if (input[3] >= 0.35000002) {
+              var82 = 0.13850817;
+            } else {
+              var82 = 0.021958841;
+            }
+          } else {
+            if (input[0] >= -27.5) {
+              var82 = -0.22176246;
+            } else {
+              var82 = 0.021818886;
+            }
+          }
+        }
+      }
+    }
+  } else {
+    var82 = 0.059124354;
+  }
+  double var83;
+  if (input[4] >= 0.85) {
+    if (input[3] >= 0.95) {
+      var83 = 0.12328475;
+    } else {
+      if (input[2] >= 0.55) {
+        if (input[2] >= 0.75) {
+          if (input[3] >= 0.45) {
+            if (input[2] >= 0.85) {
+              var83 = -0.102772705;
+            } else {
+              var83 = 0.058240887;
+            }
+          } else {
+            if (input[1] >= 0.45) {
+              var83 = 0.10149069;
+            } else {
+              var83 = -0.036956776;
+            }
+          }
+        } else {
+          if (input[3] >= 0.65) {
+            var83 = 0.02849148;
+          } else {
+            var83 = -0.19603886;
+          }
+        }
+      } else {
+        if (input[5] >= 0.75) {
+          var83 = 0.0019042956;
+        } else {
+          var83 = 0.12036792;
+        }
+      }
+    }
+  } else {
+    if (input[3] >= 0.15) {
+      if (input[2] >= 0.85) {
+        if (input[5] >= 0.75) {
+          if (input[4] >= 0.55) {
+            if (input[0] >= -26.5) {
+              var83 = -0.29479235;
+            } else {
+              var83 = 0.024264999;
+            }
+          } else {
+            if (input[1] >= 0.25) {
+              var83 = 0.0012540699;
+            } else {
+              var83 = 0.10900927;
+            }
+          }
+        } else {
+          if (input[5] >= 0.45) {
+            if (input[4] >= 0.15) {
+              var83 = -0.009933202;
+            } else {
+              var83 = -0.16268426;
+            }
+          } else {
+            if (input[1] >= 0.35000002) {
+              var83 = 0.042756923;
+            } else {
+              var83 = 0.16357817;
+            }
+          }
+        }
+      } else {
+        if (input[1] >= 0.45) {
+          if (input[2] >= 0.55) {
+            if (input[1] >= 0.85) {
+              var83 = -0.03630482;
+            } else {
+              var83 = 0.03368306;
+            }
+          } else {
+            if (input[1] >= 0.55) {
+              var83 = -0.008658833;
+            } else {
+              var83 = -0.19841702;
+            }
+          }
+        } else {
+          if (input[5] >= 0.95) {
+            var83 = -0.25686622;
+          } else {
+            if (input[0] >= -26.5) {
+              var83 = -0.0246346;
+            } else {
+              var83 = 0.027528431;
             }
           }
         }
       }
     } else {
-      if (input[2] >= 0.25) {
-        if (input[0] >= -32.5) {
-          if (input[0] >= -17.5) {
-            if (input[1] >= 0.25) {
-              var83 = -0.018633941;
-            } else {
-              var83 = 0.012184617;
-            }
+      if (input[1] >= 0.45) {
+        if (input[0] >= 38.5) {
+          if (input[1] >= 0.75) {
+            var83 = -0.0074089803;
           } else {
-            if (input[3] >= 0.55) {
-              var83 = -0.1627912;
-            } else {
-              var83 = -0.0007482115;
-            }
+            var83 = -0.24705286;
           }
         } else {
-          if (input[2] >= 0.95) {
-            if (input[5] >= 0.45) {
-              var83 = -0.24919577;
+          if (input[0] >= 34.5) {
+            if (input[5] >= 0.55) {
+              var83 = 0.086089656;
             } else {
-              var83 = 0.0698875;
+              var83 = -0.034227982;
             }
           } else {
-            if (input[1] >= 0.25) {
-              var83 = 0.01860022;
-            } else {
-              var83 = 0.14832938;
-            }
+            var83 = -0.1464944;
           }
         }
       } else {
-        var83 = -0.11362395;
+        if (input[1] >= 0.35000002) {
+          if (input[0] >= -29.5) {
+            if (input[0] >= 24.0) {
+              var83 = 0.13995433;
+            } else {
+              var83 = -0.114658654;
+            }
+          } else {
+            var83 = 0.20019253;
+          }
+        } else {
+          if (input[2] >= 0.85) {
+            if (input[1] >= 0.15) {
+              var83 = -0.26606172;
+            } else {
+              var83 = 0.006218551;
+            }
+          } else {
+            if (input[4] >= 0.05) {
+              var83 = 0.12809008;
+            } else {
+              var83 = -0.007961089;
+            }
+          }
+        }
       }
     }
   }
   double var84;
-  if (input[5] >= 0.55) {
-    if (input[2] >= 0.15) {
-      if (input[5] >= 0.85) {
-        if (input[0] >= -36.5) {
-          if (input[0] >= -33.5) {
-            if (input[0] >= -26.5) {
-              var84 = 0.017421126;
+  if (input[0] >= -17.5) {
+    if (input[0] >= 9.0) {
+      if (input[0] >= 10.5) {
+        if (input[3] >= 0.25) {
+          if (input[4] >= 0.05) {
+            if (input[1] >= 0.45) {
+              var84 = 0.022398578;
             } else {
-              var84 = -0.14091346;
+              var84 = -0.015426914;
             }
           } else {
-            if (input[1] >= 0.75) {
-              var84 = -0.106401965;
+            if (input[2] >= 0.65) {
+              var84 = -0.1350125;
             } else {
-              var84 = 0.10116961;
+              var84 = 0.012611486;
             }
           }
         } else {
-          var84 = -0.17166866;
+          if (input[5] >= 0.65) {
+            if (input[0] >= 39.5) {
+              var84 = 0.09721145;
+            } else {
+              var84 = 0.016063944;
+            }
+          } else {
+            if (input[5] >= 0.45) {
+              var84 = -0.0847471;
+            } else {
+              var84 = 0.02291362;
+            }
+          }
         }
       } else {
-        if (input[0] >= -37.5) {
-          if (input[0] >= -33.5) {
-            if (input[0] >= -32.5) {
-              var84 = -0.012638777;
-            } else {
-              var84 = 0.09619851;
-            }
+        if (input[1] >= 0.25) {
+          if (input[2] >= 0.85) {
+            var84 = 0.01986856;
           } else {
-            if (input[3] >= 0.35000002) {
-              var84 = -0.0043480755;
-            } else {
-              var84 = -0.2663631;
-            }
+            var84 = 0.12223746;
           }
         } else {
-          if (input[3] >= 0.55) {
-            var84 = -0.052010316;
+          if (input[2] >= 0.65) {
+            var84 = -0.41370922;
           } else {
-            if (input[3] >= 0.45) {
-              var84 = 0.03255692;
-            } else {
-              var84 = 0.119033545;
-            }
+            var84 = 0.018429726;
           }
         }
       }
     } else {
-      var84 = 0.07291194;
+      if (input[5] >= 0.75) {
+        if (input[4] >= 0.05) {
+          if (input[1] >= 0.25) {
+            if (input[2] >= 0.65) {
+              var84 = -0.05674636;
+            } else {
+              var84 = 0.2082463;
+            }
+          } else {
+            if (input[3] >= 0.45) {
+              var84 = -0.07243873;
+            } else {
+              var84 = 0.15059789;
+            }
+          }
+        } else {
+          var84 = 0.25360173;
+        }
+      } else {
+        if (input[2] >= 0.45) {
+          if (input[3] >= 0.85) {
+            if (input[2] >= 0.75) {
+              var84 = 0.118673906;
+            } else {
+              var84 = -0.13825786;
+            }
+          } else {
+            if (input[0] >= 0.5) {
+              var84 = -0.40214154;
+            } else {
+              var84 = -0.07170309;
+            }
+          }
+        } else {
+          var84 = 0.22679926;
+        }
+      }
     }
   } else {
-    if (input[1] >= 0.65) {
-      if (input[3] >= 0.65) {
-        if (input[0] >= 51.5) {
-          var84 = 0.060991414;
-        } else {
-          var84 = -0.17523977;
-        }
-      } else {
-        if (input[3] >= 0.35000002) {
-          if (input[4] >= 0.45) {
-            var84 = -0.093136;
-          } else {
-            if (input[3] >= 0.45) {
-              var84 = 0.04278359;
+    if (input[4] >= 0.55) {
+      if (input[1] >= 0.35000002) {
+        if (input[4] >= 0.85) {
+          if (input[3] >= 0.55) {
+            if (input[2] >= 0.95) {
+              var84 = 0.12775531;
             } else {
-              var84 = 0.16175386;
+              var84 = 0.021791572;
+            }
+          } else {
+            if (input[5] >= 0.85) {
+              var84 = 0.07455235;
+            } else {
+              var84 = -0.050575405;
             }
           }
         } else {
-          if (input[4] >= 0.15) {
-            var84 = 0.08597506;
+          if (input[4] >= 0.65) {
+            var84 = -0.24840565;
           } else {
-            var84 = -0.10209463;
+            if (input[2] >= 0.75) {
+              var84 = 0.113971874;
+            } else {
+              var84 = -0.06940357;
+            }
+          }
+        }
+      } else {
+        if (input[3] >= 0.25) {
+          if (input[0] >= -26.0) {
+            if (input[5] >= 0.65) {
+              var84 = -0.08636424;
+            } else {
+              var84 = 0.14833975;
+            }
+          } else {
+            if (input[4] >= 0.85) {
+              var84 = 0.009155746;
+            } else {
+              var84 = 0.20828813;
+            }
+          }
+        } else {
+          if (input[3] >= 0.15) {
+            var84 = -0.20916343;
+          } else {
+            var84 = 0.00895713;
           }
         }
       }
     } else {
-      if (input[3] >= 0.65) {
-        if (input[1] >= 0.55) {
-          var84 = -0.09177324;
-        } else {
-          if (input[1] >= 0.45) {
-            var84 = 0.18762071;
+      if (input[0] >= -27.5) {
+        if (input[3] >= 0.55) {
+          if (input[4] >= 0.15) {
+            var84 = -0.34933496;
           } else {
-            if (input[4] >= 0.35000002) {
-              var84 = -0.12582618;
+            if (input[1] >= 0.25) {
+              var84 = 0.14774638;
             } else {
-              var84 = 0.0821657;
+              var84 = -0.22416474;
+            }
+          }
+        } else {
+          if (input[3] >= 0.35000002) {
+            if (input[2] >= 0.85) {
+              var84 = 0.19943273;
+            } else {
+              var84 = -0.07616435;
+            }
+          } else {
+            if (input[5] >= 0.75) {
+              var84 = -0.20062236;
+            } else {
+              var84 = 0.03632852;
             }
           }
         }
       } else {
-        if (input[0] >= 24.5) {
-          var84 = -0.24150008;
-        } else {
-          if (input[3] >= 0.35000002) {
-            if (input[3] >= 0.45) {
-              var84 = -0.008899599;
+        if (input[0] >= -28.5) {
+          if (input[2] >= 0.85) {
+            if (input[5] >= 0.75) {
+              var84 = 0.09462732;
             } else {
-              var84 = -0.17081116;
+              var84 = -0.2637499;
             }
           } else {
-            if (input[2] >= 0.75) {
-              var84 = 0.114869595;
+            if (input[3] >= 0.25) {
+              var84 = 0.15417217;
             } else {
-              var84 = -0.020282973;
+              var84 = 0.027642457;
+            }
+          }
+        } else {
+          if (input[5] >= 0.95) {
+            if (input[2] >= 0.65) {
+              var84 = -0.045847893;
+            } else {
+              var84 = 0.15470003;
+            }
+          } else {
+            if (input[4] >= 0.25) {
+              var84 = 0.020728592;
+            } else {
+              var84 = -0.03910589;
             }
           }
         }
@@ -10948,817 +11776,929 @@ List<double> score(List<double> input) {
     }
   }
   double var85;
-  if (input[1] >= 0.85) {
-    if (input[5] >= 0.65) {
-      if (input[4] >= 0.05) {
-        if (input[2] >= 0.55) {
-          if (input[4] >= 0.35000002) {
-            if (input[4] >= 0.55) {
-              var85 = -0.08291498;
+  if (input[2] >= 0.15) {
+    if (input[0] >= -41.5) {
+      if (input[0] >= -17.5) {
+        if (input[0] >= 9.0) {
+          if (input[2] >= 0.45) {
+            if (input[1] >= 0.65) {
+              var85 = 0.016800491;
             } else {
-              var85 = 0.11228148;
+              var85 = -0.0061377515;
             }
           } else {
-            if (input[1] >= 0.95) {
-              var85 = 0.047199264;
+            if (input[5] >= 0.75) {
+              var85 = -0.12052657;
             } else {
-              var85 = -0.273321;
+              var85 = 0.0041578873;
             }
           }
         } else {
           if (input[5] >= 0.85) {
-            if (input[3] >= 0.75) {
-              var85 = 0.20507522;
+            if (input[4] >= 0.45) {
+              var85 = -0.03335748;
             } else {
-              var85 = 0.062465582;
+              var85 = 0.18639867;
             }
           } else {
-            var85 = -0.057772677;
+            if (input[0] >= -2.5) {
+              var85 = -0.03312071;
+            } else {
+              var85 = 0.061676085;
+            }
           }
         }
       } else {
         if (input[2] >= 0.55) {
-          if (input[3] >= 0.45) {
-            var85 = 0.2246813;
+          if (input[0] >= -25.5) {
+            if (input[2] >= 0.85) {
+              var85 = 0.076647855;
+            } else {
+              var85 = -0.19384277;
+            }
           } else {
-            var85 = 0.03419986;
+            if (input[0] >= -26.5) {
+              var85 = 0.0726307;
+            } else {
+              var85 = -0.0031257516;
+            }
           }
         } else {
-          var85 = -0.10107045;
+          if (input[5] >= 0.75) {
+            if (input[0] >= -31.5) {
+              var85 = -0.11909326;
+            } else {
+              var85 = 0.029868493;
+            }
+          } else {
+            var85 = -0.21413428;
+          }
         }
       }
     } else {
-      if (input[2] >= 0.75) {
-        if (input[0] >= 40.5) {
-          var85 = -0.22369312;
-        } else {
-          var85 = -0.009044154;
-        }
+      if (input[4] >= 0.35000002) {
+        var85 = 0.017635126;
       } else {
-        if (input[5] >= 0.55) {
-          if (input[2] >= 0.55) {
-            var85 = -0.20611684;
-          } else {
-            var85 = 0.04518011;
-          }
-        } else {
-          if (input[3] >= 0.45) {
-            if (input[0] >= 46.5) {
-              var85 = 0.12386326;
-            } else {
-              var85 = -0.03524116;
-            }
-          } else {
-            if (input[3] >= 0.25) {
-              var85 = 0.16862206;
-            } else {
-              var85 = 0.0007883478;
-            }
-          }
-        }
+        var85 = 0.06593238;
       }
     }
   } else {
-    if (input[0] >= 41.5) {
-      if (input[3] >= 0.65) {
-        if (input[4] >= 0.15) {
-          if (input[2] >= 0.85) {
-            var85 = 0.089145064;
-          } else {
-            if (input[0] >= 47.5) {
-              var85 = -0.12188993;
-            } else {
-              var85 = 0.01880885;
-            }
-          }
-        } else {
-          var85 = 0.16619931;
-        }
-      } else {
-        if (input[1] >= 0.55) {
-          if (input[1] >= 0.65) {
-            var85 = -0.028357478;
-          } else {
-            var85 = -0.23594902;
-          }
-        } else {
-          if (input[1] >= 0.45) {
-            var85 = 0.09516378;
-          } else {
-            var85 = -0.018694779;
-          }
-        }
-      }
-    } else {
-      if (input[1] >= 0.75) {
-        if (input[4] >= 0.35000002) {
-          var85 = -0.22102214;
-        } else {
-          if (input[2] >= 0.75) {
-            if (input[2] >= 0.85) {
-              var85 = -0.015439194;
-            } else {
-              var85 = 0.17938389;
-            }
-          } else {
-            if (input[2] >= 0.65) {
-              var85 = -0.2742304;
-            } else {
-              var85 = 0.0028506895;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= 39.5) {
-          if (input[3] >= 0.55) {
-            if (input[5] >= 0.55) {
-              var85 = -0.24017148;
-            } else {
-              var85 = 0.002014051;
-            }
-          } else {
-            if (input[4] >= 0.25) {
-              var85 = 0.15959495;
-            } else {
-              var85 = 0.027943637;
-            }
-          }
-        } else {
-          if (input[0] >= 38.5) {
-            if (input[1] >= 0.25) {
-              var85 = -0.28467357;
-            } else {
-              var85 = 0.13483416;
-            }
-          } else {
-            if (input[2] >= 0.75) {
-              var85 = -0.01474394;
-            } else {
-              var85 = 0.0081785945;
-            }
-          }
-        }
-      }
-    }
+    var85 = 0.0651286;
   }
   double var86;
-  if (input[2] >= 0.95) {
-    if (input[3] >= 0.55) {
-      if (input[1] >= 0.25) {
-        if (input[0] >= -30.0) {
-          if (input[1] >= 0.45) {
-            if (input[5] >= 0.75) {
-              var86 = -0.011250282;
-            } else {
-              var86 = 0.07704507;
-            }
+  if (input[4] >= 0.75) {
+    if (input[5] >= 0.75) {
+      if (input[5] >= 0.85) {
+        if (input[0] >= 13.5) {
+          if (input[2] >= 0.75) {
+            var86 = 0.20025127;
           } else {
-            var86 = 0.21064024;
+            var86 = 0.001698619;
           }
         } else {
-          var86 = -0.06706481;
+          if (input[0] >= -33.5) {
+            var86 = -0.18182246;
+          } else {
+            if (input[3] >= 0.45) {
+              var86 = 0.0263983;
+            } else {
+              var86 = 0.098064266;
+            }
+          }
         }
       } else {
-        if (input[3] >= 0.75) {
-          var86 = -0.21263616;
-        } else {
-          if (input[4] >= 0.45) {
-            var86 = 0.070424005;
+        if (input[4] >= 0.85) {
+          if (input[3] >= 0.65) {
+            if (input[0] >= -7.0) {
+              var86 = 0.01846659;
+            } else {
+              var86 = 0.14241342;
+            }
           } else {
-            var86 = 0.017755909;
+            var86 = -0.15371887;
+          }
+        } else {
+          if (input[1] >= 0.25) {
+            var86 = -0.03940817;
+          } else {
+            var86 = -0.3503003;
           }
         }
       }
     } else {
-      if (input[5] >= 0.95) {
-        var86 = 0.12315726;
-      } else {
-        if (input[5] >= 0.45) {
-          if (input[4] >= 0.45) {
-            if (input[1] >= 0.65) {
-              var86 = 0.10043635;
-            } else {
-              var86 = -0.07792127;
-            }
+      if (input[3] >= 0.25) {
+        if (input[1] >= 0.45) {
+          if (input[0] >= 39.0) {
+            var86 = 0.08877882;
           } else {
-            if (input[3] >= 0.05) {
-              var86 = -0.25910714;
-            } else {
-              var86 = 0.056968;
-            }
+            var86 = -0.0793563;
           }
         } else {
-          if (input[0] >= -32.5) {
-            var86 = 0.019463416;
+          if (input[0] >= 9.0) {
+            var86 = 0.012296544;
           } else {
-            var86 = 0.07631066;
+            if (input[3] >= 0.65) {
+              var86 = -0.007638279;
+            } else {
+              var86 = 0.19584663;
+            }
           }
         }
+      } else {
+        var86 = -0.087869346;
       }
     }
   } else {
-    if (input[0] >= 46.5) {
-      if (input[1] >= 0.45) {
-        if (input[0] >= 49.5) {
-          if (input[0] >= 51.5) {
-            var86 = 0.047868095;
+    if (input[0] >= -16.5) {
+      if (input[0] >= -9.5) {
+        if (input[2] >= 0.95) {
+          if (input[3] >= 0.75) {
+            if (input[1] >= 0.35000002) {
+              var86 = 0.088421956;
+            } else {
+              var86 = -0.24161954;
+            }
           } else {
-            var86 = -0.04833691;
+            if (input[0] >= 32.5) {
+              var86 = -0.018821504;
+            } else {
+              var86 = 0.1712797;
+            }
           }
         } else {
-          var86 = 0.10790221;
+          if (input[0] >= -4.5) {
+            if (input[0] >= -2.5) {
+              var86 = -0.0015238407;
+            } else {
+              var86 = 0.18308981;
+            }
+          } else {
+            var86 = -0.21031933;
+          }
         }
       } else {
-        if (input[0] >= 50.5) {
-          var86 = 0.023276404;
-        } else {
-          var86 = -0.08870442;
-        }
+        var86 = 0.18369238;
       }
     } else {
-      if (input[1] >= 0.95) {
-        if (input[5] >= 0.75) {
-          var86 = -0.11599107;
-        } else {
-          if (input[0] >= -27.5) {
-            var86 = -0.08008057;
-          } else {
-            if (input[0] >= -29.5) {
-              var86 = 0.10945419;
+      if (input[0] >= -25.5) {
+        if (input[2] >= 0.85) {
+          if (input[3] >= 0.55) {
+            if (input[3] >= 0.65) {
+              var86 = 0.00066686695;
             } else {
-              var86 = -0.016983785;
+              var86 = -0.23095086;
+            }
+          } else {
+            if (input[4] >= 0.15) {
+              var86 = 0.2720105;
+            } else {
+              var86 = 0.00048276683;
+            }
+          }
+        } else {
+          if (input[3] >= 0.75) {
+            if (input[0] >= -19.0) {
+              var86 = 0.12162774;
+            } else {
+              var86 = -0.07250845;
+            }
+          } else {
+            if (input[4] >= 0.05) {
+              var86 = -0.3262698;
+            } else {
+              var86 = -0.056158967;
             }
           }
         }
       } else {
-        if (input[2] >= 0.35000002) {
-          if (input[0] >= -34.5) {
-            if (input[5] >= 0.95) {
-              var86 = -0.06720505;
+        if (input[0] >= -26.5) {
+          if (input[2] >= 0.75) {
+            if (input[3] >= 0.75) {
+              var86 = 0.052991293;
             } else {
-              var86 = -0.0049681654;
+              var86 = -0.17506482;
             }
           } else {
-            if (input[1] >= 0.75) {
-              var86 = 0.06509015;
+            if (input[5] >= 0.75) {
+              var86 = 0.011603767;
             } else {
-              var86 = -0.023630517;
+              var86 = 0.22013171;
             }
           }
         } else {
-          if (input[4] >= 0.15) {
-            if (input[0] >= -32.5) {
-              var86 = 0.1229021;
+          if (input[4] >= 0.65) {
+            if (input[0] >= -33.5) {
+              var86 = 0.18357712;
             } else {
-              var86 = -0.015928663;
+              var86 = -0.18999012;
             }
           } else {
-            var86 = -0.06963979;
+            if (input[0] >= -27.5) {
+              var86 = -0.068254195;
+            } else {
+              var86 = -0.0012751241;
+            }
           }
         }
       }
     }
   }
   double var87;
-  if (input[0] >= -41.5) {
-    if (input[0] >= -36.5) {
-      if (input[5] >= 0.85) {
-        if (input[3] >= 0.85) {
-          if (input[1] >= 0.85) {
-            var87 = 0.10624897;
-          } else {
-            if (input[2] >= 0.65) {
-              var87 = 0.013474079;
+  if (input[1] >= 0.05) {
+    if (input[0] >= -35.5) {
+      if (input[1] >= 0.15) {
+        if (input[0] >= -34.5) {
+          if (input[5] >= 0.95) {
+            if (input[4] >= 0.35000002) {
+              var87 = -0.1553578;
             } else {
-              var87 = -0.22124712;
+              var87 = 0.0016320798;
+            }
+          } else {
+            if (input[0] >= 41.5) {
+              var87 = -0.027549637;
+            } else {
+              var87 = 0.0030710858;
             }
           }
         } else {
-          if (input[3] >= 0.65) {
-            if (input[4] >= 0.15) {
-              var87 = 0.0049653538;
+          if (input[1] >= 0.45) {
+            if (input[1] >= 0.75) {
+              var87 = 0.048780225;
             } else {
-              var87 = 0.12881398;
+              var87 = -0.17113574;
             }
           } else {
-            if (input[4] >= 0.05) {
-              var87 = 0.027841382;
+            if (input[3] >= 0.35000002) {
+              var87 = -0.052689463;
             } else {
-              var87 = -0.043485466;
+              var87 = 0.15770653;
             }
           }
         }
       } else {
-        if (input[1] >= 0.95) {
-          if (input[0] >= -27.5) {
-            var87 = -0.088024765;
+        if (input[5] >= 0.65) {
+          if (input[0] >= -31.5) {
+            if (input[2] >= 0.85) {
+              var87 = 0.173341;
+            } else {
+              var87 = -0.030351644;
+            }
           } else {
-            var87 = -0.02153278;
+            var87 = -0.22904122;
           }
         } else {
-          if (input[0] >= -26.5) {
-            if (input[0] >= -17.5) {
-              var87 = -0.0014851306;
+          if (input[5] >= 0.45) {
+            if (input[2] >= 0.65) {
+              var87 = -0.25065163;
             } else {
-              var87 = -0.13575523;
+              var87 = -0.05678443;
+            }
+          } else {
+            var87 = 0.0035961845;
+          }
+        }
+      }
+    } else {
+      if (input[1] >= 0.15) {
+        if (input[1] >= 0.35000002) {
+          if (input[4] >= 0.05) {
+            if (input[1] >= 0.95) {
+              var87 = 0.107472114;
+            } else {
+              var87 = -0.103972845;
+            }
+          } else {
+            if (input[3] >= 0.35000002) {
+              var87 = -0.0541494;
+            } else {
+              var87 = 0.089392275;
+            }
+          }
+        } else {
+          var87 = -0.21383578;
+        }
+      } else {
+        var87 = 0.14087619;
+      }
+    }
+  } else {
+    var87 = 0.050957765;
+  }
+  double var88;
+  if (input[0] >= -41.5) {
+    if (input[3] >= 0.75) {
+      if (input[4] >= 0.15) {
+        if (input[5] >= 0.85) {
+          if (input[1] >= 0.85) {
+            if (input[2] >= 0.55) {
+              var88 = -0.09690804;
+            } else {
+              var88 = 0.21251239;
             }
           } else {
             if (input[2] >= 0.55) {
-              var87 = 0.016393494;
+              var88 = -0.019529575;
             } else {
-              var87 = -0.12047442;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[1] >= 0.75) {
-        if (input[2] >= 0.75) {
-          var87 = 0.09761179;
-        } else {
-          var87 = -0.052501265;
-        }
-      } else {
-        if (input[2] >= 0.75) {
-          var87 = -0.15356305;
-        } else {
-          var87 = -0.024731377;
-        }
-      }
-    }
-  } else {
-    var87 = 0.05341448;
-  }
-  double var88;
-  if (input[2] >= 0.15) {
-    if (input[3] >= 0.25) {
-      if (input[0] >= 9.0) {
-        if (input[4] >= 0.05) {
-          if (input[0] >= 20.0) {
-            if (input[0] >= 28.0) {
-              var88 = 0.0065722372;
-            } else {
-              var88 = 0.15773109;
-            }
-          } else {
-            if (input[3] >= 0.65) {
-              var88 = 0.005536338;
-            } else {
-              var88 = -0.12928092;
+              var88 = -0.2838526;
             }
           }
         } else {
-          if (input[1] >= 0.55) {
-            if (input[3] >= 0.55) {
-              var88 = 0.096327014;
-            } else {
-              var88 = -0.08272745;
-            }
-          } else {
-            if (input[0] >= 20.0) {
-              var88 = -0.28472155;
-            } else {
-              var88 = -0.05822931;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= 6.5) {
-          var88 = 0.19102882;
-        } else {
-          if (input[4] >= 0.35000002) {
-            if (input[2] >= 0.75) {
-              var88 = 0.010842029;
-            } else {
-              var88 = -0.091990545;
-            }
-          } else {
-            if (input[2] >= 0.45) {
-              var88 = 0.00508752;
-            } else {
-              var88 = 0.11593208;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[4] >= 0.65) {
-        if (input[1] >= 0.65) {
-          var88 = 0.10170023;
-        } else {
-          var88 = -0.24941821;
-        }
-      } else {
-        if (input[1] >= 0.25) {
-          if (input[2] >= 0.75) {
-            if (input[1] >= 0.55) {
-              var88 = -0.22514933;
-            } else {
-              var88 = -0.028963553;
-            }
-          } else {
-            if (input[4] >= 0.15) {
-              var88 = -0.11023859;
-            } else {
-              var88 = 0.053163666;
-            }
-          }
-        } else {
-          if (input[4] >= 0.15) {
-            if (input[2] >= 0.95) {
-              var88 = -0.0099672945;
-            } else {
-              var88 = 0.17390338;
-            }
-          } else {
-            if (input[5] >= 0.85) {
-              var88 = 0.08023361;
-            } else {
-              var88 = -0.09949503;
-            }
-          }
-        }
-      }
-    }
-  } else {
-    var88 = 0.045520283;
-  }
-  double var89;
-  if (input[4] >= 0.55) {
-    if (input[2] >= 0.55) {
-      if (input[5] >= 0.75) {
-        if (input[3] >= 0.85) {
-          var89 = -0.17457075;
-        } else {
-          if (input[3] >= 0.55) {
-            if (input[0] >= 14.5) {
-              var89 = -0.102250755;
-            } else {
-              var89 = 0.088789836;
-            }
-          } else {
-            if (input[5] >= 0.85) {
-              var89 = 0.005058899;
-            } else {
-              var89 = -0.22543977;
-            }
-          }
-        }
-      } else {
-        if (input[1] >= 0.75) {
-          if (input[5] >= 0.55) {
-            var89 = -0.141883;
-          } else {
-            var89 = -0.03646675;
-          }
-        } else {
-          if (input[0] >= -27.5) {
-            if (input[3] >= 0.35000002) {
-              var89 = 0.09443893;
-            } else {
-              var89 = -0.026095008;
-            }
-          } else {
-            if (input[4] >= 0.65) {
-              var89 = -0.12791076;
-            } else {
-              var89 = 0.043560613;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[2] >= 0.45) {
-        if (input[3] >= 0.45) {
-          if (input[5] >= 0.75) {
-            var89 = 0.20609136;
-          } else {
-            var89 = 0.011918046;
-          }
-        } else {
-          if (input[0] >= 35.0) {
-            var89 = -0.024335807;
-          } else {
-            var89 = 0.054317165;
-          }
-        }
-      } else {
-        if (input[2] >= 0.35000002) {
-          var89 = -0.08908826;
-        } else {
-          var89 = 0.06655354;
-        }
-      }
-    }
-  } else {
-    if (input[2] >= 0.55) {
-      if (input[3] >= 0.45) {
-        if (input[3] >= 0.55) {
-          if (input[0] >= 6.5) {
-            if (input[4] >= 0.35000002) {
-              var89 = 0.07065917;
-            } else {
-              var89 = -0.010833657;
-            }
-          } else {
-            if (input[0] >= -27.5) {
-              var89 = -0.10436468;
-            } else {
-              var89 = 0.015457365;
-            }
-          }
-        } else {
-          if (input[0] >= -11.5) {
-            if (input[1] >= 0.45) {
-              var89 = 0.049567025;
-            } else {
-              var89 = -0.2922183;
-            }
-          } else {
-            if (input[0] >= -21.5) {
-              var89 = 0.22817422;
-            } else {
-              var89 = 0.012186137;
-            }
-          }
-        }
-      } else {
-        if (input[4] >= 0.25) {
-          if (input[2] >= 0.65) {
-            if (input[0] >= 21.0) {
-              var89 = -0.02716869;
-            } else {
-              var89 = -0.19579127;
-            }
-          } else {
-            if (input[0] >= 38.5) {
-              var89 = -0.18946989;
-            } else {
-              var89 = 0.113532916;
-            }
-          }
-        } else {
-          if (input[5] >= 0.55) {
+          if (input[0] >= -34.5) {
             if (input[1] >= 0.65) {
-              var89 = -0.14173797;
+              var88 = -0.10889991;
             } else {
-              var89 = 0.016421799;
+              var88 = 0.014961218;
             }
           } else {
-            if (input[1] >= 0.55) {
-              var89 = 0.11856283;
+            if (input[2] >= 0.75) {
+              var88 = 0.18601698;
             } else {
-              var89 = -0.07083447;
+              var88 = -0.018233214;
+            }
+          }
+        }
+      } else {
+        if (input[3] >= 0.85) {
+          if (input[1] >= 0.55) {
+            var88 = 0.020167949;
+          } else {
+            var88 = -0.10918689;
+          }
+        } else {
+          if (input[2] >= 0.75) {
+            var88 = 0.19396307;
+          } else {
+            if (input[1] >= 0.35000002) {
+              var88 = -0.082665354;
+            } else {
+              var88 = 0.16435957;
             }
           }
         }
       }
     } else {
       if (input[0] >= -33.5) {
-        if (input[0] >= 9.0) {
-          if (input[0] >= 21.0) {
-            if (input[1] >= 0.45) {
-              var89 = -0.028060306;
+        if (input[1] >= 0.15) {
+          if (input[0] >= -32.5) {
+            if (input[5] >= 0.95) {
+              var88 = -0.10158434;
             } else {
-              var89 = 0.15476221;
+              var88 = 0.00445471;
             }
           } else {
-            if (input[1] >= 0.55) {
-              var89 = 0.029636288;
+            if (input[3] >= 0.25) {
+              var88 = 0.10275526;
             } else {
-              var89 = -0.21670377;
+              var88 = -0.119918026;
             }
           }
         } else {
-          if (input[0] >= -4.5) {
+          if (input[2] >= 0.85) {
+            if (input[5] >= 0.65) {
+              var88 = 0.08402515;
+            } else {
+              var88 = -0.09665874;
+            }
+          } else {
+            if (input[3] >= 0.55) {
+              var88 = -0.25024277;
+            } else {
+              var88 = -0.033640314;
+            }
+          }
+        }
+      } else {
+        if (input[1] >= 0.45) {
+          if (input[1] >= 0.75) {
+            if (input[3] >= 0.55) {
+              var88 = -0.223828;
+            } else {
+              var88 = 0.039728153;
+            }
+          } else {
             if (input[5] >= 0.85) {
-              var89 = -0.031459324;
+              var88 = 0.024830498;
             } else {
-              var89 = 0.1475307;
+              var88 = -0.21350476;
             }
-          } else {
-            if (input[1] >= 0.65) {
-              var89 = 0.09870546;
-            } else {
-              var89 = -0.1933067;
-            }
-          }
-        }
-      } else {
-        var89 = -0.20562348;
-      }
-    }
-  }
-  double var90;
-  if (input[2] >= 0.95) {
-    if (input[1] >= 0.15) {
-      if (input[1] >= 0.25) {
-        if (input[3] >= 0.55) {
-          if (input[1] >= 0.35000002) {
-            if (input[0] >= 12.5) {
-              var90 = 0.10650522;
-            } else {
-              var90 = -0.07930459;
-            }
-          } else {
-            var90 = 0.18523082;
           }
         } else {
-          if (input[0] >= -29.5) {
-            if (input[1] >= 0.65) {
-              var90 = 0.018588131;
+          if (input[4] >= 0.45) {
+            if (input[2] >= 0.95) {
+              var88 = -0.013407789;
             } else {
-              var90 = -0.20968296;
+              var88 = -0.21685117;
             }
           } else {
-            if (input[5] >= 0.55) {
-              var90 = -0.03480907;
+            if (input[4] >= 0.25) {
+              var88 = 0.13073586;
             } else {
-              var90 = 0.11022029;
+              var88 = -0.00054424605;
             }
           }
         }
-      } else {
-        if (input[4] >= 0.25) {
-          if (input[4] >= 0.35000002) {
-            var90 = -0.13059342;
-          } else {
-            var90 = 0.14696333;
-          }
-        } else {
-          var90 = -0.2957463;
-        }
-      }
-    } else {
-      if (input[5] >= 0.65) {
-        var90 = 0.1394633;
-      } else {
-        var90 = 0.019158382;
       }
     }
   } else {
-    if (input[3] >= 0.55) {
-      if (input[0] >= -36.5) {
-        if (input[2] >= 0.75) {
-          if (input[3] >= 0.65) {
-            if (input[4] >= 0.35000002) {
-              var90 = 0.03350438;
+    var88 = 0.06613421;
+  }
+  double var89;
+  if (input[2] >= 0.65) {
+    if (input[4] >= 0.35000002) {
+      if (input[3] >= 0.65) {
+        if (input[0] >= 14.5) {
+          if (input[2] >= 0.75) {
+            if (input[0] >= 15.5) {
+              var89 = -0.028706437;
             } else {
-              var90 = -0.049532272;
-            }
-          } else {
-            if (input[0] >= 28.0) {
-              var90 = -0.017832648;
-            } else {
-              var90 = -0.29573175;
-            }
-          }
-        } else {
-          if (input[0] >= -34.5) {
-            if (input[0] >= -27.5) {
-              var90 = -0.00602154;
-            } else {
-              var90 = 0.08139497;
-            }
-          } else {
-            var90 = -0.14147343;
-          }
-        }
-      } else {
-        var90 = -0.1424405;
-      }
-    } else {
-      if (input[2] >= 0.25) {
-        if (input[0] >= -34.5) {
-          if (input[0] >= -28.5) {
-            if (input[0] >= 41.5) {
-              var90 = -0.055866808;
-            } else {
-              var90 = 0.009961941;
+              var89 = -0.29340118;
             }
           } else {
             if (input[1] >= 0.55) {
-              var90 = -0.18836543;
+              var89 = -0.07600626;
             } else {
-              var90 = -0.0067717894;
+              var89 = 0.21896596;
             }
           }
         } else {
-          if (input[5] >= 0.95) {
-            var90 = 0.1418723;
-          } else {
-            if (input[0] >= -37.5) {
-              var90 = -0.012713611;
+          if (input[2] >= 0.75) {
+            if (input[4] >= 0.65) {
+              var89 = -0.0018802506;
             } else {
-              var90 = 0.073344044;
+              var89 = 0.14115909;
+            }
+          } else {
+            if (input[3] >= 0.85) {
+              var89 = 0.005314277;
+            } else {
+              var89 = -0.26536325;
             }
           }
         }
       } else {
-        if (input[4] >= 0.15) {
-          var90 = 0.18568888;
+        if (input[0] >= 21.0) {
+          if (input[5] >= 0.65) {
+            if (input[1] >= 0.65) {
+              var89 = 0.16216877;
+            } else {
+              var89 = -0.0052978657;
+            }
+          } else {
+            var89 = -0.186382;
+          }
         } else {
-          var90 = -0.05034298;
+          if (input[0] >= -26.5) {
+            var89 = -0.2809901;
+          } else {
+            if (input[1] >= 0.35000002) {
+              var89 = -0.06375267;
+            } else {
+              var89 = 0.069463454;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[3] >= 0.35000002) {
+        if (input[0] >= -35.5) {
+          if (input[1] >= 0.35000002) {
+            if (input[3] >= 0.75) {
+              var89 = 0.06051721;
+            } else {
+              var89 = -0.020338146;
+            }
+          } else {
+            if (input[1] >= 0.25) {
+              var89 = -0.17957912;
+            } else {
+              var89 = -0.018449407;
+            }
+          }
+        } else {
+          var89 = -0.26860374;
+        }
+      } else {
+        if (input[4] >= 0.25) {
+          if (input[5] >= 0.65) {
+            var89 = -0.21668841;
+          } else {
+            var89 = -0.024971815;
+          }
+        } else {
+          if (input[1] >= 0.55) {
+            if (input[1] >= 0.75) {
+              var89 = -0.0059550037;
+            } else {
+              var89 = -0.1680218;
+            }
+          } else {
+            if (input[0] >= -27.5) {
+              var89 = 0.0003442872;
+            } else {
+              var89 = 0.05250906;
+            }
+          }
+        }
+      }
+    }
+  } else {
+    if (input[0] >= -41.5) {
+      if (input[0] >= -36.5) {
+        if (input[1] >= 0.95) {
+          if (input[0] >= 37.5) {
+            var89 = 0.001565216;
+          } else {
+            var89 = -0.18608251;
+          }
+        } else {
+          if (input[5] >= 0.95) {
+            if (input[0] >= -32.5) {
+              var89 = -0.048794877;
+            } else {
+              var89 = 0.16302487;
+            }
+          } else {
+            if (input[5] >= 0.85) {
+              var89 = -0.034292266;
+            } else {
+              var89 = 0.017457185;
+            }
+          }
+        }
+      } else {
+        if (input[1] >= 0.95) {
+          var89 = 0.13952416;
+        } else {
+          var89 = -0.2442794;
+        }
+      }
+    } else {
+      var89 = 0.117665775;
+    }
+  }
+  double var90;
+  if (input[4] >= 0.75) {
+    if (input[5] >= 0.75) {
+      if (input[5] >= 0.85) {
+        if (input[1] >= 0.25) {
+          if (input[0] >= -33.5) {
+            var90 = -0.12730877;
+          } else {
+            var90 = 0.073884435;
+          }
+        } else {
+          if (input[2] >= 0.75) {
+            var90 = 0.17875855;
+          } else {
+            var90 = 0.029337281;
+          }
+        }
+      } else {
+        if (input[4] >= 0.85) {
+          if (input[3] >= 0.65) {
+            if (input[0] >= -7.0) {
+              var90 = 0.009924673;
+            } else {
+              var90 = 0.14215402;
+            }
+          } else {
+            var90 = -0.12228664;
+          }
+        } else {
+          if (input[1] >= 0.25) {
+            var90 = -0.031572007;
+          } else {
+            var90 = -0.29971665;
+          }
+        }
+      }
+    } else {
+      if (input[0] >= -27.5) {
+        if (input[3] >= 0.35000002) {
+          if (input[0] >= 22.5) {
+            var90 = -0.005051018;
+          } else {
+            if (input[3] >= 0.45) {
+              var90 = 0.08310954;
+            } else {
+              var90 = 0.21034986;
+            }
+          }
+        } else {
+          var90 = -0.01758911;
+        }
+      } else {
+        var90 = -0.06510935;
+      }
+    }
+  } else {
+    if (input[0] >= -17.5) {
+      if (input[5] >= 0.75) {
+        if (input[0] >= 8.5) {
+          if (input[3] >= 0.75) {
+            if (input[3] >= 0.85) {
+              var90 = -0.046736516;
+            } else {
+              var90 = 0.08783828;
+            }
+          } else {
+            if (input[3] >= 0.55) {
+              var90 = -0.094401985;
+            } else {
+              var90 = 0.027605705;
+            }
+          }
+        } else {
+          if (input[2] >= 0.55) {
+            if (input[3] >= 0.65) {
+              var90 = 0.07051397;
+            } else {
+              var90 = 0.25157544;
+            }
+          } else {
+            if (input[3] >= 0.65) {
+              var90 = 0.06754676;
+            } else {
+              var90 = -0.17535919;
+            }
+          }
+        }
+      } else {
+        if (input[0] >= -14.5) {
+          if (input[0] >= -2.5) {
+            if (input[0] >= 5.5) {
+              var90 = 0.00072138465;
+            } else {
+              var90 = -0.08596267;
+            }
+          } else {
+            if (input[3] >= 0.75) {
+              var90 = 0.17762497;
+            } else {
+              var90 = -0.027627505;
+            }
+          }
+        } else {
+          if (input[3] >= 0.75) {
+            var90 = -0.008507502;
+          } else {
+            var90 = -0.26053882;
+          }
+        }
+      }
+    } else {
+      if (input[0] >= -25.5) {
+        if (input[2] >= 0.85) {
+          if (input[3] >= 0.55) {
+            if (input[3] >= 0.65) {
+              var90 = 0.04761621;
+            } else {
+              var90 = -0.19868353;
+            }
+          } else {
+            if (input[3] >= 0.45) {
+              var90 = 0.21755108;
+            } else {
+              var90 = -0.08496035;
+            }
+          }
+        } else {
+          if (input[2] >= 0.45) {
+            var90 = -0.2724613;
+          } else {
+            var90 = -0.016628437;
+          }
+        }
+      } else {
+        if (input[2] >= 0.75) {
+          if (input[5] >= 0.85) {
+            if (input[1] >= 0.25) {
+              var90 = -0.16007966;
+            } else {
+              var90 = 0.08773995;
+            }
+          } else {
+            if (input[1] >= 0.25) {
+              var90 = 0.017129095;
+            } else {
+              var90 = -0.066768795;
+            }
+          }
+        } else {
+          if (input[3] >= 0.65) {
+            if (input[1] >= 0.55) {
+              var90 = 0.0030329907;
+            } else {
+              var90 = -0.3791422;
+            }
+          } else {
+            if (input[0] >= -28.5) {
+              var90 = 0.11116388;
+            } else {
+              var90 = 0.014432224;
+            }
+          }
         }
       }
     }
   }
   double var91;
-  if (input[5] >= 0.45) {
-    if (input[0] >= -34.5) {
-      if (input[2] >= 0.15) {
-        if (input[3] >= 0.15) {
-          if (input[4] >= 0.15) {
-            if (input[3] >= 0.35000002) {
-              var91 = 0.0011376486;
+  if (input[0] >= -28.5) {
+    if (input[3] >= 0.45) {
+      if (input[2] >= 0.35000002) {
+        if (input[0] >= 46.5) {
+          if (input[3] >= 0.75) {
+            if (input[3] >= 0.85) {
+              var91 = 0.074241266;
             } else {
-              var91 = -0.047012076;
+              var91 = -0.12512693;
             }
           } else {
-            if (input[5] >= 0.95) {
-              var91 = -0.16978687;
+            if (input[4] >= 0.25) {
+              var91 = 0.13580172;
             } else {
-              var91 = -0.011239101;
+              var91 = -0.032960907;
             }
           }
         } else {
-          if (input[5] >= 0.75) {
-            if (input[4] >= 0.05) {
-              var91 = 0.056167852;
+          if (input[0] >= 39.5) {
+            if (input[1] >= 0.75) {
+              var91 = -0.104741745;
             } else {
-              var91 = -0.055764187;
+              var91 = -0.0067620324;
             }
           } else {
-            if (input[0] >= 38.5) {
-              var91 = -0.096231274;
+            if (input[1] >= 0.75) {
+              var91 = 0.100897744;
             } else {
-              var91 = 0.08429249;
+              var91 = -0.008017222;
             }
           }
         }
       } else {
-        var91 = 0.06607224;
+        if (input[5] >= 0.65) {
+          var91 = -0.023494659;
+        } else {
+          var91 = 0.13093486;
+        }
       }
     } else {
-      if (input[5] >= 0.95) {
-        var91 = 0.085031606;
-      } else {
-        if (input[5] >= 0.85) {
-          if (input[3] >= 0.25) {
-            var91 = -0.19946343;
-          } else {
-            var91 = 0.07531728;
-          }
-        } else {
-          if (input[2] >= 0.75) {
-            if (input[1] >= 0.75) {
-              var91 = 0.13573873;
+      if (input[3] >= 0.35000002) {
+        if (input[1] >= 0.55) {
+          if (input[4] >= 0.05) {
+            if (input[2] >= 0.75) {
+              var91 = 0.1260331;
             } else {
-              var91 = -0.058683086;
+              var91 = -0.00023153385;
             }
           } else {
-            if (input[3] >= 0.55) {
-              var91 = -0.1300384;
+            if (input[1] >= 0.75) {
+              var91 = -0.31394535;
             } else {
-              var91 = 0.018469254;
+              var91 = 0.044107825;
+            }
+          }
+        } else {
+          if (input[2] >= 0.95) {
+            var91 = -0.11491517;
+          } else {
+            if (input[2] >= 0.75) {
+              var91 = 0.057253215;
+            } else {
+              var91 = 0.16299023;
+            }
+          }
+        }
+      } else {
+        if (input[4] >= 0.25) {
+          if (input[2] >= 0.45) {
+            if (input[3] >= 0.25) {
+              var91 = -0.22033653;
+            } else {
+              var91 = -0.016799042;
+            }
+          } else {
+            var91 = 0.1078406;
+          }
+        } else {
+          if (input[4] >= 0.15) {
+            if (input[5] >= 0.75) {
+              var91 = 0.044181302;
+            } else {
+              var91 = 0.17243505;
+            }
+          } else {
+            if (input[0] >= -27.5) {
+              var91 = -0.024573155;
+            } else {
+              var91 = 0.10564201;
             }
           }
         }
       }
     }
   } else {
-    if (input[1] >= 0.75) {
-      if (input[4] >= 0.35000002) {
-        if (input[4] >= 0.55) {
-          var91 = 0.07280065;
+    if (input[5] >= 0.75) {
+      if (input[4] >= 0.25) {
+        if (input[1] >= 0.45) {
+          if (input[4] >= 0.35000002) {
+            if (input[2] >= 0.75) {
+              var91 = 0.09887757;
+            } else {
+              var91 = -0.1436509;
+            }
+          } else {
+            if (input[2] >= 0.75) {
+              var91 = -0.2794883;
+            } else {
+              var91 = 0.013391971;
+            }
+          }
         } else {
-          var91 = 0.010478049;
+          if (input[3] >= 0.45) {
+            if (input[5] >= 0.85) {
+              var91 = 0.049205597;
+            } else {
+              var91 = 0.2631383;
+            }
+          } else {
+            if (input[4] >= 0.45) {
+              var91 = 0.06793951;
+            } else {
+              var91 = -0.08873655;
+            }
+          }
         }
       } else {
-        if (input[2] >= 0.65) {
-          var91 = 0.024622226;
+        if (input[4] >= 0.15) {
+          var91 = -0.25752133;
         } else {
-          var91 = -0.22635438;
+          if (input[1] >= 0.75) {
+            if (input[2] >= 0.75) {
+              var91 = 0.14311561;
+            } else {
+              var91 = -0.03156278;
+            }
+          } else {
+            if (input[1] >= 0.55) {
+              var91 = -0.23077035;
+            } else {
+              var91 = -0.004888898;
+            }
+          }
         }
       }
     } else {
-      if (input[1] >= 0.65) {
-        var91 = 0.12598725;
-      } else {
-        if (input[2] >= 0.95) {
-          if (input[4] >= 0.35000002) {
-            var91 = -0.0010572552;
+      if (input[0] >= -34.5) {
+        if (input[1] >= 0.55) {
+          if (input[1] >= 0.65) {
+            if (input[0] >= -33.5) {
+              var91 = 0.10176838;
+            } else {
+              var91 = -0.25885263;
+            }
           } else {
-            var91 = 0.097634606;
+            var91 = 0.1712766;
           }
         } else {
-          if (input[2] >= 0.65) {
-            var91 = -0.12530129;
-          } else {
-            if (input[1] >= 0.55) {
-              var91 = 0.0914513;
+          if (input[2] >= 0.85) {
+            if (input[3] >= 0.15) {
+              var91 = -0.094213195;
             } else {
-              var91 = -0.009119822;
+              var91 = 0.0869305;
+            }
+          } else {
+            if (input[4] >= 0.35000002) {
+              var91 = -0.02043764;
+            } else {
+              var91 = -0.3277712;
+            }
+          }
+        }
+      } else {
+        if (input[1] >= 0.75) {
+          if (input[2] >= 0.65) {
+            var91 = -0.2579779;
+          } else {
+            if (input[5] >= 0.55) {
+              var91 = -0.052583892;
+            } else {
+              var91 = 0.08443584;
+            }
+          }
+        } else {
+          if (input[3] >= 0.55) {
+            if (input[2] >= 0.65) {
+              var91 = 0.03975455;
+            } else {
+              var91 = 0.17251669;
+            }
+          } else {
+            if (input[2] >= 0.85) {
+              var91 = 0.11193653;
+            } else {
+              var91 = -0.064338885;
             }
           }
         }
@@ -11766,93 +12706,161 @@ List<double> score(List<double> input) {
     }
   }
   double var92;
-  if (input[0] >= 15.5) {
-    if (input[0] >= 18.5) {
-      if (input[4] >= 0.75) {
-        if (input[0] >= 39.5) {
-          var92 = 0.051951878;
+  if (input[0] >= -21.5) {
+    if (input[3] >= 0.25) {
+      if (input[3] >= 0.35000002) {
+        if (input[5] >= 0.85) {
+          if (input[0] >= 8.5) {
+            if (input[0] >= 14.5) {
+              var92 = 0.038829066;
+            } else {
+              var92 = -0.102414526;
+            }
+          } else {
+            if (input[1] >= 0.35000002) {
+              var92 = 0.21593729;
+            } else {
+              var92 = 0.045324184;
+            }
+          }
         } else {
-          var92 = -0.16699044;
+          if (input[2] >= 0.65) {
+            if (input[5] >= 0.55) {
+              var92 = -0.04152367;
+            } else {
+              var92 = 0.031091759;
+            }
+          } else {
+            if (input[1] >= 0.25) {
+              var92 = -0.0022341863;
+            } else {
+              var92 = 0.04101973;
+            }
+          }
         }
       } else {
-        if (input[4] >= 0.55) {
-          if (input[5] >= 0.85) {
-            var92 = -0.058900945;
-          } else {
-            if (input[1] >= 0.75) {
-              var92 = -0.021868942;
+        if (input[1] >= 0.25) {
+          if (input[1] >= 0.35000002) {
+            if (input[0] >= 39.5) {
+              var92 = 0.009966571;
             } else {
-              var92 = 0.13670051;
+              var92 = -0.14659406;
             }
+          } else {
+            var92 = 0.14116539;
           }
         } else {
-          if (input[3] >= 0.25) {
-            if (input[1] >= 0.45) {
-              var92 = 0.007218705;
-            } else {
-              var92 = -0.06446201;
-            }
-          } else {
-            if (input[4] >= 0.25) {
-              var92 = -0.18942301;
-            } else {
-              var92 = 0.04190499;
-            }
-          }
+          var92 = -0.2080042;
         }
       }
     } else {
-      if (input[4] >= 0.35000002) {
-        var92 = 0.1807478;
+      if (input[5] >= 0.65) {
+        if (input[5] >= 0.75) {
+          if (input[1] >= 0.55) {
+            if (input[0] >= 37.5) {
+              var92 = -0.018846406;
+            } else {
+              var92 = 0.13832074;
+            }
+          } else {
+            if (input[1] >= 0.35000002) {
+              var92 = -0.086439446;
+            } else {
+              var92 = 0.035686072;
+            }
+          }
+        } else {
+          if (input[4] >= 0.25) {
+            var92 = -0.056602687;
+          } else {
+            if (input[1] >= 0.45) {
+              var92 = 0.05682677;
+            } else {
+              var92 = 0.17509961;
+            }
+          }
+        }
       } else {
-        var92 = -0.09792583;
+        if (input[1] >= 0.65) {
+          if (input[0] >= 38.5) {
+            var92 = -0.10128208;
+          } else {
+            if (input[1] >= 0.85) {
+              var92 = -0.028467393;
+            } else {
+              var92 = 0.08617797;
+            }
+          }
+        } else {
+          if (input[1] >= 0.25) {
+            var92 = -0.21020064;
+          } else {
+            var92 = 0.039979823;
+          }
+        }
       }
     }
   } else {
-    if (input[0] >= 9.0) {
-      if (input[4] >= 0.15) {
-        if (input[3] >= 0.95) {
-          var92 = -0.1437314;
-        } else {
-          if (input[4] >= 0.55) {
-            if (input[1] >= 0.15) {
-              var92 = -0.118760645;
+    if (input[0] >= -25.5) {
+      var92 = -0.18348928;
+    } else {
+      if (input[2] >= 0.75) {
+        if (input[4] >= 0.45) {
+          if (input[3] >= 0.75) {
+            if (input[4] >= 0.65) {
+              var92 = -0.07767259;
             } else {
-              var92 = 0.13048427;
+              var92 = 0.19949745;
             }
           } else {
-            if (input[2] >= 0.85) {
-              var92 = 0.04928257;
+            if (input[0] >= -34.5) {
+              var92 = 0.034783874;
             } else {
-              var92 = -0.012799262;
+              var92 = -0.16695547;
+            }
+          }
+        } else {
+          if (input[0] >= -27.5) {
+            if (input[4] >= 0.15) {
+              var92 = 0.021899015;
+            } else {
+              var92 = -0.27650335;
+            }
+          } else {
+            if (input[4] >= 0.05) {
+              var92 = -0.057605226;
+            } else {
+              var92 = 0.006696681;
             }
           }
         }
       } else {
-        var92 = -0.13356622;
-      }
-    } else {
-      if (input[0] >= 6.5) {
-        var92 = 0.18104169;
-      } else {
-        if (input[3] >= 0.95) {
-          if (input[4] >= 0.55) {
-            var92 = 0.10828025;
-          } else {
-            var92 = 0.01855107;
-          }
-        } else {
-          if (input[3] >= 0.75) {
-            if (input[4] >= 0.65) {
-              var92 = -0.18113798;
+        if (input[3] >= 0.65) {
+          if (input[1] >= 0.55) {
+            if (input[1] >= 0.65) {
+              var92 = -0.09892687;
             } else {
-              var92 = -0.010955055;
+              var92 = 0.09835323;
             }
           } else {
-            if (input[0] >= -4.5) {
-              var92 = 0.07773115;
+            if (input[4] >= 0.45) {
+              var92 = -0.00076764385;
             } else {
-              var92 = -0.0040441086;
+              var92 = -0.32596135;
+            }
+          }
+        } else {
+          if (input[4] >= 0.45) {
+            if (input[1] >= 0.65) {
+              var92 = 0.03534319;
+            } else {
+              var92 = -0.14928685;
+            }
+          } else {
+            if (input[3] >= 0.55) {
+              var92 = 0.11282143;
+            } else {
+              var92 = 0.016232576;
             }
           }
         }
@@ -11860,764 +12868,968 @@ List<double> score(List<double> input) {
     }
   }
   double var93;
-  if (input[0] >= 46.5) {
-    if (input[1] >= 0.45) {
-      if (input[4] >= 0.25) {
-        if (input[1] >= 0.85) {
-          var93 = 0.09548544;
+  if (input[4] >= 0.75) {
+    if (input[5] >= 0.45) {
+      if (input[0] >= 18.5) {
+        if (input[0] >= 39.0) {
+          var93 = -0.028687725;
         } else {
-          var93 = 0.03231323;
+          var93 = -0.16197464;
         }
       } else {
-        var93 = -0.028043374;
+        if (input[2] >= 0.85) {
+          if (input[5] >= 0.75) {
+            if (input[0] >= -33.5) {
+              var93 = -0.1936016;
+            } else {
+              var93 = 0.030736402;
+            }
+          } else {
+            var93 = 0.047984816;
+          }
+        } else {
+          if (input[3] >= 0.75) {
+            if (input[5] >= 0.75) {
+              var93 = -0.16725293;
+            } else {
+              var93 = 0.075058796;
+            }
+          } else {
+            if (input[0] >= -23.5) {
+              var93 = 0.11190743;
+            } else {
+              var93 = -0.024109008;
+            }
+          }
+        }
       }
     } else {
-      if (input[1] >= 0.25) {
-        var93 = -0.073549695;
-      } else {
-        var93 = 0.030028505;
-      }
+      var93 = 0.12129027;
     }
   } else {
-    if (input[5] >= 0.35000002) {
-      if (input[5] >= 0.65) {
-        if (input[4] >= 0.75) {
-          if (input[0] >= 18.5) {
-            if (input[3] >= 0.35000002) {
-              var93 = -0.1968316;
+    if (input[0] >= -1.0) {
+      if (input[0] >= 4.5) {
+        if (input[2] >= 0.95) {
+          if (input[3] >= 0.75) {
+            if (input[1] >= 0.35000002) {
+              var93 = 0.06971616;
             } else {
-              var93 = 0.032915387;
+              var93 = -0.20880876;
             }
           } else {
-            if (input[5] >= 0.75) {
-              var93 = 0.016021196;
+            if (input[0] >= 32.5) {
+              var93 = -0.02078133;
             } else {
-              var93 = 0.12800182;
+              var93 = 0.14883184;
             }
           }
         } else {
-          if (input[0] >= 39.5) {
-            if (input[3] >= 0.35000002) {
-              var93 = -0.028536228;
+          if (input[3] >= 0.75) {
+            if (input[5] >= 0.75) {
+              var93 = 0.05127393;
             } else {
-              var93 = 0.11356967;
+              var93 = -0.025325445;
             }
           } else {
-            if (input[5] >= 0.75) {
-              var93 = -0.00016847297;
+            if (input[0] >= 11.5) {
+              var93 = -0.008115021;
             } else {
-              var93 = -0.035370097;
+              var93 = -0.16058747;
             }
           }
         }
       } else {
-        if (input[4] >= 0.75) {
-          var93 = -0.19132172;
-        } else {
-          if (input[0] >= -33.5) {
-            if (input[0] >= 1.5) {
-              var93 = -0.024877226;
-            } else {
-              var93 = 0.08118213;
-            }
+        if (input[4] >= 0.35000002) {
+          if (input[3] >= 0.85) {
+            var93 = 0.25014785;
           } else {
-            if (input[5] >= 0.55) {
-              var93 = -0.23522241;
+            if (input[0] >= 2.0) {
+              var93 = 0.12598187;
             } else {
-              var93 = -0.0051042;
+              var93 = -0.07092298;
             }
+          }
+        } else {
+          if (input[2] >= 0.5) {
+            var93 = -0.3222802;
+          } else {
+            var93 = 0.059805475;
           }
         }
       }
     } else {
-      if (input[1] >= 0.35000002) {
-        if (input[0] >= 40.5) {
-          var93 = -0.09694461;
+      if (input[0] >= -2.5) {
+        if (input[3] >= 0.65) {
+          var93 = -0.38156208;
         } else {
-          if (input[1] >= 0.55) {
-            var93 = 0.10576742;
-          } else {
-            if (input[4] >= 0.2) {
-              var93 = 0.0014477533;
+          var93 = 0.18743728;
+        }
+      } else {
+        if (input[0] >= -4.5) {
+          var93 = 0.16331872;
+        } else {
+          if (input[4] >= 0.35000002) {
+            if (input[0] >= -37.5) {
+              var93 = -0.065256715;
             } else {
-              var93 = -0.077056035;
+              var93 = 0.08264233;
+            }
+          } else {
+            if (input[0] >= -17.5) {
+              var93 = 0.07371394;
+            } else {
+              var93 = -0.0074628713;
             }
           }
         }
-      } else {
-        var93 = 0.13138671;
       }
     }
   }
   double var94;
-  if (input[0] >= 15.5) {
-    if (input[0] >= 22.0) {
-      if (input[0] >= 30.5) {
-        if (input[0] >= 36.5) {
-          if (input[0] >= 37.5) {
-            if (input[1] >= 0.25) {
-              var94 = -0.0040592644;
-            } else {
-              var94 = 0.08864771;
-            }
-          } else {
-            if (input[4] >= 0.05) {
-              var94 = -0.153538;
-            } else {
-              var94 = 0.027131245;
-            }
-          }
-        } else {
-          if (input[4] >= 0.05) {
-            if (input[4] >= 0.15) {
-              var94 = 0.041283216;
-            } else {
-              var94 = 0.1877613;
-            }
-          } else {
-            if (input[2] >= 0.65) {
-              var94 = -0.15459059;
-            } else {
-              var94 = 0.03360289;
-            }
-          }
-        }
-      } else {
-        if (input[4] >= 0.45) {
-          if (input[4] >= 0.55) {
-            var94 = 0.024577295;
-          } else {
-            var94 = 0.13331585;
-          }
-        } else {
-          if (input[2] >= 0.65) {
-            var94 = -0.3412744;
-          } else {
-            var94 = 0.0889543;
-          }
-        }
-      }
+  if (input[5] >= 0.45) {
+    if (input[0] >= 51.5) {
+      var94 = -0.091930225;
     } else {
-      if (input[2] >= 0.55) {
-        if (input[3] >= 0.55) {
-          if (input[0] >= 18.5) {
-            if (input[1] >= 0.45) {
-              var94 = 0.16700278;
+      if (input[2] >= 0.85) {
+        if (input[0] >= -35.5) {
+          if (input[0] >= 38.5) {
+            if (input[1] >= 0.35000002) {
+              var94 = -0.12730274;
             } else {
-              var94 = -0.06893117;
+              var94 = 0.07905927;
             }
           } else {
-            var94 = 0.21802427;
+            if (input[0] >= 31.0) {
+              var94 = 0.11518274;
+            } else {
+              var94 = -0.009983084;
+            }
           }
         } else {
-          if (input[3] >= 0.25) {
-            if (input[2] >= 0.85) {
-              var94 = 0.08113554;
-            } else {
-              var94 = -0.21563582;
-            }
+          if (input[3] >= 0.85) {
+            var94 = 0.059035838;
           } else {
-            var94 = 0.20031011;
+            var94 = -0.22987686;
           }
         }
       } else {
-        var94 = -0.1894466;
-      }
-    }
-  } else {
-    if (input[2] >= 0.25) {
-      if (input[0] >= 9.0) {
-        if (input[3] >= 0.65) {
-          if (input[5] >= 0.65) {
-            if (input[4] >= 0.75) {
-              var94 = 0.11965725;
-            } else {
-              var94 = -0.007834292;
-            }
-          } else {
-            var94 = -0.19267464;
-          }
-        } else {
-          if (input[2] >= 0.55) {
-            if (input[0] >= 14.5) {
-              var94 = -0.06477155;
-            } else {
-              var94 = -0.22877117;
-            }
-          } else {
+        if (input[4] >= 0.55) {
+          if (input[1] >= 0.25) {
             if (input[5] >= 0.85) {
-              var94 = -0.07892636;
+              var94 = -0.047038127;
             } else {
-              var94 = 0.15202694;
-            }
-          }
-        }
-      } else {
-        if (input[0] >= 6.5) {
-          var94 = 0.16468802;
-        } else {
-          if (input[4] >= 0.35000002) {
-            if (input[0] >= 4.5) {
-              var94 = -0.17481901;
-            } else {
-              var94 = -0.006122925;
+              var94 = 0.099977896;
             }
           } else {
-            if (input[0] >= 4.5) {
-              var94 = 0.079957545;
+            if (input[3] >= 0.65) {
+              var94 = -0.087656684;
             } else {
-              var94 = -0.0008071506;
-            }
-          }
-        }
-      }
-    } else {
-      var94 = 0.06048821;
-    }
-  }
-  double var95;
-  if (input[0] >= -41.5) {
-    if (input[0] >= -36.5) {
-      if (input[0] >= -34.5) {
-        if (input[5] >= 0.45) {
-          if (input[3] >= 0.35000002) {
-            if (input[2] >= 0.15) {
-              var95 = -0.00018356199;
-            } else {
-              var95 = 0.13285169;
-            }
-          } else {
-            if (input[4] >= 0.25) {
-              var95 = -0.068254;
-            } else {
-              var95 = -0.0006686822;
+              var94 = 0.07984988;
             }
           }
         } else {
-          if (input[4] >= 0.75) {
-            var95 = 0.11902041;
-          } else {
-            if (input[4] >= 0.45) {
-              var95 = -0.11714594;
+          if (input[5] >= 0.65) {
+            if (input[0] >= 3.5) {
+              var94 = 0.0067157103;
             } else {
-              var95 = 0.02384994;
-            }
-          }
-        }
-      } else {
-        if (input[5] >= 0.75) {
-          if (input[1] >= 0.65) {
-            if (input[2] >= 0.75) {
-              var95 = 0.0974601;
-            } else {
-              var95 = -0.11941316;
+              var94 = -0.02947685;
             }
           } else {
-            if (input[3] >= 0.35000002) {
-              var95 = 0.035353918;
+            if (input[0] >= 2.5) {
+              var94 = -0.029697359;
             } else {
-              var95 = 0.124656886;
+              var94 = 0.08311987;
             }
           }
-        } else {
-          if (input[5] >= 0.55) {
-            var95 = -0.11941439;
-          } else {
-            if (input[4] >= 0.25) {
-              var95 = 0.04527583;
-            } else {
-              var95 = -0.01258175;
-            }
-          }
-        }
-      }
-    } else {
-      if (input[1] >= 0.75) {
-        if (input[2] >= 0.75) {
-          var95 = 0.07860331;
-        } else {
-          var95 = -0.03878068;
-        }
-      } else {
-        if (input[2] >= 0.75) {
-          var95 = -0.11138187;
-        } else {
-          var95 = -0.029131496;
         }
       }
     }
   } else {
-    var95 = 0.052783042;
-  }
-  double var96;
-  if (input[4] >= 0.55) {
-    if (input[3] >= 0.45) {
-      if (input[2] >= 0.55) {
-        if (input[3] >= 0.55) {
-          if (input[1] >= 0.15) {
-            if (input[0] >= 26.0) {
-              var96 = 0.07851572;
-            } else {
-              var96 = -0.035276096;
-            }
+    if (input[1] >= 0.75) {
+      if (input[4] >= 0.05) {
+        if (input[4] >= 0.15) {
+          if (input[0] >= 51.5) {
+            var94 = 0.092725776;
           } else {
-            var96 = 0.12654938;
+            if (input[0] >= 38.5) {
+              var94 = -0.1995639;
+            } else {
+              var94 = -0.011266728;
+            }
           }
         } else {
-          if (input[1] >= 0.45) {
-            var96 = -0.2628696;
-          } else {
-            if (input[1] >= 0.25) {
-              var96 = 0.05406968;
-            } else {
-              var96 = -0.18127468;
-            }
-          }
+          var94 = 0.14975986;
         }
       } else {
-        if (input[2] >= 0.45) {
-          if (input[5] >= 0.75) {
-            var96 = 0.18894333;
-          } else {
-            var96 = -0.012916959;
-          }
-        } else {
-          var96 = -0.036540303;
-        }
+        var94 = -0.2883251;
       }
     } else {
       if (input[3] >= 0.35000002) {
-        if (input[5] >= 0.65) {
-          if (input[5] >= 0.75) {
-            if (input[0] >= 15.5) {
-              var96 = 0.08871265;
+        if (input[3] >= 0.45) {
+          if (input[3] >= 0.75) {
+            if (input[1] >= 0.55) {
+              var94 = 0.047371056;
             } else {
-              var96 = -0.021113273;
+              var94 = -0.07573006;
+            }
+          } else {
+            if (input[0] >= 40.5) {
+              var94 = 0.10347706;
+            } else {
+              var94 = -0.078284375;
+            }
+          }
+        } else {
+          var94 = -0.10683494;
+        }
+      } else {
+        if (input[4] >= 0.35000002) {
+          var94 = -0.040659536;
+        } else {
+          if (input[3] >= 0.15) {
+            var94 = 0.19067906;
+          } else {
+            var94 = 0.029723154;
+          }
+        }
+      }
+    }
+  }
+  double var95;
+  if (input[5] >= 0.45) {
+    if (input[0] >= 51.5) {
+      var95 = -0.07701938;
+    } else {
+      if (input[1] >= 0.75) {
+        if (input[4] >= 0.35000002) {
+          if (input[2] >= 0.75) {
+            if (input[4] >= 0.55) {
+              var95 = -0.07818494;
+            } else {
+              var95 = 0.1236945;
             }
           } else {
             if (input[4] >= 0.65) {
-              var96 = 0.18164428;
+              var95 = -0.025791595;
             } else {
-              var96 = 0.03306856;
+              var95 = -0.28587347;
             }
           }
         } else {
-          var96 = 0.011224279;
+          if (input[2] >= 0.65) {
+            if (input[2] >= 0.75) {
+              var95 = 0.01667392;
+            } else {
+              var95 = -0.14596236;
+            }
+          } else {
+            if (input[5] >= 0.55) {
+              var95 = 0.025480801;
+            } else {
+              var95 = 0.16621709;
+            }
+          }
         }
       } else {
-        if (input[1] >= 0.25) {
-          if (input[0] >= 36.0) {
-            var96 = -0.023287915;
-          } else {
-            if (input[0] >= 15.5) {
-              var96 = 0.14094122;
+        if (input[5] >= 0.55) {
+          if (input[3] >= 0.95) {
+            if (input[1] >= 0.25) {
+              var95 = 0.018651336;
             } else {
-              var96 = 0.017838538;
+              var95 = -0.22651346;
+            }
+          } else {
+            if (input[2] >= 0.35000002) {
+              var95 = 0.0031069792;
+            } else {
+              var95 = -0.14463034;
             }
           }
         } else {
-          var96 = -0.12469667;
+          if (input[2] >= 0.55) {
+            if (input[0] >= 40.5) {
+              var95 = 0.0900291;
+            } else {
+              var95 = -0.08936172;
+            }
+          } else {
+            var95 = -0.3870563;
+          }
         }
       }
     }
   } else {
-    if (input[2] >= 0.55) {
-      if (input[3] >= 0.45) {
-        if (input[1] >= 0.15) {
-          if (input[0] >= -32.5) {
-            if (input[0] >= -21.5) {
-              var96 = 0.011890314;
+    if (input[1] >= 0.75) {
+      if (input[4] >= 0.05) {
+        if (input[3] >= 0.45) {
+          if (input[4] >= 0.35000002) {
+            if (input[4] >= 0.45) {
+              var95 = 0.0009959181;
             } else {
-              var96 = -0.17116433;
+              var95 = 0.02406559;
             }
           } else {
-            if (input[1] >= 0.45) {
-              var96 = 0.009664888;
-            } else {
-              var96 = 0.1688734;
-            }
+            var95 = -0.21663618;
           }
         } else {
-          if (input[3] >= 0.55) {
-            if (input[0] >= 14.5) {
-              var96 = 0.15235384;
-            } else {
-              var96 = -0.20692915;
-            }
-          } else {
-            var96 = 0.18688975;
-          }
+          var95 = 0.121554576;
         }
       } else {
-        if (input[4] >= 0.25) {
+        var95 = -0.26081368;
+      }
+    } else {
+      if (input[2] >= 0.85) {
+        if (input[4] >= 0.15) {
           if (input[1] >= 0.35000002) {
-            if (input[1] >= 0.65) {
-              var96 = 0.027798243;
-            } else {
-              var96 = -0.28230217;
-            }
+            var95 = -0.13442196;
           } else {
-            if (input[2] >= 0.65) {
-              var96 = -0.04870124;
+            var95 = 0.13635951;
+          }
+        } else {
+          var95 = 0.15688035;
+        }
+      } else {
+        if (input[2] >= 0.65) {
+          if (input[1] >= 0.65) {
+            var95 = 0.09215808;
+          } else {
+            if (input[0] >= 50.0) {
+              var95 = 0.013983208;
             } else {
-              var96 = 0.13086519;
+              var95 = -0.21750562;
             }
           }
         } else {
-          if (input[0] >= -26.5) {
-            if (input[0] >= 17.5) {
-              var96 = 0.007659645;
+          if (input[5] >= 0.35000002) {
+            if (input[4] >= 0.35000002) {
+              var95 = 0.09214865;
             } else {
-              var96 = -0.17533982;
+              var95 = -0.1083898;
             }
           } else {
-            if (input[1] >= 0.55) {
-              var96 = -0.06831171;
+            if (input[3] >= 0.35000002) {
+              var95 = 0.02893197;
             } else {
-              var96 = 0.037194103;
+              var95 = 0.11550488;
             }
           }
         }
       }
-    } else {
-      if (input[0] >= -33.5) {
-        if (input[0] >= 9.0) {
-          if (input[3] >= 0.55) {
-            if (input[4] >= 0.35000002) {
-              var96 = -0.20957157;
+    }
+  }
+  double var96;
+  if (input[0] >= 36.5) {
+    if (input[0] >= 37.5) {
+      if (input[3] >= 0.95) {
+        if (input[1] >= 0.25) {
+          if (input[5] >= 0.79999995) {
+            var96 = 0.06329282;
+          } else {
+            var96 = -0.045057766;
+          }
+        } else {
+          var96 = 0.14517121;
+        }
+      } else {
+        if (input[1] >= 0.65) {
+          if (input[3] >= 0.65) {
+            if (input[0] >= 41.5) {
+              var96 = 0.009252822;
             } else {
-              var96 = -0.023634462;
+              var96 = -0.22288065;
             }
           } else {
-            if (input[1] >= 0.45) {
-              var96 = -0.016203852;
+            if (input[4] >= 0.45) {
+              var96 = -0.08280126;
             } else {
-              var96 = 0.13195975;
+              var96 = 0.048486307;
             }
           }
         } else {
           if (input[3] >= 0.65) {
-            if (input[1] >= 0.25) {
-              var96 = 0.1577355;
+            if (input[5] >= 0.55) {
+              var96 = -0.11310832;
             } else {
-              var96 = -0.0101545565;
+              var96 = 0.06414348;
             }
           } else {
-            if (input[1] >= 0.15) {
-              var96 = -0.14056093;
+            if (input[5] >= 0.65) {
+              var96 = 0.011445537;
             } else {
-              var96 = 0.08022865;
+              var96 = -0.26095185;
+            }
+          }
+        }
+      }
+    } else {
+      if (input[4] >= 0.05) {
+        if (input[4] >= 0.55) {
+          if (input[3] >= 0.45) {
+            var96 = -0.0034553155;
+          } else {
+            var96 = 0.027107492;
+          }
+        } else {
+          var96 = -0.27299035;
+        }
+      } else {
+        if (input[1] >= 0.35000002) {
+          if (input[5] >= 0.75) {
+            var96 = 0.058609545;
+          } else {
+            var96 = -0.21858719;
+          }
+        } else {
+          var96 = 0.12658627;
+        }
+      }
+    }
+  } else {
+    if (input[0] >= 22.0) {
+      if (input[2] >= 0.55) {
+        if (input[1] >= 0.55) {
+          if (input[1] >= 0.85) {
+            var96 = -0.028879631;
+          } else {
+            if (input[0] >= 33.5) {
+              var96 = 0.15560907;
+            } else {
+              var96 = 0.024105081;
+            }
+          }
+        } else {
+          if (input[4] >= 0.45) {
+            if (input[5] >= 0.75) {
+              var96 = -0.03184981;
+            } else {
+              var96 = 0.16249514;
+            }
+          } else {
+            if (input[1] >= 0.45) {
+              var96 = -0.016743297;
+            } else {
+              var96 = -0.29621774;
             }
           }
         }
       } else {
-        var96 = -0.182522;
+        if (input[1] >= 0.55) {
+          var96 = 0.03372497;
+        } else {
+          var96 = 0.20157126;
+        }
+      }
+    } else {
+      if (input[5] >= 0.35000002) {
+        if (input[5] >= 0.75) {
+          if (input[4] >= 0.25) {
+            if (input[0] >= 15.5) {
+              var96 = 0.10367351;
+            } else {
+              var96 = 0.0071437187;
+            }
+          } else {
+            if (input[4] >= 0.15) {
+              var96 = -0.16356245;
+            } else {
+              var96 = 0.0010147013;
+            }
+          }
+        } else {
+          if (input[4] >= 0.15) {
+            if (input[4] >= 0.25) {
+              var96 = -0.017203152;
+            } else {
+              var96 = 0.12051278;
+            }
+          } else {
+            if (input[4] >= 0.05) {
+              var96 = -0.18542053;
+            } else {
+              var96 = -0.026741428;
+            }
+          }
+        }
+      } else {
+        if (input[4] >= 0.35000002) {
+          var96 = 0.017801227;
+        } else {
+          if (input[1] >= 0.45) {
+            var96 = 0.00040865422;
+          } else {
+            var96 = 0.14239714;
+          }
+        }
       }
     }
   }
   double var97;
-  if (input[1] >= 0.85) {
-    if (input[3] >= 0.15) {
-      if (input[5] >= 0.65) {
-        if (input[2] >= 0.65) {
-          if (input[4] >= 0.05) {
-            if (input[4] >= 0.35000002) {
-              var97 = 0.08032404;
+  if (input[0] >= 36.5) {
+    if (input[0] >= 37.5) {
+      if (input[1] >= 0.25) {
+        if (input[3] >= 0.15) {
+          if (input[2] >= 0.45) {
+            if (input[3] >= 0.75) {
+              var97 = -0.03778251;
             } else {
-              var97 = -0.06414265;
+              var97 = 0.016062725;
             }
           } else {
-            var97 = 0.17379746;
+            if (input[5] >= 0.75) {
+              var97 = -0.19619887;
+            } else {
+              var97 = -0.010344665;
+            }
           }
         } else {
-          if (input[3] >= 0.75) {
-            var97 = 0.06664174;
+          if (input[1] >= 0.85) {
+            var97 = 0.14233392;
           } else {
-            if (input[5] >= 0.75) {
-              var97 = -0.15407749;
+            if (input[1] >= 0.35000002) {
+              var97 = -0.07250956;
             } else {
-              var97 = 0.011697657;
+              var97 = -0.2727371;
             }
           }
         }
       } else {
-        if (input[2] >= 0.75) {
-          var97 = -0.14883646;
+        if (input[4] >= 0.25) {
+          if (input[3] >= 0.95) {
+            var97 = 0.124916896;
+          } else {
+            var97 = -0.20171045;
+          }
         } else {
-          if (input[0] >= 40.5) {
-            if (input[3] >= 0.65) {
-              var97 = -0.028419103;
+          if (input[3] >= 0.15) {
+            if (input[2] >= 0.55) {
+              var97 = -0.013003328;
             } else {
-              var97 = 0.08327279;
+              var97 = 0.09699852;
             }
           } else {
-            if (input[3] >= 0.45) {
-              var97 = -0.03578675;
-            } else {
-              var97 = -0.1380709;
-            }
+            var97 = 0.1552059;
           }
         }
       }
     } else {
-      var97 = 0.09489519;
+      if (input[4] >= 0.05) {
+        if (input[4] >= 0.55) {
+          if (input[3] >= 0.45) {
+            var97 = -0.0028775672;
+          } else {
+            var97 = 0.02307472;
+          }
+        } else {
+          var97 = -0.24773894;
+        }
+      } else {
+        if (input[1] >= 0.35000002) {
+          if (input[5] >= 0.75) {
+            if (input[5] >= 0.85) {
+              var97 = 0.057112396;
+            } else {
+              var97 = 0.015132398;
+            }
+          } else {
+            var97 = -0.197579;
+          }
+        } else {
+          var97 = 0.10876256;
+        }
+      }
     }
   } else {
-    if (input[4] >= 0.55) {
-      if (input[3] >= 0.45) {
-        if (input[2] >= 0.85) {
-          if (input[0] >= -2.5) {
-            var97 = -0.24829738;
-          } else {
-            if (input[1] >= 0.45) {
-              var97 = -0.22218117;
+    if (input[0] >= 22.0) {
+      if (input[2] >= 0.65) {
+        if (input[4] >= 0.05) {
+          if (input[3] >= 0.65) {
+            if (input[3] >= 0.75) {
+              var97 = 0.056179214;
             } else {
-              var97 = 0.12779671;
+              var97 = -0.11844198;
+            }
+          } else {
+            if (input[2] >= 0.75) {
+              var97 = 0.12740159;
+            } else {
+              var97 = -0.0013957259;
             }
           }
         } else {
-          if (input[1] >= 0.25) {
-            if (input[5] >= 0.75) {
-              var97 = -0.03787596;
-            } else {
-              var97 = 0.1294083;
-            }
-          } else {
-            if (input[0] >= 6.5) {
-              var97 = 0.041359045;
-            } else {
-              var97 = -0.27105018;
-            }
-          }
+          var97 = -0.16481097;
         }
       } else {
-        if (input[2] >= 0.55) {
-          if (input[1] >= 0.45) {
-            if (input[5] >= 0.85) {
-              var97 = 0.16789427;
-            } else {
-              var97 = 0.05965954;
-            }
-          } else {
-            if (input[5] >= 0.75) {
-              var97 = -0.113113746;
-            } else {
-              var97 = 0.060539756;
-            }
-          }
+        if (input[1] >= 0.65) {
+          var97 = -0.00003197391;
         } else {
-          var97 = -0.040606633;
+          if (input[3] >= 0.15) {
+            var97 = 0.17477682;
+          } else {
+            var97 = 0.034453318;
+          }
         }
       }
     } else {
-      if (input[2] >= 0.25) {
-        if (input[0] >= 41.5) {
-          if (input[4] >= 0.15) {
-            if (input[2] >= 0.85) {
-              var97 = 0.083046146;
+      if (input[5] >= 0.35000002) {
+        if (input[1] >= 0.55) {
+          if (input[4] >= 0.25) {
+            if (input[2] >= 0.75) {
+              var97 = -0.06106362;
             } else {
-              var97 = -0.053692218;
+              var97 = 0.028516483;
             }
           } else {
-            if (input[3] >= 0.65) {
-              var97 = 0.14494711;
+            if (input[1] >= 0.75) {
+              var97 = -0.019194921;
             } else {
-              var97 = 0.00264365;
+              var97 = -0.23987852;
             }
           }
         } else {
-          if (input[0] >= 38.5) {
-            if (input[1] >= 0.25) {
-              var97 = -0.054202177;
+          if (input[1] >= 0.45) {
+            if (input[2] >= 0.95) {
+              var97 = -0.23122469;
             } else {
-              var97 = 0.10274463;
+              var97 = 0.067161;
             }
           } else {
-            if (input[1] >= 0.55) {
-              var97 = 0.02754021;
+            if (input[2] >= 0.75) {
+              var97 = -0.01649487;
             } else {
-              var97 = -0.0110536;
+              var97 = 0.012060464;
             }
           }
         }
       } else {
-        var97 = -0.103751585;
+        if (input[4] >= 0.35000002) {
+          var97 = 0.014900117;
+        } else {
+          if (input[1] >= 0.45) {
+            var97 = 0.00033373098;
+          } else {
+            var97 = 0.12321893;
+          }
+        }
       }
     }
   }
   double var98;
-  if (input[0] >= 52.5) {
-    var98 = 0.054022063;
-  } else {
-    if (input[0] >= 49.5) {
-      if (input[1] >= 0.85) {
-        var98 = 0.01950594;
+  if (input[2] >= 0.95) {
+    if (input[5] >= 0.85) {
+      if (input[5] >= 0.95) {
+        var98 = 0.13833976;
       } else {
-        var98 = -0.068551056;
+        if (input[4] >= 0.15) {
+          var98 = -0.25110754;
+        } else {
+          var98 = -0.01245471;
+        }
       }
     } else {
-      if (input[0] >= 46.5) {
-        if (input[5] >= 0.65) {
-          if (input[1] >= 0.55) {
-            var98 = 0.112846866;
+      if (input[4] >= 0.25) {
+        if (input[0] >= -27.5) {
+          if (input[3] >= 0.75) {
+            if (input[0] >= 40.0) {
+              var98 = 0.023523292;
+            } else {
+              var98 = -0.05157274;
+            }
           } else {
-            var98 = 0.024569204;
+            if (input[3] >= 0.55) {
+              var98 = 0.15627529;
+            } else {
+              var98 = 0.026859937;
+            }
           }
         } else {
-          var98 = -0.038909595;
+          if (input[1] >= 0.85) {
+            var98 = 0.11922988;
+          } else {
+            if (input[4] >= 0.35000002) {
+              var98 = -0.09443074;
+            } else {
+              var98 = 0.04065773;
+            }
+          }
         }
       } else {
-        if (input[0] >= 43.5) {
-          var98 = -0.059826594;
-        } else {
-          if (input[5] >= 0.85) {
-            if (input[0] >= -26.5) {
-              var98 = 0.02000698;
-            } else {
-              var98 = -0.02858793;
-            }
+        if (input[1] >= 0.35000002) {
+          if (input[1] >= 0.45) {
+            var98 = -0.0823901;
           } else {
-            if (input[2] >= 0.65) {
-              var98 = -0.012556117;
+            if (input[0] >= -33.5) {
+              var98 = 0.016880795;
             } else {
-              var98 = 0.01119771;
+              var98 = 0.17439353;
             }
           }
+        } else {
+          var98 = -0.22972567;
+        }
+      }
+    }
+  } else {
+    if (input[3] >= 0.75) {
+      if (input[4] >= 0.15) {
+        if (input[0] >= 2.0) {
+          if (input[1] >= 0.25) {
+            if (input[1] >= 0.45) {
+              var98 = 0.026631113;
+            } else {
+              var98 = -0.108712986;
+            }
+          } else {
+            if (input[0] >= 4.0) {
+              var98 = 0.037489213;
+            } else {
+              var98 = 0.24561156;
+            }
+          }
+        } else {
+          if (input[0] >= -2.5) {
+            if (input[1] >= 0.25) {
+              var98 = 0.031035446;
+            } else {
+              var98 = -0.4396427;
+            }
+          } else {
+            if (input[0] >= -14.5) {
+              var98 = 0.14465162;
+            } else {
+              var98 = -0.032671496;
+            }
+          }
+        }
+      } else {
+        if (input[5] >= 0.55) {
+          if (input[3] >= 0.85) {
+            var98 = -0.029696845;
+          } else {
+            if (input[1] >= 0.25) {
+              var98 = 0.17020775;
+            } else {
+              var98 = 0.044119798;
+            }
+          }
+        } else {
+          if (input[3] >= 0.85) {
+            var98 = -0.008715735;
+          } else {
+            var98 = -0.033211775;
+          }
+        }
+      }
+    } else {
+      if (input[0] >= -37.5) {
+        if (input[1] >= 0.15) {
+          if (input[1] >= 0.55) {
+            if (input[1] >= 0.65) {
+              var98 = -0.008435869;
+            } else {
+              var98 = -0.08256545;
+            }
+          } else {
+            if (input[5] >= 0.85) {
+              var98 = 0.0246097;
+            } else {
+              var98 = -0.008814668;
+            }
+          }
+        } else {
+          if (input[0] >= 40.5) {
+            var98 = 0.0877437;
+          } else {
+            if (input[0] >= 4.5) {
+              var98 = -0.2090726;
+            } else {
+              var98 = -0.048449334;
+            }
+          }
+        }
+      } else {
+        if (input[1] >= 0.15) {
+          if (input[1] >= 0.45) {
+            if (input[3] >= 0.35000002) {
+              var98 = -0.027289068;
+            } else {
+              var98 = 0.1171745;
+            }
+          } else {
+            if (input[3] >= 0.15) {
+              var98 = -0.27163872;
+            } else {
+              var98 = 0.033596646;
+            }
+          }
+        } else {
+          var98 = 0.18843724;
         }
       }
     }
   }
   double var99;
-  if (input[5] >= 0.55) {
-    if (input[5] >= 0.65) {
-      if (input[0] >= 39.5) {
-        if (input[3] >= 0.55) {
-          if (input[4] >= 0.15) {
-            if (input[3] >= 0.85) {
-              var99 = 0.021034982;
-            } else {
-              var99 = -0.21266222;
-            }
-          } else {
-            if (input[4] >= 0.05) {
-              var99 = 0.06362702;
-            } else {
-              var99 = -0.0036202285;
-            }
-          }
-        } else {
-          if (input[5] >= 0.85) {
-            if (input[4] >= 0.45) {
-              var99 = 0.084989935;
-            } else {
-              var99 = -0.06273916;
-            }
-          } else {
-            if (input[3] >= 0.35000002) {
-              var99 = 0.015713802;
-            } else {
-              var99 = 0.13571973;
-            }
-          }
-        }
-      } else {
-        if (input[4] >= 0.05) {
-          if (input[0] >= 37.5) {
-            if (input[3] >= 0.25) {
-              var99 = 0.12333028;
-            } else {
-              var99 = -0.07747304;
-            }
-          } else {
-            if (input[0] >= 35.5) {
-              var99 = -0.15162823;
-            } else {
-              var99 = 0.0056858887;
-            }
-          }
-        } else {
-          if (input[0] >= 37.5) {
-            if (input[3] >= 0.05) {
-              var99 = -0.33952788;
-            } else {
-              var99 = 0.035243977;
-            }
-          } else {
-            if (input[2] >= 0.85) {
-              var99 = 0.030949613;
-            } else {
-              var99 = -0.030630339;
-            }
-          }
-        }
-      }
+  if (input[4] >= 0.55) {
+    if (input[3] >= 0.95) {
+      var99 = 0.15314406;
     } else {
-      if (input[0] >= -33.5) {
-        if (input[0] >= 38.5) {
-          if (input[3] >= 0.75) {
-            var99 = 0.07982843;
-          } else {
-            if (input[1] >= 0.85) {
-              var99 = -0.04654475;
+      if (input[5] >= 0.75) {
+        if (input[2] >= 0.55) {
+          if (input[0] >= 14.5) {
+            if (input[1] >= 0.45) {
+              var99 = 0.067569576;
             } else {
-              var99 = -0.300832;
+              var99 = -0.2590971;
+            }
+          } else {
+            if (input[3] >= 0.55) {
+              var99 = 0.016915085;
+            } else {
+              var99 = -0.12471068;
             }
           }
         } else {
-          if (input[1] >= 0.45) {
-            if (input[4] >= 0.25) {
-              var99 = 0.046648353;
+          if (input[3] >= 0.65) {
+            if (input[1] >= 0.25) {
+              var99 = 0.12714571;
             } else {
-              var99 = 0.1910656;
+              var99 = -0.27298558;
             }
           } else {
-            if (input[2] >= 0.85) {
-              var99 = -0.16897833;
+            if (input[1] >= 0.25) {
+              var99 = -0.03838006;
             } else {
-              var99 = 0.030934257;
+              var99 = 0.23605557;
             }
           }
         }
       } else {
-        var99 = -0.21130209;
+        if (input[3] >= 0.45) {
+          if (input[3] >= 0.55) {
+            if (input[3] >= 0.75) {
+              var99 = -0.02106317;
+            } else {
+              var99 = 0.08410458;
+            }
+          } else {
+            if (input[1] >= 0.45) {
+              var99 = -0.20715554;
+            } else {
+              var99 = -0.039345123;
+            }
+          }
+        } else {
+          if (input[5] >= 0.65) {
+            if (input[4] >= 0.65) {
+              var99 = 0.1839154;
+            } else {
+              var99 = -0.01797866;
+            }
+          } else {
+            if (input[3] >= 0.15) {
+              var99 = -0.044277266;
+            } else {
+              var99 = 0.16241907;
+            }
+          }
+        }
       }
     }
   } else {
-    if (input[1] >= 0.25) {
-      if (input[2] >= 0.95) {
-        if (input[1] >= 0.45) {
-          var99 = -0.03947932;
+    if (input[4] >= 0.45) {
+      if (input[5] >= 0.75) {
+        if (input[3] >= 0.85) {
+          var99 = -0.2856398;
         } else {
-          if (input[4] >= 0.35000002) {
-            var99 = 0.037444666;
+          if (input[3] >= 0.55) {
+            if (input[3] >= 0.75) {
+              var99 = 0.105924785;
+            } else {
+              var99 = -0.15056239;
+            }
           } else {
-            var99 = 0.14174722;
+            if (input[1] >= 0.45) {
+              var99 = 0.17884208;
+            } else {
+              var99 = 0.026221978;
+            }
           }
         }
       } else {
-        if (input[1] >= 0.45) {
-          if (input[2] >= 0.85) {
-            var99 = -0.092998326;
-          } else {
-            if (input[3] >= 0.35000002) {
-              var99 = 0.032622542;
+        if (input[5] >= 0.55) {
+          if (input[0] >= 10.5) {
+            if (input[0] >= 14.5) {
+              var99 = -0.16499361;
             } else {
-              var99 = -0.04004214;
+              var99 = 0.15829727;
             }
+          } else {
+            var99 = -0.30174732;
           }
         } else {
-          if (input[0] >= 43.5) {
-            var99 = 0.047002446;
+          if (input[3] >= 0.35000002) {
+            var99 = -0.059201542;
           } else {
-            var99 = -0.18128508;
+            var99 = 0.09010029;
           }
         }
       }
     } else {
-      if (input[2] >= 0.85) {
-        var99 = -0.07690379;
+      if (input[2] >= 0.55) {
+        if (input[0] >= 14.5) {
+          if (input[0] >= 20.0) {
+            if (input[0] >= 33.5) {
+              var99 = 0.01121667;
+            } else {
+              var99 = -0.17489879;
+            }
+          } else {
+            if (input[3] >= 0.55) {
+              var99 = 0.12298485;
+            } else {
+              var99 = -0.016401451;
+            }
+          }
+        } else {
+          if (input[0] >= 13.5) {
+            if (input[4] >= 0.35000002) {
+              var99 = 0.13306484;
+            } else {
+              var99 = -0.22553112;
+            }
+          } else {
+            if (input[0] >= 12.5) {
+              var99 = 0.13955729;
+            } else {
+              var99 = -0.0047717947;
+            }
+          }
+        }
       } else {
-        var99 = 0.13007823;
+        if (input[3] >= 0.75) {
+          if (input[0] >= -19.0) {
+            if (input[0] >= 5.5) {
+              var99 = 0.0148072345;
+            } else {
+              var99 = 0.14638437;
+            }
+          } else {
+            var99 = -0.08130873;
+          }
+        } else {
+          if (input[3] >= 0.15) {
+            if (input[5] >= 0.75) {
+              var99 = -0.12408558;
+            } else {
+              var99 = -0.024109356;
+            }
+          } else {
+            if (input[5] >= 0.55) {
+              var99 = 0.09540754;
+            } else {
+              var99 = -0.083355516;
+            }
+          }
+        }
       }
     }
   }

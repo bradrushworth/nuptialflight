@@ -45,21 +45,20 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.97, 0.01));
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.96, 0.01));
     });
   });
 
   group('Worst day', () {
     Daily daily = Daily();
-    daily.temp =
-        Temp(day: 5.0, min: 5.0, max: 5.0, night: 5.0, eve: 5.0, morn: 5.0);
+    daily.temp = Temp(day: 5.0, min: 5.0, max: 5.0, night: 5.0, eve: 5.0, morn: 5.0);
     daily.humidity = 10;
     daily.windSpeed = 30.0;
     daily.windGust = 31.0;
     daily.pop = 1.0;
     daily.dewPoint = 2.5;
     daily.clouds = 20;
-    daily.pressure = 990;
+    daily.pressure = 995;
     daily.uvi = 3;
     double lat = -35.2;
 
@@ -84,7 +83,7 @@ void main() {
     });
 
     test('Pressure', () {
-      expect(pressureContribution(daily.pressure!), closeTo(0.11, 0.01));
+      expect(pressureContribution(daily.pressure!), closeTo(0.20, 0.01));
     });
 
     test('Total', () {
@@ -144,7 +143,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.54, 0.01));
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.36, 0.01));
     });
   });
 
@@ -196,7 +195,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.04, 0.01));
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.06, 0.01));
     });
   });
 
@@ -243,7 +242,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.05, 0.01));
+      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.01, 0.01));
     });
   });
 }

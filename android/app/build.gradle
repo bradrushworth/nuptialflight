@@ -75,3 +75,11 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
+
+// Not sure why I needed to add these to get this working
+// https://stackoverflow.com/questions/69389145/how-do-i-fix-this-error-task-wrapper-not-found-in-project-app
+task wrapper(type: Wrapper) {
+    gradleVersion = '7.2'
+}
+// https://stackoverflow.com/questions/64290545/task-preparekotlinbuildscriptmodel-not-found-in-project-app
+tasks.register("prepareKotlinBuildScriptModel") {}

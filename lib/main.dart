@@ -118,6 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
       IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData halictus_rubicundus_silhouette =
       IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const int LARGE_SCREEN_HEIGHT = 800;
 
   final String corsProxyUrl = 'https://api.bitbot.com.au/cors/https://maps.googleapis.com/maps/api';
 
@@ -431,6 +432,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget buildUI(String title) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -466,9 +469,9 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: LayoutBuilder(builder: (ctx, constraints) {
-        return OrientationBuilder(
-          builder: (context, orientation) {
+      body: OrientationBuilder(builder: (context, orientation) {
+        return LayoutBuilder(
+          builder: (ctx, constraints) {
             return errorMessage != null
                 ? _buildErrorMessage()
                 : !loaded
@@ -481,19 +484,20 @@ class _MyHomePageState extends State<MyHomePage> {
                         children: <Widget>[
                           GridView.count(
                             crossAxisCount: orientation == Orientation.portrait ? 1 : 3,
-                            childAspectRatio: orientation == Orientation.portrait ? 6 : 4,
-                            padding: orientation == Orientation.portrait
-                                ? const EdgeInsets.symmetric(
-                                    horizontal: 0,
-                                    vertical: 0,
-                                  )
-                                : const EdgeInsets.symmetric(
-                                    horizontal: 0,
-                                    vertical: 0,
-                                  ),
-                            shrinkWrap: true,
-                            children: [
-                              _buildNuptialHeading(orientation),
+                    childAspectRatio: orientation == Orientation.portrait ? 6 : 4,
+                    padding: orientation == Orientation.portrait
+                        ? const EdgeInsets.symmetric(
+                      horizontal: 0,
+                      vertical: 0,
+                    )
+                        : const EdgeInsets.symmetric(
+                      horizontal: 0,
+                      vertical: 0,
+                    ),
+                    shrinkWrap: true,
+                    children: [
+                              if (orientation == Orientation.landscape || height >= 840)
+                                _buildNuptialHeading(orientation),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
@@ -505,30 +509,26 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                               if (orientation == Orientation.portrait)
                                 _buildTodayHistogram(orientation),
-                              _buildTodayWeather(orientation),
-                            ],
-                          ),
-                          if (orientation == Orientation.landscape && constraints.maxHeight > 600)
-                            SizedBox(
-                              height: 120,
-                              width: constraints.maxWidth,
-                              child: _buildTodayHistogram(orientation),
-                            ),
-                          GridView.count(
-                            crossAxisCount: orientation == Orientation.portrait ? 3 : 6,
-                            childAspectRatio: 2.0,
-                            padding: orientation == Orientation.portrait
-                                ? const EdgeInsets.symmetric(vertical: 0)
-                                : const EdgeInsets.symmetric(horizontal: 0),
-                            shrinkWrap: true,
-                            children: [
-                              // _buildTemperature(
-                              //     'Day Temp', _weather!.daily!.first.temp!.day!),
-                              // _buildTemperature(
-                              //     'Max Temp', _weather!.daily!.first.temp!.max!),
-                              // _buildTemperature(
-                              //     'Eve Temp', _weather!.daily!.first.temp!.eve!),
-
+                      _buildTodayWeather(orientation),
+                    ],
+                  ),
+                  if (orientation == Orientation.landscape && constraints.maxHeight > 600)
+                    SizedBox(
+                      height: 120,
+                      width: constraints.maxWidth,
+                      child: _buildTodayHistogram(orientation),
+                    ),
+                  GridView.count(
+                    crossAxisCount: orientation == Orientation.portrait ? 3 : 6,
+                    childAspectRatio: 2.0,
+                    padding: orientation == Orientation.portrait
+                        ? const EdgeInsets.symmetric(vertical: 0)
+                        : const EdgeInsets.symmetric(horizontal: 0),
+                    shrinkWrap: true,
+                    children: [
+                              if (orientation == Orientation.landscape &&
+                                  height >= LARGE_SCREEN_HEIGHT)
+                                _buildTemperature('Min Temp', _weather!.daily!.first.temp!.min!),
                               _buildTemperature(
                                   timeOfDayFormat
                                           .format(DateTime.fromMillisecondsSinceEpoch(
@@ -539,6 +539,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                           .toLowerCase() +
                                       ' Temp',
                                   _indexOfDiurnalHour!.temp!),
+                              if (orientation == Orientation.landscape &&
+                                  height >= LARGE_SCREEN_HEIGHT)
+                                _buildTemperature('Day Temp', _weather!.daily!.first.temp!.day!),
                               _buildTemperature('Max Temp', _weather!.daily!.first.temp!.max!),
                               _buildTemperature(
                                   timeOfDayFormat
@@ -550,85 +553,95 @@ class _MyHomePageState extends State<MyHomePage> {
                                           .toLowerCase() +
                                       ' Temp',
                                   _indexOfNocturnalHour!.temp!),
-                              _buildWindSpeed(),
-                              if (orientation == Orientation.portrait) _buildWindGust(),
+                              if (orientation == Orientation.landscape &&
+                                  height >= LARGE_SCREEN_HEIGHT)
+                                _buildTemperature('Eve Temp', _weather!.daily!.first.temp!.eve!),
                               _buildAirPressure(),
+                              _buildWindSpeed(),
+                              if (orientation == Orientation.portrait ||
+                                  height >= LARGE_SCREEN_HEIGHT)
+                                _buildWindGust(),
                               _buildHumidity(),
-                              if (orientation == Orientation.portrait) _buildCloudiness(),
-                              if (orientation == Orientation.portrait) _buildPrecipitation(),
+                              if (orientation == Orientation.portrait ||
+                                  height >= LARGE_SCREEN_HEIGHT)
+                                _buildCloudiness(),
+                              if (orientation == Orientation.portrait ||
+                                  height >= LARGE_SCREEN_HEIGHT)
+                                _buildPrecipitation(),
+                              //if (height >= LARGE_SCREEN_HEIGHT) _buildUVI(),
                             ],
-                          ),
-                          _buildUpcomingWeek(orientation),
-                          if (orientation == Orientation.portrait)
+                  ),
+                  _buildUpcomingWeek(orientation),
+                  if (orientation == Orientation.portrait || height >= 800)
                             Container(padding: const EdgeInsets.symmetric(vertical: 35)),
-                          if (orientation == Orientation.portrait ||
-                              orientation == Orientation.landscape)
-                            Text(
-                                (kIsWeb
-                                        ? 'Web'
-                                        : toBeginningOfSentenceCase(Platform.operatingSystem)!) +
-                                    ' Version $version+$buildNumber',
-                                style: TextStyle(fontSize: 8, color: Colors.grey)),
-                        ],
-                      );
-          },
-        );
-      }),
+                  if (orientation == Orientation.portrait ||
+                      orientation == Orientation.landscape)
+                    Text(
+                        (kIsWeb
+                            ? 'Web'
+                            : toBeginningOfSentenceCase(Platform.operatingSystem)!) +
+                            ' Version $version+$buildNumber',
+                        style: TextStyle(fontSize: 8, color: Colors.grey)),
+                ],
+              );
+            },
+            );
+          }),
 
       /// Future feature to record that the user saw a nuptial flight today
       floatingActionButton: fixedLocation
           ? null
           : FloatingActionButton(
-              onPressed: () async {
-                // set up the buttons
-                Widget smallButton = ElevatedButton(
-                  child: Text("Small"),
+        onPressed: () async {
+          // set up the buttons
+          Widget smallButton = ElevatedButton(
+            child: Text("Small\n(10mm)", textAlign: TextAlign.center),
                   style: ElevatedButton.styleFrom(alignment: Alignment.centerLeft),
                   onPressed: () {
                     _sawNuptialFlight('small');
                   },
                 );
-                Widget mediumButton = ElevatedButton(
-                  child: Text("Medium"),
+          Widget mediumButton = ElevatedButton(
+            child: Text("Medium\n(20mm)", textAlign: TextAlign.center),
                   style: ElevatedButton.styleFrom(alignment: Alignment.center),
                   onPressed: () {
                     _sawNuptialFlight('medium');
                   },
                 );
-                Widget largeButton = ElevatedButton(
-                  child: Text("Large"),
+          Widget largeButton = ElevatedButton(
+            child: Text("Large\n(30mm)", textAlign: TextAlign.center),
                   style: ElevatedButton.styleFrom(alignment: Alignment.centerRight),
                   onPressed: () {
                     _sawNuptialFlight('large');
                   },
                 );
-                // set up the AlertDialog
-                AlertDialog alert = AlertDialog(
-                  title: Center(child: Text('Report Nuptial Flight')),
-                  content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                    Container(
-                      child: Text(
-                          "What size queen ant did you see today? Please only report real sightings. This data trains the app.",
+          // set up the AlertDialog
+          AlertDialog alert = AlertDialog(
+            title: Center(child: Text('Report Nuptial Flight')),
+            content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+              Container(
+                child: Text(
+                    "What size queen ant did you see? Please only report real sightings. This data trains the app.",
                           textAlign: TextAlign.center),
-                    ),
-                    Text(''),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[smallButton, mediumButton, largeButton],
-                    ),
-                  ]),
-                );
-                // show the dialog
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return alert;
-                  },
-                );
-              },
-              tooltip: 'Saw Nuptial Flight',
-              child: Icon(halictus_rubicundus_silhouette, size: 45, color: Colors.white),
-            ),
+              ),
+              Text(''),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[smallButton, mediumButton, largeButton],
+              ),
+            ]),
+          );
+          // show the dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return alert;
+            },
+          );
+        },
+        tooltip: 'Saw Nuptial Flight',
+        child: Icon(halictus_rubicundus_silhouette, size: 45, color: Colors.white),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
     );
   }
@@ -702,6 +715,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       minFontSize: 16,
       maxFontSize: 24,
+      textScaleFactor: 1,
       textAlign: TextAlign.center,
       softWrap: true,
       maxLines: 2,
@@ -760,9 +774,9 @@ class _MyHomePageState extends State<MyHomePage> {
             height: constraints.maxHeight * 0.15,
             child: FittedBox(
               child: RotatedBox(
-                quarterTurns: -1,
+                quarterTurns: 0,
                 child: AutoSizeText(
-                  percentage > 0 ? '${percentage}%' : '???',
+                  ' ', //percentage > 0 ? '${percentage}%' : '???',
                   minFontSize: 2,
                   maxFontSize: 12,
                   stepGranularity: 1.0,

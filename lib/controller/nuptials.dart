@@ -49,8 +49,7 @@ double nuptialHourlyPercentage(Hourly hourly) {
 }
 
 double nuptialDailyPercentage(Daily daily, {bool nocturnal = false}) {
-  double temp =
-      temperatureContribution(nocturnal ? daily.temp!.eve! : daily.temp!.day!);
+  double temp = temperatureContribution(nocturnal ? daily.temp!.eve! : daily.temp!.day!);
   double windSpeed = windContribution(daily.windSpeed!);
   //double windGust = windContribution(daily.windGust!);
   //double rain = rainContribution(daily.pop!);
@@ -70,31 +69,46 @@ double nuptialDailyPercentage(Daily daily, {bool nocturnal = false}) {
 }
 
 double nuptialHourlyPercentageModel(num lat, Hourly hourly) {
+  double temp = hourly.temp!.toDouble();
+  double wind = hourly.windSpeed!.toDouble();
+  double humid = hourly.humidity!.toDouble();
+  double cloud = hourly.clouds!.toDouble();
+  double press = hourly.pressure!.toDouble();
+  if (temp < 5) return 0.01;
+  if (wind > 15) return 0.01;
+  if (humid < 40) return 0.01;
+  if (press < 995) return 0.01;
   return max(
       0.01,
       score([
         lat.toDouble(),
-        temperatureContribution(hourly.temp!.toDouble()),
-        windContribution(hourly.windSpeed!.toDouble()),
-        humidityContribution(hourly.humidity!.toDouble()),
-        cloudinessContribution(hourly.clouds!.toDouble()),
-        pressureContribution(hourly.pressure!.toDouble()),
+        temperatureContribution(temp),
+        windContribution(wind),
+        humidityContribution(humid),
+        cloudinessContribution(cloud),
+        pressureContribution(press),
       ])[1]);
 }
 
-double nuptialDailyPercentageModel(num lat, Daily daily,
-    {bool nocturnal = false}) {
+double nuptialDailyPercentageModel(num lat, Daily daily, {bool nocturnal = false}) {
+  double temp = nocturnal ? daily.temp!.eve!.toDouble() : daily.temp!.day!.toDouble();
+  double wind = daily.windSpeed!.toDouble();
+  double humid = daily.humidity!.toDouble();
+  double cloud = daily.clouds!.toDouble();
+  double press = daily.pressure!.toDouble();
+  if (temp < 5) return 0.01;
+  if (wind > 15) return 0.01;
+  if (humid < 40) return 0.01;
+  if (press < 995) return 0.01;
   return max(
       0.01,
       score([
         lat.toDouble(),
-        temperatureContribution(nocturnal
-            ? daily.temp!.eve!.toDouble()
-            : daily.temp!.day!.toDouble()),
-        windContribution(daily.windSpeed!.toDouble()),
-        humidityContribution(daily.humidity!.toDouble()),
-        cloudinessContribution(daily.clouds!.toDouble()),
-        pressureContribution(daily.pressure!.toDouble()),
+        temperatureContribution(temp),
+        windContribution(wind),
+        humidityContribution(humid),
+        cloudinessContribution(cloud),
+        pressureContribution(press),
       ])[1]);
 }
 
@@ -103,9 +117,7 @@ double nuptialDailyPercentageModel(num lat, Daily daily,
 /// a nuptial flight today.
 ///
 double nuptialCalculator(List<Map<String, num>> values) {
-  var sum = values
-      .map((m) => m['percentage']! * m['weighting']!)
-      .reduce((a, b) => a + b);
+  var sum = values.map((m) => m['percentage']! * m['weighting']!).reduce((a, b) => a + b);
   var count = values.map((e) => e['weighting']!).reduce((a, b) => a + b);
   var result = sum / count;
   // developer.log("sum=$sum", name: 'nuptialPercentage');
@@ -122,18 +134,12 @@ double temperatureContribution(num temp) {
 
 /// Humidity, %
 double humidityContribution(num humidity) {
-  return max(
-          0,
-          min(0.5,
-              Normal.cdf(-(humidity - HUMIDITY_AVG).abs() / HUMIDITY_STD))) *
-      2;
+  return max(0, min(0.5, Normal.cdf(-(humidity - HUMIDITY_AVG).abs() / HUMIDITY_STD))) * 2;
 }
 
 /// Wind speed. Units metre/sec
 double windContribution(num windSpeed) {
-  return max(
-          0, min(0.5, Normal.cdf(-(windSpeed - WIND_AVG).abs() / WIND_STD))) *
-      2;
+  return max(0, min(0.5, Normal.cdf(-(windSpeed - WIND_AVG).abs() / WIND_STD))) * 2;
 }
 
 /// Probability of precipitation
@@ -149,17 +155,12 @@ double rainContribution(num pop) {
 
 /// Cloudiness, %
 double cloudinessContribution(num clouds) {
-  return max(0, min(0.5, Normal.cdf(-(clouds - CLOUD_AVG).abs() / CLOUD_STD))) *
-      2;
+  return max(0, min(0.5, Normal.cdf(-(clouds - CLOUD_AVG).abs() / CLOUD_STD))) * 2;
 }
 
 /// Air pressure (hPa)
 double pressureContribution(num pressure) {
-  return max(
-          0,
-          min(0.5,
-              Normal.cdf(-(pressure - PRESSURE_AVG).abs() / PRESSURE_STD))) *
-      2;
+  return max(0, min(0.5, Normal.cdf(-(pressure - PRESSURE_AVG).abs() / PRESSURE_STD))) * 2;
 }
 
 /// UVI
