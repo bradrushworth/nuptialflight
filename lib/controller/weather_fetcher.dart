@@ -107,7 +107,7 @@ class WeatherFetcher {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to load reverse geocoding!');
+      throw Exception('Failed to load reverse geocoding!\n\n' + response.body);
     }
   }
 
@@ -129,7 +129,7 @@ class WeatherFetcher {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to download current weather!');
+      throw Exception('Failed to download current weather!\n\n' + response.body);
     }
   }
 
@@ -150,7 +150,7 @@ class WeatherFetcher {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to download weather!');
+      throw Exception('Failed to download weather!\n\n' + response.body);
     }
   }
 
@@ -173,7 +173,7 @@ class WeatherFetcher {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to download weather!');
+      throw Exception('Failed to download historical weather!\n\n' + response.body);
     }
   }
 }

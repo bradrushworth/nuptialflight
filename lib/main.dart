@@ -1298,7 +1298,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (e != null && e.toString().startsWith('Exception: ')) {
       setState(() {
         loaded = true;
-        errorMessage = e.toString().replaceFirst('^Exception: ', '');
+        errorMessage = e.toString().replaceFirst('Exception: ', '');
         developer.log('handleError: $e', error: e);
       });
     } else {
