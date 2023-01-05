@@ -10,6 +10,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_webservice/places.dart';
@@ -366,6 +367,10 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       loaded = true;
     });
+    print(
+        "_updateWeather: _diurnalHourPercentage=$_diurnalHourPercentage _indexOfDiurnalHour=${_indexOfDiurnalHour?.dt}");
+    print(
+        "_updateWeather: _nocturnalHourPercentage=$_nocturnalHourPercentage _indexOfNocturnalHour=${_indexOfNocturnalHour?.dt}");
     print("_updateWeather: _hourlyPercentage=" + _hourlyPercentage.toString());
     _recordWeather();
   }
@@ -477,29 +482,29 @@ class _MyHomePageState extends State<MyHomePage> {
                 : !loaded
                     ? _buildCircularProgressIndicator()
                     : Column(
+              mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: orientation == Orientation.portrait
-                            ? MainAxisAlignment.spaceBetween
-                            : MainAxisAlignment.spaceAround,
-                        //crossAxisAlignment: CrossAxisAlignment.end,
+                            ? MainAxisAlignment.spaceEvenly
+                            : MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
-                          GridView.count(
+                          SizedBox(
+                              child: GridView.count(
                             crossAxisCount: orientation == Orientation.portrait ? 1 : 3,
-                    childAspectRatio: orientation == Orientation.portrait ? 6 : 4,
-                    padding: orientation == Orientation.portrait
-                        ? const EdgeInsets.symmetric(
-                      horizontal: 0,
-                      vertical: 0,
-                    )
-                        : const EdgeInsets.symmetric(
-                      horizontal: 0,
-                      vertical: 0,
-                    ),
-                    shrinkWrap: true,
-                    children: [
-                              if (orientation == Orientation.landscape || height >= 840)
+                            // width/height ratio
+                            childAspectRatio: constraints.maxHeight >= 1000
+                                ? 8
+                                : orientation == Orientation.portrait
+                                    ? 6
+                                    : 4,
+                            shrinkWrap: true,
+                            padding: EdgeInsets.symmetric(vertical: 0),
+                            children: [
+                              if (orientation == Orientation.landscape || height >= 860)
                                 _buildNuptialHeading(orientation),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: <Widget>[
                                   _buildTodayPercentage(orientation, 'Day', _diurnalHourPercentage),
                                   _buildTodayPercentage(orientation, 'Now', _dailyPercentage[0]),
@@ -507,25 +512,26 @@ class _MyHomePageState extends State<MyHomePage> {
                                       orientation, 'Evening', _nocturnalHourPercentage),
                                 ],
                               ),
-                              if (orientation == Orientation.portrait)
-                                _buildTodayHistogram(orientation),
-                      _buildTodayWeather(orientation),
-                    ],
-                  ),
-                  if (orientation == Orientation.landscape && constraints.maxHeight > 600)
-                    SizedBox(
-                      height: 120,
-                      width: constraints.maxWidth,
-                      child: _buildTodayHistogram(orientation),
-                    ),
-                  GridView.count(
-                    crossAxisCount: orientation == Orientation.portrait ? 3 : 6,
-                    childAspectRatio: 2.0,
-                    padding: orientation == Orientation.portrait
-                        ? const EdgeInsets.symmetric(vertical: 0)
-                        : const EdgeInsets.symmetric(horizontal: 0),
-                    shrinkWrap: true,
-                    children: [
+                              if (orientation == Orientation.portrait &&
+                                  constraints.maxHeight >= 700)
+                                _buildTodayHistogram(constraints),
+                              _buildTodayWeather(orientation),
+                            ],
+                          )),
+                          if (orientation == Orientation.landscape && constraints.maxHeight > 600)
+                            _buildTodayHistogram(constraints),
+                          SizedBox(
+                              child: GridView.count(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            crossAxisCount: orientation == Orientation.portrait ? 3 : 6,
+                            // width/height ratio
+                            childAspectRatio: constraints.maxHeight >= 1000
+                                ? 2.8
+                                : orientation == Orientation.portrait
+                                    ? 1.8
+                                    : 1.8,
+                            shrinkWrap: true,
+                            children: [
                               if (orientation == Orientation.landscape &&
                                   height >= LARGE_SCREEN_HEIGHT)
                                 _buildTemperature('Min Temp', _weather!.daily!.first.temp!.min!),
@@ -537,29 +543,29 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   1000,
                                               isUtc: true))
                                           .toLowerCase() +
-                                      ' Temp',
-                                  _indexOfDiurnalHour!.temp!),
-                              if (orientation == Orientation.landscape &&
-                                  height >= LARGE_SCREEN_HEIGHT)
-                                _buildTemperature('Day Temp', _weather!.daily!.first.temp!.day!),
-                              _buildTemperature('Max Temp', _weather!.daily!.first.temp!.max!),
-                              _buildTemperature(
-                                  timeOfDayFormat
-                                          .format(DateTime.fromMillisecondsSinceEpoch(
-                                              (_indexOfNocturnalHour!.dt! +
-                                                      _weather!.timezoneOffset!) *
-                                                  1000,
-                                              isUtc: true))
-                                          .toLowerCase() +
-                                      ' Temp',
-                                  _indexOfNocturnalHour!.temp!),
-                              if (orientation == Orientation.landscape &&
-                                  height >= LARGE_SCREEN_HEIGHT)
-                                _buildTemperature('Eve Temp', _weather!.daily!.first.temp!.eve!),
-                              _buildAirPressure(),
-                              _buildWindSpeed(),
-                              if (orientation == Orientation.portrait ||
-                                  height >= LARGE_SCREEN_HEIGHT)
+                                ' Temp',
+                            _indexOfDiurnalHour!.temp!),
+                        if (orientation == Orientation.landscape &&
+                            height >= LARGE_SCREEN_HEIGHT)
+                          _buildTemperature('Day Temp', _weather!.daily!.first.temp!.day!),
+                        _buildTemperature('Max Temp', _weather!.daily!.first.temp!.max!),
+                        _buildTemperature(
+                            timeOfDayFormat
+                                .format(DateTime.fromMillisecondsSinceEpoch(
+                                (_indexOfNocturnalHour!.dt! +
+                                    _weather!.timezoneOffset!) *
+                                    1000,
+                                isUtc: true))
+                                .toLowerCase() +
+                                ' Temp',
+                            _indexOfNocturnalHour!.temp!),
+                        if (orientation == Orientation.landscape &&
+                            height >= LARGE_SCREEN_HEIGHT)
+                          _buildTemperature('Eve Temp', _weather!.daily!.first.temp!.eve!),
+                        _buildAirPressure(),
+                        _buildWindSpeed(),
+                        if (orientation == Orientation.portrait ||
+                            height >= LARGE_SCREEN_HEIGHT)
                                 _buildWindGust(),
                               _buildHumidity(),
                               if (orientation == Orientation.portrait ||
@@ -570,78 +576,79 @@ class _MyHomePageState extends State<MyHomePage> {
                                 _buildPrecipitation(),
                               //if (height >= LARGE_SCREEN_HEIGHT) _buildUVI(),
                             ],
-                  ),
-                  _buildUpcomingWeek(orientation),
-                  if (orientation == Orientation.portrait || height >= 800)
-                            Container(padding: const EdgeInsets.symmetric(vertical: 35)),
-                  if (orientation == Orientation.portrait ||
-                      orientation == Orientation.landscape)
-                    Text(
-                        (kIsWeb
-                            ? 'Web'
-                            : toBeginningOfSentenceCase(Platform.operatingSystem)!) +
-                            ' Version $version+$buildNumber',
-                        style: TextStyle(fontSize: 8, color: Colors.grey)),
-                ],
-              );
-            },
-            );
-          }),
+                          )),
+                          _buildUpcomingWeek(orientation),
+                          if (orientation == Orientation.portrait)
+                            Container(padding: const EdgeInsets.symmetric(vertical: 40)),
+                          if (orientation == Orientation.portrait ||
+                              orientation == Orientation.landscape)
+                            Text(
+                                (kIsWeb
+                                        ? 'Web'
+                                        : toBeginningOfSentenceCase(Platform.operatingSystem)!) +
+                                    ' Version $version+$buildNumber',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 8, color: Colors.grey)),
+                        ],
+                      );
+          },
+        );
+      }),
 
       /// Future feature to record that the user saw a nuptial flight today
       floatingActionButton: fixedLocation
           ? null
           : FloatingActionButton(
-        onPressed: () async {
-          // set up the buttons
-          Widget smallButton = ElevatedButton(
-            child: Text("Small\n(10mm)", textAlign: TextAlign.center),
+              onPressed: () async {
+                // set up the buttons
+                Widget smallButton = ElevatedButton(
+                  child: Text("Small\n(10mm)", textAlign: TextAlign.center),
                   style: ElevatedButton.styleFrom(alignment: Alignment.centerLeft),
                   onPressed: () {
                     _sawNuptialFlight('small');
                   },
                 );
-          Widget mediumButton = ElevatedButton(
-            child: Text("Medium\n(20mm)", textAlign: TextAlign.center),
+                Widget mediumButton = ElevatedButton(
+                  child: Text("Medium\n(20mm)", textAlign: TextAlign.center),
                   style: ElevatedButton.styleFrom(alignment: Alignment.center),
                   onPressed: () {
                     _sawNuptialFlight('medium');
                   },
                 );
-          Widget largeButton = ElevatedButton(
-            child: Text("Large\n(30mm)", textAlign: TextAlign.center),
+                Widget largeButton = ElevatedButton(
+                  child: Text("Large\n(30mm)", textAlign: TextAlign.center),
                   style: ElevatedButton.styleFrom(alignment: Alignment.centerRight),
                   onPressed: () {
                     _sawNuptialFlight('large');
                   },
                 );
-          // set up the AlertDialog
-          AlertDialog alert = AlertDialog(
-            title: Center(child: Text('Report Nuptial Flight')),
-            content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-              Container(
-                child: Text(
-                    "What size queen ant did you see? Please only report real sightings. This data trains the app.",
+                // set up the AlertDialog
+                AlertDialog alert = AlertDialog(
+                  title: Center(child: Text('Report Nuptial Flight')),
+                  content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                    Container(
+                      child: Text(
+                          "What size queen ant did you see? Please only report real sightings. This data trains the app.",
                           textAlign: TextAlign.center),
-              ),
-              Text(''),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[smallButton, mediumButton, largeButton],
-              ),
-            ]),
-          );
-          // show the dialog
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return alert;
-            },
-          );
-        },
-        tooltip: 'Saw Nuptial Flight',
-        child: Icon(halictus_rubicundus_silhouette, size: 45, color: Colors.white),
-      ),
+                    ),
+                    Text(''),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[smallButton, mediumButton, largeButton],
+                    ),
+                  ]),
+                );
+                // show the dialog
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return alert;
+                  },
+                );
+              },
+              tooltip: 'Saw Nuptial Flight',
+              child: Icon(halictus_rubicundus_silhouette, size: 45, color: Colors.white),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
     );
   }
@@ -650,12 +657,11 @@ class _MyHomePageState extends State<MyHomePage> {
     return TextStyle(color: getColorGradient(percentage), fontWeight: FontWeight.w600);
   }
 
-  static Color? getColorGradient(int percentage) {
+  static Color getColorGradient(int percentage) {
     Color? color = (percentage < amberThreshold
         ? Colors.red[800]
         : (percentage < greenThreshold ? Colors.orange[800] : Colors.green[700]));
-
-    return color;
+    return color!;
   }
 
   static Color? getContinuousColorGradient(int percentage) {
@@ -704,27 +710,31 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildNuptialHeading(Orientation orientation) {
-    return AutoSizeText(
-      orientation == Orientation.portrait
-          ? 'Confidence of Nuptial Flight'
-          : 'Confidence of Ant\nNuptial Flight',
-      style: TextStyle(
-        height: orientation == Orientation.portrait ? 3.0 : 1.2,
-        fontSize: 22,
-        fontWeight: FontWeight.w600,
-      ),
-      minFontSize: 16,
-      maxFontSize: 24,
-      textScaleFactor: 1,
-      textAlign: TextAlign.center,
-      softWrap: true,
-      maxLines: 2,
-    );
+    return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      AutoSizeText(
+        orientation == Orientation.portrait
+            ? 'Confidence of Nuptial Flight'
+            : 'Confidence of Ant\nNuptial Flight',
+        style: TextStyle(
+          height: orientation == Orientation.portrait ? 3.0 : 1.2,
+          fontSize: 22,
+          fontWeight: FontWeight.w600,
+        ),
+        minFontSize: 16,
+        maxFontSize: 24,
+        textScaleFactor: 1,
+        textAlign: TextAlign.center,
+        softWrap: true,
+        maxLines: 2,
+      )
+    ]);
   }
 
   Widget _buildTodayPercentage(Orientation orientation, String heading, int percentage) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: orientation == Orientation.portrait
+          ? MainAxisAlignment.spaceAround
+          : MainAxisAlignment.spaceEvenly,
       children: [
         AutoSizeText(
           heading,
@@ -756,18 +766,25 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _buildTodayHistogram(Orientation orientation) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: List.generate(24, (index) => _buildTodayHistogramElement(index)),
+  Widget _buildTodayHistogram(BoxConstraints constraints) {
+    return SizedBox(
+      height: 140,
+      width: constraints.maxWidth,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: List.generate(24, (index) => _buildTodayHistogramElement(index)),
+      ),
     );
   }
 
   Widget _buildTodayHistogramElement(int index) {
     int percentage = _hourlyPercentage[index];
+    if (percentage < 11) percentage = 11;
     return LayoutBuilder(builder: (ctx, constraints) {
       return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           Container(
@@ -801,9 +818,9 @@ class _MyHomePageState extends State<MyHomePage> {
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
-                    //border: Border.all(color: Colors.white, width: 1.0),
+                    border: Border.all(color: Color.fromRGBO(0, 0, 0, 0.1), width: 0.5),
                     //color: Colors.white,//Color.fromRGBO(220, 220, 220, 1),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(11),
                   ),
                 ),
                 Align(
@@ -814,7 +831,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: getColorGradient(percentage),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(11),
                       ),
                     ),
                   ),
@@ -850,6 +867,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildTodayWeather(Orientation orientation) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AutoSizeText(
           (_geocoding == null ? 'Today\'s Weather' : '$_geocoding Weather'),
@@ -865,8 +883,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         AutoSizeText(
           longDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                  (_historical!.current!.dt! + _historical!.timezoneOffset!) * 1000,
-                  isUtc: true)) +
+              (_historical!.current!.dt! + _historical!.timezoneOffset!) * 1000,
+              isUtc: true)) +
               ' - ' +
               toBeginningOfSentenceCase(_historical!.current!.weather!.first.description)!,
           style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
@@ -1142,11 +1160,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildUpcomingWeek(Orientation orientation) {
     return Column(
       children: [
-        AutoSizeText(
+        // AutoSizeText doesn't work here because the parent is unconstrained
+        SizedBox(
+            child: AutoSizeText(
           'Upcoming Week',
           style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-        ),
-        DataTable(
+        )),
+        SizedBox(
+            child: DataTable(
           headingRowHeight: 22,
           dataRowHeight: 22,
           horizontalMargin: 22,
@@ -1158,16 +1179,16 @@ class _MyHomePageState extends State<MyHomePage> {
             DataColumn(label: Text('Wind Speed'), numeric: true),
             DataColumn(label: Text('Confidence'), numeric: true),
           ],
-          rows: [
-            _buildFuturePercentage(1),
-            _buildFuturePercentage(2),
-            _buildFuturePercentage(3),
-            _buildFuturePercentage(4),
-            _buildFuturePercentage(5),
-            _buildFuturePercentage(6),
-            _buildFuturePercentage(7),
-          ],
-        ),
+              rows: [
+                _buildFuturePercentage(1),
+                _buildFuturePercentage(2),
+                _buildFuturePercentage(3),
+                _buildFuturePercentage(4),
+                _buildFuturePercentage(5),
+                _buildFuturePercentage(6),
+                _buildFuturePercentage(7),
+              ],
+            )),
       ],
     );
   }
