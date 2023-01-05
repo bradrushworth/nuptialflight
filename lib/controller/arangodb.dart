@@ -1,4 +1,5 @@
 import 'package:darango/darango.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 
 import '../responses/onecall_response.dart';
 import '../responses/weather_response.dart';
@@ -33,12 +34,15 @@ class ArangoSingleton {
       OneCallResponse? _weather,
       OneCallResponse? _historical,
       CurrentWeatherResponse? _currentWeather) async {
+    String? deviceId = await PlatformDeviceId.getDeviceId;
+
     {
       // Let's create a new database post
       Collection? collection = await _arangoClient!.collection('flights');
       Document createResult = await collection!.document().add({
         'flight': 'unknown',
         'version': '$version+$buildNumber',
+        'device_id': deviceId,
         'weather': _weather!.toJson()
       });
       _weatherFlightsKey = createResult.key;
@@ -49,6 +53,7 @@ class ArangoSingleton {
       Document createResult = await collection!.document().add({
         'flight': 'unknown',
         'version': '$version+$buildNumber',
+        'device_id': deviceId,
         'weather': _historical!.toJson()
       });
       _weatherHistoricalKey = createResult.key;
@@ -59,6 +64,7 @@ class ArangoSingleton {
       Document createResult = await collection!.document().add({
         'flight': 'unknown',
         'version': '$version+$buildNumber',
+        'device_id': deviceId,
         'weather': _currentWeather!.toJson()
       });
       _weatherCurrentKey = createResult.key;
@@ -72,6 +78,8 @@ class ArangoSingleton {
       OneCallResponse? _weather,
       OneCallResponse? _historical,
       CurrentWeatherResponse? _currentWeather) async {
+    String? deviceId = await PlatformDeviceId.getDeviceId;
+
     {
       // Let's update the existing database entry
       Collection? collection = await _arangoClient!.collection('flights');
@@ -79,6 +87,7 @@ class ArangoSingleton {
         'flight': 'yes',
         'size': size,
         'version': '$version+$buildNumber',
+        'device_id': deviceId,
         'weather': _weather!.toJson()
       });
     }
@@ -91,6 +100,7 @@ class ArangoSingleton {
         'flight': 'yes',
         'size': size,
         'version': '$version+$buildNumber',
+        'device_id': deviceId,
         'weather': _historical!.toJson()
       });
     }
@@ -101,6 +111,7 @@ class ArangoSingleton {
         'flight': 'yes',
         'size': size,
         'version': '$version+$buildNumber',
+        'device_id': deviceId,
         'weather': _currentWeather!.toJson()
       });
     }

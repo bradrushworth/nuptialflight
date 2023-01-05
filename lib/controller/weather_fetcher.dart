@@ -135,11 +135,10 @@ class WeatherFetcher {
 
   Future<OneCallResponse> fetchWeather() async {
     if (_lat == null || _lon == null)
-      throw Exception(
-          'Location is unknown! Perhaps you didn\'t allow location permissions?');
+      throw Exception('Location is unknown! Perhaps you didn\'t allow location permissions?');
 
     String url =
-        'https://api.openweathermap.org/data/2.5/onecall?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&exclude=minutely,hourly,current';
+        'https://api.openweathermap.org/data/2.5/onecall?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&exclude=minutely,current';
     print("url=$url");
 
     final response = await http.get(Uri.parse(url));

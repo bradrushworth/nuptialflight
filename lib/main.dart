@@ -35,6 +35,7 @@ final DateFormat dateFormat = DateFormat("yyyy-MM-dd");
 final DateFormat longDateFormat = DateFormat.MMMEd();
 final DateFormat weekdayFormat = DateFormat("E");
 final DateFormat timeOfDayFormat = DateFormat("ha");
+final DateFormat timeOfDay24HourFormat = DateFormat("HH");
 
 const String kGoogleApiKey = 'AIzaSyDNaPQ01hKnTmVRQoT_FM1ZTTxDnw6GoOU';
 
@@ -141,14 +142,12 @@ class _MyHomePageState extends State<MyHomePage> {
   bool loaded = false;
   String? errorMessage;
 
-  //int _diurnalPercentage = 0;
-  //int _nocturnalPercentage = 0;
   Hourly? _indexOfDiurnalHour;
   Hourly? _indexOfNocturnalHour;
   int _diurnalHourPercentage = 0;
   int _nocturnalHourPercentage = 0;
   List<int> _hourlyPercentage = List.generate(
-    24,
+    48, // 24 * 2
     (index) {
       return 0;
     },
@@ -251,8 +250,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _getWeather() {
-    DateTime now = new DateTime.now();
-    DateTime today = new DateTime(now.year, now.month, now.day);
+    DateTime now = new DateTime.now().toUtc();
+    DateTime today = new DateTime.utc(now.year, now.month, now.day);
     int dt = today.millisecondsSinceEpoch ~/ 1000;
 
     return Future.wait([
@@ -318,6 +317,9 @@ class _MyHomePageState extends State<MyHomePage> {
       CurrentWeatherResponse current, OneCallResponse historical, OneCallResponse weather) {
     setState(() {
       _currentWeather = current;
+      _historical = historical;
+      _weather = weather;
+
       if (current.name == null) {
         developer.log("Unexpected reverse geocoding response", name: 'WeatherFetcher');
         _geocoding = "Unknown Location";
@@ -326,32 +328,59 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       print('_updateWeather: geocoding=$_geocoding');
 
-      _historical = historical;
-      _indexOfDiurnalHour = historical.hourly!.firstWhere((e) =>
-          timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
-              (e.dt! + historical.timezoneOffset!) * 1000,
-              isUtc: true)) ==
-          '11AM');
-      _diurnalHourPercentage =
-          (nuptialHourlyPercentageModel(weather.lat!, _indexOfDiurnalHour!) * 100.0).toInt();
+      DateTime now = new DateTime.now().toUtc();
+      now.add(Duration(milliseconds: weather.timezoneOffset!));
+      print('now.hour=${now.hour}');
+      try {
+        if (now.hour > 11) {
+          _indexOfDiurnalHour = historical.hourly!.lastWhere((e) =>
+              timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                  (e.dt! + historical.timezoneOffset!) * 1000,
+                  isUtc: true)) ==
+              '11AM');
+        } else {
+          _indexOfDiurnalHour = weather.hourly!.firstWhere((e) =>
+              timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                  (e.dt! + weather.timezoneOffset!) * 1000,
+                  isUtc: true)) ==
+              '11AM');
+        }
+        _diurnalHourPercentage =
+            (nuptialHourlyPercentageModel(weather.lat!, _indexOfDiurnalHour!) * 100.0).toInt();
+      } on StateError catch (e) {
+        _indexOfDiurnalHour = null;
+        _diurnalHourPercentage = 0;
+      }
 
-      _indexOfNocturnalHour = historical.hourly!.firstWhere((e) =>
-          timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
-              (e.dt! + historical.timezoneOffset!) * 1000,
-              isUtc: true)) ==
-          '7PM');
-      _nocturnalHourPercentage =
-          (nuptialHourlyPercentageModel(weather.lat!, _indexOfNocturnalHour!) * 100.0).toInt();
+      try {
+        if (now.hour > 19) {
+          _indexOfNocturnalHour = historical.hourly!.lastWhere((e) =>
+              timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                  (e.dt! + historical.timezoneOffset!) * 1000,
+                  isUtc: true)) ==
+              '7PM');
+        } else {
+          _indexOfNocturnalHour = weather.hourly!.firstWhere((e) =>
+              timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                  (e.dt! + weather.timezoneOffset!) * 1000,
+                  isUtc: true)) ==
+              '7PM');
+        }
+        _nocturnalHourPercentage =
+            (nuptialHourlyPercentageModel(weather.lat!, _indexOfNocturnalHour!) * 100.0).toInt();
+      } on StateError catch (e) {
+        _indexOfNocturnalHour = null;
+        _nocturnalHourPercentage = 0;
+      }
 
       // Sometimes API returns less than 24 hours worth of data, but it is always the most recent
       int j = 0;
-      for (int i = 24 - historical.hourly!.length; i < _hourlyPercentage.length; i++) {
+      for (int i = 0; i < historical.hourly!.length; i++) {
         _hourlyPercentage[i] =
             (nuptialHourlyPercentageModel(weather.lat!, historical.hourly![j]) * 100.0).toInt();
         j++;
       }
 
-      _weather = weather;
       for (int i = 0; i < _dailyPercentage.length; i++) {
         _dailyPercentage[i] =
             (nuptialDailyPercentageModel(weather.lat!, weather.daily!.elementAt(i)) * 100.0)
@@ -506,10 +535,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: <Widget>[
-                                  _buildTodayPercentage(orientation, 'Day', _diurnalHourPercentage),
-                                  _buildTodayPercentage(orientation, 'Now', _dailyPercentage[0]),
                                   _buildTodayPercentage(
-                                      orientation, 'Evening', _nocturnalHourPercentage),
+                                      orientation, 'Next 11am', _diurnalHourPercentage),
+                                  _buildTodayPercentage(
+                                      orientation, 'Today Overall', _dailyPercentage[0]),
+                                  _buildTodayPercentage(
+                                      orientation, 'Next 7pm', _nocturnalHourPercentage),
                                 ],
                               ),
                               if (orientation == Orientation.portrait &&
@@ -535,37 +566,41 @@ class _MyHomePageState extends State<MyHomePage> {
                               if (orientation == Orientation.landscape &&
                                   height >= LARGE_SCREEN_HEIGHT)
                                 _buildTemperature('Min Temp', _weather!.daily!.first.temp!.min!),
-                              _buildTemperature(
-                                  timeOfDayFormat
-                                          .format(DateTime.fromMillisecondsSinceEpoch(
-                                              (_indexOfDiurnalHour!.dt! +
-                                                      _weather!.timezoneOffset!) *
-                                                  1000,
-                                              isUtc: true))
-                                          .toLowerCase() +
-                                ' Temp',
-                            _indexOfDiurnalHour!.temp!),
-                        if (orientation == Orientation.landscape &&
-                            height >= LARGE_SCREEN_HEIGHT)
-                          _buildTemperature('Day Temp', _weather!.daily!.first.temp!.day!),
-                        _buildTemperature('Max Temp', _weather!.daily!.first.temp!.max!),
-                        _buildTemperature(
-                            timeOfDayFormat
-                                .format(DateTime.fromMillisecondsSinceEpoch(
-                                (_indexOfNocturnalHour!.dt! +
-                                    _weather!.timezoneOffset!) *
-                                    1000,
-                                isUtc: true))
-                                .toLowerCase() +
-                                ' Temp',
-                            _indexOfNocturnalHour!.temp!),
-                        if (orientation == Orientation.landscape &&
-                            height >= LARGE_SCREEN_HEIGHT)
-                          _buildTemperature('Eve Temp', _weather!.daily!.first.temp!.eve!),
-                        _buildAirPressure(),
-                        _buildWindSpeed(),
-                        if (orientation == Orientation.portrait ||
-                            height >= LARGE_SCREEN_HEIGHT)
+                              _indexOfDiurnalHour != null
+                                  ? _buildTemperature(
+                                      timeOfDayFormat
+                                              .format(DateTime.fromMillisecondsSinceEpoch(
+                                                  (_indexOfDiurnalHour!.dt! +
+                                                          _weather!.timezoneOffset!) *
+                                                      1000,
+                                                  isUtc: true))
+                                              .toLowerCase() +
+                                          ' Temp',
+                                      _indexOfDiurnalHour!.temp!)
+                                  : _buildTemperature('Missing', 0),
+                              if (orientation == Orientation.landscape &&
+                                  height >= LARGE_SCREEN_HEIGHT)
+                                _buildTemperature('Day Temp', _weather!.daily!.first.temp!.day!),
+                              _buildTemperature('Max Temp', _weather!.daily!.first.temp!.max!),
+                              _indexOfNocturnalHour != null
+                                  ? _buildTemperature(
+                                      timeOfDayFormat
+                                              .format(DateTime.fromMillisecondsSinceEpoch(
+                                                  (_indexOfNocturnalHour!.dt! +
+                                                          _weather!.timezoneOffset!) *
+                                                      1000,
+                                                  isUtc: true))
+                                              .toLowerCase() +
+                                          ' Temp',
+                                      _indexOfNocturnalHour!.temp!)
+                                  : _buildTemperature('Missing', 0),
+                              if (orientation == Orientation.landscape &&
+                                  height >= LARGE_SCREEN_HEIGHT)
+                                _buildTemperature('Eve Temp', _weather!.daily!.first.temp!.eve!),
+                              _buildAirPressure(),
+                              _buildWindSpeed(),
+                              if (orientation == Orientation.portrait ||
+                                  height >= LARGE_SCREEN_HEIGHT)
                                 _buildWindGust(),
                               _buildHumidity(),
                               if (orientation == Orientation.portrait ||
@@ -678,7 +713,7 @@ class _MyHomePageState extends State<MyHomePage> {
     String? text =
         (percentage < amberThreshold ? 'No' : (percentage < greenThreshold ? 'Maybe' : 'Yes'));
 
-    return text!;
+    return text;
   }
 
   Widget _buildErrorMessage() {
@@ -749,7 +784,7 @@ class _MyHomePageState extends State<MyHomePage> {
           textAlign: TextAlign.center,
         ),
         AutoSizeText(
-          '${percentage}%',
+          percentage > 0 ? '${percentage}%' : '?',
           //getColorText(percentage),
           style: TextStyle(
             color: getColorGradient(percentage),
@@ -774,14 +809,19 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(24, (index) => _buildTodayHistogramElement(index)),
+        children: List.generate(
+            min(24, _weather!.hourly!.length), (index) => _buildTodayHistogramElement(index)),
       ),
     );
   }
 
   Widget _buildTodayHistogramElement(int index) {
+    Hourly hourly = _weather!.hourly![index];
+    String time = timeOfDay24HourFormat.format(DateTime.fromMillisecondsSinceEpoch(
+        (hourly.dt! + _weather!.timezoneOffset!) * 1000,
+        isUtc: true));
     int percentage = _hourlyPercentage[index];
-    if (percentage < 11) percentage = 11;
+    if (percentage < 10) percentage = 10;
     return LayoutBuilder(builder: (ctx, constraints) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -813,14 +853,14 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Container(
             height: constraints.maxHeight * 0.6,
-            width: 11,
+            width: 12,
             child: Stack(
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Color.fromRGBO(0, 0, 0, 0.1), width: 0.5),
                     //color: Colors.white,//Color.fromRGBO(220, 220, 220, 1),
-                    borderRadius: BorderRadius.circular(11),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 Align(
@@ -831,7 +871,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: getColorGradient(percentage),
-                        borderRadius: BorderRadius.circular(11),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
@@ -844,10 +884,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Container(
             height: constraints.maxHeight * 0.15,
-            width: 13,
+            width: 12,
             child: FittedBox(
               child: AutoSizeText(
-                index.toString().padLeft(2, '0'),
+                //index.toString().padLeft(2, '0'),
+                time,
                 minFontSize: 2,
                 maxFontSize: 12,
                 stepGranularity: 1.0,
@@ -883,10 +924,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         AutoSizeText(
           longDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-              (_historical!.current!.dt! + _historical!.timezoneOffset!) * 1000,
-              isUtc: true)) +
+                  (_weather!.hourly!.first.dt! + _weather!.timezoneOffset!) * 1000,
+                  isUtc: true)) +
               ' - ' +
-              toBeginningOfSentenceCase(_historical!.current!.weather!.first.description)!,
+              toBeginningOfSentenceCase(_weather!.hourly!.first.weather!.first.description)!,
           style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
           minFontSize: 17,
           maxFontSize: 20,
@@ -939,14 +980,14 @@ class _MyHomePageState extends State<MyHomePage> {
             group: headingGroup,
           ),
           AutoSizeText(
-            '${_indexOfDiurnalHour!.windSpeed!.toStringAsFixed(1)}\u{00A0}m/s',
+            '${_weather!.daily!.first.windSpeed!.toStringAsFixed(1)}\u{00A0}m/s',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
             stepGranularity: 1.0,
             group: parameterGroup,
           ),
           AutoSizeText(
             "Suitability: " +
-                (windContribution(_indexOfDiurnalHour!.windSpeed!) * 100).toStringAsFixed(0) +
+                (windContribution(_weather!.daily!.first.windSpeed!) * 100).toStringAsFixed(0) +
                 "%",
             style: TextStyle(
               fontSize: 12,
@@ -1071,14 +1112,14 @@ class _MyHomePageState extends State<MyHomePage> {
             group: headingGroup,
           ),
           AutoSizeText(
-            '${_indexOfDiurnalHour!.humidity!}%',
+            '${_weather!.daily!.first.humidity!}%',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
             stepGranularity: 1.0,
             group: parameterGroup,
           ),
           AutoSizeText(
             "Suitability: " +
-                (humidityContribution(_indexOfDiurnalHour!.humidity!) * 100).toStringAsFixed(0) +
+                (humidityContribution(_weather!.daily!.first.humidity!) * 100).toStringAsFixed(0) +
                 "%",
             style: TextStyle(
               fontSize: 12,
@@ -1104,14 +1145,14 @@ class _MyHomePageState extends State<MyHomePage> {
             group: headingGroup,
           ),
           AutoSizeText(
-            '${_indexOfDiurnalHour!.clouds!}%',
+            '${_weather!.daily!.first.clouds!}%',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
             stepGranularity: 1.0,
             group: parameterGroup,
           ),
           AutoSizeText(
             "Suitability: " +
-                (cloudinessContribution(_indexOfDiurnalHour!.clouds!) * 100).toStringAsFixed(0) +
+                (cloudinessContribution(_weather!.daily!.first.clouds!) * 100).toStringAsFixed(0) +
                 "%",
             style: TextStyle(fontSize: 12),
             minFontSize: 2,
@@ -1135,14 +1176,14 @@ class _MyHomePageState extends State<MyHomePage> {
             group: headingGroup,
           ),
           AutoSizeText(
-            (_indexOfDiurnalHour!.pressure!).toStringAsFixed(0) + "\u{00A0}hPa",
+            (_weather!.daily!.first.pressure!).toStringAsFixed(0) + "\u{00A0}hPa",
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
             stepGranularity: 1.0,
             group: parameterGroup,
           ),
           AutoSizeText(
             "Suitability: " +
-                (pressureContribution(_indexOfDiurnalHour!.pressure!) * 100).toStringAsFixed(0) +
+                (pressureContribution(_weather!.daily!.first.pressure!) * 100).toStringAsFixed(0) +
                 "%",
             style: TextStyle(
               fontSize: 12,
@@ -1179,16 +1220,16 @@ class _MyHomePageState extends State<MyHomePage> {
             DataColumn(label: Text('Wind Speed'), numeric: true),
             DataColumn(label: Text('Confidence'), numeric: true),
           ],
-              rows: [
-                _buildFuturePercentage(1),
-                _buildFuturePercentage(2),
-                _buildFuturePercentage(3),
-                _buildFuturePercentage(4),
-                _buildFuturePercentage(5),
-                _buildFuturePercentage(6),
-                _buildFuturePercentage(7),
-              ],
-            )),
+          rows: [
+            _buildFuturePercentage(1),
+            _buildFuturePercentage(2),
+            _buildFuturePercentage(3),
+            _buildFuturePercentage(4),
+            _buildFuturePercentage(5),
+            _buildFuturePercentage(6),
+            _buildFuturePercentage(7),
+          ],
+        )),
       ],
     );
   }
