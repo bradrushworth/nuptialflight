@@ -374,9 +374,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
       // Sometimes API returns less than 24 hours worth of data, but it is always the most recent
       int j = 0;
-      for (int i = 0; i < historical.hourly!.length; i++) {
+      for (int i = 0; i < _hourlyPercentage.length; i++) {
         _hourlyPercentage[i] =
-            (nuptialHourlyPercentageModel(weather.lat!, historical.hourly![j]) * 100.0).toInt();
+            (nuptialHourlyPercentageModel(weather.lat!, weather.hourly![j]) * 100.0).toInt();
         j++;
       }
 
