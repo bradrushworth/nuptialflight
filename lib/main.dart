@@ -466,7 +466,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget buildUI(String title) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    //double width = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -808,13 +808,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildTodayHistogram(BoxConstraints constraints) {
+    double height = MediaQuery.of(context).size.height;
     return SizedBox(
-      height: 140,
+      height: height / 8,
       width: constraints.maxWidth,
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: List.generate(
             min(24, _weather!.hourly!.length), (index) => _buildTodayHistogramElement(index)),
       ),
@@ -828,6 +829,7 @@ class _MyHomePageState extends State<MyHomePage> {
         isUtc: true));
     int percentage = _hourlyPercentage[index];
     if (percentage < 10) percentage = 10;
+    double width = MediaQuery.of(context).size.width;
     return LayoutBuilder(builder: (ctx, constraints) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -859,7 +861,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Container(
             height: constraints.maxHeight * 0.6,
-            width: 12,
+            width: width / 32,
             child: Stack(
               children: <Widget>[
                 Container(
@@ -896,7 +898,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Container(
             height: constraints.maxHeight * 0.15,
-            width: 12,
+            width: width / 32,
             child: FittedBox(
               child: AutoSizeText(
                 //index.toString().padLeft(2, '0'),
@@ -921,6 +923,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildTodayWeather(Orientation orientation) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         AutoSizeText(
           (_geocoding == null ? 'Today\'s Weather' : '$_geocoding Weather'),
