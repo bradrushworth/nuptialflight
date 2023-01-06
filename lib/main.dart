@@ -510,7 +510,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 : !loaded
                     ? _buildCircularProgressIndicator()
                     : Column(
-              mainAxisSize: MainAxisSize.max,
+                        mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: orientation == Orientation.portrait
                             ? MainAxisAlignment.spaceEvenly
                             : MainAxisAlignment.spaceEvenly,
@@ -552,7 +552,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             _buildTodayHistogram(constraints),
                           SizedBox(
                               child: GridView.count(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            padding: EdgeInsets.fromLTRB(
+                                0,
+                                (orientation == Orientation.landscape &&
+                                        height >= 750
+                                    ? 30
+                                    : 0),
+                                0,
+                                0),
                             crossAxisCount: orientation == Orientation.portrait ? 3 : 6,
                             // width/height ratio
                             childAspectRatio: constraints.maxHeight >= 1000
@@ -683,7 +690,7 @@ class _MyHomePageState extends State<MyHomePage> {
               tooltip: 'Saw Nuptial Flight',
               child: Icon(halictus_rubicundus_silhouette, size: 45, color: Colors.white),
             ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }
 
@@ -857,7 +864,13 @@ class _MyHomePageState extends State<MyHomePage> {
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: Color.fromRGBO(0, 0, 0, 0.1), width: 0.5),
+                    border: Border.all(
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .color!
+                            .withOpacity(0.1), // Color.fromRGBO(220, 220, 220, 0.2),
+                        width: 0.5),
                     //color: Colors.white,//Color.fromRGBO(220, 220, 220, 1),
                     borderRadius: BorderRadius.circular(10),
                   ),
