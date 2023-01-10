@@ -345,7 +345,7 @@ class _MyHomePageState extends State<MyHomePage> {
               '11AM');
         }
         _diurnalHourPercentage =
-            (nuptialHourlyPercentageModel(weather.lat!, _indexOfDiurnalHour!) * 100.0).toInt();
+            (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, _indexOfDiurnalHour!) * 100.0).toInt();
       } on StateError catch (e) {
         _indexOfDiurnalHour = null;
         _diurnalHourPercentage = 0;
@@ -366,7 +366,7 @@ class _MyHomePageState extends State<MyHomePage> {
               '7PM');
         }
         _nocturnalHourPercentage =
-            (nuptialHourlyPercentageModel(weather.lat!, _indexOfNocturnalHour!) * 100.0).toInt();
+            (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, _indexOfNocturnalHour!) * 100.0).toInt();
       } on StateError catch (e) {
         _indexOfNocturnalHour = null;
         _nocturnalHourPercentage = 0;
@@ -376,13 +376,13 @@ class _MyHomePageState extends State<MyHomePage> {
       int j = 0;
       for (int i = 0; i < _hourlyPercentage.length; i++) {
         _hourlyPercentage[i] =
-            (nuptialHourlyPercentageModel(weather.lat!, weather.hourly![j]) * 100.0).toInt();
+            (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, weather.hourly![j]) * 100.0).toInt();
         j++;
       }
 
       for (int i = 0; i < _dailyPercentage.length; i++) {
         _dailyPercentage[i] =
-            (nuptialDailyPercentageModel(weather.lat!, weather.daily!.elementAt(i)) * 100.0)
+            (nuptialDailyPercentageModel(weather.lat!, weather.lon!, weather.daily!.elementAt(i)) * 100.0)
                 .toInt();
       }
 

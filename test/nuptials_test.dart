@@ -15,6 +15,7 @@ void main() {
     daily.pressure = PRESSURE_AVG.round();
     daily.uvi = UVI_STD.round();
     double lat = -35.2;
+    double lon = 149.1;
 
     test('Temperature', () {
       expect(temperatureContribution(daily.temp!.day!), closeTo(1.00, 0.01));
@@ -45,7 +46,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.96, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.81, 0.01));
     });
   });
 
@@ -61,6 +62,7 @@ void main() {
     daily.pressure = 995;
     daily.uvi = 3;
     double lat = -35.2;
+    double lon = 149.1;
 
     test('Temperature', () {
       expect(temperatureContribution(daily.temp!.day!), closeTo(0.25, 0.01));
@@ -91,7 +93,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.01, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.01, 0.01));
     });
   });
 
@@ -113,6 +115,7 @@ void main() {
     daily.pressure = 1013;
     daily.uvi = 5;
     double lat = -35.2;
+    double lon = 149.1;
 
     test('Temperature', () {
       expect(temperatureContribution(daily.temp!.day!), closeTo(0.99, 0.01));
@@ -143,7 +146,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.36, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.32, 0.01));
     });
   });
 
@@ -165,6 +168,7 @@ void main() {
     daily.pressure = 1015;
     daily.uvi = 1;
     double lat = -35.2;
+    double lon = 149.1;
 
     test('Temperature', () {
       expect(temperatureContribution(daily.temp!.day!), closeTo(0.52, 0.01));
@@ -195,7 +199,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.06, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.01, 0.01));
     });
   });
 
@@ -212,6 +216,7 @@ void main() {
     daily.pressure = 995;
     daily.uvi = 12;
     double lat = -35.2;
+    double lon = 149.1;
 
     test('Temperature', () {
       expect(temperatureContribution(daily.temp!.day!), closeTo(0.33, 0.01));
@@ -242,7 +247,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, daily), closeTo(0.01, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.01, 0.01));
     });
   });
 }

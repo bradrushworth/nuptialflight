@@ -2,7 +2,6 @@ import 'dart:math';
 
 //import 'dart:developer' as developer;
 import 'package:normal/normal.dart';
-//import 'package:collection/collection.dart';
 import 'package:nuptialflight/models/final_model.dart';
 import 'package:nuptialflight/responses/onecall_response.dart';
 
@@ -68,7 +67,7 @@ double nuptialDailyPercentage(Daily daily, {bool nocturnal = false}) {
   return nuptialCalculator(values);
 }
 
-double nuptialHourlyPercentageModel(num lat, Hourly hourly) {
+double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
   double temp = hourly.temp!.toDouble();
   double wind = hourly.windSpeed!.toDouble();
   double humid = hourly.humidity!.toDouble();
@@ -78,19 +77,22 @@ double nuptialHourlyPercentageModel(num lat, Hourly hourly) {
   if (wind > 15) return 0.01;
   if (humid < 40) return 0.01;
   if (press < 995) return 0.01;
-  return max(
-      0.01,
-      score([
-        lat.toDouble(),
-        temperatureContribution(temp),
-        windContribution(wind),
-        humidityContribution(humid),
-        cloudinessContribution(cloud),
-        pressureContribution(press),
-      ])[1]);
+  return min(
+      0.99,
+      max(
+          0.01,
+          score([
+            lat.toDouble(),
+            lon.toDouble(),
+            temp, //temperatureContribution(temp),
+            wind, //windContribution(wind),
+            humid, //humidityContribution(humid),
+            cloud, //cloudinessContribution(cloud),
+            press, //pressureContribution(press),
+          ])[1]));
 }
 
-double nuptialDailyPercentageModel(num lat, Daily daily, {bool nocturnal = false}) {
+double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturnal = false}) {
   double temp = nocturnal ? daily.temp!.eve!.toDouble() : daily.temp!.day!.toDouble();
   double wind = daily.windSpeed!.toDouble();
   double humid = daily.humidity!.toDouble();
@@ -100,16 +102,19 @@ double nuptialDailyPercentageModel(num lat, Daily daily, {bool nocturnal = false
   if (wind > 15) return 0.01;
   if (humid < 40) return 0.01;
   if (press < 995) return 0.01;
-  return max(
-      0.01,
-      score([
-        lat.toDouble(),
-        temperatureContribution(temp),
-        windContribution(wind),
-        humidityContribution(humid),
-        cloudinessContribution(cloud),
-        pressureContribution(press),
-      ])[1]);
+  return min(
+      0.99,
+      max(
+          0.01,
+          score([
+            lat.toDouble(),
+            lon.toDouble(),
+            temp, //temperatureContribution(temp),
+            wind, //windContribution(wind),
+            humid, //humidityContribution(humid),
+            cloud, //cloudinessContribution(cloud),
+            press, //pressureContribution(press),
+          ])[1]));
 }
 
 ///
