@@ -5,6 +5,7 @@ import 'package:test/test.dart';
 void main() {
   group('Perfect day', () {
     Daily daily = Daily();
+    daily.dt = 1665190800;
     daily.temp = Temp(day: TEMP_AVG);
     daily.humidity = HUMIDITY_AVG.round();
     daily.windSpeed = WIND_AVG;
@@ -46,12 +47,13 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.81, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.97, 0.01));
     });
   });
 
   group('Worst day', () {
     Daily daily = Daily();
+    daily.dt = 1665190800;
     daily.temp = Temp(day: 5.0, min: 5.0, max: 5.0, night: 5.0, eve: 5.0, morn: 5.0);
     daily.humidity = 10;
     daily.windSpeed = 30.0;
@@ -99,6 +101,7 @@ void main() {
 
   group('Great day', () {
     Daily daily = Daily();
+    daily.dt = 1665190800;
     daily.temp = Temp(
         day: 16.65,
         min: 16.97,
@@ -146,12 +149,13 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.32, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.91, 0.01));
     });
   });
 
   group('Ordinary day', () {
     Daily daily = Daily();
+    daily.dt = 1665190800;
     daily.temp = Temp(
         day: 22.84,
         min: 16.97,
@@ -199,12 +203,13 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.01, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.66, 0.01));
     });
   });
 
   group('Bad day', () {
     Daily daily = Daily();
+    daily.dt = 1665190800;
     daily.temp = Temp(
         day: 6.84, min: 6.97, max: 6.84, night: 1.53, eve: 5.65, morn: 3.54);
     daily.humidity = 40;

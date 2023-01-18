@@ -1,6 +1,7 @@
 import 'dart:math';
 
 //import 'dart:developer' as developer;
+import 'package:intl/intl.dart';
 import 'package:normal/normal.dart';
 import 'package:nuptialflight/models/final_model.dart';
 import 'package:nuptialflight/responses/onecall_response.dart';
@@ -26,6 +27,8 @@ const double RADIATION_AVG = 225.7; // (J.cm-2.h-1)
 const double RADIATION_STD = 19.5; // SE not SD
 const double UVI_AVG = 6.1;
 const double UVI_STD = 6;
+
+final DateFormat dayOfYearFormat = DateFormat("D");
 
 double nuptialHourlyPercentage(Hourly hourly) {
   double temp = temperatureContribution(hourly.temp!);
@@ -73,6 +76,15 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
   double humid = hourly.humidity!.toDouble();
   double cloud = hourly.clouds!.toDouble();
   double press = hourly.pressure!.toDouble();
+  double northern = lat > 0 ? 1.0 : 0.0;
+  int dayOfYear = int.parse(dayOfYearFormat
+      .format(DateTime.fromMillisecondsSinceEpoch(
+      (hourly.dt!) *
+          1000,
+      isUtc: true)));
+  double daysSinceSpring = (dayOfYear - (31 + 28 + 31 + 30 + 31 + 30 + 31 + 31)) % 365;
+  if (northern == 1.0) daysSinceSpring = (daysSinceSpring - (31 + 30 + 31 + 30 + 31 + 31)) % 365;
+
   if (temp < 5) return 0.01;
   if (wind > 15) return 0.01;
   if (humid < 40) return 0.01;
@@ -89,6 +101,8 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
             humid, //humidityContribution(humid),
             cloud, //cloudinessContribution(cloud),
             press, //pressureContribution(press),
+            northern,
+            daysSinceSpring,
           ])[1]));
 }
 
@@ -98,6 +112,15 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturna
   double humid = daily.humidity!.toDouble();
   double cloud = daily.clouds!.toDouble();
   double press = daily.pressure!.toDouble();
+  double northern = lat > 0 ? 1.0 : 0.0;
+  int dayOfYear = int.parse(dayOfYearFormat
+      .format(DateTime.fromMillisecondsSinceEpoch(
+      (daily.dt!) *
+          1000,
+      isUtc: true)));
+  double daysSinceSpring = (dayOfYear - (31 + 28 + 31 + 30 + 31 + 30 + 31 + 31)) % 365;
+  if (northern == 1.0) daysSinceSpring = (daysSinceSpring - (31 + 30 + 31 + 30 + 31 + 31)) % 365;
+
   if (temp < 5) return 0.01;
   if (wind > 15) return 0.01;
   if (humid < 40) return 0.01;
@@ -114,6 +137,8 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturna
             humid, //humidityContribution(humid),
             cloud, //cloudinessContribution(cloud),
             press, //pressureContribution(press),
+            northern,
+            daysSinceSpring,
           ])[1]));
 }
 
