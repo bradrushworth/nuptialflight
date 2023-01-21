@@ -73,9 +73,11 @@ double nuptialDailyPercentage(Daily daily, {bool nocturnal = false}) {
 double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
   double temp = hourly.temp!.toDouble();
   double wind = hourly.windSpeed!.toDouble();
+  double gust = hourly.windGust!.toDouble();
   double humid = hourly.humidity!.toDouble();
   double cloud = hourly.clouds!.toDouble();
   double press = hourly.pressure!.toDouble();
+  double dewPoint = hourly.dewPoint!.toDouble();
   double northern = lat > 0 ? 1.0 : 0.0;
   int dayOfYear = int.parse(dayOfYearFormat
       .format(DateTime.fromMillisecondsSinceEpoch(
@@ -87,6 +89,7 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
 
   if (temp < 5) return 0.01;
   if (wind > 15) return 0.01;
+  if (gust > 20) return 0.01;
   if (humid < 40) return 0.01;
   if (press < 995) return 0.01;
   return min(
@@ -96,22 +99,28 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
           score([
             lat.toDouble(),
             lon.toDouble(),
-            temp, //temperatureContribution(temp),
-            wind, //windContribution(wind),
+            //temp, //temperatureContribution(temp),
+            //morn,
+            //wind, //windContribution(wind),
+            gust,
             humid, //humidityContribution(humid),
-            cloud, //cloudinessContribution(cloud),
+            //cloud, //cloudinessContribution(cloud),
             press, //pressureContribution(press),
-            northern,
+            dewPoint,
+            //northern,
             daysSinceSpring,
           ])[1]));
 }
 
 double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturnal = false}) {
   double temp = nocturnal ? daily.temp!.eve!.toDouble() : daily.temp!.day!.toDouble();
+  //double morn = daily.temp!.morn!.toDouble();
   double wind = daily.windSpeed!.toDouble();
+  double gust = daily.windGust!.toDouble();
   double humid = daily.humidity!.toDouble();
-  double cloud = daily.clouds!.toDouble();
+  //double cloud = daily.clouds!.toDouble();
   double press = daily.pressure!.toDouble();
+  double dewPoint = daily.dewPoint!.toDouble();
   double northern = lat > 0 ? 1.0 : 0.0;
   int dayOfYear = int.parse(dayOfYearFormat
       .format(DateTime.fromMillisecondsSinceEpoch(
@@ -123,6 +132,7 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturna
 
   if (temp < 5) return 0.01;
   if (wind > 15) return 0.01;
+  if (gust > 20) return 0.01;
   if (humid < 40) return 0.01;
   if (press < 995) return 0.01;
   return min(
@@ -132,12 +142,15 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturna
           score([
             lat.toDouble(),
             lon.toDouble(),
-            temp, //temperatureContribution(temp),
-            wind, //windContribution(wind),
+            //temp, //temperatureContribution(temp),
+            //morn,
+            //wind, //windContribution(wind),
+            gust,
             humid, //humidityContribution(humid),
-            cloud, //cloudinessContribution(cloud),
+            //cloud, //cloudinessContribution(cloud),
             press, //pressureContribution(press),
-            northern,
+            dewPoint,
+            //northern,
             daysSinceSpring,
           ])[1]));
 }

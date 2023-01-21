@@ -345,7 +345,8 @@ class _MyHomePageState extends State<MyHomePage> {
               '11AM');
         }
         _diurnalHourPercentage =
-            (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, _indexOfDiurnalHour!) * 100.0).toInt();
+            (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, _indexOfDiurnalHour!) * 100.0)
+                .toInt();
       } on StateError catch (e) {
         _indexOfDiurnalHour = null;
         _diurnalHourPercentage = 0;
@@ -366,7 +367,9 @@ class _MyHomePageState extends State<MyHomePage> {
               '7PM');
         }
         _nocturnalHourPercentage =
-            (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, _indexOfNocturnalHour!) * 100.0).toInt();
+            (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, _indexOfNocturnalHour!) *
+                    100.0)
+                .toInt();
       } on StateError catch (e) {
         _indexOfNocturnalHour = null;
         _nocturnalHourPercentage = 0;
@@ -376,13 +379,15 @@ class _MyHomePageState extends State<MyHomePage> {
       int j = 0;
       for (int i = 0; i < _hourlyPercentage.length; i++) {
         _hourlyPercentage[i] =
-            (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, weather.hourly![j]) * 100.0).toInt();
+            (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, weather.hourly![j]) * 100.0)
+                .toInt();
         j++;
       }
 
       for (int i = 0; i < _dailyPercentage.length; i++) {
         _dailyPercentage[i] =
-            (nuptialDailyPercentageModel(weather.lat!, weather.lon!, weather.daily!.elementAt(i)) * 100.0)
+            (nuptialDailyPercentageModel(weather.lat!, weather.lon!, weather.daily!.elementAt(i)) *
+                    100.0)
                 .toInt();
       }
 
@@ -554,10 +559,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: GridView.count(
                             padding: EdgeInsets.fromLTRB(
                                 0,
-                                (orientation == Orientation.landscape &&
-                                        height >= 750
-                                    ? 30
-                                    : 0),
+                                (orientation == Orientation.landscape && height >= 750 ? 30 : 0),
                                 0,
                                 0),
                             crossAxisCount: orientation == Orientation.portrait ? 3 : 6,
@@ -569,6 +571,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     : 1.8,
                             shrinkWrap: true,
                             children: [
+                              _buildTemperature('Dew Point', _weather!.daily!.first.dewPoint!),
                               if (orientation == Orientation.landscape &&
                                   height >= LARGE_SCREEN_HEIGHT)
                                 _buildTemperature('Min Temp', _weather!.daily!.first.temp!.min!),
@@ -587,7 +590,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               if (orientation == Orientation.landscape &&
                                   height >= LARGE_SCREEN_HEIGHT)
                                 _buildTemperature('Day Temp', _weather!.daily!.first.temp!.day!),
-                              _buildTemperature('Max Temp', _weather!.daily!.first.temp!.max!),
+                              //_buildTemperature('Max Temp', _weather!.daily!.first.temp!.max!),
                               _indexOfNocturnalHour != null
                                   ? _buildTemperature(
                                       timeOfDayFormat
@@ -604,10 +607,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                   height >= LARGE_SCREEN_HEIGHT)
                                 _buildTemperature('Eve Temp', _weather!.daily!.first.temp!.eve!),
                               _buildAirPressure(),
-                              _buildWindSpeed(),
                               if (orientation == Orientation.portrait ||
                                   height >= LARGE_SCREEN_HEIGHT)
-                                _buildWindGust(),
+                                _buildWindSpeed(),
+                              _buildWindGust(),
                               _buildHumidity(),
                               if (orientation == Orientation.portrait ||
                                   height >= LARGE_SCREEN_HEIGHT)
@@ -1231,25 +1234,31 @@ class _MyHomePageState extends State<MyHomePage> {
           dividerThickness: 0,
           columns: [
             DataColumn(label: Text('Day'), numeric: true),
-            DataColumn(label: Text('Temperature'), numeric: true),
-            DataColumn(label: Text('Wind Speed'), numeric: true),
+            if (orientation == Orientation.landscape)
+              DataColumn(label: Text('Temp'), numeric: true),
+            DataColumn(label: Text('Dew Point'), numeric: true),
+            if (orientation == Orientation.landscape)
+              DataColumn(label: Text('Pressure'), numeric: true),
+            if (orientation == Orientation.landscape)
+              DataColumn(label: Text('Humidity'), numeric: true),
+            DataColumn(label: Text('Wind Gust'), numeric: true),
             DataColumn(label: Text('Confidence'), numeric: true),
           ],
           rows: [
-            _buildFuturePercentage(1),
-            _buildFuturePercentage(2),
-            _buildFuturePercentage(3),
-            _buildFuturePercentage(4),
-            _buildFuturePercentage(5),
-            _buildFuturePercentage(6),
-            _buildFuturePercentage(7),
+            _buildFuturePercentage(orientation, 1),
+            _buildFuturePercentage(orientation, 2),
+            _buildFuturePercentage(orientation, 3),
+            _buildFuturePercentage(orientation, 4),
+            _buildFuturePercentage(orientation, 5),
+            _buildFuturePercentage(orientation, 6),
+            _buildFuturePercentage(orientation, 7),
           ],
         )),
       ],
     );
   }
 
-  DataRow _buildFuturePercentage(int i) {
+  DataRow _buildFuturePercentage(Orientation orientation, int i) {
     return DataRow(
       cells: [
         DataCell(
@@ -1260,15 +1269,36 @@ class _MyHomePageState extends State<MyHomePage> {
             style: getColorTextStyle(_dailyPercentage[i]),
           ),
         ),
+        if (orientation == Orientation.landscape)
+          DataCell(
+            Text(
+              ' ${_weather!.daily!.elementAt(i).temp!.day!.toStringAsFixed(1)}°C',
+              style: getColorTextStyle(_dailyPercentage[i]),
+            ),
+          ),
         DataCell(
           Text(
-            ' ${_weather!.daily!.elementAt(i).temp!.day!.toStringAsFixed(1)}°C',
+            ' ${_weather!.daily!.elementAt(i).dewPoint!.toStringAsFixed(1)}°C',
             style: getColorTextStyle(_dailyPercentage[i]),
           ),
         ),
+        if (orientation == Orientation.landscape)
+          DataCell(
+            Text(
+              ' ${_weather!.daily!.elementAt(i).pressure!.toStringAsFixed(0)}\u{00A0}hPa',
+              style: getColorTextStyle(_dailyPercentage[i]),
+            ),
+          ),
+        if (orientation == Orientation.landscape)
+          DataCell(
+            Text(
+              ' ${_weather!.daily!.elementAt(i).humidity!.toStringAsFixed(0)}%',
+              style: getColorTextStyle(_dailyPercentage[i]),
+            ),
+          ),
         DataCell(
           Text(
-            ' ${_weather!.daily!.elementAt(i).windSpeed!.toStringAsFixed(1)}\u{00A0}m/s',
+            ' ${_weather!.daily!.elementAt(i).windGust!.toStringAsFixed(1)}\u{00A0}m/s',
             style: getColorTextStyle(_dailyPercentage[i]),
           ),
         ),
