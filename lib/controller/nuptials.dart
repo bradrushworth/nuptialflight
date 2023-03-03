@@ -33,7 +33,7 @@ final DateFormat dayOfYearFormat = DateFormat("D");
 double nuptialHourlyPercentage(Hourly hourly) {
   double temp = temperatureContribution(hourly.temp!);
   double windSpeed = windContribution(hourly.windSpeed!);
-  //double windGust = windContribution(hourly.windGust!);
+  //double windGust = windContribution(hourly.windGust?.toDouble() ?? hourly.windSpeed!.toDouble());
   //double rain = rainContribution(hourly.pop!);
   double humid = humidityContribution(hourly.humidity!);
   double cloud = cloudinessContribution(hourly.clouds!);
@@ -53,7 +53,7 @@ double nuptialHourlyPercentage(Hourly hourly) {
 double nuptialDailyPercentage(Daily daily, {bool nocturnal = false}) {
   double temp = temperatureContribution(nocturnal ? daily.temp!.eve! : daily.temp!.day!);
   double windSpeed = windContribution(daily.windSpeed!);
-  //double windGust = windContribution(daily.windGust!);
+  //double windGust = windContribution(daily.windGust?.toDouble() ?? daily.windSpeed!.toDouble());
   //double rain = rainContribution(daily.pop!);
   double humid = humidityContribution(daily.humidity!);
   double cloud = cloudinessContribution(daily.clouds!);
@@ -73,7 +73,7 @@ double nuptialDailyPercentage(Daily daily, {bool nocturnal = false}) {
 double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
   double temp = hourly.temp!.toDouble();
   double wind = hourly.windSpeed!.toDouble();
-  double gust = hourly.windGust!.toDouble();
+  double gust = hourly.windGust?.toDouble() ?? hourly.windSpeed!.toDouble();
   double humid = hourly.humidity!.toDouble();
   double cloud = hourly.clouds!.toDouble();
   double press = hourly.pressure!.toDouble();
@@ -116,7 +116,7 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturna
   double temp = nocturnal ? daily.temp!.eve!.toDouble() : daily.temp!.day!.toDouble();
   //double morn = daily.temp!.morn!.toDouble();
   double wind = daily.windSpeed!.toDouble();
-  double gust = daily.windGust!.toDouble();
+  double gust = daily.windGust?.toDouble() ?? daily.windSpeed!.toDouble();
   double humid = daily.humidity!.toDouble();
   //double cloud = daily.clouds!.toDouble();
   double press = daily.pressure!.toDouble();
