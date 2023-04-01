@@ -46,7 +46,9 @@ const int amberThreshold = 40;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initialiseWidget();
-  await initializeService();
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+    await initializeService();
+  }
   runApp(
     DevicePreview(
       enabled: !kReleaseMode && kIsWeb,
