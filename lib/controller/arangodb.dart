@@ -1,4 +1,6 @@
 import 'package:darango/darango.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 
 import '../responses/onecall_response.dart';
@@ -137,4 +139,33 @@ RETURN {
     List<dynamic> result = response['result'];
     return result;
   }
+
+  Future<List> getRecentFlightsNearMe() async {
+    Position? position = await Geolocator.getLastKnownPosition();
+    if (position == null) {
+      debugPrint("Could not find last known position!");
+      return [];
+    }
+    Aql aql = _arangoClient!.aql();
+    String query = """
+FOR f IN current
+FILTER f.`flight` == 'yes'
+&& DATE_ISO8601(TO_NUMBER(f.weather.dt) * 1000) >= DATE_ADD(DATE_NOW(), -30, "minutes")
+&& DISTANCE(f.weather.coord.lat, f.weather.coord.lon, ${position.latitude}, ${position.longitude}) < 500 * 1000
+RETURN {
+    "key": f._key,
+    "weather": f.weather.weather[0].description,
+    "size": f.size,
+    "lat": f.weather.coord.lat,
+    "lon": f.weather.coord.lon,
+    "distance": ROUND(DISTANCE(f.weather.coord.lat, f.weather.coord.lon, ${position.latitude}, ${position.longitude}) / 1000),
+}
+""";
+
+    Map<String, dynamic> response = await aql.run(query, batchSize: 1000);
+    //print("response=${response}");
+    List<dynamic> result = response['result'];
+    return result;
+  }
+
 }

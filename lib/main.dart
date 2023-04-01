@@ -12,6 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:intl/intl.dart';
 import 'package:nuptialflight/controller/arangodb.dart';
@@ -21,6 +22,7 @@ import 'controller/nuptials.dart';
 import 'controller/screenshots_mobile.dart'
     if (dart.library.io) 'controller/screenshots_mobile.dart'
     if (dart.library.js) 'controller/screenshots_other.dart';
+import 'controller/service_mobile.dart';
 import 'controller/weather_fetcher.dart';
 import 'controller/widgets_other.dart'
     if (dart.library.io) 'controller/widgets_mobile.dart'
@@ -41,9 +43,10 @@ const String kGoogleApiKey = 'AIzaSyDNaPQ01hKnTmVRQoT_FM1ZTTxDnw6GoOU';
 const int greenThreshold = 60;
 const int amberThreshold = 40;
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initialiseWidget();
+  await initializeService();
   runApp(
     DevicePreview(
       enabled: !kReleaseMode && kIsWeb,
@@ -206,6 +209,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _loadData() async {
     await dotenv.load(fileName: 'assets/.env');
+
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestPermission();
 
     _getLocation();
 

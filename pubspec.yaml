@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.3.4+70
+version: 2.4.0+71
 
 environment:
   sdk: '>=2.18.4 <3.0.0'
@@ -29,7 +29,7 @@ dependencies:
   cupertino_icons: ^1.0.5
 
   # All app dependencies
-  home_widget: ^0.1.6
+  home_widget: ^0.2.0+1
   http: ^0.13.5
   intl: ^0.17.0
   #spectrum: ^0.2.1+1
@@ -44,18 +44,20 @@ dependencies:
   package_info_plus: ^3.0.1
   flutter_google_places: ^0.3.0
   flutter_map: ^3.0.0
-  flutter_html: ^2.2.1
+  flutter_html: ^3.0.0-alpha.6
   darango: ^0.1.1
     #git: https://github.com/bradrushworth/darango.git
   #path: ../darango
   platform_device_id: ^1.0.1
+  flutter_background_service: ^2.4.6
+  flutter_local_notifications: ^13.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   test: any
   flutter_automation: any
-  flutter_launcher_icons: ^0.11.0
+  flutter_launcher_icons: ^0.12.0
   device_preview: ^1.1.0
 
 # For information on the generic Dart part of this file, see the
