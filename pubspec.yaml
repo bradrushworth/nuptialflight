@@ -29,7 +29,9 @@ dependencies:
   cupertino_icons: ^1.0.5
 
   # All app dependencies
-  home_widget: ^0.2.0+1
+  home_widget: #^0.2.0+1
+    #path: ../home_widget
+    git: https://github.com/bradrushworth/home_widget.git
   http: ^0.13.5
   intl: ^0.17.0
   #spectrum: ^0.2.1+1

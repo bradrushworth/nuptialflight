@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:home_widget/home_widget.dart';
 //import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:nuptialflight/controller/service_percentage.dart' as PercentageService;
 
 void initialiseWidget() {
   if (Platform.isAndroid) {
     HomeWidget.registerBackgroundCallback(backgroundCallback);
   }
+  PercentageService.initializeService();
 }
 
 void widgetInitState(Function function) {

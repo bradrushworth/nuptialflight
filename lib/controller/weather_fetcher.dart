@@ -79,6 +79,12 @@ class WeatherFetcher {
     print('setLocation: _lat=$_lat _lon=$_lon');
   }
 
+  void setPosition(Position position) {
+    _lat = position.latitude;
+    _lon = position.longitude;
+    print('setLocation: _lat=$_lat _lon=$_lon');
+  }
+
   void setLocationPlace(PlacesDetailsResponse detail) {
     _lat = detail.result.geometry!.location.lat;
     _lon = detail.result.geometry!.location.lng;
