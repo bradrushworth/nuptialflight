@@ -11,7 +11,7 @@ void main() {
     daily.windSpeed = WIND_AVG;
     daily.windGust = WIND_AVG;
     daily.pop = 0.0;
-    daily.dewPoint = 18.43;
+    daily.dewPoint = 12.43;
     daily.clouds = 73; //CLOUD_AVG.round(); // Workaround for model limitation
     daily.pressure = PRESSURE_AVG.round();
     daily.uvi = UVI_STD.round();
@@ -47,7 +47,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.71, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.86, 0.01));
     });
   });
 
@@ -59,7 +59,7 @@ void main() {
     daily.windSpeed = 30.0;
     daily.windGust = 31.0;
     daily.pop = 1.0;
-    daily.dewPoint = 2.5;
+    daily.dewPoint = 6.43;
     daily.clouds = 20;
     daily.pressure = 995;
     daily.uvi = 3;
@@ -113,7 +113,7 @@ void main() {
     daily.windSpeed = 5.77;
     daily.windGust = 6.37;
     daily.pop = 0.05;
-    daily.dewPoint = 15;
+    daily.dewPoint = 18.43;
     daily.clouds = 75;
     daily.pressure = 1013;
     daily.uvi = 5;
@@ -149,7 +149,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.63, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.43, 0.01));
     });
   });
 
@@ -167,7 +167,7 @@ void main() {
     daily.windSpeed = 4.37;
     daily.windGust = 5.37;
     daily.pop = 0.30;
-    daily.dewPoint = 15;
+    daily.dewPoint = 15.43;
     daily.clouds = 80;
     daily.pressure = 1015;
     daily.uvi = 1;
@@ -203,7 +203,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.58, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.64, 0.01));
     });
   });
 
@@ -216,7 +216,7 @@ void main() {
     daily.windSpeed = 16.37;
     daily.windGust = 17.37;
     daily.pop = 0.70;
-    daily.dewPoint = 0;
+    daily.dewPoint = 3.43;
     daily.clouds = 99;
     daily.pressure = 995;
     daily.uvi = 12;

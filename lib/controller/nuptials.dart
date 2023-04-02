@@ -101,10 +101,11 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
             lon.toDouble(),
             //temp, //temperatureContribution(temp),
             //morn,
-            //wind, //windContribution(wind),
-            gust,
+            wind, //windContribution(wind),
+            //gust,
+            //rain,
             humid, //humidityContribution(humid),
-            //cloud, //cloudinessContribution(cloud),
+            cloud, //cloudinessContribution(cloud),
             press, //pressureContribution(press),
             dewPoint,
             //northern,
@@ -118,7 +119,7 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturna
   double wind = daily.windSpeed!.toDouble();
   double gust = daily.windGust?.toDouble() ?? daily.windSpeed!.toDouble();
   double humid = daily.humidity!.toDouble();
-  //double cloud = daily.clouds!.toDouble();
+  double cloud = daily.clouds!.toDouble();
   double press = daily.pressure!.toDouble();
   double dewPoint = daily.dewPoint!.toDouble();
   double northern = lat > 0 ? 1.0 : 0.0;
@@ -144,10 +145,11 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturna
             lon.toDouble(),
             //temp, //temperatureContribution(temp),
             //morn,
-            //wind, //windContribution(wind),
-            gust,
+            wind, //windContribution(wind),
+            //gust,
+            //rain,
             humid, //humidityContribution(humid),
-            //cloud, //cloudinessContribution(cloud),
+            cloud, //cloudinessContribution(cloud),
             press, //pressureContribution(press),
             dewPoint,
             //northern,
