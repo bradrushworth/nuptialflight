@@ -50,7 +50,10 @@ dependencies:
   darango: ^0.1.1
     #git: https://github.com/bradrushworth/darango.git
   #path: ../darango
-  platform_device_id: ^1.0.1
+  platform_device_id: #^1.0.1
+    git:
+      url: https://github.com/mohn93/platform_device_id.git
+      path: platform_device_id
   flutter_background_service: ^2.4.6
   flutter_local_notifications: ^13.0.0
 
