@@ -140,8 +140,7 @@ RETURN {
     return result;
   }
 
-  Future<List> getRecentFlightsNearMe() async {
-    Position? position = await Geolocator.getLastKnownPosition();
+  Future<List> getRecentFlightsNearMe(Position? position) async {
     if (position == null) {
       debugPrint("Could not find last known position!");
       return [];
@@ -162,8 +161,9 @@ RETURN {
 }
 """;
 
+    print("getRecentFlightsNearMe: query=${query}");
     Map<String, dynamic> response = await aql.run(query, batchSize: 1000);
-    //print("response=${response}");
+    //print("getRecentFlightsNearMe: response=${response}");
     List<dynamic> result = response['result'];
     return result;
   }

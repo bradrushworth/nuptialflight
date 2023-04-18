@@ -18,6 +18,9 @@ const notificationChannelId = 'percentage';
 // this will be used for notification id, So you can update your custom notification with this id.
 const notificationId = 101;
 
+// not allowed to get position in the background
+Position? _lastKnownPosition;
+
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();
 
@@ -71,18 +74,22 @@ Future<void> onStart(ServiceInstance service) async {
     // Get nuptial updates
     if (true /*service is AndroidServiceInstance*/) {
       if (true /*await service.isForegroundService()*/) {
-        WeatherFetcher weatherFetcher = WeatherFetcher();
         Position? position = await Geolocator.getLastKnownPosition();
         if (position == null) {
-          debugPrint('Last known position is null');
+          position = _lastKnownPosition;
+        }
+        _lastKnownPosition = position;
+        if (position == null) {
+          debugPrint('getServicePercentage: Last known position is null');
         } else {
-          weatherFetcher.setPosition(position!);
+          WeatherFetcher weatherFetcher = WeatherFetcher();
+          weatherFetcher.setPosition(position);
           OneCallResponse weather = await weatherFetcher.fetchWeather();
           int percentage =
           (nuptialDailyPercentageModel(weather.lat!, weather.lon!, weather.daily!.elementAt(0)) *
               100.0)
               .toInt();
-          debugPrint('Percentage for nuptial flights: $percentage');
+          debugPrint('getServicePercentage: Percentage for nuptial flights: $percentage');
           updateAppWidget([percentage]);
 
           if (percentage >= greenThreshold) {

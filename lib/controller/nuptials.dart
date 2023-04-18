@@ -3,7 +3,8 @@ import 'dart:math';
 //import 'dart:developer' as developer;
 import 'package:intl/intl.dart';
 import 'package:normal/normal.dart';
-import 'package:nuptialflight/models/final_model.dart';
+import 'package:nuptialflight/models/final_model.dart' as DailyModel;
+import 'package:nuptialflight/models/hour_model.dart' as HourlyModel;
 import 'package:nuptialflight/responses/onecall_response.dart';
 
 ///
@@ -29,6 +30,7 @@ const double UVI_AVG = 6.1;
 const double UVI_STD = 6;
 
 final DateFormat dayOfYearFormat = DateFormat("D");
+final DateFormat hourFormat = DateFormat("HH");
 
 double nuptialHourlyPercentage(Hourly hourly) {
   double temp = temperatureContribution(hourly.temp!);
@@ -74,17 +76,16 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
   double temp = hourly.temp!.toDouble();
   double wind = hourly.windSpeed!.toDouble();
   double gust = hourly.windGust?.toDouble() ?? hourly.windSpeed!.toDouble();
+  double windDeg = hourly.windDeg!.toDouble();
+  double rain = rainContribution(hourly.pop!);
   double humid = hourly.humidity!.toDouble();
   double cloud = hourly.clouds!.toDouble();
   double press = hourly.pressure!.toDouble();
   double dewPoint = hourly.dewPoint!.toDouble();
   double northern = lat > 0 ? 1.0 : 0.0;
-  int dayOfYear = int.parse(dayOfYearFormat
-      .format(DateTime.fromMillisecondsSinceEpoch(
-      (hourly.dt!) *
-          1000,
-      isUtc: true)));
+  int dayOfYear = int.parse(dayOfYearFormat.format(DateTime.fromMillisecondsSinceEpoch((hourly.dt!) * 1000, isUtc: true)));
   double daysSinceSpring = (dayOfYear - (31 + 28 + 31 + 30 + 31 + 30 + 31 + 31)) % 365;
+  int hour = int.parse(hourFormat.format(DateTime.fromMillisecondsSinceEpoch((hourly.dt!) * 1000, isUtc: true)));
   if (northern == 1.0) daysSinceSpring = (daysSinceSpring - (31 + 30 + 31 + 30 + 31 + 31)) % 365;
 
   if (temp < 5) return 0.01;
@@ -96,14 +97,16 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
       0.99,
       max(
           0.01,
-          score([
+          HourlyModel.score([
             lat.toDouble(),
             lon.toDouble(),
+            hour.toDouble(),
             //temp, //temperatureContribution(temp),
             //morn,
             wind, //windContribution(wind),
             //gust,
-            //rain,
+            windDeg,
+            rain,
             humid, //humidityContribution(humid),
             cloud, //cloudinessContribution(cloud),
             press, //pressureContribution(press),
@@ -140,7 +143,7 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturna
       0.99,
       max(
           0.01,
-          score([
+          DailyModel.score([
             lat.toDouble(),
             lon.toDouble(),
             //temp, //temperatureContribution(temp),

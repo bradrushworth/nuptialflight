@@ -16,6 +16,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:intl/intl.dart';
 import 'package:nuptialflight/controller/arangodb.dart';
+import 'package:nuptialflight/controller/service_percentage.dart' as PercentageService;
 import 'package:nuptialflight/controller/service_report_flight.dart' as ReportFlightService;
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -40,14 +41,15 @@ final DateFormat timeOfDay24HourFormat = DateFormat("HH");
 
 const String kGoogleApiKey = 'AIzaSyDNaPQ01hKnTmVRQoT_FM1ZTTxDnw6GoOU';
 
-const int greenThreshold = 60;
-const int amberThreshold = 40;
+const int greenThreshold = 70;
+const int amberThreshold = 50;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initialiseWidget();
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
     await ReportFlightService.initializeService();
+    await PercentageService.initializeService();
   }
   runApp(
     DevicePreview(
