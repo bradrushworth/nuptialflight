@@ -15,15 +15,14 @@ import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:intl/intl.dart';
-import 'package:nuptialflight/controller/arangodb.dart';
-import 'package:nuptialflight/controller/service_percentage.dart' as PercentageService;
-import 'package:nuptialflight/controller/service_report_flight.dart' as ReportFlightService;
 import 'package:package_info_plus/package_info_plus.dart';
 
+import 'controller/arangodb.dart';
 import 'controller/nuptials.dart';
 import 'controller/screenshots_mobile.dart'
     if (dart.library.io) 'controller/screenshots_mobile.dart'
     if (dart.library.js) 'controller/screenshots_other.dart';
+import 'controller/services.dart';
 import 'controller/weather_fetcher.dart';
 import 'controller/widgets_other.dart'
     if (dart.library.io) 'controller/widgets_mobile.dart'
@@ -48,8 +47,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initialiseWidget();
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-    await ReportFlightService.initializeService();
-    await PercentageService.initializeService();
+    await initializeService();
   }
   runApp(
     DevicePreview(
