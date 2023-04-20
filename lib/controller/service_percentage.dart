@@ -70,7 +70,7 @@ Future<void> onStart(ServiceInstance service) async {
   await dotenv.load(fileName: 'assets/.env');
 
   // bring to foreground
-  Timer.periodic(const Duration(hours: 12), (timer) async {
+  Timer.periodic(const Duration(hours: 8), (timer) async {
     // Get nuptial updates
     if (true /*service is AndroidServiceInstance*/) {
       if (true /*await service.isForegroundService()*/) {

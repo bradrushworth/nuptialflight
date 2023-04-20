@@ -10,8 +10,8 @@ import es.antonborri.home_widget.HomeWidgetProvider
 
 class AppWidgetProvider : HomeWidgetProvider() {
 
-    val greenThreshold = 70
-    val amberThreshold = 50
+    val greenThreshold = 65
+    val amberThreshold = 45
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray, widgetData: SharedPreferences) {
         appWidgetIds.forEach { widgetId ->

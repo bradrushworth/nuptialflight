@@ -41,8 +41,8 @@ final DateFormat timeOfDay24HourFormat = DateFormat("HH");
 
 const String kGoogleApiKey = 'AIzaSyDNaPQ01hKnTmVRQoT_FM1ZTTxDnw6GoOU';
 
-const int greenThreshold = 70;
-const int amberThreshold = 50;
+const int greenThreshold = 65;
+const int amberThreshold = 45;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

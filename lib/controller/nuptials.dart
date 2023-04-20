@@ -77,7 +77,7 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
   double wind = hourly.windSpeed!.toDouble();
   double gust = hourly.windGust?.toDouble() ?? hourly.windSpeed!.toDouble();
   double windDeg = hourly.windDeg!.toDouble();
-  double rain = rainContribution(hourly.pop!);
+  double rain = hourly.pop?.toDouble() ?? 0.0;
   double humid = hourly.humidity!.toDouble();
   double cloud = hourly.clouds!.toDouble();
   double press = hourly.pressure!.toDouble();
