@@ -158,7 +158,7 @@ packages:
     description:
       path: device_frame
       ref: HEAD
-      resolved-ref: "6ca08f70a6eca586f732c9bc03bf7b49941b28cc"
+      resolved-ref: "337578fbd47011178bbfef8c81492d47874cb86e"
       url: "https://github.com/bradrushworth/flutter_device_preview.git"
     source: git
     version: "1.1.0"
@@ -183,7 +183,7 @@ packages:
     description:
       path: device_preview
       ref: HEAD
-      resolved-ref: "6ca08f70a6eca586f732c9bc03bf7b49941b28cc"
+      resolved-ref: "337578fbd47011178bbfef8c81492d47874cb86e"
       url: "https://github.com/bradrushworth/flutter_device_preview.git"
     source: git
     version: "1.1.0"
