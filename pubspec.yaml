@@ -33,7 +33,6 @@ dependencies:
     #path: ../home_widget
     git: https://github.com/bradrushworth/home_widget.git
   http: ^0.13.5
-  intl: ^0.17.0
   #spectrum: ^0.2.1+1
   normal: ^0.6.0
   geolocator: ^9.0.2
@@ -64,6 +63,18 @@ dev_dependencies:
   flutter_automation: any
   flutter_launcher_icons: ^0.13.0
   device_preview: ^1.1.0
+
+dependency_overrides:
+  device_preview:
+    git:
+      url: https://github.com/bradrushworth/flutter_device_preview.git
+      path: device_preview
+#    path: ../flutter_device_preview/device_preview
+  device_frame:
+    git:
+      url: https://github.com/bradrushworth/flutter_device_preview.git
+      path: device_frame
+#    path: ../flutter_device_preview/device_frame
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
