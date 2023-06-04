@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/flutter_html.dart' as html;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -115,10 +115,10 @@ class _MapPageState extends State<MapPage> {
         nonRotatedChildren: [
           Align(
             alignment: Alignment.bottomLeft,
-            child: Html(
+            child: html.Html(
               data:
                   '<div style="color: #00ffff;">Markers show last 48hr nuptial flights.<br/>Marker size indicates species size.<br/>Weather &copy; <a href="http://openweathermap.org">OpenWeatherMap</a><br/>Tiles by <a href="http://stamen.com">Stamen Design</a> - <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a><br/>Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</div>',
-              onLinkTap: (url, context, attributes, element) => Utils.launchURL(url!),
+              onLinkTap: (url, attributes, element) => Utils.launchURL(url!),
             ),
           ),
         ],
