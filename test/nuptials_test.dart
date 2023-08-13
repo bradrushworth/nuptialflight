@@ -6,7 +6,7 @@ void main() {
   group('Perfect day', () {
     Daily daily = Daily();
     daily.dt = 1665190800;
-    daily.temp = Temp(day: TEMP_AVG);
+    daily.temp = Temp(day: TEMP_AVG, max: TEMP_AVG);
     daily.humidity = HUMIDITY_AVG.round();
     daily.windSpeed = WIND_AVG;
     daily.windGust = WIND_AVG;
@@ -19,7 +19,7 @@ void main() {
     double lon = 149.1;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily.temp!.day!), closeTo(1.00, 0.01));
+      expect(temperatureContribution(daily.temp!.max!), closeTo(1.00, 0.01));
     });
 
     test('Humidity', () {
@@ -47,7 +47,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.94, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.99, 0.01));
     });
   });
 
@@ -67,7 +67,7 @@ void main() {
     double lon = 149.1;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily.temp!.day!), closeTo(0.25, 0.01));
+      expect(temperatureContribution(daily.temp!.max!), closeTo(0.25, 0.01));
     });
 
     test('Humidity', () {
@@ -121,7 +121,7 @@ void main() {
     double lon = 149.1;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily.temp!.day!), closeTo(0.99, 0.01));
+      expect(temperatureContribution(daily.temp!.max!), closeTo(0.47, 0.01));
     });
 
     test('Humidity', () {
@@ -145,11 +145,11 @@ void main() {
     });
 
     test('Total', () {
-      expect(nuptialDailyPercentage(daily), closeTo(0.95, 0.01));
+      expect(nuptialDailyPercentage(daily), closeTo(0.88, 0.01));
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.66, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.94, 0.01));
     });
   });
 
@@ -175,7 +175,7 @@ void main() {
     double lon = 149.1;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily.temp!.day!), closeTo(0.52, 0.01));
+      expect(temperatureContribution(daily.temp!.max!), closeTo(0.30, 0.01));
     });
 
     test('Humidity', () {
@@ -199,11 +199,11 @@ void main() {
     });
 
     test('Total', () {
-      expect(nuptialDailyPercentage(daily), closeTo(0.61, 0.01));
+      expect(nuptialDailyPercentage(daily), closeTo(0.59, 0.01));
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.78, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.61, 0.01));
     });
   });
 
@@ -224,7 +224,7 @@ void main() {
     double lon = 149.1;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily.temp!.day!), closeTo(0.33, 0.01));
+      expect(temperatureContribution(daily.temp!.max!), closeTo(0.33, 0.01));
     });
 
     test('Humidity', () {

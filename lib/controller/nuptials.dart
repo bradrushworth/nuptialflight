@@ -53,7 +53,8 @@ double nuptialHourlyPercentage(Hourly hourly) {
 }
 
 double nuptialDailyPercentage(Daily daily, {bool nocturnal = false}) {
-  double temp = temperatureContribution(nocturnal ? daily.temp!.eve! : daily.temp!.day!);
+  //double temp = temperatureContribution(nocturnal ? daily.temp!.eve! : daily.temp!.day!);
+  double temp = temperatureContribution(daily.temp!.max!);
   double windSpeed = windContribution(daily.windSpeed!);
   //double windGust = windContribution(daily.windGust?.toDouble() ?? daily.windSpeed!.toDouble());
   //double rain = rainContribution(daily.pop!);
@@ -101,7 +102,7 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
             lat.toDouble(),
             lon.toDouble(),
             hour.toDouble(),
-            //temp, //temperatureContribution(temp),
+            temp, //temperatureContribution(temp),
             //morn,
             wind, //windContribution(wind),
             //gust,
@@ -117,7 +118,8 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
 }
 
 double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturnal = false}) {
-  double temp = nocturnal ? daily.temp!.eve!.toDouble() : daily.temp!.day!.toDouble();
+  //double temp = nocturnal ? daily.temp!.eve!.toDouble() : daily.temp!.day!.toDouble();
+  double temp = daily.temp!.max!.toDouble();
   //double morn = daily.temp!.morn!.toDouble();
   double wind = daily.windSpeed!.toDouble();
   double gust = daily.windGust?.toDouble() ?? daily.windSpeed!.toDouble();
@@ -146,7 +148,7 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturna
           DailyModel.score([
             lat.toDouble(),
             lon.toDouble(),
-            //temp, //temperatureContribution(temp),
+            temp, //temperatureContribution(temp),
             //morn,
             wind, //windContribution(wind),
             //gust,
