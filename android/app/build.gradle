@@ -33,6 +33,10 @@ if (keystorePropertiesFile.exists()) {
     }
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 android {
     namespace 'au.com.bitbot.nuptialflight'
 
@@ -40,11 +44,11 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-    compileSdkVersion 34
+    compileSdkVersion 33
     defaultConfig {
         applicationId "au.com.bitbot.nuptialflight"
         minSdkVersion 23
-        targetSdkVersion 34
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
