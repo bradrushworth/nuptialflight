@@ -1,14 +1,13 @@
 import 'package:darango/darango.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:platform_device_id/platform_device_id.dart';
+import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 
 import '../responses/onecall_response.dart';
 import '../responses/weather_response.dart';
 
 class ArangoSingleton {
-  static final ArangoSingleton _singleton =
-      ArangoSingleton._privateConstructor();
+  static final ArangoSingleton _singleton = ArangoSingleton._privateConstructor();
 
   // Create client for Arango database
   Database? _arangoClient;
@@ -26,17 +25,12 @@ class ArangoSingleton {
 
   void init() async {
     _arangoClient = Database('https://api.bitbot.com.au:8530');
-    await _arangoClient!
-        .connect('nuptialFlight', 'nuptialflight', 'fdggdsgdfstg34wfwfwff');
+    await _arangoClient!.connect('nuptialFlight', 'nuptialflight', 'fdggdsgdfstg34wfwfwff');
   }
 
-  void createWeather(
-      String? version,
-      String? buildNumber,
-      OneCallResponse? _weather,
-      OneCallResponse? _historical,
-      CurrentWeatherResponse? _currentWeather) async {
-    String? deviceId = await PlatformDeviceId.getDeviceId;
+  void createWeather(String? version, String? buildNumber, OneCallResponse? _weather,
+      OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather) async {
+    String? deviceId = await MobileDeviceIdentifier().getDeviceId();
 
     {
       // Let's create a new database post
@@ -73,14 +67,9 @@ class ArangoSingleton {
     }
   }
 
-  void updateWeather(
-      String? version,
-      String? buildNumber,
-      String size,
-      OneCallResponse? _weather,
-      OneCallResponse? _historical,
-      CurrentWeatherResponse? _currentWeather) async {
-    String? deviceId = await PlatformDeviceId.getDeviceId;
+  void updateWeather(String? version, String? buildNumber, String size, OneCallResponse? _weather,
+      OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather) async {
+    String? deviceId = await MobileDeviceIdentifier().getDeviceId();
 
     {
       // Let's update the existing database entry
@@ -96,9 +85,7 @@ class ArangoSingleton {
     {
       // Let's update the existing database entry
       Collection? collection = await _arangoClient!.collection('historical');
-      await collection!
-          .document(document_handle: _weatherHistoricalKey)
-          .update({
+      await collection!.document(document_handle: _weatherHistoricalKey).update({
         'flight': 'yes',
         'size': size,
         'version': '$version+$buildNumber',
@@ -167,5 +154,4 @@ RETURN {
     List<dynamic> result = response['result'];
     return result;
   }
-
 }

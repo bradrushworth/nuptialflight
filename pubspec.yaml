@@ -51,11 +51,12 @@ dependencies:
   darango: #^0.1.1
     git: https://github.com/bradrushworth/darango.git
     #path: ../darango
-  platform_device_id: #^1.0.1
-    git:
-      #url: https://github.com/mohn93/platform_device_id.git
-      url: https://github.com/bradrushworth/platform_device_id.git
-      path: platform_device_id
+#  platform_device_id: #^1.0.1
+#    git:
+#      #url: https://github.com/mohn93/platform_device_id.git
+#      url: https://github.com/bradrushworth/platform_device_id.git
+#      path: platform_device_id
+  mobile_device_identifier: ^0.0.2
   flutter_background_service: ^5.0.0
   flutter_local_notifications: ^16.1.0
 
