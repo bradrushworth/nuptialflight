@@ -82,6 +82,7 @@ dependency_overrides:
       path: device_frame
 #    path: ../flutter_device_preview/device_frame
   google_api_headers:
+#    path: ../google_api_headers
     git:
       url: https://github.com/bradrushworth/google_api_headers.git
 
