@@ -77,8 +77,8 @@ dependencies {
 
 // Not sure why I needed to add these to get this working
 // https://stackoverflow.com/questions/69389145/how-do-i-fix-this-error-task-wrapper-not-found-in-project-app
-task wrapper(type: Wrapper) {
-    gradleVersion = '7.5'
-}
+//task wrapper(type: Wrapper) {
+//    gradleVersion = '7.5'
+//}
 // https://stackoverflow.com/questions/64290545/task-preparekotlinbuildscriptmodel-not-found-in-project-app
-tasks.register("prepareKotlinBuildScriptModel") {}
+//tasks.register("prepareKotlinBuildScriptModel") {}
