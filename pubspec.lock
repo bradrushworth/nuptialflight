@@ -390,7 +390,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "208459a5e3d0919deeaab5bf88ed3af48c1c2fb3"
+      resolved-ref: e4375771ce761d6b77761f6fd75e43f99ec65af1
       url: "https://github.com/bradrushworth/google_api_headers.git"
     source: git
     version: "2.0.3"
