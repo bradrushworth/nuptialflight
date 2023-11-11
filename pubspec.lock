@@ -558,10 +558,11 @@ packages:
   mobile_device_identifier:
     dependency: "direct main"
     description:
-      name: mobile_device_identifier
-      sha256: b59462637ed54a83766c4b955c0c87e010989ccfb0716c7e2ec21fc2939b08bf
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "81b109278b89337fb398f0f0be9335958c77e28a"
+      url: "https://github.com/bradrushworth/mobile_device_identifier.git"
+    source: git
     version: "0.0.2"
   nested:
     dependency: transitive

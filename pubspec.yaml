@@ -56,7 +56,8 @@ dependencies:
 #      #url: https://github.com/mohn93/platform_device_id.git
 #      url: https://github.com/bradrushworth/platform_device_id.git
 #      path: platform_device_id
-  mobile_device_identifier: ^0.0.2
+  mobile_device_identifier: #^0.0.2
+    git: https://github.com/bradrushworth/mobile_device_identifier.git
   flutter_background_service: ^5.0.0
   flutter_local_notifications: ^16.1.0
 
