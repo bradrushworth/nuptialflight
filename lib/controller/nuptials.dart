@@ -179,17 +179,17 @@ double nuptialCalculator(List<Map<String, num>> values) {
 /// Evening temperature. Celsius.
 double temperatureContribution(num temp) {
   // z = (x – μ (mean)) / σ (standard deviation)
-  return max(0, min(0.5, Normal.cdf(-(temp - TEMP_AVG).abs() / TEMP_STD))) * 2;
+  return max(0, min(0.5, Normal().cdf(-(temp - TEMP_AVG).abs() / TEMP_STD))) * 2;
 }
 
 /// Humidity, %
 double humidityContribution(num humidity) {
-  return max(0, min(0.5, Normal.cdf(-(humidity - HUMIDITY_AVG).abs() / HUMIDITY_STD))) * 2;
+  return max(0, min(0.5, Normal().cdf(-(humidity - HUMIDITY_AVG).abs() / HUMIDITY_STD))) * 2;
 }
 
 /// Wind speed. Units metre/sec
 double windContribution(num windSpeed) {
-  return max(0, min(0.5, Normal.cdf(-(windSpeed - WIND_AVG).abs() / WIND_STD))) * 2;
+  return max(0, min(0.5, Normal().cdf(-(windSpeed - WIND_AVG).abs() / WIND_STD))) * 2;
 }
 
 /// Probability of precipitation
@@ -205,15 +205,15 @@ double rainContribution(num pop) {
 
 /// Cloudiness, %
 double cloudinessContribution(num clouds) {
-  return max(0, min(0.5, Normal.cdf(-(clouds - CLOUD_AVG).abs() / CLOUD_STD))) * 2;
+  return max(0, min(0.5, Normal().cdf(-(clouds - CLOUD_AVG).abs() / CLOUD_STD))) * 2;
 }
 
 /// Air pressure (hPa)
 double pressureContribution(num pressure) {
-  return max(0, min(0.5, Normal.cdf(-(pressure - PRESSURE_AVG).abs() / PRESSURE_STD))) * 2;
+  return max(0, min(0.5, Normal().cdf(-(pressure - PRESSURE_AVG).abs() / PRESSURE_STD))) * 2;
 }
 
 /// UVI
 double uviContribution(num uvi) {
-  return max(0, min(0.5, Normal.cdf(-(uvi - UVI_AVG).abs() / UVI_STD))) * 2;
+  return max(0, min(0.5, Normal().cdf(-(uvi - UVI_AVG).abs() / UVI_STD))) * 2;
 }

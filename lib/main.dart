@@ -217,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestPermission();
+        ?.requestNotificationsPermission();
 
     _getLocation();
 
