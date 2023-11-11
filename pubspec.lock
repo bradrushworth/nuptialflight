@@ -386,12 +386,13 @@ packages:
     source: hosted
     version: "2.1.2"
   google_api_headers:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: google_api_headers
-      sha256: "59ebb30d12fea5a77525b8e66cf3cec9593a9433dc0f0168497ebca1d3142311"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "208459a5e3d0919deeaab5bf88ed3af48c1c2fb3"
+      url: "https://github.com/bradrushworth/google_api_headers.git"
+    source: git
     version: "2.0.3"
   google_maps_webservice:
     dependency: transitive
