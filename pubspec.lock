@@ -246,8 +246,8 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: d86baed5655682ccbcb09c8b33b49e133d0ec231
-      url: "https://github.com/devCitronnoir/flutter_google_places.git"
+      resolved-ref: d099ebcce0c87966f916d251fbe4cf753582951c
+      url: "https://github.com/bradrushworth/flutter_google_places.git"
     source: git
     version: "0.5.0"
   flutter_html:

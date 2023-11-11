@@ -45,7 +45,8 @@ dependencies:
   #image: ^3.1.0
   #package_info_plus: ^3.1.0
   flutter_google_places: #^0.3.0
-    git: https://github.com/devCitronnoir/flutter_google_places.git
+    #git: https://github.com/devCitronnoir/flutter_google_places.git
+    git: https://github.com/bradrushworth/flutter_google_places.git
   flutter_map: ^5.0.0
   flutter_html: ^3.0.0-alpha.6
   darango: #^0.1.1
