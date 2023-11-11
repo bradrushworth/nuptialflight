@@ -560,7 +560,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "81b109278b89337fb398f0f0be9335958c77e28a"
+      resolved-ref: b6e84ffc86c4f922d26927bc4038b55c6219e7e9
       url: "https://github.com/bradrushworth/mobile_device_identifier.git"
     source: git
     version: "0.0.2"
