@@ -59,7 +59,7 @@ dependencies:
 #      path: platform_device_id
   mobile_device_identifier: #^0.0.2
     git: https://github.com/bradrushworth/mobile_device_identifier.git
-  flutter_background_service: ^5.0.0
+  flutter_background_service: ^5.0.3
   flutter_local_notifications: ^16.1.0
   sklite: ^1.0.0
 
