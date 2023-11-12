@@ -1,5 +1,7 @@
+import 'dart:io';
+
 import 'package:darango/darango.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 
@@ -30,7 +32,15 @@ class ArangoSingleton {
 
   void createWeather(String? version, String? buildNumber, OneCallResponse? _weather,
       OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather) async {
-    String? deviceId = await MobileDeviceIdentifier().getDeviceId();
+
+    String? deviceId;
+    if (kIsWeb) {
+      deviceId = 'web';
+    } else if (Platform.isAndroid || Platform.isIOS) {
+      deviceId = await MobileDeviceIdentifier().getDeviceId();
+    } else {
+      deviceId = Platform.localHostname;
+    }
 
     {
       // Let's create a new database post

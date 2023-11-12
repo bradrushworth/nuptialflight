@@ -84,9 +84,11 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
   double press = hourly.pressure!.toDouble();
   double dewPoint = hourly.dewPoint!.toDouble();
   double northern = lat > 0 ? 1.0 : 0.0;
-  int dayOfYear = int.parse(dayOfYearFormat.format(DateTime.fromMillisecondsSinceEpoch((hourly.dt!) * 1000, isUtc: true)));
+  int dayOfYear = int.parse(dayOfYearFormat
+      .format(DateTime.fromMillisecondsSinceEpoch((hourly.dt!) * 1000, isUtc: true)));
   double daysSinceSpring = (dayOfYear - (31 + 28 + 31 + 30 + 31 + 30 + 31 + 31)) % 365;
-  int hour = int.parse(hourFormat.format(DateTime.fromMillisecondsSinceEpoch((hourly.dt!) * 1000, isUtc: true)));
+  int hour = int.parse(
+      hourFormat.format(DateTime.fromMillisecondsSinceEpoch((hourly.dt!) * 1000, isUtc: true)));
   if (northern == 1.0) daysSinceSpring = (daysSinceSpring - (31 + 30 + 31 + 30 + 31 + 31)) % 365;
 
   if (temp < 5) return 0.01;
@@ -128,11 +130,8 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturna
   double press = daily.pressure!.toDouble();
   double dewPoint = daily.dewPoint!.toDouble();
   double northern = lat > 0 ? 1.0 : 0.0;
-  int dayOfYear = int.parse(dayOfYearFormat
-      .format(DateTime.fromMillisecondsSinceEpoch(
-      (daily.dt!) *
-          1000,
-      isUtc: true)));
+  int dayOfYear = int.parse(
+      dayOfYearFormat.format(DateTime.fromMillisecondsSinceEpoch((daily.dt!) * 1000, isUtc: true)));
   double daysSinceSpring = (dayOfYear - (31 + 28 + 31 + 30 + 31 + 30 + 31 + 31)) % 365;
   if (northern == 1.0) daysSinceSpring = (daysSinceSpring - (31 + 30 + 31 + 30 + 31 + 31)) % 365;
 
