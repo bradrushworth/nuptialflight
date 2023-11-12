@@ -140,6 +140,32 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturna
   if (gust > 20) return 0.01;
   if (humid < 40) return 0.01;
   if (press < 995) return 0.01;
+
+  // loadModel('assets/final_model.json').then((value) {
+  //   RandomForestClassifier model = RandomForestClassifier.fromMap(json.decode(value));
+  //   return min(
+  //       0.99,
+  //       max(
+  //           0.01,
+  //           model.predict([
+  //                 lat.toDouble(),
+  //                 lon.toDouble(),
+  //                 temp, //temperatureContribution(temp),
+  //                 //morn,
+  //                 wind, //windContribution(wind),
+  //                 //gust,
+  //                 //rain,
+  //                 humid, //humidityContribution(humid),
+  //                 cloud, //cloudinessContribution(cloud),
+  //                 press, //pressureContribution(press),
+  //                 dewPoint,
+  //                 //northern,
+  //                 daysSinceSpring,
+  //               ]) /
+  //               100.0));
+  // });
+  // return 0.0;
+
   return min(
       0.99,
       max(
