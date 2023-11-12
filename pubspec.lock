@@ -142,10 +142,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "830c6ed258248bc9ae226cc120f9a64c4c7dfc0a"
+      resolved-ref: "990378817f797774bba55d1189874c7bafd58526"
       url: "https://github.com/bradrushworth/darango.git"
     source: git
-    version: "0.1.1"
+    version: "0.2.0"
   dbus:
     dependency: transitive
     description:
@@ -246,7 +246,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: d099ebcce0c87966f916d251fbe4cf753582951c
+      resolved-ref: "7574b913b95cc8a8e599312eec6b8c6904787e06"
       url: "https://github.com/bradrushworth/flutter_google_places.git"
     source: git
     version: "0.5.0"
@@ -390,7 +390,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "6b10c39e53665d368e6495d27a9e158717c3571d"
+      resolved-ref: "196e2aac4f55be46e02dde2b2cd2a58778ed5dbb"
       url: "https://github.com/bradrushworth/google_api_headers.git"
     source: git
     version: "2.0.3"
