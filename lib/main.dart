@@ -79,8 +79,10 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
         // For DevicePreview
         locale: DevicePreview.locale(context),
         builder: DevicePreview.appBuilder,
-        theme: ThemeData(brightness: Brightness.light, primarySwatch: primarySwatch),
-        darkTheme: ThemeData(brightness: Brightness.dark, primarySwatch: primarySwatch),
+        theme: ThemeData(
+            brightness: Brightness.light, primarySwatch: primarySwatch, useMaterial3: false),
+        darkTheme: ThemeData(
+            brightness: Brightness.dark, primarySwatch: primarySwatch, useMaterial3: false),
         themeMode: ThemeMode.system,
         home: MyHomePage(
           primarySwatch: setPrimarySwatch,
