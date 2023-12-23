@@ -54,7 +54,7 @@ class _MapPageState extends State<MapPage> {
           _markers.add(
             Marker(
               point: new LatLng(row['lat'], row['lon']),
-              builder: (ctx) => _MarkerIcon(
+              child: _MarkerIcon(
                 key: row['key'],
                 size: row['size'],
                 weather: row['weather'],

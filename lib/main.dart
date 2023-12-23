@@ -120,8 +120,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   static const _kFontFam = 'WingedAnt';
   static const String? _kFontPkg = null;
-  static const IconData winged_ant =
-      IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  // static const IconData winged_ant =
+  //     IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData halictus_rubicundus_silhouette =
       IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const int LARGE_SCREEN_HEIGHT = 800;

@@ -5,7 +5,7 @@ void main() {
   group('ArangoDB', () {
     test('Latest Flights', () async {
       await ArangoSingleton().getRecentFlights().then((value) {
-        print(value);
+        //print(value);
         expect(value.length, greaterThanOrEqualTo(1));
         expect(value.first['key'], isNotEmpty);
         expect(value.first['weather'], isNotEmpty);
