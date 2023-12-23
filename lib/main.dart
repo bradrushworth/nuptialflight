@@ -82,7 +82,13 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
         theme: ThemeData(
             brightness: Brightness.light, primarySwatch: primarySwatch, useMaterial3: false),
         darkTheme: ThemeData(
-            brightness: Brightness.dark, primarySwatch: primarySwatch, useMaterial3: false),
+            brightness: Brightness.dark,
+            primarySwatch: primarySwatch,
+            primaryColor: primarySwatch,
+            floatingActionButtonTheme:
+                Theme.of(context).floatingActionButtonTheme.copyWith(backgroundColor: primarySwatch),
+            appBarTheme: Theme.of(context).appBarTheme.copyWith(backgroundColor: primarySwatch),
+            useMaterial3: false),
         themeMode: ThemeMode.system,
         home: MyHomePage(
           primarySwatch: setPrimarySwatch,
@@ -686,7 +692,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                     Container(
                       child: Text(
-                          "What size queen ant did you see? Please only report real sightings. This data trains the app.",
+                          "What size queen ant did you see fly? Please only report real sightings. This data improves the app.",
                           textAlign: TextAlign.center),
                     ),
                     Text(''),
