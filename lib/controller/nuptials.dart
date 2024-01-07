@@ -181,7 +181,7 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
             humid, //humidityContribution(humid),
             cloud, //cloudinessContribution(cloud),
             press, //pressureContribution(press),
-            //dewPoint,
+            dewPoint,
             //northern,
             daysSinceSpring,
           ])[1]));
@@ -197,7 +197,7 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturna
   double humid = daily.humidity!.toDouble();
   double cloud = daily.clouds!.toDouble();
   double press = daily.pressure!.toDouble();
-  //double dewPoint = daily.dewPoint!.toDouble();
+  double dewPoint = daily.dewPoint!.toDouble();
   double northern = lat > 0 ? 1.0 : 0.0;
   int dayOfYear = int.parse(
       dayOfYearFormat.format(DateTime.fromMillisecondsSinceEpoch((daily.dt!) * 1000, isUtc: true)));
@@ -248,7 +248,7 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturna
             humid, //humidityContribution(humid),
             cloud, //cloudinessContribution(cloud),
             press, //pressureContribution(press),
-            //dewPoint,
+            dewPoint,
             //northern,
             daysSinceSpring,
           ])[1]));
