@@ -85,8 +85,9 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             brightness: Brightness.dark,
             primarySwatch: primarySwatch,
             primaryColor: primarySwatch,
-            floatingActionButtonTheme:
-                Theme.of(context).floatingActionButtonTheme.copyWith(backgroundColor: primarySwatch),
+            floatingActionButtonTheme: Theme.of(context)
+                .floatingActionButtonTheme
+                .copyWith(backgroundColor: primarySwatch),
             appBarTheme: Theme.of(context).appBarTheme.copyWith(backgroundColor: primarySwatch),
             useMaterial3: false),
         themeMode: ThemeMode.system,
@@ -1254,14 +1255,14 @@ class _MyHomePageState extends State<MyHomePage> {
           dividerThickness: 0,
           columns: [
             DataColumn(label: Text('Day'), numeric: true),
+            DataColumn(label: Text('Temp'), numeric: true),
             if (orientation == Orientation.landscape)
-              DataColumn(label: Text('Temp'), numeric: true),
-            DataColumn(label: Text('Dew Point'), numeric: true),
+              DataColumn(label: Text('Dew Point'), numeric: true),
             if (orientation == Orientation.landscape)
               DataColumn(label: Text('Pressure'), numeric: true),
             if (orientation == Orientation.landscape)
               DataColumn(label: Text('Humidity'), numeric: true),
-            DataColumn(label: Text('Wind Gust'), numeric: true),
+            DataColumn(label: Text('Wind Speed'), numeric: true),
             DataColumn(label: Text('Confidence'), numeric: true),
           ],
           rows: [
@@ -1289,19 +1290,19 @@ class _MyHomePageState extends State<MyHomePage> {
             style: getColorTextStyle(_dailyPercentage[i]),
           ),
         ),
-        if (orientation == Orientation.landscape)
-          DataCell(
-            Text(
-              ' ${_weather!.daily!.elementAt(i).temp!.day!.toStringAsFixed(1)}°C',
-              style: getColorTextStyle(_dailyPercentage[i]),
-            ),
-          ),
         DataCell(
           Text(
-            ' ${_weather!.daily!.elementAt(i).dewPoint!.toStringAsFixed(1)}°C',
+            ' ${_weather!.daily!.elementAt(i).temp!.day!.toStringAsFixed(1)}°C',
             style: getColorTextStyle(_dailyPercentage[i]),
           ),
         ),
+        if (orientation == Orientation.landscape)
+          DataCell(
+            Text(
+              ' ${_weather!.daily!.elementAt(i).dewPoint!.toStringAsFixed(1)}°C',
+              style: getColorTextStyle(_dailyPercentage[i]),
+            ),
+          ),
         if (orientation == Orientation.landscape)
           DataCell(
             Text(

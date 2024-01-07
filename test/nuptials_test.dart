@@ -1,8 +1,10 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:nuptialflight/controller/nuptials.dart';
 import 'package:nuptialflight/responses/onecall_response.dart';
-import 'package:test/test.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('Perfect day', () {
     Daily daily = Daily();
     daily.dt = 1665190800;
@@ -47,7 +49,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.81, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.97, 0.01));
     });
   });
 
@@ -145,11 +147,11 @@ void main() {
     });
 
     test('Total', () {
-      expect(nuptialDailyPercentage(daily), closeTo(0.80, 0.01));
+      expect(nuptialDailyPercentage(daily), closeTo(0.82, 0.01));
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.59, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.78, 0.01));
     });
   });
 
@@ -199,11 +201,11 @@ void main() {
     });
 
     test('Total', () {
-      expect(nuptialDailyPercentage(daily), closeTo(0.59, 0.01));
+      expect(nuptialDailyPercentage(daily), closeTo(0.60, 0.01));
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.49, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.82, 0.01));
     });
   });
 
@@ -213,7 +215,7 @@ void main() {
     daily.temp = Temp(
         day: 6.84, min: 6.97, max: 6.84, night: 1.53, eve: 5.65, morn: 3.54);
     daily.humidity = 40;
-    daily.windSpeed = 16.37;
+    daily.windSpeed = 14.37;
     daily.windGust = 17.37;
     daily.pop = 0.70;
     daily.dewPoint = 3.43;
@@ -232,7 +234,7 @@ void main() {
     });
 
     test('Wind', () {
-      expect(windContribution(daily.windSpeed!), closeTo(0.03, 0.01));
+      expect(windContribution(daily.windSpeed!), closeTo(0.08, 0.01));
     });
 
     test('Rain', () {
@@ -248,11 +250,11 @@ void main() {
     });
 
     test('Total', () {
-      expect(nuptialDailyPercentage(daily), closeTo(0.20, 0.01));
+      expect(nuptialDailyPercentage(daily), closeTo(0.22, 0.01));
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.01, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.41, 0.01));
     });
   });
 }

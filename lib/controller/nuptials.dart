@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 //import 'dart:developer' as developer;
@@ -6,6 +7,9 @@ import 'package:normal/normal.dart';
 import 'package:nuptialflight/models/final_model.dart' as DailyModel;
 import 'package:nuptialflight/models/hour_model.dart' as HourlyModel;
 import 'package:nuptialflight/responses/onecall_response.dart';
+import 'package:sklite/base.dart';
+import 'package:sklite/ensemble/forest.dart';
+import 'package:sklite/utils/io.dart';
 
 ///
 /// https://www.antwiki.org/wiki/images/d/dd/Boomsma%2C_J.J.%2C_Leusink%2C_A._1981._Weather_conditions_during_nuptial_flights_of_four_European_ant_species_.pdf
@@ -32,11 +36,47 @@ const double UVI_STD = 6;
 final DateFormat dayOfYearFormat = DateFormat("D");
 final DateFormat hourFormat = DateFormat("HH");
 
+class Nuptials {
+  static final Nuptials _instance = Nuptials._internal();
+  late RandomForestClassifier _dailyModel;
+  late RandomForestClassifier _hourlyModel;
+
+  // using a factory is important
+  // because it promises to return _an_ object of this type
+  // but it doesn't promise to make a new one.
+  factory Nuptials() {
+    return _instance;
+  }
+
+  // This named constructor is the "real" constructor
+  // It'll be called exactly once, by the static property assignment above
+  // it's also private, so it can only be called in this class
+  Nuptials._internal() {
+    loadModel('assets/final_model.json').then((value) {
+      //print("value=$value");
+      this._dailyModel = RandomForestClassifier.fromMap(json.decode(value));
+    });
+
+    loadModel('assets/hour_model.json').then((value) {
+      //print("value=$value");
+      this._hourlyModel = RandomForestClassifier.fromMap(json.decode(value));
+    });
+  }
+
+  Classifier getDailyModel() {
+    return _dailyModel;
+  }
+
+  Classifier getHourlyModel() {
+    return _hourlyModel;
+  }
+}
+
 double nuptialHourlyPercentage(Hourly hourly) {
   double temp = temperatureContribution(hourly.temp!);
   double windSpeed = windContribution(hourly.windSpeed!);
   //double windGust = windContribution(hourly.windGust?.toDouble() ?? hourly.windSpeed!.toDouble());
-  //double rain = rainContribution(hourly.pop!);
+  double rain = rainContribution(hourly.pop!);
   double humid = humidityContribution(hourly.humidity!);
   double cloud = cloudinessContribution(hourly.clouds!);
   double press = pressureContribution(hourly.pressure!);
@@ -44,6 +84,7 @@ double nuptialHourlyPercentage(Hourly hourly) {
   var values = [
     {'percentage': temp, 'weighting': 1},
     {'percentage': windSpeed, 'weighting': 2},
+    {'percentage': rain, 'weighting': 1},
     {'percentage': humid, 'weighting': 3},
     {'percentage': cloud, 'weighting': 1},
     {'percentage': press, 'weighting': 1},
@@ -57,7 +98,7 @@ double nuptialDailyPercentage(Daily daily, {bool nocturnal = false}) {
   double temp = temperatureContribution(daily.temp!.max!);
   double windSpeed = windContribution(daily.windSpeed!);
   //double windGust = windContribution(daily.windGust?.toDouble() ?? daily.windSpeed!.toDouble());
-  //double rain = rainContribution(daily.pop!);
+  double rain = rainContribution(daily.pop!);
   double humid = humidityContribution(daily.humidity!);
   double cloud = cloudinessContribution(daily.clouds!);
   double press = pressureContribution(daily.pressure!);
@@ -65,6 +106,7 @@ double nuptialDailyPercentage(Daily daily, {bool nocturnal = false}) {
   var values = [
     {'percentage': temp, 'weighting': 1},
     {'percentage': windSpeed, 'weighting': 2},
+    {'percentage': rain, 'weighting': 1},
     {'percentage': humid, 'weighting': 3},
     {'percentage': cloud, 'weighting': 1},
     {'percentage': press, 'weighting': 1},
@@ -94,8 +136,34 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
   if (temp < 5) return 0.01;
   if (wind > 15) return 0.01;
   if (gust > 20) return 0.01;
-  if (humid < 40) return 0.01;
-  if (press < 995) return 0.01;
+  //if (humid < 40) return 0.01;
+  //if (press < 995) return 0.01;
+
+  // Classifier? model = Nuptials._instance.getHourlyModel();
+  // if (model == null) return 0.00;
+  // return min(
+  //     0.99,
+  //     max(
+  //         0.01,
+  //         model.predict([
+  //               lat.toDouble(),
+  //               lon.toDouble(),
+  //               hour.toDouble(),
+  //               temp, //temperatureContribution(temp),
+  //               //morn,
+  //               wind, //windContribution(wind),
+  //               //gust,
+  //               //windDeg,
+  //               rain,
+  //               humid, //humidityContribution(humid),
+  //               cloud, //cloudinessContribution(cloud),
+  //               press, //pressureContribution(press),
+  //               //dewPoint,
+  //               //northern,
+  //               daysSinceSpring,
+  //             ]) /
+  //             100.0));
+
   return min(
       0.99,
       max(
@@ -108,12 +176,12 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
             //morn,
             wind, //windContribution(wind),
             //gust,
-            windDeg,
+            //windDeg,
             rain,
             humid, //humidityContribution(humid),
             cloud, //cloudinessContribution(cloud),
             press, //pressureContribution(press),
-            dewPoint,
+            //dewPoint,
             //northern,
             daysSinceSpring,
           ])[1]));
@@ -121,14 +189,15 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
 
 double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturnal = false}) {
   //double temp = nocturnal ? daily.temp!.eve!.toDouble() : daily.temp!.day!.toDouble();
-  double temp = daily.temp!.max!.toDouble();
+  double temp = daily.temp!.day!.toDouble();
   //double morn = daily.temp!.morn!.toDouble();
   double wind = daily.windSpeed!.toDouble();
   double gust = daily.windGust?.toDouble() ?? daily.windSpeed!.toDouble();
+  double rain = daily.pop!.toDouble();
   double humid = daily.humidity!.toDouble();
   double cloud = daily.clouds!.toDouble();
   double press = daily.pressure!.toDouble();
-  double dewPoint = daily.dewPoint!.toDouble();
+  //double dewPoint = daily.dewPoint!.toDouble();
   double northern = lat > 0 ? 1.0 : 0.0;
   int dayOfYear = int.parse(
       dayOfYearFormat.format(DateTime.fromMillisecondsSinceEpoch((daily.dt!) * 1000, isUtc: true)));
@@ -138,33 +207,31 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturna
   if (temp < 5) return 0.01;
   if (wind > 15) return 0.01;
   if (gust > 20) return 0.01;
-  if (humid < 40) return 0.01;
-  if (press < 995) return 0.01;
+  //if (humid < 40) return 0.01;
+  //if (press < 995) return 0.01;
 
-  // loadModel('assets/final_model.json').then((value) {
-  //   RandomForestClassifier model = RandomForestClassifier.fromMap(json.decode(value));
-  //   return min(
-  //       0.99,
-  //       max(
-  //           0.01,
-  //           model.predict([
-  //                 lat.toDouble(),
-  //                 lon.toDouble(),
-  //                 temp, //temperatureContribution(temp),
-  //                 //morn,
-  //                 wind, //windContribution(wind),
-  //                 //gust,
-  //                 //rain,
-  //                 humid, //humidityContribution(humid),
-  //                 cloud, //cloudinessContribution(cloud),
-  //                 press, //pressureContribution(press),
-  //                 dewPoint,
-  //                 //northern,
-  //                 daysSinceSpring,
-  //               ]) /
-  //               100.0));
-  // });
-  // return 0.0;
+  // Classifier? model = Nuptials._instance.getDailyModel();
+  // if (model == null) return 0.00;
+  // return min(
+  //     0.99,
+  //     max(
+  //         0.01,
+  //         model.predict([
+  //               lat.toDouble(),
+  //               lon.toDouble(),
+  //               temp, //temperatureContribution(temp),
+  //               //morn,
+  //               wind, //windContribution(wind),
+  //               //gust,
+  //               rain,
+  //               humid, //humidityContribution(humid),
+  //               cloud, //cloudinessContribution(cloud),
+  //               press, //pressureContribution(press),
+  //               //dewPoint,
+  //               //northern,
+  //               daysSinceSpring,
+  //             ]) /
+  //             100.0));
 
   return min(
       0.99,
@@ -177,11 +244,11 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturna
             //morn,
             wind, //windContribution(wind),
             //gust,
-            //rain,
+            rain,
             humid, //humidityContribution(humid),
             cloud, //cloudinessContribution(cloud),
             press, //pressureContribution(press),
-            dewPoint,
+            //dewPoint,
             //northern,
             daysSinceSpring,
           ])[1]));
