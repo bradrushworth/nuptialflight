@@ -642,7 +642,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               //if (height >= LARGE_SCREEN_HEIGHT) _buildUVI(),
                             ],
                           )),
-                          _buildUpcomingWeek(orientation),
+                          _buildUpcomingWeek(orientation, height),
                           if (orientation == Orientation.portrait)
                             Container(padding: const EdgeInsets.symmetric(vertical: 40)),
                           if (orientation == Orientation.portrait ||
@@ -1237,7 +1237,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _buildUpcomingWeek(Orientation orientation) {
+  Widget _buildUpcomingWeek(Orientation orientation, double height) {
     return Column(
       children: [
         // AutoSizeText doesn't work here because the parent is unconstrained
@@ -1271,8 +1271,10 @@ class _MyHomePageState extends State<MyHomePage> {
             _buildFuturePercentage(orientation, 3),
             _buildFuturePercentage(orientation, 4),
             _buildFuturePercentage(orientation, 5),
-            _buildFuturePercentage(orientation, 6),
-            _buildFuturePercentage(orientation, 7),
+            if (height >= LARGE_SCREEN_HEIGHT)
+              _buildFuturePercentage(orientation, 6),
+            if (height >= LARGE_SCREEN_HEIGHT)
+              _buildFuturePercentage(orientation, 7),
           ],
         )),
       ],
