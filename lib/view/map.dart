@@ -117,7 +117,7 @@ class _MapPageState extends State<MapPage> {
             alignment: Alignment.bottomLeft,
             child: html.Html(
               data:
-                  '<div style="color: #00ffff;">Markers show last 48hr nuptial flights.<br/>Marker size indicates species size.<br/>Weather &copy; <a href="http://openweathermap.org">OpenWeatherMap</a><br/>Tiles by <a href="http://stamen.com">Stamen Design</a> - <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a><br/>Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</div>',
+                  '<div style="color: #00ffff;">Markers show last 48hr nuptial flights.<br/>Marker size indicates species size.<br/>Weather <a href="http://openweathermap.org">&copy; OpenWeatherMap</a><br/>Tiles <a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a><br/>Map data <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap</a></div>',
               onLinkTap: (url, attributes, element) => Utils.launchURL(url!),
             ),
           ),

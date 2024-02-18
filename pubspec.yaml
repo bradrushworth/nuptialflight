@@ -15,10 +15,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.7.3+91
+version: 2.7.4+92
 
 environment:
-  sdk: '>=2.19.6 <4.0.0'
+  sdk: '>=3.2.4 <4.0.0'
 
 dependencies:
   flutter:
@@ -36,7 +36,7 @@ dependencies:
   #http: ^0.13.5
   #spectrum: ^0.2.1+1
   normal: ^0.7.0
-  geolocator: ^10.1.0
+  geolocator: ^11.0.0
   flutter_dotenv: ^5.0.2
   url_launcher: ^6.1.6
   auto_size_text: ^3.0.0
@@ -47,6 +47,7 @@ dependencies:
   flutter_google_places: #^0.3.0
     #git: https://github.com/devCitronnoir/flutter_google_places.git
     git: https://github.com/bradrushworth/flutter_google_places.git
+    #path: ../flutter_google_places
   flutter_map: ^6.1.0
   flutter_html: ^3.0.0-alpha.6
   darango: #^0.1.1
@@ -57,6 +58,7 @@ dependencies:
   flutter_background_service: ^5.0.5
   flutter_local_notifications: ^16.3.2
   sklite: ^1.0.0
+  google_api_headers: ^3.8.0
 #  platform_device_id: #^1.0.1
 #    git:
 #      #url: https://github.com/mohn93/platform_device_id.git
@@ -82,10 +84,10 @@ dependency_overrides:
       url: https://github.com/bradrushworth/flutter_device_preview.git
       path: device_frame
 #    path: ../flutter_device_preview/device_frame
-  google_api_headers:
-#    path: ../google_api_headers
-    git:
-      url: https://github.com/bradrushworth/google_api_headers.git
+#  google_api_headers:
+##    path: ../google_api_headers
+#    git:
+#      url: https://github.com/bradrushworth/google_api_headers.git
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
