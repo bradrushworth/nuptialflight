@@ -34,7 +34,7 @@ class WeatherFetcher {
                 timeLimit: Duration(seconds: 30));
           } catch (exception) {
             developer.log("Can't get current position: exception=$exception",
-                name: 'WeatherFetcher');
+                name: 'WeatherFetcher', error: exception);
           }
         } else if (!kIsWeb) {
           position = await Geolocator.getLastKnownPosition();
@@ -170,7 +170,7 @@ class WeatherFetcher {
     print("url=$url");
 
     final response = await http.get(Uri.parse(url));
-    developer.log("response=${response.body}", name: 'WeatherFetcher');
+    print("WeatherFetcher: response=${response.body}");
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,

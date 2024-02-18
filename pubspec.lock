@@ -252,10 +252,12 @@ packages:
   flutter_google_places:
     dependency: "direct main"
     description:
-      path: "../flutter_google_places"
-      relative: true
-    source: path
-    version: "0.5.0"
+      path: "."
+      ref: HEAD
+      resolved-ref: "4a221809e113d4aabbeb1b62ef3be1a4519027fa"
+      url: "https://github.com/bradrushworth/flutter_google_places.git"
+    source: git
+    version: "0.6.0"
   flutter_html:
     dependency: "direct main"
     description:

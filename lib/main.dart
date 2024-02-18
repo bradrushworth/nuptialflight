@@ -154,6 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
   OneCallResponse? _weather;
   bool loaded = false;
   String? errorMessage;
+  Timer? _everyHour;
 
   Hourly? _indexOfDiurnalHour;
   Hourly? _indexOfNocturnalHour;
@@ -174,6 +175,12 @@ class _MyHomePageState extends State<MyHomePage> {
     this.weatherFetcher = widget.weatherFetcher;
     widgetInitState(_loadData);
     _loadData(); // This will load data every time app is opened
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _everyHour?.cancel();
   }
 
   void createMenu() {
@@ -228,8 +235,14 @@ class _MyHomePageState extends State<MyHomePage> {
         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
         ?.requestNotificationsPermission();
 
-    _getLocation();
+    // Get location data now and every hour
+    _getLocation(false);
+    _everyHour = Timer.periodic(Duration(hours: 1), (Timer t) {
+      print('Periodic state refresh...');
+      _getLocation(true);
+    });
 
+    // Get platform information and then create the menu
     PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
       setState(() {
         appName = packageInfo.appName;
@@ -241,7 +254,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _getLocation() {
+  void _getLocation(bool forceUpdate) {
     setState(() {
       errorMessage = null;
     });
@@ -254,9 +267,8 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       // Try to passively then actively determine the location.
       // Only update the Android widget for the current location.
-      weatherFetcher
-          .findLocation(false)
-          .then((updated) => updated ? _getWeather() : Future.value())
+      weatherFetcher.findLocation(false)
+          .then((updated) => updated || forceUpdate ? _getWeather() : Future.value())
           .then((nothing) => updateAppWidget(_dailyPercentage))
           .then((nothing) =>
               print("findLocation(passive): _percentage=" + _dailyPercentage.toString()))
@@ -1271,10 +1283,8 @@ class _MyHomePageState extends State<MyHomePage> {
             _buildFuturePercentage(orientation, 3),
             _buildFuturePercentage(orientation, 4),
             _buildFuturePercentage(orientation, 5),
-            if (height >= LARGE_SCREEN_HEIGHT)
-              _buildFuturePercentage(orientation, 6),
-            if (height >= LARGE_SCREEN_HEIGHT)
-              _buildFuturePercentage(orientation, 7),
+            if (height >= LARGE_SCREEN_HEIGHT) _buildFuturePercentage(orientation, 6),
+            if (height >= LARGE_SCREEN_HEIGHT) _buildFuturePercentage(orientation, 7),
           ],
         )),
       ],
@@ -1358,7 +1368,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // Wait then try to get weather again
     Future.delayed(const Duration(milliseconds: 3000), () {
-      _getLocation();
+      _getLocation(false);
     });
   }
 

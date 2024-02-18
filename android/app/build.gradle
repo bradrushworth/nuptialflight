@@ -91,5 +91,6 @@ dependencies {
 //task wrapper(type: Wrapper) {
 //    gradleVersion = '7.5'
 //}
+
 // https://stackoverflow.com/questions/64290545/task-preparekotlinbuildscriptmodel-not-found-in-project-app
-//tasks.register("prepareKotlinBuildScriptModel") {}
+tasks.register("prepareKotlinBuildScriptModel") {}
