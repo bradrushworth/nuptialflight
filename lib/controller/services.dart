@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:background_fetch/background_fetch.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
@@ -30,8 +30,6 @@ const notificationIdPercentage = 101;
 Position? _lastKnownPosition;
 
 Future<void> initializeService() async {
-  final service = FlutterBackgroundService();
-
   const AndroidNotificationChannel channelReport = AndroidNotificationChannel(
     notificationChannelIdReport, // id
     'Nuptial Flight Reports', // title
@@ -54,123 +52,167 @@ Future<void> initializeService() async {
     ?..createNotificationChannel(channelReport)
     ..createNotificationChannel(channelPercentage);
 
-  await service.configure(
-    androidConfiguration: AndroidConfiguration(
-      // this will be executed when app is in foreground or background in separated isolate
-      onStart: onStart,
-
-      // auto start service
-      autoStart: true,
-      autoStartOnBoot: true,
-      isForegroundMode: false,
-
-      notificationChannelId: notificationChannelIdReport,
-      foregroundServiceNotificationId: notificationIdReport,
-      initialNotificationTitle: 'Nuptial Flight Reports',
-    ),
-    iosConfiguration: IosConfiguration(
-      autoStart: true,
-      onForeground: onStart,
-    ),
-  );
-}
-
-@pragma('vm:entry-point')
-Future<void> onStart(ServiceInstance service) async {
   // Only available for flutter 3.0.0 and later
   DartPluginRegistrant.ensureInitialized();
 
+  await dotenv.load(fileName: 'assets/.env');
+
+  // Register to receive BackgroundFetch events after app is terminated.
+  // Requires {stopOnTerminate: false, enableHeadless: true}
+  BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+
+  // Configure BackgroundFetch.
+  try {
+    var status = await BackgroundFetch.configure(BackgroundFetchConfig(
+        minimumFetchInterval: 15,
+        forceAlarmManager: false,
+        stopOnTerminate: false,
+        startOnBoot: true,
+        enableHeadless: true,
+        requiresBatteryNotLow: false,
+        requiresCharging: false,
+        requiresStorageNotLow: false,
+        requiresDeviceIdle: false,
+        requiredNetworkType: NetworkType.NONE
+    ), _onBackgroundFetch, _onBackgroundFetchTimeout);
+    print('[BackgroundFetch] configure success: $status');
+
+    // Schedule a "one-shot" custom-task in 10000ms.
+    // These are fairly reliable on Android (particularly with forceAlarmManager) but not iOS,
+    // where device must be powered (and delay will be throttled by the OS).
+    BackgroundFetch.scheduleTask(TaskConfig(
+        taskId: "com.transistorsoft.customtask",
+        delay: 10000,
+        periodic: false,
+        forceAlarmManager: true,
+        stopOnTerminate: false,
+        enableHeadless: true
+    ));
+  } on Exception catch(e) {
+    print("[BackgroundFetch] configure ERROR: $e");
+  }
+}
+
+void _onBackgroundFetch(String taskId) async {
+  var timestamp = DateTime.now();
+  // This is the fetch-event callback.
+  print("[BackgroundFetch] Event received: $taskId");
+
+  if (taskId == "flutter_background_fetch") {
+    _lastKnownPosition = await Geolocator.getLastKnownPosition();
+    await getReportedFlightsNearMe();
+    await getServicePercentage();
+  }
+
+  // IMPORTANT:  You must signal completion of your fetch task or the OS can punish your app
+  // for taking too long in the background.
+  BackgroundFetch.finish(taskId);
+}
+
+// This event fires shortly before your task is about to timeout.
+// You must finish any outstanding work and call BackgroundFetch.finish(taskId).
+void _onBackgroundFetchTimeout(String taskId) {
+  print("[BackgroundFetch] TIMEOUT: $taskId");
+  BackgroundFetch.finish(taskId);
+}
+
+// [Android-only] This "Headless Task" is run when the Android app is terminated with `enableHeadless: true`
+// Be sure to annotate your callback function to avoid issues in release mode on Flutter >= 3.3.0
+@pragma('vm:entry-point')
+void backgroundFetchHeadlessTask(HeadlessTask task) async {
+  String taskId = task.taskId;
+  bool isTimeout = task.timeout;
+  if (isTimeout) {
+    // This task has exceeded its allowed running-time.
+    // You must stop what you're doing and immediately .finish(taskId)
+    print("[BackgroundFetch] Headless task timed-out: $taskId");
+    BackgroundFetch.finish(taskId);
+    return;
+  }
+  print('[BackgroundFetch] Headless event received.');
+
+  _lastKnownPosition = await Geolocator.getLastKnownPosition();
+  await getReportedFlightsNearMe();
+  await getServicePercentage();
+
+  if (taskId == 'flutter_background_fetch') {
+    BackgroundFetch.scheduleTask(TaskConfig(
+        taskId: "com.transistorsoft.customtask",
+        delay: 5000,
+        periodic: false,
+        forceAlarmManager: false,
+        stopOnTerminate: false,
+        enableHeadless: true,
+    ));
+  }
+  BackgroundFetch.finish(taskId);
+}
+
+Future<void> getReportedFlightsNearMe() async {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  await dotenv.load(fileName: 'assets/.env');
-
-  _lastKnownPosition = await Geolocator.getLastKnownPosition();
-
-  // bring to foreground
-  Timer.periodic(const Duration(minutes: 30), (timer) async {
-    // Get nuptial updates
-    if (true /*service is AndroidServiceInstance*/) {
-      if (true /*await service.isForegroundService()*/) {
-        int numFlights = 0;
-        int closestDistance = 0;
-        Position? position = await Geolocator.getLastKnownPosition();
-        if (position == null) {
-          position = _lastKnownPosition;
-        } else {
-          _lastKnownPosition = position;
-        }
-        await ArangoSingleton().getRecentFlightsNearMe(position).then((values) {
-          debugPrint('getRecentFlightsNearMe: values=$values');
-          numFlights = values.length;
-          if (numFlights > 0) {
-            closestDistance = values.reduce((current, next) =>
-                current['distance'] > next['distance'] ? current : next)['distance'];
-          }
-        });
-        debugPrint('getRecentFlightsNearMe: Reported local nuptial flights: $numFlights');
-
-        if (numFlights > 0) {
-          flutterLocalNotificationsPlugin.show(
-            notificationIdReport,
-            'Current reported local nuptial flight!',
-            'There are $numFlights reported flights in the last 30 minutes with the nearest ${closestDistance} km away...',
-            const NotificationDetails(
-              android: AndroidNotificationDetails(
-                notificationChannelIdReport,
-                'Nuptial Flight Reports',
-                icon: 'ic_launcher_foreground',
-                ongoing: false,
-              ),
-            ),
-          );
-        }
-      }
+  int numFlights = 0;
+  int closestDistance = 0;
+  await ArangoSingleton().getRecentFlightsNearMe(_lastKnownPosition).then((values) {
+    debugPrint('getRecentFlightsNearMe: values=$values');
+    numFlights = values.length;
+    if (numFlights > 0) {
+      closestDistance = values.reduce(
+          (current, next) => current['distance'] > next['distance'] ? current : next)['distance'];
     }
   });
+  debugPrint('getRecentFlightsNearMe: Reported local nuptial flights: $numFlights');
 
-  // bring to foreground
-  Timer.periodic(const Duration(hours: 8), (timer) async {
-    // Get nuptial updates
-    if (true /*service is AndroidServiceInstance*/) {
-      if (true /*await service.isForegroundService()*/) {
-        Position? position = await Geolocator.getLastKnownPosition();
-        if (position == null) {
-          position = _lastKnownPosition;
-        } else {
-          _lastKnownPosition = position;
-        }
-        if (position == null) {
-          debugPrint('getServicePercentage: Last known position is null');
-        } else {
-          debugPrint('getServicePercentage: Last known position is ' + position.toString());
-          WeatherFetcher weatherFetcher = WeatherFetcher();
-          weatherFetcher.setPosition(position);
-          OneCallResponse weather = await weatherFetcher.fetchWeather();
-          int percentage = (nuptialDailyPercentageModel(
-                      weather.lat!, weather.lon!, weather.daily!.elementAt(0)) *
-                  100.0)
-              .toInt();
-          debugPrint('getServicePercentage: Percentage for nuptial flights: $percentage');
-          updateAppWidget([percentage]);
+  if (numFlights > 0 || true) {
+    flutterLocalNotificationsPlugin.show(
+      notificationIdReport,
+      'Current reported local nuptial flight!',
+      'There are $numFlights reported flights in the last 30 minutes with the nearest ${closestDistance} km away...',
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          notificationChannelIdReport,
+          'Nuptial Flight Reports',
+          icon: 'ic_launcher_foreground',
+          ongoing: false,
+        ),
+      ),
+    );
+  }
+}
 
-          if (percentage >= greenThreshold) {
-            flutterLocalNotificationsPlugin.show(
-              notificationIdPercentage,
-              'Good weather for a nuptial flight!',
-              'The confidence for nuptial flight is $percentage% today...',
-              const NotificationDetails(
-                android: AndroidNotificationDetails(
-                  notificationChannelIdPercentage,
-                  'Nuptial Flight Percentage',
-                  icon: 'ic_launcher_foreground',
-                  ongoing: false,
-                ),
-              ),
-            );
-          }
-        }
-      }
+Future<void> getServicePercentage() async {
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  if (_lastKnownPosition == null) {
+    debugPrint('getServicePercentage: Last known position is null');
+  } else {
+    debugPrint('getServicePercentage: Last known position is ' + _lastKnownPosition.toString());
+    WeatherFetcher weatherFetcher = WeatherFetcher();
+    weatherFetcher.setPosition(_lastKnownPosition!);
+    OneCallResponse weather = await weatherFetcher.fetchWeather();
+    int percentage =
+        (nuptialDailyPercentageModel(weather.lat!, weather.lon!, weather.daily!.elementAt(0)) *
+                100.0)
+            .toInt();
+    debugPrint('getServicePercentage: Percentage for nuptial flights: $percentage');
+    updateAppWidget([percentage]);
+
+    if (percentage >= greenThreshold || true) {
+      flutterLocalNotificationsPlugin.show(
+        notificationIdPercentage,
+        'Good weather for a nuptial flight!',
+        'The confidence for nuptial flight is $percentage% today...',
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            notificationChannelIdPercentage,
+            'Nuptial Flight Percentage',
+            icon: 'ic_launcher_foreground',
+            ongoing: false,
+          ),
+        ),
+      );
     }
-  });
+  }
 }

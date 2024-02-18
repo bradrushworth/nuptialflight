@@ -267,7 +267,8 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       // Try to passively then actively determine the location.
       // Only update the Android widget for the current location.
-      weatherFetcher.findLocation(false)
+      weatherFetcher
+          .findLocation(false)
           .then((updated) => updated || forceUpdate ? _getWeather() : Future.value())
           .then((nothing) => updateAppWidget(_dailyPercentage))
           .then((nothing) =>
@@ -543,6 +544,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: OrientationBuilder(builder: (context, orientation) {
         return LayoutBuilder(
           builder: (ctx, constraints) {
+            print('constraints.maxHeight=${constraints.maxHeight}');
             return errorMessage != null
                 ? _buildErrorMessage()
                 : !loaded
@@ -568,21 +570,21 @@ class _MyHomePageState extends State<MyHomePage> {
                             children: [
                               if (orientation == Orientation.landscape || height >= 860)
                                 _buildNuptialHeading(orientation),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: <Widget>[
-                                  _buildTodayPercentage(
-                                      orientation, 'Next 11am', _diurnalHourPercentage),
-                                  _buildTodayPercentage(
-                                      orientation, 'Today Overall', _dailyPercentage[0]),
-                                  _buildTodayPercentage(
-                                      orientation, 'Next 7pm', _nocturnalHourPercentage),
-                                ],
-                              ),
                               if (orientation == Orientation.portrait &&
                                   constraints.maxHeight >= 700)
-                                _buildTodayHistogram(constraints),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: <Widget>[
+                                    _buildTodayPercentage(
+                                        orientation, 'Next 11am', _diurnalHourPercentage),
+                                    _buildTodayPercentage(
+                                        orientation, 'Today Overall', _dailyPercentage[0]),
+                                    _buildTodayPercentage(
+                                        orientation, 'Next 7pm', _nocturnalHourPercentage),
+                                  ],
+                                ),
+                              _buildTodayHistogram(constraints),
                               _buildTodayWeather(orientation),
                             ],
                           )),
