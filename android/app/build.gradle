@@ -56,11 +56,11 @@ android {
         }
     }
 
-    compileSdkVersion 34
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "au.com.bitbot.nuptialflight"
-        minSdkVersion 23
-        targetSdkVersion 34
+        minSdkVersion rootProject.ext.targetSdkVersion
+        targetSdkVersion rootProject.ext.compileSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         manifestPlaceholders['foregroundServiceType'] = 'location'
@@ -94,9 +94,18 @@ flutter {
 
 dependencies {
     //implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    //implementation 'androidx.core:core-ktx:1.6.0'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
-
 }
+
+// AAPT: error: resource android:attr/lStar not found.
+// Problem in the background_fetch dependency.
+// https://stackoverflow.com/questions/69033022/message-error-resource-androidattr-lstar-not-found
+//configurations.all {
+//    resolutionStrategy {
+//        force 'androidx.core:core-ktx:1.6.0'
+//    }
+//}
 
 // Not sure why I needed to add these to get this working
 // https://stackoverflow.com/questions/69389145/how-do-i-fix-this-error-task-wrapper-not-found-in-project-app

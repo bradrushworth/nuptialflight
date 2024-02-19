@@ -18,6 +18,14 @@
 //}
 
 allprojects {
+    ext {
+        compileSdkVersion = 34
+        targetSdkVersion = 34
+        appCompatVersion = "1.6.1"
+        lifeCycleRuntimeVersion = "2.7.0"
+        lifeCycleExtensionsVersion = "2.2.0"
+    }
+
     repositories {
         google()
         mavenCentral()
