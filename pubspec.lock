@@ -391,10 +391,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: aa92da14591b2bb29e5e5c5b9163173f3bd0384a
-      url: "https://github.com/milindgoel15/home_widget.git"
+      resolved-ref: e7d983129e94bca1d6f1ebfd923e9737ef5217f1
+      url: "https://github.com/ABausG/home_widget.git"
     source: git
-    version: "0.3.1"
+    version: "0.4.1"
   html:
     dependency: "direct main"
     description:

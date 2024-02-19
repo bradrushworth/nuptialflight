@@ -29,10 +29,11 @@ dependencies:
   cupertino_icons: ^1.0.5
 
   # All app dependencies
-  home_widget: #^0.4.0-alpha.0
+  home_widget: #^0.4.1
     #path: ../home_widget
+    git: https://github.com/ABausG/home_widget.git
     #git: https://github.com/bradrushworth/home_widget.git
-    git: https://github.com/milindgoel15/home_widget.git
+    #git: https://github.com/milindgoel15/home_widget.git
   #http: ^0.13.5
   #spectrum: ^0.2.1+1
   normal: ^0.7.0
