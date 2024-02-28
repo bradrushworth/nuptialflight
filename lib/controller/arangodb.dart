@@ -79,7 +79,13 @@ class ArangoSingleton {
 
   void updateWeather(String? version, String? buildNumber, String size, OneCallResponse? _weather,
       OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather) async {
-    String? deviceId = await MobileDeviceIdentifier().getDeviceId();
+    if (kIsWeb) {
+      deviceId = 'web';
+    } else if (Platform.isAndroid || Platform.isIOS) {
+      deviceId = await MobileDeviceIdentifier().getDeviceId();
+    } else {
+      deviceId = Platform.localHostname;
+    }
 
     {
       // Let's update the existing database entry
