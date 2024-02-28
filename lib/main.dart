@@ -381,7 +381,7 @@ class _MyHomePageState extends State<MyHomePage> {
         _diurnalHourPercentage =
             (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, _indexOfDiurnalHour!) * 100.0)
                 .toInt();
-      } on StateError catch (e) {
+      } on StateError {
         _indexOfDiurnalHour = null;
         _diurnalHourPercentage = 0;
       }
@@ -404,7 +404,7 @@ class _MyHomePageState extends State<MyHomePage> {
             (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, _indexOfNocturnalHour!) *
                     100.0)
                 .toInt();
-      } on StateError catch (e) {
+      } on StateError {
         _indexOfNocturnalHour = null;
         _nocturnalHourPercentage = 0;
       }
@@ -907,7 +907,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     border: Border.all(
                         color: Theme.of(context)
                             .textTheme
-                            .bodyText1!
+                            .bodyLarge!
                             .color!
                             .withOpacity(0.1), // Color.fromRGBO(220, 220, 220, 0.2),
                         width: 0.5),
