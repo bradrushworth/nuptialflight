@@ -140,13 +140,13 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 
-  plugin:
-    platforms:
-      android:
-        package: com.transistorsoft.flutter.backgroundfetch
-        pluginClass: BackgroundFetchPlugin
-      ios:
-        pluginClass: BackgroundFetchPlugin
+#  plugin:
+#    platforms:
+#      android:
+#        package: com.transistorsoft.flutter.backgroundfetch
+#        pluginClass: BackgroundFetchPlugin
+#      ios:
+#        pluginClass: BackgroundFetchPlugin
 
 flutter_icons:
   android: true
