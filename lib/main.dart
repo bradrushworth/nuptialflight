@@ -570,21 +570,21 @@ class _MyHomePageState extends State<MyHomePage> {
                             children: [
                               if (orientation == Orientation.landscape || height >= 860)
                                 _buildNuptialHeading(orientation),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: <Widget>[
+                                  _buildTodayPercentage(
+                                      orientation, 'Next 11am', _diurnalHourPercentage),
+                                  _buildTodayPercentage(
+                                      orientation, 'Today Overall', _dailyPercentage[0]),
+                                  _buildTodayPercentage(
+                                      orientation, 'Next 7pm', _nocturnalHourPercentage),
+                                ],
+                              ),
                               if (orientation == Orientation.portrait &&
                                   constraints.maxHeight >= 700)
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: <Widget>[
-                                    _buildTodayPercentage(
-                                        orientation, 'Next 11am', _diurnalHourPercentage),
-                                    _buildTodayPercentage(
-                                        orientation, 'Today Overall', _dailyPercentage[0]),
-                                    _buildTodayPercentage(
-                                        orientation, 'Next 7pm', _nocturnalHourPercentage),
-                                  ],
-                                ),
-                              _buildTodayHistogram(constraints),
+                                _buildTodayHistogram(constraints),
                               _buildTodayWeather(orientation),
                             ],
                           )),
