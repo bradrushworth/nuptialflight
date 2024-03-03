@@ -144,16 +144,22 @@ RETURN {
     return result;
   }
 
-  Future<List> getRecentFlightsNearMe(Position? position) async {
+  Future<List> getRecentFlightsNearMe(Position? position, int minutes) async {
     if (position == null) {
       debugPrint("Could not find last known position!");
       return [];
+    }
+    if (minutes == 0) {
+      minutes = -30;
+    }
+    if (minutes > 0) {
+      minutes = -minutes;
     }
     Aql aql = _arangoClient!.aql();
     String query = """
 FOR f IN current
 FILTER f.`flight` == 'yes'
-&& DATE_ISO8601(TO_NUMBER(f.weather.dt) * 1000) >= DATE_ADD(DATE_NOW(), -30, "minutes")
+&& DATE_ISO8601(TO_NUMBER(f.weather.dt) * 1000) >= DATE_ADD(DATE_NOW(), ${minutes}, "minutes")
 && DISTANCE(f.weather.coord.lat, f.weather.coord.lon, ${position.latitude}, ${position.longitude}) < 500 * 1000
 RETURN {
     "key": f._key,

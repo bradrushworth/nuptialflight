@@ -29,6 +29,9 @@ const notificationIdPercentage = 101;
 // not allowed to get position in the background
 Position? _lastKnownPosition;
 
+// when did we check the last time
+DateTime? _lastCheckDate;
+
 Future<void> initializeService() async {
   const AndroidNotificationChannel channelReport = AndroidNotificationChannel(
     notificationChannelIdReport, // id
@@ -152,6 +155,15 @@ Future<void> getReportedFlightsNearMe() async {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+  int minutes;
+  if (_lastCheckDate == null) {
+    minutes = -30;
+  } else {
+    DateTime now = DateTime.now();
+    minutes = (_lastCheckDate!.millisecondsSinceEpoch - now.millisecondsSinceEpoch) ~/ 1000 ~/ 60;
+    _lastCheckDate = now;
+  }
+
   int numFlights = 0;
   int closestDistance = 0;
   await ArangoSingleton().getRecentFlightsNearMe(_lastKnownPosition).then((values) {
@@ -162,13 +174,13 @@ Future<void> getReportedFlightsNearMe() async {
           (current, next) => current['distance'] > next['distance'] ? current : next)['distance'];
     }
   });
-  debugPrint('getRecentFlightsNearMe: Reported local nuptial flights: $numFlights');
+  debugPrint('getRecentFlightsNearMe: Reported local nuptial flights: $numFlights in $minutes mins');
 
-  if (numFlights > 0 || true) {
+  if (numFlights > 0) {
     flutterLocalNotificationsPlugin.show(
       notificationIdReport,
       'Current reported local nuptial flight!',
-      'There are $numFlights reported flights in the last 30 minutes with the nearest ${closestDistance} km away...',
+      'There are $numFlights reported flights in the last ${minutes} minutes with the nearest ${closestDistance} km away...',
       const NotificationDetails(
         android: AndroidNotificationDetails(
           notificationChannelIdReport,
@@ -199,7 +211,7 @@ Future<void> getServicePercentage() async {
     debugPrint('getServicePercentage: Percentage for nuptial flights: $percentage');
     updateAppWidget([percentage]);
 
-    if (percentage >= greenThreshold || true) {
+    if (percentage >= greenThreshold) {
       flutterLocalNotificationsPlugin.show(
         notificationIdPercentage,
         'Good weather for a nuptial flight!',
