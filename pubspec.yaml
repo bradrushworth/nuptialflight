@@ -58,7 +58,7 @@ dependencies:
     git: https://github.com/bradrushworth/mobile_device_identifier.git
   #flutter_background_service: ^5.0.5
   flutter_local_notifications: ^16.3.2
-  background_fetch: ^1.2.2
+  background_fetch: ^1.2.3
   sklite: ^1.0.0
   google_api_headers: ^3.8.0
 #  platform_device_id: #^1.0.1

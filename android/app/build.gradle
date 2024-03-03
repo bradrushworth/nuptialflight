@@ -1,6 +1,7 @@
 plugins {
+//    id 'org.jetbrains.kotlin.jvm' version '1.9.22'
     id "com.android.application"
-    id "org.jetbrains.kotlin.android"
+    id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
 
@@ -42,21 +43,37 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace 'au.com.bitbot.nuptialflight'
 
+//    compileSdk flutter.compileSdkVersion
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    ndkVersion flutter.ndkVersion
+
+    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+
+        // Flag to enable support for the new language APIs
+        //coreLibraryDesugaringEnabled true
+    }
+
+//    kotlinOptions {
+//        jvmTarget = '1.8'
+//    }
+
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs += 'src/main/java'
+        main.kotlin.srcDirs += 'src/main/kotlin'
     }
 
     kotlin {
         jvmToolchain(11)
     }
+//
+//    java {
+//        toolchain {
+//            languageVersion.set(JavaLanguageVersion.of(11))
+//        }
+//    }
 
-    java {
-        toolchain {
-            languageVersion.set(JavaLanguageVersion.of(11))
-        }
-    }
-
-    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "au.com.bitbot.nuptialflight"
         minSdkVersion rootProject.ext.targetSdkVersion
@@ -64,10 +81,6 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         manifestPlaceholders['foregroundServiceType'] = 'location'
-    }
-    compileOptions {
-        // Flag to enable support for the new language APIs
-        coreLibraryDesugaringEnabled true
     }
 
     signingConfigs {
@@ -80,6 +93,9 @@ android {
     }
     buildTypes {
         release {
+            minifyEnabled true
+            shrinkResources true
+            //proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
         }
         debug {
@@ -95,8 +111,19 @@ flutter {
 dependencies {
     //implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     //implementation 'androidx.core:core-ktx:1.12.0'
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+    //testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    //coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+//    implementation 'androidx.window:window:1.0.0'
+//    implementation 'androidx.window:window-java:1.2.0'
 }
+
+//test {
+//    useJUnitPlatform()
+//}
+
+//kotlin {
+//    jvmToolchain(11)
+//}
 
 // AAPT: error: resource android:attr/lStar not found.
 // Problem in the background_fetch dependency.
@@ -109,10 +136,10 @@ dependencies {
 
 // Not sure why I needed to add these to get this working
 // https://stackoverflow.com/questions/69389145/how-do-i-fix-this-error-task-wrapper-not-found-in-project-app
-task wrapper(type: Wrapper) {
-    //gradleVersion = '8.6'
-    validateDistributionUrl = false
-}
+//task wrapper(type: Wrapper) {
+//    //gradleVersion = '8.6'
+//    validateDistributionUrl = false
+//}
 
 // https://stackoverflow.com/questions/64290545/task-preparekotlinbuildscriptmodel-not-found-in-project-app
 tasks.register("prepareKotlinBuildScriptModel") {}

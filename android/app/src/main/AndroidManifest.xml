@@ -19,6 +19,7 @@
     </queries>
 
     <application
+        android:name="${applicationName}"
         tools:replace="android:label"
         android:icon="@mipmap/ic_launcher"
         android:label="Ant Flight">
