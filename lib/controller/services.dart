@@ -166,7 +166,7 @@ Future<void> getReportedFlightsNearMe() async {
 
   int numFlights = 0;
   int closestDistance = 0;
-  await ArangoSingleton().getRecentFlightsNearMe(_lastKnownPosition).then((values) {
+  await ArangoSingleton().getRecentFlightsNearMe(_lastKnownPosition, minutes).then((values) {
     debugPrint('getRecentFlightsNearMe: values=$values');
     numFlights = values.length;
     if (numFlights > 0) {
