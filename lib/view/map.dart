@@ -126,15 +126,15 @@ class _MapPageState extends State<MapPage> {
           TileLayer(
               urlTemplate:
               //'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}',
-              //'https://maps.bitbot.com.au/tiles/maptiler/{z}/{x}/{y}.{ext}?origin=nw',
-              'https://api.maptiler.com/maps/backdrop/{z}/{x}/{y}.png?key={apiKey}',
+              'https://maps.bitbot.com.au/tiles/backdrop/{z}/{x}/{y}.{ext}?origin=nw',
+              //'https://api.maptiler.com/maps/backdrop/{z}/{x}/{y}.png?key={apiKey}',
               subdomains: ['a', 'b', 'c'],
               userAgentPackageName: 'au.com.bitbot.nuptialflight',
               minZoom: 0,
               maxZoom: 20,
               additionalOptions: {
                 'ext': 'png',
-                'apiKey': dotenv.env['MAPTILER_MAP_KEY']!,
+                //'apiKey': dotenv.env['MAPTILER_MAP_KEY']!,
               }),
 
           // _openWeatherMapWidget('precipitation_new'),
