@@ -53,10 +53,10 @@ packages:
     dependency: "direct main"
     description:
       name: background_fetch
-      sha256: "1a7868d9bd165eb177f039ff8244cfa7952340b18f7caabf322b26e712b438a3"
+      sha256: eb3af263d390d7e68ecb90f2ae984d2bfd96dceb4c7b4f72418dd5383b49de0a
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.3"
+    version: "1.2.4"
   boolean_selector:
     dependency: transitive
     description:
@@ -254,10 +254,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_local_notifications
-      sha256: c18f1de98fe0bb9dd5ba91e1330d4febc8b6a7de6aae3ffe475ef423723e72f3
+      sha256: f9a05409385b77b06c18f200a41c7c2711ebf7415669350bb0f8474c07bd40d1
       url: "https://pub.dev"
     source: hosted
-    version: "16.3.2"
+    version: "17.0.0"
   flutter_local_notifications_linux:
     dependency: transitive
     description:
@@ -391,7 +391,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: e7d983129e94bca1d6f1ebfd923e9737ef5217f1
+      resolved-ref: cba82629b3942e9196af940434b5173aa151c21e
       url: "https://github.com/ABausG/home_widget.git"
     source: git
     version: "0.4.1"
@@ -519,10 +519,10 @@ packages:
     dependency: transitive
     description:
       name: logger
-      sha256: "6bbb9d6f7056729537a4309bda2e74e18e5d9f14302489cc1e93f33b3fe32cac"
+      sha256: b3ff55aeb08d9d8901b767650285872cb1bb8f508373b3e348d60268b0c7f770
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.2+1"
+    version: "2.1.0"
   logging:
     dependency: transitive
     description:
@@ -1109,10 +1109,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: "464f5674532865248444b4c3daca12bd9bf2d7c47f759ce2617986e7229494a8"
+      sha256: "8cb58b45c47dcb42ab3651533626161d6b67a2921917d8d429791f76972b3480"
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.0"
+    version: "5.3.0"
   wkt_parser:
     dependency: transitive
     description:
