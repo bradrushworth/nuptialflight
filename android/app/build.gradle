@@ -45,19 +45,13 @@ android {
 
 //    compileSdk flutter.compileSdkVersion
     compileSdkVersion rootProject.ext.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    //ndkVersion flutter.ndkVersion
+    ndkVersion "25.1.8937393"
 
     compileOptions {
-//        sourceCompatibility JavaVersion.VERSION_1_8
-//        targetCompatibility JavaVersion.VERSION_1_8
-
         // Flag to enable support for the new language APIs
         coreLibraryDesugaringEnabled true
     }
-
-//    kotlinOptions {
-//        jvmTarget = '1.8'
-//    }
 
     sourceSets {
         main.java.srcDirs += 'src/main/java'
@@ -67,12 +61,12 @@ android {
     kotlin {
         jvmToolchain(11)
     }
-//
-//    java {
-//        toolchain {
-//            languageVersion.set(JavaLanguageVersion.of(11))
-//        }
-//    }
+
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(11))
+        }
+    }
 
     defaultConfig {
         applicationId "au.com.bitbot.nuptialflight"

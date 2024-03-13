@@ -157,16 +157,16 @@ Future<void> getReportedFlightsNearMe() async {
 
   int minutes;
   if (_lastCheckDate == null) {
-    minutes = -30;
+    minutes = 30;
   } else {
     DateTime now = DateTime.now();
-    minutes = (_lastCheckDate!.millisecondsSinceEpoch - now.millisecondsSinceEpoch) ~/ 1000 ~/ 60;
+    minutes = (now.millisecondsSinceEpoch - _lastCheckDate!.millisecondsSinceEpoch) ~/ 1000 ~/ 60;
     _lastCheckDate = now;
   }
 
   int numFlights = 0;
   int closestDistance = 0;
-  await ArangoSingleton().getRecentFlightsNearMe(_lastKnownPosition, minutes).then((values) {
+  await ArangoSingleton().getRecentFlightsNearMe(_lastKnownPosition, -minutes).then((values) {
     debugPrint('getRecentFlightsNearMe: values=$values');
     numFlights = values.length;
     if (numFlights > 0) {
@@ -203,11 +203,13 @@ Future<void> getServicePercentage() async {
     debugPrint('getServicePercentage: Last known position is ' + _lastKnownPosition.toString());
     WeatherFetcher weatherFetcher = WeatherFetcher();
     weatherFetcher.setPosition(_lastKnownPosition!);
-    OneCallResponse weather = await weatherFetcher.fetchWeather();
-    int percentage =
-        (nuptialDailyPercentageModel(weather.lat!, weather.lon!, weather.daily!.elementAt(0)) *
-                100.0)
-            .toInt();
+    int percentage = 0;
+    await weatherFetcher.fetchWeather().then((OneCallResponse weather) {
+      percentage =
+          (nuptialDailyPercentageModel(weather.lat!, weather.lon!, weather.daily!.elementAt(0)) *
+              100.0)
+              .toInt();
+    });
     debugPrint('getServicePercentage: Percentage for nuptial flights: $percentage');
     updateAppWidget([percentage]);
 
