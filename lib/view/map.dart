@@ -124,10 +124,13 @@ class _MapPageState extends State<MapPage> {
         ],
         children: <Widget>[
           TileLayer(
-              urlTemplate:
-              //'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}',
-              'https://maps.bitbot.com.au/tiles/backdrop/{z}/{x}/{y}.{ext}?origin=nw',
-              //'https://api.maptiler.com/maps/backdrop/{z}/{x}/{y}.png?key={apiKey}',
+              wmsOptions: WMSTileLayerOptions(
+                  baseUrl: 'https://maps.bitbot.com.au/service?', layers: ['backdrop']),
+              // urlTemplate:
+              // //'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}',
+              // //'https://maps.bitbot.com.au/tiles/backdrop/{z}/{x}/{y}.{ext}?origin=sw',
+              // 'https://maps.bitbot.com.au/tms/1.0.0/backdrop/EPSG3857/{z}/{x}/{y}.{ext}?origin=nw',
+              // //'https://api.maptiler.com/maps/backdrop/{z}/{x}/{y}.png?key={apiKey}',
               subdomains: ['a', 'b', 'c'],
               userAgentPackageName: 'au.com.bitbot.nuptialflight',
               minZoom: 0,
@@ -174,9 +177,12 @@ class _MapPageState extends State<MapPage> {
     return Opacity(
       opacity: 0.165,
       child: TileLayer(
-        urlTemplate:
-            //'https://tile.openweathermap.org/map/{layer}/{z}/{x}/{y}.{ext}?appid={apiKey}',
-            'https://maps.bitbot.com.au/tiles/{layer}/{z}/{x}/{y}.{ext}?origin=nw',
+        wmsOptions: WMSTileLayerOptions(
+            baseUrl: 'https://maps.bitbot.com.au/service?', layers: [layer]),
+        // urlTemplate:
+        //     //'https://tile.openweathermap.org/map/{layer}/{z}/{x}/{y}.{ext}?appid={apiKey}',
+        //     'https://maps.bitbot.com.au/tiles/{layer}/{z}/{x}/{y}.{ext}?origin=nw',
+        // //'https://maps.bitbot.com.au/tms/1.0.0/{layer}/EPSG900913/{z}/{x}/{y}.{ext}',
         subdomains: ['a', 'b', 'c'],
         userAgentPackageName: 'au.com.bitbot.nuptialflight',
         minZoom: 0,
