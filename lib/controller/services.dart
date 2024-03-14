@@ -176,7 +176,7 @@ Future<void> getReportedFlightsNearMe() async {
   });
   debugPrint('getRecentFlightsNearMe: Reported local nuptial flights: $numFlights in $minutes mins');
 
-  if (numFlights > 0 || true) {
+  if (numFlights > 0) {
     flutterLocalNotificationsPlugin.show(
       notificationIdReport,
       'Current reported local nuptial flight!',
@@ -213,7 +213,7 @@ Future<void> getServicePercentage() async {
     debugPrint('getServicePercentage: Percentage for nuptial flights: $percentage');
     updateAppWidget([percentage]);
 
-    if (percentage >= greenThreshold || true) {
+    if (percentage >= greenThreshold) {
       flutterLocalNotificationsPlugin.show(
         notificationIdPercentage,
         'Good weather for a nuptial flight!',
