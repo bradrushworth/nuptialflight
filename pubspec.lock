@@ -596,10 +596,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: ff5948f20fa0eeb51feb474e7611731955cdc3c9
-      url: "https://github.com/bradrushworth/mobile_device_identifier.git"
+      resolved-ref: "7cc3ee98f4f60e45b9ceeead8f3f270d9394ab4b"
+      url: "https://github.com/stilus-tayyipguzel/mobile_device_identifier.git"
     source: git
-    version: "0.0.2"
+    version: "0.0.3"
   nested:
     dependency: transitive
     description:
