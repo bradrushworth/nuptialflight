@@ -785,7 +785,7 @@ packages:
     source: hosted
     version: "0.28.0"
   screenshot_modes:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       path: "."
       ref: HEAD
