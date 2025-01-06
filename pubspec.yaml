@@ -41,7 +41,6 @@ dependencies:
   flutter_dotenv: ^5.2.1
   url_launcher: ^6.3.1
   auto_size_text: ^3.0.0
-  screenshot_modes: ^1.0.1
   html: ^0.15.3
   #image: ^3.1.0
   #package_info_plus: ^3.1.0
@@ -74,6 +73,9 @@ dev_dependencies:
   #flutter_automation: any
   flutter_launcher_icons: ^0.13.1 # Causes some dependency conflicts
   device_preview: ^1.1.0
+  screenshot_modes: #^1.0.0
+    git:
+      url: https://github.com/bradintheusa/screenshot_modes.git
 
 dependency_overrides:
   device_preview:
