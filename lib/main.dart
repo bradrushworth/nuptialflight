@@ -387,7 +387,7 @@ class _MyHomePageState extends State<MyHomePage> {
       }
 
       try {
-        if (now.hour > 19) {
+        if (now.hour > 19 && historical.hourly != null) {
           _indexOfNocturnalHour = historical.hourly!.lastWhere((e) =>
               timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
                   (e.dt! + historical.timezoneOffset!) * 1000,
