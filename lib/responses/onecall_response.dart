@@ -26,8 +26,7 @@ class OneCallResponse {
     lon = json['lon'];
     timezone = json['timezone'];
     timezoneOffset = json['timezone_offset'];
-    current =
-        json['current'] != null ? new Current.fromJson(json['current']) : null;
+    current = json['current'] != null ? new Current.fromJson(json['current']) : null;
     if (json['minutely'] != null) {
       minutely = <Minutely>[];
       json['minutely'].forEach((v) {
@@ -299,6 +298,7 @@ class Daily {
   int? moonrise;
   int? moonset;
   num? moonPhase;
+  String? summary;
   Temp? temp;
   FeelsLike? feelsLike;
   int? pressure;
@@ -310,8 +310,8 @@ class Daily {
   List<Weather>? weather;
   int? clouds;
   num? pop;
-  num? rain;
   num? uvi;
+  num? rain;
 
   Daily(
       {this.dt,
@@ -320,6 +320,7 @@ class Daily {
       this.moonrise,
       this.moonset,
       this.moonPhase,
+      this.summary,
       this.temp,
       this.feelsLike,
       this.pressure,
@@ -331,8 +332,8 @@ class Daily {
       this.weather,
       this.clouds,
       this.pop,
-      this.rain,
-      this.uvi});
+      this.uvi,
+      this.rain});
 
   Daily.fromJson(Map<String, dynamic> json) {
     dt = json['dt'];
@@ -341,10 +342,9 @@ class Daily {
     moonrise = json['moonrise'];
     moonset = json['moonset'];
     moonPhase = json['moon_phase'];
+    summary = json['summary'];
     temp = json['temp'] != null ? new Temp.fromJson(json['temp']) : null;
-    feelsLike = json['feels_like'] != null
-        ? new FeelsLike.fromJson(json['feels_like'])
-        : null;
+    feelsLike = json['feels_like'] != null ? new FeelsLike.fromJson(json['feels_like']) : null;
     pressure = json['pressure'];
     humidity = json['humidity'];
     dewPoint = json['dew_point'];
@@ -359,8 +359,8 @@ class Daily {
     }
     clouds = json['clouds'];
     pop = json['pop'];
-    rain = json['rain'];
     uvi = json['uvi'];
+    rain = json['rain'];
   }
 
   Map<String, dynamic> toJson() {
@@ -371,6 +371,7 @@ class Daily {
     data['moonrise'] = this.moonrise;
     data['moonset'] = this.moonset;
     data['moon_phase'] = this.moonPhase;
+    data['summary'] = this.summary;
     if (this.temp != null) {
       data['temp'] = this.temp!.toJson();
     }
@@ -388,8 +389,8 @@ class Daily {
     }
     data['clouds'] = this.clouds;
     data['pop'] = this.pop;
-    data['rain'] = this.rain;
     data['uvi'] = this.uvi;
+    data['rain'] = this.rain;
     return data;
   }
 }

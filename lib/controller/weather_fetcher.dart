@@ -68,8 +68,8 @@ class WeatherFetcher {
     return false;
   }
 
-  LatLng? getLocation() {
-    if (_lat == null || _lon == null) return null;
+  LatLng getLocation() {
+    if (_lat == null || _lon == null) return LatLng(0, 0);
     return LatLng(_lat!, _lon!);
   }
 

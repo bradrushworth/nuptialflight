@@ -68,7 +68,7 @@ class _MapPageState extends State<MapPage> {
 
   void _moveMap() {
     LatLng? latLng = _weatherFetcher.getLocation();
-    if (latLng != null) {
+    if (latLng != LatLng(0, 0)) {
       _mapController.moveAndRotate(latLng, defaultZoom, 0.0);
     }
   }
@@ -91,8 +91,8 @@ class _MapPageState extends State<MapPage> {
       body: FlutterMap(
         mapController: _mapController,
         options: MapOptions(
-          center: _weatherFetcher.getLocation(),
-          zoom: defaultZoom,
+          initialCenter: _weatherFetcher.getLocation(),
+          initialZoom: defaultZoom,
           minZoom: 2,
           maxZoom: 9,
           onLongPress: (position, latLng) {
@@ -107,21 +107,11 @@ class _MapPageState extends State<MapPage> {
                   maintainState: true),
             );
           },
-          interactiveFlags: InteractiveFlag.pinchZoom |
-              InteractiveFlag.drag |
-              InteractiveFlag.doubleTapZoom |
-              InteractiveFlag.flingAnimation,
+          // interactionOptions: const InteractionOptions(
+          //     pinchZoomWinGestures: MultiFingerGesture.pinchZoom | MultiFingerGesture.pinchMove,
+          //
+          // ),
         ),
-        nonRotatedChildren: [
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: html.Html(
-              data:
-                  '<div style="color: #00ffff;">Markers show last 48hr nuptial flights.<br/>Marker size indicates species size.<br/>Weather <a href="http://openweathermap.org">&copy; OpenWeatherMap</a><br/>Tiles <a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a><br/>Map data <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap</a></div>',
-              onLinkTap: (url, attributes, element) => Utils.launchURL(url!),
-            ),
-          ),
-        ],
         children: <Widget>[
           TileLayer(
               wmsOptions: WMSTileLayerOptions(
@@ -168,6 +158,15 @@ class _MapPageState extends State<MapPage> {
                 0, 0, 2, 0, -60, // A
               ])),
           MarkerLayer(markers: _markers),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: html.Html(
+              data:
+              '<div style="color: #00ffff;">Markers show last 48hr nuptial flights.<br/>Marker size indicates species size.<br/>Weather <a href="http://openweathermap.org">&copy; OpenWeatherMap</a><br/>Tiles <a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a><br/>Map data <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap</a></div>',
+              onLinkTap: (url, attributes, element) => Utils.launchURL(url!),
+            ),
+          ),
+
         ],
       ),
     );
