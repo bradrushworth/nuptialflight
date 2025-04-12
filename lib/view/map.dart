@@ -107,10 +107,10 @@ class _MapPageState extends State<MapPage> {
                   maintainState: true),
             );
           },
-          // interactionOptions: const InteractionOptions(
-          //     pinchZoomWinGestures: MultiFingerGesture.pinchZoom | MultiFingerGesture.pinchMove,
-          //
-          // ),
+          interactionOptions: InteractionOptions(
+            flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+            cursorKeyboardRotationOptions: CursorKeyboardRotationOptions.disabled(),
+          ),
         ),
         children: <Widget>[
           TileLayer(
@@ -162,11 +162,10 @@ class _MapPageState extends State<MapPage> {
             alignment: Alignment.bottomLeft,
             child: html.Html(
               data:
-              '<div style="color: #00ffff;">Markers show last 48hr nuptial flights.<br/>Marker size indicates species size.<br/>Weather <a href="http://openweathermap.org">&copy; OpenWeatherMap</a><br/>Tiles <a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a><br/>Map data <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap</a></div>',
+                  '<div style="color: #00ffff;">Markers show last 48hr nuptial flights.<br/>Marker size indicates species size.<br/>Weather <a href="http://openweathermap.org">&copy; OpenWeatherMap</a><br/>Tiles <a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a><br/>Map data <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap</a></div>',
               onLinkTap: (url, attributes, element) => Utils.launchURL(url!),
             ),
           ),
-
         ],
       ),
     );
@@ -176,8 +175,8 @@ class _MapPageState extends State<MapPage> {
     return Opacity(
       opacity: 0.165,
       child: TileLayer(
-        wmsOptions: WMSTileLayerOptions(
-            baseUrl: 'https://maps.bitbot.com.au/service?', layers: [layer]),
+        wmsOptions:
+            WMSTileLayerOptions(baseUrl: 'https://maps.bitbot.com.au/service?', layers: [layer]),
         // urlTemplate:
         //     //'https://tile.openweathermap.org/map/{layer}/{z}/{x}/{y}.{ext}?appid={apiKey}',
         //     'https://maps.bitbot.com.au/tiles/{layer}/{z}/{x}/{y}.{ext}?origin=nw',

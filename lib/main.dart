@@ -365,7 +365,7 @@ class _MyHomePageState extends State<MyHomePage> {
       now.add(Duration(milliseconds: weather.timezoneOffset!));
       print('now.hour=${now.hour}');
       try {
-        if (now.hour > 11) {
+        if (now.hour > 11 && historical.hourly != null) {
           _indexOfDiurnalHour = historical.hourly!.lastWhere((e) =>
               timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
                   (e.dt! + historical.timezoneOffset!) * 1000,
