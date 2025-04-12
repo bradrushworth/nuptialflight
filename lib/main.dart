@@ -40,8 +40,8 @@ final DateFormat timeOfDay24HourFormat = DateFormat("HH");
 
 const String kGoogleApiKey = 'AIzaSyDNaPQ01hKnTmVRQoT_FM1ZTTxDnw6GoOU';
 
-const int greenThreshold = 65;
-const int amberThreshold = 45;
+const int greenThreshold = 60;
+const int amberThreshold = 50;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -664,7 +664,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             Text(
                                 (kIsWeb
                                         ? 'Web'
-                                        : toBeginningOfSentenceCase(Platform.operatingSystem)!) +
+                                        : toBeginningOfSentenceCase(Platform.operatingSystem)) +
                                     ' Version $version+$buildNumber',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontSize: 8, color: Colors.grey)),
@@ -1263,7 +1263,8 @@ class _MyHomePageState extends State<MyHomePage> {
         SizedBox(
             child: DataTable(
           headingRowHeight: 22,
-          dataRowHeight: 22,
+          dataRowMinHeight: 22,
+          dataRowMaxHeight: 22,
           horizontalMargin: 22,
           columnSpacing: 22,
           dividerThickness: 0,
@@ -1277,7 +1278,7 @@ class _MyHomePageState extends State<MyHomePage> {
             if (orientation == Orientation.landscape)
               DataColumn(label: Text('Humidity'), numeric: true),
             DataColumn(label: Text('Wind Speed'), numeric: true),
-            DataColumn(label: Text('Confidence'), numeric: true),
+            DataColumn(label: Text('Prediction'), numeric: true),
           ],
           rows: [
             _buildFuturePercentage(orientation, 1),
