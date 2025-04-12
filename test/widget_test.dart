@@ -5,6 +5,7 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nuptialflight/main.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -19,6 +20,10 @@ void main() {
       buildSignature: 'buildSignature');
 
   testWidgets('Smoke test', (WidgetTester tester) async {
+    // Any written tests done on the [FlutterLocalNotificationsPlugin] will need to manually
+    // call the registerWith() method that has been added to each implementation.
+    AndroidFlutterLocalNotificationsPlugin.registerWith();
+
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyMaterialApp());
 
