@@ -144,7 +144,7 @@ class WeatherFetcher {
       throw Exception('Location is unknown! Perhaps you didn\'t allow location permissions?');
 
     String url =
-        'https://api.openweathermap.org/data/2.5/onecall?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&exclude=minutely,current';
+        'https://api.openweathermap.org/data/3.0/onecall?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&exclude=minutely,current';
     print("url=$url");
 
     final response = await http.get(Uri.parse(url));
@@ -166,7 +166,7 @@ class WeatherFetcher {
           'Location is unknown! Perhaps you didn\'t allow location permissions?');
 
     String url =
-        'https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&dt=$dt';
+        'https://api.openweathermap.org/data/3.0/onecall/timemachine?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&dt=$dt';
     print("url=$url");
 
     final response = await http.get(Uri.parse(url));
