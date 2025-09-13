@@ -187,31 +187,37 @@ packages:
     source: hosted
     version: "0.7.11"
   device_frame:
-    dependency: "direct overridden"
-    description:
-      path: device_frame
-      ref: HEAD
-      resolved-ref: "3e84282e3ad3578ab898e3fe693af1ceed5dc08c"
-      url: "https://github.com/bradrushworth/flutter_device_preview.git"
-    source: git
-    version: "1.1.0"
-  device_preview:
-    dependency: "direct dev"
-    description:
-      path: device_preview
-      ref: HEAD
-      resolved-ref: "3e84282e3ad3578ab898e3fe693af1ceed5dc08c"
-      url: "https://github.com/bradrushworth/flutter_device_preview.git"
-    source: git
-    version: "1.1.0"
-  device_preview_plus:
     dependency: transitive
     description:
-      name: device_preview_plus
-      sha256: c84fc7a81b9093b55db49e63d7acf76a4e03a15e07f22cfb41322d1181ee81f6
+      name: device_frame
+      sha256: "7b2ebb2a09d6cc0f086b51bd1412d7be83e0170056a7290349169be41164c86a"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.2"
+    version: "1.4.0"
+  device_frame_plus:
+    dependency: transitive
+    description:
+      name: device_frame_plus
+      sha256: ccc94abccd4d9f0a9f19ef239001b3a59896e678ad42601371d7065889f2bf78
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.0"
+  device_preview:
+    dependency: transitive
+    description:
+      name: device_preview
+      sha256: "88aa1cc73ee9a8ec771b309dcbc4000cc66b5d8456b825980997640ab1195bf5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.1"
+  device_preview_plus:
+    dependency: "direct dev"
+    description:
+      name: device_preview_plus
+      sha256: "45f9154c3213e470df1aa54326757ccf3cc6fb1f04396bced6ad1a7bfc9d6400"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.0"
   fake_async:
     dependency: transitive
     description:
@@ -341,10 +347,10 @@ packages:
     dependency: transitive
     description:
       name: freezed_annotation
-      sha256: c2e2d632dd9b8a2b7751117abcfc2b4888ecfe181bd9fca7170d9ef02e595fe2
+      sha256: "7294967ff0a6d98638e7acb774aac3af2550777accd8149c90af5b014e6d44d8"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.4"
+    version: "3.1.0"
   frontend_server_client:
     dependency: transitive
     description:
@@ -820,14 +826,13 @@ packages:
     source: hosted
     version: "0.28.0"
   screenshot_modes:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "3cbcd645f130336b1aeb8b381983f40f87a102ae"
-      url: "https://github.com/bradintheusa/screenshot_modes.git"
-    source: git
-    version: "1.0.2"
+      name: screenshot_modes
+      sha256: "023348c40f5c1ad9c81c0954b048a56f7519196ea3a7286d82c17e41baec9738"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   shared_preferences:
     dependency: transitive
     description:

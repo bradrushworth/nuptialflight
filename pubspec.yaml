@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.10.0+110
+version: 2.10.1+111
 
 environment:
   sdk: '>=3.9.2 <4.0.0'
@@ -66,9 +66,6 @@ dependencies:
 #      #url: https://github.com/mohn93/platform_device_id.git
 #      url: https://github.com/bradrushworth/platform_device_id.git
 #      path: platform_device_id
-  screenshot_modes: #^1.0.0
-    git:
-      url: https://github.com/bradintheusa/screenshot_modes.git
 
 dev_dependencies:
   flutter_test:
@@ -76,19 +73,25 @@ dev_dependencies:
   test: any
   #flutter_automation: any
   flutter_launcher_icons: ^0.14.3 # Causes some dependency conflicts
-  device_preview: ^1.1.0
+#  device_preview: ^1.1.0
+  device_preview_plus: ^2.5.0
+  screenshot_modes: ^1.0.1
+  #    git:
+  #      url: https://github.com/bradrushworth/screenshot_modes.git
+  #    git:
+  #      url: https://github.com/bradintheusa/screenshot_modes.git
 
-dependency_overrides:
-  device_preview:
-    git:
-      url: https://github.com/bradrushworth/flutter_device_preview.git
-      path: device_preview
-#    path: ../flutter_device_preview/device_preview
-  device_frame:
-    git:
-      url: https://github.com/bradrushworth/flutter_device_preview.git
-      path: device_frame
-#    path: ../flutter_device_preview/device_frame
+#dependency_overrides:
+#  device_preview:
+#    git:
+#      url: https://github.com/bradrushworth/flutter_device_preview.git
+#      path: device_preview
+##    path: ../flutter_device_preview/device_preview
+#  device_frame:
+#    git:
+#      url: https://github.com/bradrushworth/flutter_device_preview.git
+#      path: device_frame
+##    path: ../flutter_device_preview/device_frame
 #  google_api_headers:
 ##    path: ../google_api_headers
 #    git:
