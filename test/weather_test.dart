@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nuptialflight/controller/weather_fetcher.dart';
 import 'package:nuptialflight/responses/onecall_response.dart';
@@ -8,7 +6,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('Download', () {
-    dotenv.testLoad(fileInput: File('assets/.env').readAsStringSync());
+    dotenv.load(fileName: 'assets/.env');
     WeatherFetcher weatherFetcher = WeatherFetcher(mockLocation: true);
     weatherFetcher.findLocation(false);
 

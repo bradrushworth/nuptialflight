@@ -15,10 +15,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.9.5+109
+version: 2.10.0+110
 
 environment:
-  sdk: '>=3.6.0 <4.0.0'
+  sdk: '>=3.9.2 <4.0.0'
 
 dependencies:
   flutter:
@@ -29,7 +29,7 @@ dependencies:
   cupertino_icons: ^1.0.5
 
   # All app dependencies
-  home_widget: ^0.7.0
+  home_widget: ^0.8.0
     #path: ../home_widget
     #git: https://github.com/ABausG/home_widget.git
     #git: https://github.com/bradrushworth/home_widget.git
@@ -37,8 +37,8 @@ dependencies:
   #http: ^0.13.5
   #spectrum: ^0.2.1+1
   normal: ^0.7.0
-  geolocator: ^13.0.4
-  flutter_dotenv: ^5.2.1
+  geolocator: ^14.0.2
+  flutter_dotenv: ^6.0.0
   url_launcher: ^6.3.1
   auto_size_text: ^3.0.0
   html: ^0.15.3
