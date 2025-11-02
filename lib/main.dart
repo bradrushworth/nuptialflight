@@ -71,30 +71,32 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Ant Nuptial Flight Predictor',
-        // Create space for camera cut-outs etc
-        useInheritedMediaQuery: true,
-        // Hide the dev banner
-        debugShowCheckedModeBanner: false,
-        // For DevicePreview
-        locale: DevicePreview.locale(context),
-        builder: DevicePreview.appBuilder,
-        theme: ThemeData(
-            brightness: Brightness.light, primarySwatch: primarySwatch, useMaterial3: false),
-        darkTheme: ThemeData(
-            brightness: Brightness.dark,
-            primarySwatch: primarySwatch,
-            primaryColor: primarySwatch,
-            floatingActionButtonTheme: Theme.of(context)
-                .floatingActionButtonTheme
-                .copyWith(backgroundColor: primarySwatch),
-            appBarTheme: Theme.of(context).appBarTheme.copyWith(backgroundColor: primarySwatch),
-            useMaterial3: false),
-        themeMode: ThemeMode.system,
-        home: MyHomePage(
-          primarySwatch: setPrimarySwatch,
-          weatherFetcher: WeatherFetcher(),
-        ));
+      title: 'Ant Nuptial Flight Predictor',
+      // Create space for camera cut-outs etc
+      useInheritedMediaQuery: true,
+      // Hide the dev banner
+      debugShowCheckedModeBanner: false,
+      // For DevicePreview
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: primarySwatch,
+        useMaterial3: false,
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: primarySwatch,
+        primaryColor: primarySwatch,
+        floatingActionButtonTheme: Theme.of(
+          context,
+        ).floatingActionButtonTheme.copyWith(backgroundColor: primarySwatch),
+        appBarTheme: Theme.of(context).appBarTheme.copyWith(backgroundColor: primarySwatch),
+        useMaterial3: false,
+      ),
+      themeMode: ThemeMode.system,
+      home: MyHomePage(primarySwatch: setPrimarySwatch, weatherFetcher: WeatherFetcher()),
+    );
   }
 
   void setPrimarySwatch(MaterialColor s) {
@@ -109,12 +111,12 @@ class MyHomePage extends StatefulWidget {
   final bool fixedLocation;
   final WeatherFetcher weatherFetcher;
 
-  MyHomePage(
-      {Key? key,
-      void Function(MaterialColor s)? this.primarySwatch,
-      this.fixedLocation = false,
-      required this.weatherFetcher})
-      : super(key: key);
+  MyHomePage({
+    Key? key,
+    void Function(MaterialColor s)? this.primarySwatch,
+    this.fixedLocation = false,
+    required this.weatherFetcher,
+  }) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -131,8 +133,11 @@ class _MyHomePageState extends State<MyHomePage> {
   static const String? _kFontPkg = null;
   // static const IconData winged_ant =
   //     IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData halictus_rubicundus_silhouette =
-      IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData halictus_rubicundus_silhouette = IconData(
+    0xe801,
+    fontFamily: _kFontFam,
+    fontPackage: _kFontPkg,
+  );
   static const int LARGE_SCREEN_HEIGHT = 800;
 
   final String corsProxyUrl = 'https://api.bitbot.com.au/cors/https://maps.googleapis.com/maps/api';
@@ -187,41 +192,58 @@ class _MyHomePageState extends State<MyHomePage> {
     choices = <Choice>[];
     choices.add(const Choice(title: 'Select Location', url: '', icon: Icons.add_location_alt));
     choices.add(const Choice(title: 'Show Map', url: '', icon: Icons.map));
-    choices.add(Choice(
+    choices.add(
+      Choice(
         title: 'Report Issue',
-        url: 'mailto:bitbot@bitbot.com.au?subject=Help with Ant Flight (' +
+        url:
+            'mailto:bitbot@bitbot.com.au?subject=Help with Ant Flight (' +
             (kIsWeb ? 'Web' : toBeginningOfSentenceCase(Platform.operatingSystem)!) +
             ' Version ' +
             (version ?? '?') +
             '+' +
             (buildNumber ?? '?') +
             ')',
-        icon: Icons.email));
+        icon: Icons.email,
+      ),
+    );
     if (!kIsWeb) {
-      choices
-          .add(const Choice(title: 'Web App', url: 'https://nuptialflight.app/', icon: Icons.web));
+      choices.add(
+        const Choice(title: 'Web App', url: 'https://nuptialflight.app/', icon: Icons.web),
+      );
     }
     if (kIsWeb || Platform.isAndroid || Platform.isFuchsia) {
-      choices.add(const Choice(
+      choices.add(
+        const Choice(
           title: 'Android',
           url: 'https://play.google.com/store/apps/details?id=au.com.bitbot.nuptialflight',
-          icon: Icons.android));
+          icon: Icons.android,
+        ),
+      );
     }
     if (kIsWeb || Platform.isIOS || Platform.isMacOS) {
-      choices.add(const Choice(
+      choices.add(
+        const Choice(
           title: 'IOS',
           url: 'https://apps.apple.com/us/app/ant-nuptial-flight-predictor/id1603373687',
-          icon: Icons.phone_iphone));
+          icon: Icons.phone_iphone,
+        ),
+      );
     }
-    choices.add(const Choice(
+    choices.add(
+      const Choice(
         title: 'Source Code',
         url: 'https://github.com/bradrushworth/nuptialflight',
-        icon: Icons.source));
+        icon: Icons.source,
+      ),
+    );
     if (kIsWeb) {
-      choices.add(const Choice(
+      choices.add(
+        const Choice(
           title: 'Buy Brad Coffee',
           url: 'https://www.buymeacoffee.com/bitbot',
-          icon: Icons.coffee));
+          icon: Icons.coffee,
+        ),
+      );
     }
   }
 
@@ -261,8 +283,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (fixedLocation) {
       _getWeather()
-          .then((nothing) =>
-              print("findLocation(fixed): _dailyPercentage=" + _dailyPercentage.toString()))
+          .then(
+            (nothing) =>
+                print("findLocation(fixed): _dailyPercentage=" + _dailyPercentage.toString()),
+          )
           .catchError((e) => handleError(e));
     } else {
       // Try to passively then actively determine the location.
@@ -271,13 +295,15 @@ class _MyHomePageState extends State<MyHomePage> {
           .findLocation(false)
           .then((updated) => updated || forceUpdate ? _getWeather() : Future.value())
           .then((nothing) => updateAppWidget(_dailyPercentage))
-          .then((nothing) =>
-              print("findLocation(passive): _percentage=" + _dailyPercentage.toString()))
+          .then(
+            (nothing) => print("findLocation(passive): _percentage=" + _dailyPercentage.toString()),
+          )
           .then((nothing) => weatherFetcher.findLocation(true))
           .then((updated) => updated ? _getWeather() : Future.value())
           .then((nothing) => updateAppWidget(_dailyPercentage))
-          .then((nothing) =>
-              print("findLocation(active): _percentage=" + _dailyPercentage.toString()))
+          .then(
+            (nothing) => print("findLocation(active): _percentage=" + _dailyPercentage.toString()),
+          )
           .catchError((e) => handleLocationError(e));
     }
   }
@@ -288,25 +314,25 @@ class _MyHomePageState extends State<MyHomePage> {
     int dt = today.millisecondsSinceEpoch ~/ 1000;
 
     return Future.wait([
-      weatherFetcher.fetchNearestWeatherLocation(),
-      weatherFetcher.fetchHistoricalWeather(dt),
-      weatherFetcher.fetchWeather(),
-    ])
+          weatherFetcher.fetchNearestWeatherLocation(),
+          weatherFetcher.fetchHistoricalWeather(dt),
+          weatherFetcher.fetchWeather(),
+        ])
         .then((List responses) => _updateWeather(responses[0], responses[1], responses[2]))
         .catchError((e) => handleError(e));
   }
 
   void _findPlaceName() {
     PlacesAutocomplete.show(
-      context: context,
-      //location: weatherFetcher.getLatLng(),
-      apiKey: kGoogleApiKey,
-      proxyBaseUrl: corsProxyUrl,
-      mode: Mode.fullscreen,
-      components: [],
-      types: [],
-      strictbounds: false,
-    )
+          context: context,
+          //location: weatherFetcher.getLatLng(),
+          apiKey: kGoogleApiKey,
+          proxyBaseUrl: corsProxyUrl,
+          mode: Mode.fullscreen,
+          components: [],
+          types: [],
+          strictbounds: false,
+        )
         .then((Prediction? prediction) => _lookupPlace(prediction))
         .then((PlacesDetailsResponse? place) => _setPlaceName(place));
   }
@@ -317,12 +343,10 @@ class _MyHomePageState extends State<MyHomePage> {
       newWeatherFetcher.setLocationPlace(place);
       Navigator.of(context).push(
         MaterialPageRoute(
-            builder: (_) => MyHomePage(
-                  fixedLocation: true,
-                  weatherFetcher: newWeatherFetcher,
-                ),
-            fullscreenDialog: true,
-            maintainState: true),
+          builder: (_) => MyHomePage(fixedLocation: true, weatherFetcher: newWeatherFetcher),
+          fullscreenDialog: true,
+          maintainState: true,
+        ),
       );
     } else {
       print('_findPlaceName: User cancelled search!');
@@ -347,7 +371,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _updateWeather(
-      CurrentWeatherResponse current, OneCallResponse historical, OneCallResponse weather) {
+    CurrentWeatherResponse current,
+    OneCallResponse historical,
+    OneCallResponse weather,
+  ) {
     setState(() {
       _currentWeather = current;
       _historical = historical;
@@ -366,17 +393,27 @@ class _MyHomePageState extends State<MyHomePage> {
       print('now.hour=${now.hour}');
       try {
         if (now.hour > 11 && historical.hourly != null) {
-          _indexOfDiurnalHour = historical.hourly!.lastWhere((e) =>
-              timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                  (e.dt! + historical.timezoneOffset!) * 1000,
-                  isUtc: true)) ==
-              '11AM');
+          _indexOfDiurnalHour = historical.hourly!.lastWhere(
+            (e) =>
+                timeOfDayFormat.format(
+                  DateTime.fromMillisecondsSinceEpoch(
+                    (e.dt! + historical.timezoneOffset!) * 1000,
+                    isUtc: true,
+                  ),
+                ) ==
+                '11AM',
+          );
         } else {
-          _indexOfDiurnalHour = weather.hourly!.firstWhere((e) =>
-              timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                  (e.dt! + weather.timezoneOffset!) * 1000,
-                  isUtc: true)) ==
-              '11AM');
+          _indexOfDiurnalHour = weather.hourly!.firstWhere(
+            (e) =>
+                timeOfDayFormat.format(
+                  DateTime.fromMillisecondsSinceEpoch(
+                    (e.dt! + weather.timezoneOffset!) * 1000,
+                    isUtc: true,
+                  ),
+                ) ==
+                '11AM',
+          );
         }
         _diurnalHourPercentage =
             (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, _indexOfDiurnalHour!) * 100.0)
@@ -388,17 +425,27 @@ class _MyHomePageState extends State<MyHomePage> {
 
       try {
         if (now.hour > 19 && historical.hourly != null) {
-          _indexOfNocturnalHour = historical.hourly!.lastWhere((e) =>
-              timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                  (e.dt! + historical.timezoneOffset!) * 1000,
-                  isUtc: true)) ==
-              '7PM');
+          _indexOfNocturnalHour = historical.hourly!.lastWhere(
+            (e) =>
+                timeOfDayFormat.format(
+                  DateTime.fromMillisecondsSinceEpoch(
+                    (e.dt! + historical.timezoneOffset!) * 1000,
+                    isUtc: true,
+                  ),
+                ) ==
+                '7PM',
+          );
         } else {
-          _indexOfNocturnalHour = weather.hourly!.firstWhere((e) =>
-              timeOfDayFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                  (e.dt! + weather.timezoneOffset!) * 1000,
-                  isUtc: true)) ==
-              '7PM');
+          _indexOfNocturnalHour = weather.hourly!.firstWhere(
+            (e) =>
+                timeOfDayFormat.format(
+                  DateTime.fromMillisecondsSinceEpoch(
+                    (e.dt! + weather.timezoneOffset!) * 1000,
+                    isUtc: true,
+                  ),
+                ) ==
+                '7PM',
+          );
         }
         _nocturnalHourPercentage =
             (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, _indexOfNocturnalHour!) *
@@ -435,9 +482,11 @@ class _MyHomePageState extends State<MyHomePage> {
       loaded = true;
     });
     print(
-        "_updateWeather: _diurnalHourPercentage=$_diurnalHourPercentage _indexOfDiurnalHour=${_indexOfDiurnalHour?.dt}");
+      "_updateWeather: _diurnalHourPercentage=$_diurnalHourPercentage _indexOfDiurnalHour=${_indexOfDiurnalHour?.dt}",
+    );
     print(
-        "_updateWeather: _nocturnalHourPercentage=$_nocturnalHourPercentage _indexOfNocturnalHour=${_indexOfNocturnalHour?.dt}");
+      "_updateWeather: _nocturnalHourPercentage=$_nocturnalHourPercentage _indexOfNocturnalHour=${_indexOfNocturnalHour?.dt}",
+    );
     print("_updateWeather: _hourlyPercentage=" + _hourlyPercentage.toString());
     _recordWeather();
   }
@@ -457,20 +506,22 @@ class _MyHomePageState extends State<MyHomePage> {
   /// Create an alert dialog
   Future<void> showAlert(String title, String message) async {
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Text(message),
-            actions: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("OK"))
-            ],
-          );
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   /// Feature to record user saw a nuptial flight
@@ -487,8 +538,14 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    ArangoSingleton()
-        .updateWeather(version, buildNumber, size, _weather, _historical, _currentWeather);
+    ArangoSingleton().updateWeather(
+      version,
+      buildNumber,
+      size,
+      _weather,
+      _historical,
+      _currentWeather,
+    );
     showAlert('Success', 'Thank you for submitting!');
   }
 
@@ -530,41 +587,44 @@ class _MyHomePageState extends State<MyHomePage> {
               return choices.map((Choice choice) {
                 return PopupMenuItem<Choice>(
                   value: choice,
-                  child: Row(children: [
-                    Icon(choice.icon, size: 20, color: Theme.of(context).primaryColor),
-                    Text('    '),
-                    Text('${choice.title}'),
-                  ]),
+                  child: Row(
+                    children: [
+                      Icon(choice.icon, size: 20, color: Theme.of(context).primaryColor),
+                      Text('    '),
+                      Text('${choice.title}'),
+                    ],
+                  ),
                 );
               }).toList();
             },
           ),
         ],
       ),
-      body: OrientationBuilder(builder: (context, orientation) {
-        return LayoutBuilder(
-          builder: (ctx, constraints) {
-            print('constraints.maxHeight=${constraints.maxHeight}');
-            return errorMessage != null
-                ? _buildErrorMessage()
-                : !loaded
-                    ? _buildCircularProgressIndicator()
-                    : Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: orientation == Orientation.portrait
-                            ? MainAxisAlignment.spaceEvenly
-                            : MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          SizedBox(
-                              child: GridView.count(
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          return LayoutBuilder(
+            builder: (ctx, constraints) {
+              print('constraints.maxHeight=${constraints.maxHeight}');
+              return errorMessage != null
+                  ? _buildErrorMessage()
+                  : !loaded
+                  ? _buildCircularProgressIndicator()
+                  : Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: orientation == Orientation.portrait
+                          ? MainAxisAlignment.spaceEvenly
+                          : MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        SizedBox(
+                          child: GridView.count(
                             crossAxisCount: orientation == Orientation.portrait ? 1 : 3,
                             // width/height ratio
                             childAspectRatio: constraints.maxHeight >= 1000
                                 ? 8
                                 : orientation == Orientation.portrait
-                                    ? 6
-                                    : 4,
+                                ? 6
+                                : 4,
                             shrinkWrap: true,
                             padding: EdgeInsets.symmetric(vertical: 0),
                             children: [
@@ -575,11 +635,20 @@ class _MyHomePageState extends State<MyHomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: <Widget>[
                                   _buildTodayPercentage(
-                                      orientation, 'Next 11am', _diurnalHourPercentage),
+                                    orientation,
+                                    'Next 11am',
+                                    _diurnalHourPercentage,
+                                  ),
                                   _buildTodayPercentage(
-                                      orientation, 'Today Overall', _dailyPercentage[0]),
+                                    orientation,
+                                    'Today Overall',
+                                    _dailyPercentage[0],
+                                  ),
                                   _buildTodayPercentage(
-                                      orientation, 'Next 7pm', _nocturnalHourPercentage),
+                                    orientation,
+                                    'Next 7pm',
+                                    _nocturnalHourPercentage,
+                                  ),
                                 ],
                               ),
                               if (orientation == Orientation.portrait &&
@@ -587,92 +656,31 @@ class _MyHomePageState extends State<MyHomePage> {
                                 _buildTodayHistogram(constraints),
                               _buildTodayWeather(orientation),
                             ],
-                          )),
-                          if (orientation == Orientation.landscape && constraints.maxHeight > 600)
-                            _buildTodayHistogram(constraints),
-                          SizedBox(
-                              child: GridView.count(
-                            padding: EdgeInsets.fromLTRB(
-                                0,
-                                (orientation == Orientation.landscape && height >= 750 ? 30 : 0),
-                                0,
-                                0),
-                            crossAxisCount: orientation == Orientation.portrait ? 3 : 6,
-                            // width/height ratio
-                            childAspectRatio: constraints.maxHeight >= 1000
-                                ? 2.8
-                                : orientation == Orientation.portrait
-                                    ? 1.8
-                                    : 1.8,
-                            shrinkWrap: true,
-                            children: [
-                              _buildTemperature('Dew Point', _weather!.daily!.first.dewPoint!),
-                              if (orientation == Orientation.landscape &&
-                                  height >= LARGE_SCREEN_HEIGHT)
-                                _buildTemperature('Min Temp', _weather!.daily!.first.temp!.min!),
-                              _indexOfDiurnalHour != null
-                                  ? _buildTemperature(
-                                      timeOfDayFormat
-                                              .format(DateTime.fromMillisecondsSinceEpoch(
-                                                  (_indexOfDiurnalHour!.dt! +
-                                                          _weather!.timezoneOffset!) *
-                                                      1000,
-                                                  isUtc: true))
-                                              .toLowerCase() +
-                                          ' Temp',
-                                      _indexOfDiurnalHour!.temp!)
-                                  : _buildTemperature('Missing', 0),
-                              if (orientation == Orientation.landscape &&
-                                  height >= LARGE_SCREEN_HEIGHT)
-                                _buildTemperature('Day Temp', _weather!.daily!.first.temp!.day!),
-                              //_buildTemperature('Max Temp', _weather!.daily!.first.temp!.max!),
-                              _indexOfNocturnalHour != null
-                                  ? _buildTemperature(
-                                      timeOfDayFormat
-                                              .format(DateTime.fromMillisecondsSinceEpoch(
-                                                  (_indexOfNocturnalHour!.dt! +
-                                                          _weather!.timezoneOffset!) *
-                                                      1000,
-                                                  isUtc: true))
-                                              .toLowerCase() +
-                                          ' Temp',
-                                      _indexOfNocturnalHour!.temp!)
-                                  : _buildTemperature('Missing', 0),
-                              if (orientation == Orientation.landscape &&
-                                  height >= LARGE_SCREEN_HEIGHT)
-                                _buildTemperature('Eve Temp', _weather!.daily!.first.temp!.eve!),
-                              _buildAirPressure(),
-                              if (orientation == Orientation.portrait ||
-                                  height >= LARGE_SCREEN_HEIGHT)
-                                _buildWindSpeed(),
-                              _buildWindGust(),
-                              _buildHumidity(),
-                              if (orientation == Orientation.portrait ||
-                                  height >= LARGE_SCREEN_HEIGHT)
-                                _buildCloudiness(),
-                              if (orientation == Orientation.portrait ||
-                                  height >= LARGE_SCREEN_HEIGHT)
-                                _buildPrecipitation(),
-                              //if (height >= LARGE_SCREEN_HEIGHT) _buildUVI(),
-                            ],
-                          )),
-                          _buildUpcomingWeek(orientation, height),
-                          if (orientation == Orientation.portrait)
-                            Container(padding: const EdgeInsets.symmetric(vertical: 40)),
-                          if (orientation == Orientation.portrait ||
-                              orientation == Orientation.landscape)
-                            Text(
-                                (kIsWeb
-                                        ? 'Web'
-                                        : toBeginningOfSentenceCase(Platform.operatingSystem)) +
-                                    ' Version $version+$buildNumber',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 8, color: Colors.grey)),
-                        ],
-                      );
-          },
-        );
-      }),
+                          ),
+                        ),
+                        if (orientation == Orientation.landscape && constraints.maxHeight > 600)
+                          _buildTodayHistogram(constraints),
+                        if (true)
+                          _buildWeatherGrid(orientation, constraints)
+                        else
+                          _buildInstructionsGrid(orientation, constraints),
+                        _buildUpcomingWeek(orientation, height),
+                        if (orientation == Orientation.portrait)
+                          Container(padding: const EdgeInsets.symmetric(vertical: 40)),
+                        if (orientation == Orientation.portrait ||
+                            orientation == Orientation.landscape)
+                          Text(
+                            (kIsWeb ? 'Web' : toBeginningOfSentenceCase(Platform.operatingSystem)) +
+                                ' Version $version+$buildNumber',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 8, color: Colors.grey),
+                          ),
+                      ],
+                    );
+            },
+          );
+        },
+      ),
 
       /// Future feature to record that the user saw a nuptial flight today
       floatingActionButton: fixedLocation
@@ -704,18 +712,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 // set up the AlertDialog
                 AlertDialog alert = AlertDialog(
                   title: Center(child: Text('Report Nuptial Flight')),
-                  content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                    Container(
-                      child: Text(
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        child: Text(
                           "What size queen ant did you see fly? Please only report real sightings. This data improves the app.",
-                          textAlign: TextAlign.center),
-                    ),
-                    Text(''),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[smallButton, mediumButton, largeButton],
-                    ),
-                  ]),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Text(''),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[smallButton, mediumButton, largeButton],
+                      ),
+                    ],
+                  ),
                 );
                 // show the dialog
                 showDialog(
@@ -744,7 +756,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   static Color? getContinuousColorGradient(int percentage) {
-// Bias towards red and green and away from the middle
+    // Bias towards red and green and away from the middle
     int r = max(0, (1.0 * 255 * (100 - percentage * 1.2)) ~/ 100);
     int g = min(255, (1.0 * 255 * percentage * 1.2) ~/ 100);
     int b = 0;
@@ -754,8 +766,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   static String getColorText(int percentage) {
-    String? text =
-        (percentage < amberThreshold ? 'No' : (percentage < greenThreshold ? 'Maybe' : 'Yes'));
+    String? text = (percentage < amberThreshold
+        ? 'No'
+        : (percentage < greenThreshold ? 'Maybe' : 'Yes'));
 
     return text;
   }
@@ -773,40 +786,46 @@ class _MyHomePageState extends State<MyHomePage> {
     //                       ),
     //                     ],
     return Center(
-        child: Text(
-      '$errorMessage',
-      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-      textAlign: TextAlign.center,
-    ));
+      child: Text(
+        '$errorMessage',
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 
   Widget _buildCircularProgressIndicator() {
     return Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [CircularProgressIndicator()]));
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [CircularProgressIndicator()],
+      ),
+    );
   }
 
   Widget _buildNuptialHeading(Orientation orientation) {
-    return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      AutoSizeText(
-        orientation == Orientation.portrait
-            ? 'Confidence of Nuptial Flight'
-            : 'Confidence of Ant\nNuptial Flight',
-        style: TextStyle(
-          height: orientation == Orientation.portrait ? 3.0 : 1.2,
-          fontSize: 22,
-          fontWeight: FontWeight.w600,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        AutoSizeText(
+          orientation == Orientation.portrait
+              ? 'Confidence of Nuptial Flight'
+              : 'Confidence of Ant\nNuptial Flight',
+          style: TextStyle(
+            height: orientation == Orientation.portrait ? 3.0 : 1.2,
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+          ),
+          minFontSize: 16,
+          maxFontSize: 24,
+          textScaleFactor: 1,
+          textAlign: TextAlign.center,
+          softWrap: true,
+          maxLines: 2,
         ),
-        minFontSize: 16,
-        maxFontSize: 24,
-        textScaleFactor: 1,
-        textAlign: TextAlign.center,
-        softWrap: true,
-        maxLines: 2,
-      )
-    ]);
+      ],
+    );
   }
 
   Widget _buildTodayPercentage(Orientation orientation, String heading, int percentage) {
@@ -818,10 +837,7 @@ class _MyHomePageState extends State<MyHomePage> {
         AutoSizeText(
           heading,
           group: headingGroup,
-          style: TextStyle(
-            fontSize: 14,
-            height: orientation == Orientation.portrait ? 0.95 : 0.90,
-          ),
+          style: TextStyle(fontSize: 14, height: orientation == Orientation.portrait ? 0.95 : 0.90),
           minFontSize: 14,
           maxFontSize: 22,
           stepGranularity: 1.0,
@@ -855,107 +871,104 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: List.generate(
-            min(24, _weather!.hourly!.length), (index) => _buildTodayHistogramElement(index)),
+          min(24, _weather!.hourly!.length),
+          (index) => _buildTodayHistogramElement(index),
+        ),
       ),
     );
   }
 
   Widget _buildTodayHistogramElement(int index) {
     Hourly hourly = _weather!.hourly![index];
-    String time = timeOfDay24HourFormat.format(DateTime.fromMillisecondsSinceEpoch(
+    String time = timeOfDay24HourFormat.format(
+      DateTime.fromMillisecondsSinceEpoch(
         (hourly.dt! + _weather!.timezoneOffset!) * 1000,
-        isUtc: true));
+        isUtc: true,
+      ),
+    );
     int percentage = _hourlyPercentage[index];
     if (percentage < 10) percentage = 10;
     double width = MediaQuery.of(context).size.width;
-    return LayoutBuilder(builder: (ctx, constraints) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Container(
-            height: constraints.maxHeight * 0.15,
-            child: FittedBox(
-              child: RotatedBox(
-                quarterTurns: 0,
+    return LayoutBuilder(
+      builder: (ctx, constraints) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Container(
+              height: constraints.maxHeight * 0.15,
+              child: FittedBox(
+                child: RotatedBox(
+                  quarterTurns: 0,
+                  child: AutoSizeText(
+                    ' ', //percentage > 0 ? '${percentage}%' : '???',
+                    minFontSize: 2,
+                    maxFontSize: 12,
+                    stepGranularity: 1.0,
+                    group: histogramGroup,
+                    style: TextStyle(color: getColorGradient(percentage), fontSize: 2),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: constraints.maxHeight * 0.05),
+            Container(
+              height: constraints.maxHeight * 0.6,
+              width: width / 32,
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(
+                          0.1,
+                        ), // Color.fromRGBO(220, 220, 220, 0.2),
+                        width: 0.5,
+                      ),
+                      //color: Colors.white,//Color.fromRGBO(220, 220, 220, 1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: FractionallySizedBox(
+                      heightFactor: percentage / 100,
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: getColorGradient(percentage),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: constraints.maxHeight * 0.05),
+            Container(
+              height: constraints.maxHeight * 0.15,
+              width: width / 32,
+              child: FittedBox(
                 child: AutoSizeText(
-                  ' ', //percentage > 0 ? '${percentage}%' : '???',
+                  //index.toString().padLeft(2, '0'),
+                  time,
                   minFontSize: 2,
                   maxFontSize: 12,
                   stepGranularity: 1.0,
-                  group: histogramGroup,
-                  style: TextStyle(
-                    color: getColorGradient(percentage),
-                    fontSize: 2,
-                  ),
+                  group: histogramLegendGroup,
+                  style: TextStyle(fontSize: 2),
                   textAlign: TextAlign.center,
                   maxLines: 1,
                 ),
               ),
             ),
-          ),
-          SizedBox(
-            height: constraints.maxHeight * 0.05,
-          ),
-          Container(
-            height: constraints.maxHeight * 0.6,
-            width: width / 32,
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .color!
-                            .withOpacity(0.1), // Color.fromRGBO(220, 220, 220, 0.2),
-                        width: 0.5),
-                    //color: Colors.white,//Color.fromRGBO(220, 220, 220, 1),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: FractionallySizedBox(
-                    heightFactor: percentage / 100,
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: getColorGradient(percentage),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: constraints.maxHeight * 0.05,
-          ),
-          Container(
-            height: constraints.maxHeight * 0.15,
-            width: width / 32,
-            child: FittedBox(
-              child: AutoSizeText(
-                //index.toString().padLeft(2, '0'),
-                time,
-                minFontSize: 2,
-                maxFontSize: 12,
-                stepGranularity: 1.0,
-                group: histogramLegendGroup,
-                style: TextStyle(
-                  fontSize: 2,
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 1,
-              ),
-            ),
-          )
-        ],
-      );
-    });
+          ],
+        );
+      },
+    );
   }
 
   Widget _buildTodayWeather(Orientation orientation) {
@@ -965,10 +978,7 @@ class _MyHomePageState extends State<MyHomePage> {
       children: [
         AutoSizeText(
           (_geocoding == null ? 'Today\'s Weather' : '$_geocoding Weather'),
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-          ),
+          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
           minFontSize: 17,
           maxFontSize: 26,
           stepGranularity: 1.0,
@@ -976,9 +986,12 @@ class _MyHomePageState extends State<MyHomePage> {
           overflow: TextOverflow.ellipsis,
         ),
         AutoSizeText(
-          longDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+          longDateFormat.format(
+                DateTime.fromMillisecondsSinceEpoch(
                   (_weather!.hourly!.first.dt! + _weather!.timezoneOffset!) * 1000,
-                  isUtc: true)) +
+                  isUtc: true,
+                ),
+              ) +
               ' - ' +
               toBeginningOfSentenceCase(_weather!.hourly!.first.weather!.first.description)!,
           style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
@@ -991,7 +1004,81 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _buildTemperature(String heading, num temp) {
+  Widget _buildWeatherGrid(Orientation orientation, BoxConstraints constraints) {
+    double height = MediaQuery.of(context).size.height;
+    return SizedBox(
+      child: GridView.count(
+        padding: EdgeInsets.fromLTRB(
+          0,
+          (orientation == Orientation.landscape && height >= 750 ? 30 : 0),
+          0,
+          0,
+        ),
+        crossAxisCount: orientation == Orientation.portrait ? 3 : 6,
+        // width/height ratio
+        childAspectRatio: constraints.maxHeight >= 1000
+            ? 2.8
+            : orientation == Orientation.portrait
+            ? 1.8
+            : 1.8,
+        shrinkWrap: true,
+        children: [
+          _buildTemperature('Dew Point', _weather!.daily!.first.dewPoint!),
+          if (orientation == Orientation.landscape && height >= LARGE_SCREEN_HEIGHT)
+            _buildTemperature('Min Temp', _weather!.daily!.first.temp!.min!),
+          _indexOfDiurnalHour != null
+              ? _buildTemperature(
+                  timeOfDayFormat
+                          .format(
+                            DateTime.fromMillisecondsSinceEpoch(
+                              (_indexOfDiurnalHour!.dt! + _weather!.timezoneOffset!) * 1000,
+                              isUtc: true,
+                            ),
+                          )
+                          .toLowerCase() +
+                      ' Temp',
+                  _indexOfDiurnalHour!.temp!,
+                )
+              : _buildTemperature('Missing', 0),
+          if (orientation == Orientation.landscape && height >= LARGE_SCREEN_HEIGHT)
+            _buildTemperature('Day Temp', _weather!.daily!.first.temp!.day!),
+          //_buildTemperature('Max Temp', _weather!.daily!.first.temp!.max!),
+          _indexOfNocturnalHour != null
+              ? _buildTemperature(
+                  timeOfDayFormat
+                          .format(
+                            DateTime.fromMillisecondsSinceEpoch(
+                              (_indexOfNocturnalHour!.dt! + _weather!.timezoneOffset!) * 1000,
+                              isUtc: true,
+                            ),
+                          )
+                          .toLowerCase() +
+                      ' Temp',
+                  _indexOfNocturnalHour!.temp!,
+                )
+              : _buildTemperature('Missing', 0),
+          if (orientation == Orientation.landscape && height >= LARGE_SCREEN_HEIGHT)
+            _buildTemperature('Eve Temp', _weather!.daily!.first.temp!.eve!),
+          _buildAirPressure(),
+          if (orientation == Orientation.portrait || height >= LARGE_SCREEN_HEIGHT)
+            _buildWindSpeed(),
+          _buildWindGust(),
+          _buildHumidity(),
+          if (orientation == Orientation.portrait || height >= LARGE_SCREEN_HEIGHT)
+            _buildCloudiness(),
+          if (orientation == Orientation.portrait || height >= LARGE_SCREEN_HEIGHT)
+            _buildPrecipitation(),
+          //if (height >= LARGE_SCREEN_HEIGHT) _buildUVI(),
+        ],
+      ),
+    );
+  }
+
+_buildInstructionsGrid(Orientation orientation, BoxConstraints constraints) {
+    return Spacer();
+}
+
+Widget _buildTemperature(String heading, num temp) {
     return SizedBox(
       child: Column(
         children: [
@@ -1009,9 +1096,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           AutoSizeText(
             "Suitability: " + (temperatureContribution(temp) * 100).toStringAsFixed(0) + "%",
-            style: TextStyle(
-              fontSize: 12,
-            ),
+            style: TextStyle(fontSize: 12),
             minFontSize: 2,
             maxFontSize: 12,
             stepGranularity: 1.0,
@@ -1042,9 +1127,7 @@ class _MyHomePageState extends State<MyHomePage> {
             "Suitability: " +
                 (windContribution(_weather!.daily!.first.windSpeed!) * 100).toStringAsFixed(0) +
                 "%",
-            style: TextStyle(
-              fontSize: 12,
-            ),
+            style: TextStyle(fontSize: 12),
             minFontSize: 2,
             maxFontSize: 12,
             stepGranularity: 1.0,
@@ -1075,9 +1158,7 @@ class _MyHomePageState extends State<MyHomePage> {
             "Suitability: " +
                 (windContribution(_weather!.daily!.first.windGust!) * 100).toStringAsFixed(0) +
                 "%",
-            style: TextStyle(
-              fontSize: 12,
-            ),
+            style: TextStyle(fontSize: 12),
             minFontSize: 2,
             maxFontSize: 12,
             stepGranularity: 1.0,
@@ -1108,9 +1189,7 @@ class _MyHomePageState extends State<MyHomePage> {
             "Suitability: " +
                 (rainContribution(_weather!.daily!.first.pop!) * 100).toStringAsFixed(0) +
                 "%",
-            style: TextStyle(
-              fontSize: 12,
-            ),
+            style: TextStyle(fontSize: 12),
             minFontSize: 2,
             maxFontSize: 12,
             stepGranularity: 1.0,
@@ -1141,9 +1220,7 @@ class _MyHomePageState extends State<MyHomePage> {
             "Suitability: " +
                 (uviContribution(_weather!.daily!.first.uvi!) * 100).toStringAsFixed(0) +
                 "%",
-            style: TextStyle(
-              fontSize: 12,
-            ),
+            style: TextStyle(fontSize: 12),
             minFontSize: 2,
             maxFontSize: 12,
             stepGranularity: 1.0,
@@ -1174,9 +1251,7 @@ class _MyHomePageState extends State<MyHomePage> {
             "Suitability: " +
                 (humidityContribution(_weather!.daily!.first.humidity!) * 100).toStringAsFixed(0) +
                 "%",
-            style: TextStyle(
-              fontSize: 12,
-            ),
+            style: TextStyle(fontSize: 12),
             minFontSize: 2,
             maxFontSize: 12,
             stepGranularity: 1.0,
@@ -1238,9 +1313,7 @@ class _MyHomePageState extends State<MyHomePage> {
             "Suitability: " +
                 (pressureContribution(_weather!.daily!.first.pressure!) * 100).toStringAsFixed(0) +
                 "%",
-            style: TextStyle(
-              fontSize: 12,
-            ),
+            style: TextStyle(fontSize: 12),
             minFontSize: 2,
             maxFontSize: 12,
             stepGranularity: 1.0,
@@ -1256,40 +1329,42 @@ class _MyHomePageState extends State<MyHomePage> {
       children: [
         // AutoSizeText doesn't work here because the parent is unconstrained
         SizedBox(
-            child: AutoSizeText(
-          'Upcoming Week',
-          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-        )),
+          child: AutoSizeText(
+            'Upcoming Week',
+            style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+          ),
+        ),
         SizedBox(
-            child: DataTable(
-          headingRowHeight: 22,
-          dataRowMinHeight: 22,
-          dataRowMaxHeight: 22,
-          horizontalMargin: 22,
-          columnSpacing: 22,
-          dividerThickness: 0,
-          columns: [
-            DataColumn(label: Text('Day'), numeric: true),
-            DataColumn(label: Text('Temp'), numeric: true),
-            if (orientation == Orientation.landscape)
-              DataColumn(label: Text('Dew Point'), numeric: true),
-            if (orientation == Orientation.landscape)
-              DataColumn(label: Text('Pressure'), numeric: true),
-            if (orientation == Orientation.landscape)
-              DataColumn(label: Text('Humidity'), numeric: true),
-            DataColumn(label: Text('Wind Speed'), numeric: true),
-            DataColumn(label: Text('Prediction'), numeric: true),
-          ],
-          rows: [
-            _buildFuturePercentage(orientation, 1),
-            _buildFuturePercentage(orientation, 2),
-            _buildFuturePercentage(orientation, 3),
-            _buildFuturePercentage(orientation, 4),
-            _buildFuturePercentage(orientation, 5),
-            if (height >= LARGE_SCREEN_HEIGHT) _buildFuturePercentage(orientation, 6),
-            if (height >= LARGE_SCREEN_HEIGHT) _buildFuturePercentage(orientation, 7),
-          ],
-        )),
+          child: DataTable(
+            headingRowHeight: 22,
+            dataRowMinHeight: 22,
+            dataRowMaxHeight: 22,
+            horizontalMargin: 22,
+            columnSpacing: 22,
+            dividerThickness: 0,
+            columns: [
+              DataColumn(label: Text('Day'), numeric: true),
+              DataColumn(label: Text('Temp'), numeric: true),
+              if (orientation == Orientation.landscape)
+                DataColumn(label: Text('Dew Point'), numeric: true),
+              if (orientation == Orientation.landscape)
+                DataColumn(label: Text('Pressure'), numeric: true),
+              if (orientation == Orientation.landscape)
+                DataColumn(label: Text('Humidity'), numeric: true),
+              DataColumn(label: Text('Wind Speed'), numeric: true),
+              DataColumn(label: Text('Prediction'), numeric: true),
+            ],
+            rows: [
+              _buildFuturePercentage(orientation, 1),
+              _buildFuturePercentage(orientation, 2),
+              _buildFuturePercentage(orientation, 3),
+              _buildFuturePercentage(orientation, 4),
+              _buildFuturePercentage(orientation, 5),
+              if (height >= LARGE_SCREEN_HEIGHT) _buildFuturePercentage(orientation, 6),
+              if (height >= LARGE_SCREEN_HEIGHT) _buildFuturePercentage(orientation, 7),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -1299,9 +1374,12 @@ class _MyHomePageState extends State<MyHomePage> {
       cells: [
         DataCell(
           Text(
-            weekdayFormat.format(DateTime.fromMillisecondsSinceEpoch(
+            weekdayFormat.format(
+              DateTime.fromMillisecondsSinceEpoch(
                 (_weather!.daily!.elementAt(i).dt! + _weather!.timezoneOffset!) * 1000,
-                isUtc: true)),
+                isUtc: true,
+              ),
+            ),
             style: getColorTextStyle(_dailyPercentage[i]),
           ),
         ),
@@ -1394,7 +1472,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-/*
+  /*
   FutureBuilder<WeatherResponse> weatherText() {
     return FutureBuilder<WeatherResponse>(
       future: _futureWeather,
