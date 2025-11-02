@@ -58,7 +58,7 @@ class AppWidgetProvider : HomeWidgetProvider() {
         if (percentage < 60) return "🐜👌"
         if (percentage < 65) return "🐜👍"
         if (percentage < 70) return "🐜💪"
-        return "🫶🐜"
+        return "🐜🫶"
     }
 
 }

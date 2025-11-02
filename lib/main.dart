@@ -72,8 +72,6 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Ant Nuptial Flight Predictor',
-      // Create space for camera cut-outs etc
-      useInheritedMediaQuery: true,
       // Hide the dev banner
       debugShowCheckedModeBanner: false,
       // For DevicePreview
@@ -795,7 +793,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (percentage < 60) return '🐜👌'; // 🏃😁🤗
     if (percentage < 65) return '🐜👍'; //
     if (percentage < 70) return '🐜💪'; //
-    return '🫶🐜';
+    return '🐜🫶';
   }
 
   String getEmojiInstructions() {
