@@ -158,6 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
   OneCallResponse? _historical;
   OneCallResponse? _weather;
   bool loaded = false;
+  bool advancedMode = false;
   String? errorMessage;
   Timer? _everyHour;
 
@@ -525,7 +526,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   /// Feature to record user saw a nuptial flight
-  void _sawNuptialFlight(String size) async {
+  void _sawNuptialFlight(String? size) async {
     Navigator.of(context).pop();
 
     if (fixedLocation) {
@@ -604,7 +605,7 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context, orientation) {
           return LayoutBuilder(
             builder: (ctx, constraints) {
-              print('constraints.maxHeight=${constraints.maxHeight}');
+              //print('constraints.maxHeight=${constraints.maxHeight}');
               return errorMessage != null
                   ? _buildErrorMessage()
                   : !loaded
@@ -630,26 +631,33 @@ class _MyHomePageState extends State<MyHomePage> {
                             children: [
                               if (orientation == Orientation.landscape || height >= 860)
                                 _buildNuptialHeading(orientation),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: <Widget>[
-                                  _buildTodayPercentage(
-                                    orientation,
-                                    'Next 11am',
-                                    _diurnalHourPercentage,
-                                  ),
-                                  _buildTodayPercentage(
-                                    orientation,
-                                    'Today Overall',
-                                    _dailyPercentage[0],
-                                  ),
-                                  _buildTodayPercentage(
-                                    orientation,
-                                    'Next 7pm',
-                                    _nocturnalHourPercentage,
-                                  ),
-                                ],
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    advancedMode = !advancedMode;
+                                  });
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: <Widget>[
+                                    _buildTodayPercentage(
+                                      orientation,
+                                      'Next 11am',
+                                      _diurnalHourPercentage,
+                                    ),
+                                    _buildTodayPercentage(
+                                      orientation,
+                                      'Today Overall',
+                                      _dailyPercentage[0],
+                                    ),
+                                    _buildTodayPercentage(
+                                      orientation,
+                                      'Next 7pm',
+                                      _nocturnalHourPercentage,
+                                    ),
+                                  ],
+                                ),
                               ),
                               if (orientation == Orientation.portrait &&
                                   constraints.maxHeight >= 700)
@@ -660,21 +668,24 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         if (orientation == Orientation.landscape && constraints.maxHeight > 600)
                           _buildTodayHistogram(constraints),
-                        if (true)
-                          _buildWeatherGrid(orientation, constraints)
-                        else
-                          _buildInstructionsGrid(orientation, constraints),
+                        _buildWeatherGrid(orientation, constraints),
                         _buildUpcomingWeek(orientation, height),
                         if (orientation == Orientation.portrait)
-                          Container(padding: const EdgeInsets.symmetric(vertical: 40)),
-                        if (orientation == Orientation.portrait ||
-                            orientation == Orientation.landscape)
-                          Text(
-                            (kIsWeb ? 'Web' : toBeginningOfSentenceCase(Platform.operatingSystem)) +
-                                ' Version $version+$buildNumber',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 8, color: Colors.grey),
-                          ),
+                          Container(padding: const EdgeInsets.symmetric(vertical: 20))
+                        else
+                          Container(padding: const EdgeInsets.symmetric(vertical: 10)),
+                        if (orientation == Orientation.portrait || constraints.maxHeight > 600)
+                          _buildEmojiInstructions(),
+                        if (orientation == Orientation.portrait || constraints.maxHeight <= 600)
+                          Container(padding: const EdgeInsets.symmetric(vertical: 0))
+                        else
+                          Container(padding: const EdgeInsets.symmetric(vertical: 4)),
+                        Text(
+                          (kIsWeb ? 'Web' : toBeginningOfSentenceCase(Platform.operatingSystem)) +
+                              ' Version $version+$buildNumber',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 8, color: Colors.grey),
+                        ),
                       ],
                     );
             },
@@ -709,6 +720,16 @@ class _MyHomePageState extends State<MyHomePage> {
                     _sawNuptialFlight('large');
                   },
                 );
+                Widget cancelButton = ElevatedButton(
+                  child: Text("No Flight", textAlign: TextAlign.center),
+                  style: ElevatedButton.styleFrom(
+                    alignment: Alignment.center,
+                    backgroundColor: Colors.redAccent,
+                  ),
+                  onPressed: () {
+                    _sawNuptialFlight(null);
+                  },
+                );
                 // set up the AlertDialog
                 AlertDialog alert = AlertDialog(
                   title: Center(child: Text('Report Nuptial Flight')),
@@ -726,6 +747,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[smallButton, mediumButton, largeButton],
                       ),
+                      Text(''),
+                      cancelButton,
                     ],
                   ),
                 );
@@ -765,12 +788,54 @@ class _MyHomePageState extends State<MyHomePage> {
     return color;
   }
 
-  static String getColorText(int percentage) {
-    String? text = (percentage < amberThreshold
-        ? 'No'
-        : (percentage < greenThreshold ? 'Maybe' : 'Yes'));
+  String getEmojiText(int percentage) {
+    if (percentage < 45) return '👎'; // 🙅😞
+    if (percentage < 50) return '🤏'; // 🤷🫤
+    if (percentage < 55) return '🤞'; // 🚶🤔
+    if (percentage < 60) return '🐜👌'; // 🏃😁🤗
+    if (percentage < 65) return '🐜👍'; //
+    if (percentage < 70) return '🐜💪'; //
+    return '🫶🐜';
+  }
 
-    return text;
+  String getEmojiInstructions() {
+    //return '😞🫤🤔😁🐜';
+    return '👎🤏🤞👌👍💪🫶';
+  }
+
+  Widget _buildEmojiInstructions() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          advancedMode = !advancedMode;
+        });
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Center(
+            child: AutoSizeText(
+              'Confidence Scale',
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+              minFontSize: 17,
+              maxFontSize: 20,
+              stepGranularity: 1.0,
+              maxLines: 2,
+            ),
+          ),
+          Center(
+            child: AutoSizeText(
+              getEmojiInstructions(),
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300, wordSpacing: 0),
+              minFontSize: 17,
+              maxFontSize: 20,
+              stepGranularity: 1.0,
+              maxLines: 2,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildErrorMessage() {
@@ -844,8 +909,7 @@ class _MyHomePageState extends State<MyHomePage> {
           textAlign: TextAlign.center,
         ),
         AutoSizeText(
-          percentage > 0 ? '${percentage}%' : '?',
-          //getColorText(percentage),
+          advancedMode ? '${percentage}%' : getEmojiText(percentage),
           style: TextStyle(
             color: getColorGradient(percentage),
             height: orientation == Orientation.portrait ? 0.95 : 0.90,
@@ -1017,10 +1081,12 @@ class _MyHomePageState extends State<MyHomePage> {
         crossAxisCount: orientation == Orientation.portrait ? 3 : 6,
         // width/height ratio
         childAspectRatio: constraints.maxHeight >= 1000
-            ? 2.8
+            ? 3.75
             : orientation == Orientation.portrait
-            ? 1.8
-            : 1.8,
+            ? 1.90
+            : constraints.maxHeight <= 400
+            ? 1.90
+            : 1.95,
         shrinkWrap: true,
         children: [
           _buildTemperature('Dew Point', _weather!.daily!.first.dewPoint!),
@@ -1074,11 +1140,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-_buildInstructionsGrid(Orientation orientation, BoxConstraints constraints) {
-    return Spacer();
-}
-
-Widget _buildTemperature(String heading, num temp) {
+  Widget _buildTemperature(String heading, num temp) {
     return SizedBox(
       child: Column(
         children: [
@@ -1416,13 +1478,34 @@ Widget _buildTemperature(String heading, num temp) {
             style: getColorTextStyle(_dailyPercentage[i]),
           ),
         ),
-        DataCell(
-          Text(
-            ' ${_dailyPercentage[i]}%',
-            //' ' + getColorText(_dailyPercentage[i]),
-            style: getColorTextStyle(_dailyPercentage[i]),
+        if (advancedMode)
+          DataCell(
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  advancedMode = !advancedMode;
+                });
+              },
+              child: Text(
+                getEmojiText(_dailyPercentage[i]) + ' ${_dailyPercentage[i]}%',
+                style: getColorTextStyle(_dailyPercentage[i]),
+              ),
+            ),
+          )
+        else
+          DataCell(
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  advancedMode = !advancedMode;
+                });
+              },
+              child: Text(
+                getEmojiText(_dailyPercentage[i]),
+                style: getColorTextStyle(_dailyPercentage[i]),
+              ),
+            ),
           ),
-        ),
       ],
     );
   }

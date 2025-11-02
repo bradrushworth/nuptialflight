@@ -77,7 +77,7 @@ class ArangoSingleton {
     }
   }
 
-  void updateWeather(String? version, String? buildNumber, String size, OneCallResponse? _weather,
+  void updateWeather(String? version, String? buildNumber, String? size, OneCallResponse? _weather,
       OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather) async {
     String? deviceId;
     if (kIsWeb) {
