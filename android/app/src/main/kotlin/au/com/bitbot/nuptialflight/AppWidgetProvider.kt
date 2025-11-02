@@ -10,8 +10,8 @@ import es.antonborri.home_widget.HomeWidgetProvider
 
 class AppWidgetProvider : HomeWidgetProvider() {
 
-    val greenThreshold = 65
-    val amberThreshold = 45
+    val greenThreshold = 60
+    val amberThreshold = 50
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray, widgetData: SharedPreferences) {
         appWidgetIds.forEach { widgetId ->
@@ -22,8 +22,8 @@ class AppWidgetProvider : HomeWidgetProvider() {
                         MainActivity::class.java)
                 setOnClickPendingIntent(R.id.widget_root, pendingIntent)
 
-                var percentage = widgetData.getInt("_percentage", 0)
-                var percentageText = " $percentage%" // Deliberate space padding
+                val percentage = widgetData.getInt("_percentage", 0)
+                var percentageText = getEmojiText(percentage)
                 if (percentage == 0) {
                     percentageText = "Calculating"
                 }
@@ -50,4 +50,15 @@ class AppWidgetProvider : HomeWidgetProvider() {
             appWidgetManager.updateAppWidget(widgetId, views)
         }
     }
+
+    fun getEmojiText(percentage: Int): String {
+        if (percentage < 45) return "👎"
+        if (percentage < 50) return "🤏"
+        if (percentage < 55) return "🤞"
+        if (percentage < 60) return "🐜👌"
+        if (percentage < 65) return "🐜👍"
+        if (percentage < 70) return "🐜💪"
+        return "🫶🐜"
+    }
+
 }
