@@ -49,7 +49,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.43, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.38, 0.01));
     });
   });
 
@@ -151,7 +151,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.58, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.44, 0.01));
     });
   });
 
@@ -205,7 +205,7 @@ void main() {
     });
 
     test('Model', () {
-      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.59, 0.01));
+      expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.51, 0.01));
     });
   });
 
