@@ -92,7 +92,7 @@ class ArangoSingleton {
       // Let's update the existing database entry
       Collection? collection = await _arangoClient!.collection('flights');
       await collection!.document(document_handle: _weatherFlightsKey).update({
-        'flight': 'yes',
+        'flight': size == null ? 'unknown' : 'yes',
         'size': size,
         'version': '$version+$buildNumber',
         'device_id': deviceId,
@@ -103,7 +103,7 @@ class ArangoSingleton {
       // Let's update the existing database entry
       Collection? collection = await _arangoClient!.collection('historical');
       await collection!.document(document_handle: _weatherHistoricalKey).update({
-        'flight': 'yes',
+        'flight': size == null ? 'unknown' : 'yes',
         'size': size,
         'version': '$version+$buildNumber',
         'device_id': deviceId,
@@ -114,7 +114,7 @@ class ArangoSingleton {
       // Let's update the existing database entry
       Collection? collection = await _arangoClient!.collection('current');
       await collection!.document(document_handle: _weatherCurrentKey).update({
-        'flight': 'yes',
+        'flight': size == null ? 'unknown' : 'yes',
         'size': size,
         'version': '$version+$buildNumber',
         'device_id': deviceId,

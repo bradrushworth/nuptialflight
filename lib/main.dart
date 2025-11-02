@@ -684,6 +684,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 8, color: Colors.grey),
                         ),
+                        // TODO: Hack for bug in Android at the moment
+                        if (!kIsWeb && Platform.isAndroid && orientation == Orientation.portrait)
+                          Container(padding: const EdgeInsets.symmetric(vertical: 20)),
                       ],
                     );
             },
