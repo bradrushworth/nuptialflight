@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:google_maps_webservice/places.dart';
+import 'package:flutter_google_maps_webservices/places.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 

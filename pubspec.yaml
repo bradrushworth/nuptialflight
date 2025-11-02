@@ -29,7 +29,7 @@ dependencies:
   cupertino_icons: ^1.0.5
 
   # All app dependencies
-  home_widget: ^0.8.0
+  home_widget: ^0.8.1
     #path: ../home_widget
     #git: https://github.com/ABausG/home_widget.git
     #git: https://github.com/bradrushworth/home_widget.git
@@ -74,7 +74,7 @@ dev_dependencies:
   #flutter_automation: any
   flutter_launcher_icons: ^0.14.3 # Causes some dependency conflicts
 #  device_preview: ^1.1.0
-  device_preview_plus: ^2.5.0
+  device_preview_plus: ^2.5.4
   screenshot_modes: #^1.0.1
     git:
       url: https://github.com/bradrushworth/screenshot_modes.git

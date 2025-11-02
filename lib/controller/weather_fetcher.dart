@@ -5,7 +5,7 @@ import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_webservice/src/places.dart';
+import 'package:flutter_google_maps_webservices/places.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:nuptialflight/responses/onecall_response.dart';
