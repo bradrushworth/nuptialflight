@@ -63,7 +63,11 @@ class _MapPageState extends State<MapPage> {
           );
         }));
 
-    await _weatherFetcher.findLocation(false).then((value) => _moveMap());
+    try {
+      await _weatherFetcher.findLocation(false).then((value) => _moveMap());
+    } catch (e) {
+      print(e);
+    }
   }
 
   void _moveMap() {

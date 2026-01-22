@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.11.3+117
+version: 2.11.4+118
 
 environment:
   sdk: '>=3.9.2 <4.0.0'
@@ -29,7 +29,7 @@ dependencies:
   cupertino_icons: ^1.0.5
 
   # All app dependencies
-  home_widget: ^0.8.1
+  home_widget: ^0.9.0
     #path: ../home_widget
     #git: https://github.com/ABausG/home_widget.git
     #git: https://github.com/bradrushworth/home_widget.git
@@ -48,7 +48,7 @@ dependencies:
     #git: https://github.com/devCitronnoir/flutter_google_places.git
     git: https://github.com/bradrushworth/flutter_google_places.git
     #path: ../flutter_google_places
-  flutter_map: ^8.1.1
+  flutter_map: ^8.2.2
   flutter_html: ^3.0.0-alpha.6
   darango: #^0.1.1
     git: https://github.com/bradrushworth/darango.git

@@ -111,6 +111,7 @@ class MyHomePage extends StatefulWidget {
 
   MyHomePage({
     Key? key,
+
     void Function(MaterialColor s)? this.primarySwatch,
     this.fixedLocation = false,
     required this.weatherFetcher,
