@@ -7,3 +7,4 @@
 -keep class io.flutter.plugins.** { *; }
 
 # Add project specific ProGuard rules here.
+-keep class com.google.android.play.core.**
