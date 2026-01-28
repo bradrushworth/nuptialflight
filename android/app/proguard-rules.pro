@@ -7,7 +7,6 @@
 -keep class io.flutter.plugins.** { *; }
 
 # Add project specific ProGuard rules here.
--keep class com.google.android.play.core.** { *; }
 -dontwarn com.google.android.play.core.splitcompat.SplitCompatApplication
 -dontwarn com.google.android.play.core.splitinstall.SplitInstallException
 -dontwarn com.google.android.play.core.splitinstall.SplitInstallManager
