@@ -119,6 +119,7 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
   double temp = hourly.temp!.toDouble();
   double wind = hourly.windSpeed!.toDouble();
   double gust = hourly.windGust?.toDouble() ?? hourly.windSpeed!.toDouble();
+  // ignore: unused_local_variable
   double windDeg = hourly.windDeg!.toDouble();
   double rain = hourly.pop?.toDouble() ?? 0.0;
   double humid = hourly.humidity!.toDouble();

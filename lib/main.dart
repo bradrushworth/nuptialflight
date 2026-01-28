@@ -780,6 +780,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return color!;
   }
 
+  // ignore: unused_element
   static Color? getContinuousColorGradient(int percentage) {
     // Bias towards red and green and away from the middle
     int r = max(0, (1.0 * 255 * (100 - percentage * 1.2)) ~/ 100);
@@ -988,8 +989,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(
-                          0.1,
+                        color: Theme.of(context).textTheme.bodyLarge!.color!.withValues(
+                          alpha: 0.1,
                         ), // Color.fromRGBO(220, 220, 220, 0.2),
                         width: 0.5,
                       ),
@@ -1264,6 +1265,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  // ignore: unused_element
   Widget _buildUVI() {
     return SizedBox(
       child: Column(
