@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.util.TypedValue
 import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetLaunchIntent
 import es.antonborri.home_widget.HomeWidgetProvider
@@ -13,13 +14,20 @@ class AppWidgetProvider : HomeWidgetProvider() {
     val greenThreshold = 60
     val amberThreshold = 50
 
-    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray, widgetData: SharedPreferences) {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray,
+        widgetData: SharedPreferences
+    ) {
         appWidgetIds.forEach { widgetId ->
             val views = RemoteViews(context.packageName, R.layout.widget_layout).apply {
 
                 // Open App on Widget Click
-                val pendingIntent = HomeWidgetLaunchIntent.getActivity(context,
-                        MainActivity::class.java)
+                val pendingIntent = HomeWidgetLaunchIntent.getActivity(
+                    context,
+                    MainActivity::class.java
+                )
                 setOnClickPendingIntent(R.id.widget_root, pendingIntent)
 
                 val percentage = widgetData.getInt("_percentage", 0)
@@ -29,6 +37,8 @@ class AppWidgetProvider : HomeWidgetProvider() {
                 }
 
                 setTextColor(R.id.tv_heading, Color.BLACK)
+                setTextViewTextSize(R.id.tv_heading, TypedValue.COMPLEX_UNIT_PT, 8.0f)
+                setTextViewTextSize(R.id.tv_percentage, TypedValue.COMPLEX_UNIT_PT, 8.0f)
                 setTextViewText(R.id.tv_heading, "Ant\nNuptial\nFlight")
                 setTextViewText(R.id.tv_percentage, percentageText)
                 if (percentage < amberThreshold) {
