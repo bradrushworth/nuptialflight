@@ -97,7 +97,8 @@ Future<void> initializeService() async {
 }
 
 void _onBackgroundFetch(String taskId) async {
-  var timestamp = DateTime.now();
+  //var timestamp = DateTime.now();
+
   // This is the fetch-event callback.
   print("[BackgroundFetch] Event received: $taskId");
 
@@ -178,10 +179,10 @@ Future<void> getReportedFlightsNearMe() async {
 
   if (numFlights > 0) {
     flutterLocalNotificationsPlugin.show(
-      notificationIdReport,
-      'Current reported local nuptial flight!',
-      'There are $numFlights reported flights in the last ${minutes} minutes with the nearest ${closestDistance} km away...',
-      const NotificationDetails(
+      id: notificationIdReport,
+      title: 'Current reported local nuptial flight!',
+      body: 'There are $numFlights reported flights in the last ${minutes} minutes with the nearest ${closestDistance} km away...',
+      notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
           notificationChannelIdReport,
           'Nuptial Flight Reports',
@@ -215,10 +216,10 @@ Future<void> getServicePercentage() async {
 
     if (percentage >= greenThreshold) {
       flutterLocalNotificationsPlugin.show(
-        notificationIdPercentage,
-        'Good weather for a nuptial flight!',
-        'The confidence for nuptial flight is $percentage% today...',
-        const NotificationDetails(
+        id: notificationIdPercentage,
+        title: 'Good weather for a nuptial flight!',
+        body: 'The confidence for nuptial flight is $percentage% today...',
+        notificationDetails: const NotificationDetails(
           android: AndroidNotificationDetails(
             notificationChannelIdPercentage,
             'Nuptial Flight Percentage',

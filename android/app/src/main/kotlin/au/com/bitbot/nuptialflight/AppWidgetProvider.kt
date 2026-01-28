@@ -34,11 +34,13 @@ class AppWidgetProvider : HomeWidgetProvider() {
                 var percentageText = getEmojiText(percentage)
                 if (percentage == 0) {
                     percentageText = "Calculating"
+                    setTextViewTextSize(R.id.tv_percentage, TypedValue.COMPLEX_UNIT_PT, 5.0f)
+                } else {
+                    setTextViewTextSize(R.id.tv_percentage, TypedValue.COMPLEX_UNIT_PT, 11.0f)
                 }
+                setTextViewTextSize(R.id.tv_heading, TypedValue.COMPLEX_UNIT_PT, 7.0f)
 
                 setTextColor(R.id.tv_heading, Color.BLACK)
-                setTextViewTextSize(R.id.tv_heading, TypedValue.COMPLEX_UNIT_PT, 8.0f)
-                setTextViewTextSize(R.id.tv_percentage, TypedValue.COMPLEX_UNIT_PT, 8.0f)
                 setTextViewText(R.id.tv_heading, "Ant\nNuptial\nFlight")
                 setTextViewText(R.id.tv_percentage, percentageText)
                 if (percentage < amberThreshold) {

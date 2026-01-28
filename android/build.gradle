@@ -31,10 +31,10 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven {
-            // [required] background_fetch
-            url "${project(':background_fetch').projectDir}/libs"
-        }
+//        maven {
+//            // [required] background_fetch
+//            url "${project(':background_fetch').projectDir}/libs"
+//        }
 //        maven {
 //            // [required] home_widget
 //            url "${project(':home_widget').projectDir}/libs"
@@ -42,14 +42,16 @@ allprojects {
     }
 }
 
-rootProject.buildDir = '../build'
+rootProject.layout.buildDirectory = file('../build')
 subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    def directory = "${rootProject.layout.buildDirectory.get().asFile}/${project.name}"
+    logger.quiet("Build directory is: $directory") // debugging
+    project.layout.buildDirectory = file(directory)
 }
 subprojects {
-    project.evaluationDependsOn(':app')
+    project.evaluationDependsOn(":app")
 }
 
 tasks.register("clean", Delete) {
-    delete rootProject.buildDir
+    delete rootProject.layout.buildDirectory
 }
