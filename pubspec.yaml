@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.12.2+121
+version: 2.12.3+122
 
 environment:
   sdk: '>=3.9.2 <4.0.0'
@@ -69,6 +69,8 @@ dependencies:
 #      #url: https://github.com/mohn93/platform_device_id.git
 #      url: https://github.com/bradrushworth/platform_device_id.git
 #      path: platform_device_id
+  memory_info: ^0.1.0
+  memory_info_platform_interface: ^0.1.0
 
 dev_dependencies:
   flutter_test:
@@ -84,7 +86,7 @@ dev_dependencies:
   #    git:
   #      url: https://github.com/bradintheusa/screenshot_modes.git
 
-#dependency_overrides:
+dependency_overrides:
 #  device_preview:
 #    git:
 #      url: https://github.com/bradrushworth/flutter_device_preview.git
@@ -99,6 +101,16 @@ dev_dependencies:
 ##    path: ../google_api_headers
 #    git:
 #      url: https://github.com/bradrushworth/google_api_headers.git
+  memory_info:
+#    path: ../memory_info/memory_info
+    git:
+      url: https://github.com/bradrushworth/memory_info.git
+      path: memory_info
+  memory_info_platform_interface:
+#    path: ../memory_info/memory_info_platform_interface
+    git:
+      url: https://github.com/bradrushworth/memory_info.git
+      path: memory_info_platform_interface
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

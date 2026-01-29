@@ -615,6 +615,24 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.11.1"
+  memory_info:
+    dependency: "direct main"
+    description:
+      path: memory_info
+      ref: HEAD
+      resolved-ref: "07c4b597030927089ffd62dadc8521cc4a6db63b"
+      url: "https://github.com/bradrushworth/memory_info.git"
+    source: git
+    version: "0.1.0"
+  memory_info_platform_interface:
+    dependency: "direct main"
+    description:
+      path: memory_info_platform_interface
+      ref: HEAD
+      resolved-ref: "07c4b597030927089ffd62dadc8521cc4a6db63b"
+      url: "https://github.com/bradrushworth/memory_info.git"
+    source: git
+    version: "0.1.0"
   meta:
     dependency: transitive
     description:

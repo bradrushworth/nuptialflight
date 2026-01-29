@@ -20,7 +20,7 @@
 allprojects {
     ext {
         kotlin_version = "2.3.0"
-        agpVersion = "8.13.2"
+        agpVersion = "9.0.0"
         compileSdkVersion = 36
         targetSdkVersion = 24
         appCompatVersion = "1.6.1"
