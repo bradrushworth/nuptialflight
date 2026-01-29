@@ -22,6 +22,7 @@ class WeatherFetcher {
   }
 
   Future<bool> findLocation(bool waitForPosition) async {
+    print("findLocation: _mockLocation=$_mockLocation waitForPosition=$waitForPosition ");
     if (!_mockLocation) {
       LocationPermission permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.whileInUse ||
@@ -49,15 +50,18 @@ class WeatherFetcher {
             // Position has changed
             _lat = position.latitude;
             _lon = position.longitude;
+            print("findLocation: return true _lat=$_lat _lon=$_lon ");
             return true;
           }
         }
         if (_lat == null || _lon == null) {
+          print("findLocation: _lat=$_lat _lon=$_lon ");
           throw Exception(
               'Failed to get your location!\n\nPlease manually enter your location.');
         }
         return false;
       } else {
+        print("findLocation: _lat=$_lat _lon=$_lon ");
         throw Exception(
             'Location permissions are denied!\n\nPlease manually enter your location.');
       }
@@ -65,11 +69,13 @@ class WeatherFetcher {
       _lat = -35.7600;
       _lon = 150.2053;
     }
+    print("findLocation: return false _lat=$_lat _lon=$_lon ");
     return false;
   }
 
   LatLng getLocation() {
     if (_lat == null || _lon == null) return LatLng(0, 0);
+    print("getLocation: _lat=$_lat _lon=$_lon ");
     return LatLng(_lat!, _lon!);
   }
 

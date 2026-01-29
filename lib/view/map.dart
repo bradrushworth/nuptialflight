@@ -50,7 +50,7 @@ class _MapPageState extends State<MapPage> {
 
   void _loadData() async {
     ArangoSingleton().getRecentFlights().then((value) => value.forEach((row) {
-          //print("v=$row");
+          //debugPrint("_loadData: row=$row");
           _markers.add(
             Marker(
               point: new LatLng(row['lat'], row['lon']),
@@ -64,7 +64,9 @@ class _MapPageState extends State<MapPage> {
         }));
 
     try {
+      //debugPrint("_loadData: Before findLocation()");
       await _weatherFetcher.findLocation(false).then((value) => _moveMap());
+      //debugPrint("_loadData: After findLocation()");
     } catch (e) {
       print(e);
     }
@@ -73,12 +75,15 @@ class _MapPageState extends State<MapPage> {
   void _moveMap() {
     LatLng? latLng = _weatherFetcher.getLocation();
     if (latLng != LatLng(0, 0)) {
+      //debugPrint("_moveMap: Before latLng=$latLng");
       _mapController.moveAndRotate(latLng, defaultZoom, 0.0);
+      //debugPrint("_moveMap: After latLng=$latLng");
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    //debugPrint("build: context=$context");
     return Scaffold(
       extendBodyBehindAppBar: true,
       floatingActionButton: FloatingActionButton(
@@ -134,17 +139,15 @@ class _MapPageState extends State<MapPage> {
                 //'apiKey': dotenv.env['MAPTILER_MAP_KEY']!,
               }),
 
-          // _openWeatherMapWidget('precipitation_new'),
-          // _openWeatherMapWidget('pressure_new'),
-          _openWeatherMapWidget(
-            'clouds_new',
-            const ColorFilter.matrix(<double>[
-              0, 0, 0, 510, 0, // R
-              0, 0, 0, 0, 0, // G
-              0, 0, 0, 0, 0, // B
-              0, 0, 0, -2, 510, // A
-            ]),
-          ),
+          // _openWeatherMapWidget(
+          //   'clouds_new',
+          //   const ColorFilter.matrix(<double>[
+          //     0, 0, 0, 510, 0, // R
+          //     0, 0, 0, 0, 0, // G
+          //     0, 0, 0, 0, 0, // B
+          //     0, 0, 0, -2, 510, // A
+          //   ]),
+          // ),
           _openWeatherMapWidget(
               'wind_new',
               const ColorFilter.matrix(<double>[
@@ -153,14 +156,15 @@ class _MapPageState extends State<MapPage> {
                 0, 0, 0, 0, 0, // B
                 0, 0, 0, 637, 0, // A
               ])),
-          _openWeatherMapWidget(
-              'temp_new',
-              const ColorFilter.matrix(<double>[
-                1, -2, 6, 0, -255, // R
-                0, 0, 0, 0, 0, // G
-                0, 0, 0, 0, 0, // B
-                0, 0, 2, 0, -60, // A
-              ])),
+          // _openWeatherMapWidget(
+          //     'temp_new',
+          //     const ColorFilter.matrix(<double>[
+          //       1, -2, 6, 0, -255, // R
+          //       0, 0, 0, 0, 0, // G
+          //       0, 0, 0, 0, 0, // B
+          //       0, 0, 2, 0, -60, // A
+          //     ])),
+
           MarkerLayer(markers: _markers),
           Align(
             alignment: Alignment.bottomLeft,
