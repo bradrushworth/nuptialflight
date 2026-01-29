@@ -261,7 +261,7 @@ class _MapPageState extends State<MapPage> {
       setState(() {
         _memory = memory;
       });
-      debugPrint("_getMemoryInfo: totalMem=${memory.totalMem} lowMemory=${memory.lowMemory}");
+      debugPrint("_getMemoryInfo: totalMem=${memory.totalMem}");
     }
   }
 }
