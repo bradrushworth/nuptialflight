@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -143,7 +145,12 @@ class _MapPageState extends State<MapPage> {
             },
           ),
 
-          if (kIsWeb || (_memory != null && _memory!.totalMem != null && _memory!.totalMem! >= 10000))
+          if (kIsWeb ||
+              !Platform.isAndroid ||
+              (Platform.isAndroid &&
+                  _memory != null &&
+                  _memory!.totalMem != null &&
+                  _memory!.totalMem! >= 10000))
             _openWeatherMapWidget(
               'clouds_new',
               const ColorFilter.matrix(<double>[
@@ -153,7 +160,12 @@ class _MapPageState extends State<MapPage> {
                 0, 0, 0, -2, 510, // A
               ]),
             ),
-          if (kIsWeb || (_memory != null && _memory!.totalMem != null && _memory!.totalMem! >= 4000))
+          if (kIsWeb ||
+              !Platform.isAndroid ||
+              (Platform.isAndroid &&
+                  _memory != null &&
+                  _memory!.totalMem != null &&
+                  _memory!.totalMem! >= 4000))
             _openWeatherMapWidget(
               'wind_new',
               const ColorFilter.matrix(<double>[
@@ -163,7 +175,12 @@ class _MapPageState extends State<MapPage> {
                 0, 0, 0, 637, 0, // A
               ]),
             ),
-          if (kIsWeb || (_memory != null && _memory!.totalMem != null && _memory!.totalMem! >= 8000))
+          if (kIsWeb ||
+              !Platform.isAndroid ||
+              (Platform.isAndroid &&
+                  _memory != null &&
+                  _memory!.totalMem != null &&
+                  _memory!.totalMem! >= 8000))
             _openWeatherMapWidget(
               'temp_new',
               const ColorFilter.matrix(<double>[
