@@ -52,3 +52,5 @@ app.*.map.json
 /screenshots/resized/
 /coverage/lcov.info
 android/.kotlin/
+android/build/reports/problems/problems-report.html
+android/app/local.properties
