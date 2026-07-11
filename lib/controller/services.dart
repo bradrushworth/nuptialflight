@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:home_widget/home_widget.dart';
 
 import '../main.dart';
 import '../responses/onecall_response.dart';
@@ -29,10 +30,20 @@ const notificationIdPercentage = 101;
 // not allowed to get position in the background
 Position? _lastKnownPosition;
 
-// when did we check the last time
-DateTime? _lastCheckDate;
+bool _isServiceInitialized = false;
 
-Future<void> initializeService() async {
+Future<void> _ensureInitialized() async {
+  if (_isServiceInitialized) return;
+
+  // Only available for flutter 3.0.0 and later
+  DartPluginRegistrant.ensureInitialized();
+
+  try {
+    await dotenv.load(fileName: 'assets/.env');
+  } catch (e) {
+    debugPrint("Failed to load dotenv in background: $e");
+  }
+
   const AndroidNotificationChannel channelReport = AndroidNotificationChannel(
     notificationChannelIdReport, // id
     'Nuptial Flight Reports', // title
@@ -50,15 +61,24 @@ Future<void> initializeService() async {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+  // Initialize Flutter Local Notifications Plugin
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('ic_launcher_foreground');
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+  await flutterLocalNotificationsPlugin.initialize(settings: initializationSettings);
+
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
     ?..createNotificationChannel(channelReport)
     ..createNotificationChannel(channelPercentage);
 
-  // Only available for flutter 3.0.0 and later
-  DartPluginRegistrant.ensureInitialized();
+  _isServiceInitialized = true;
+}
 
-  await dotenv.load(fileName: 'assets/.env');
+Future<void> initializeService() async {
+  await _ensureInitialized();
 
   // Register to receive BackgroundFetch events after app is terminated.
   // Requires {stopOnTerminate: false, enableHeadless: true}
@@ -96,14 +116,63 @@ Future<void> initializeService() async {
   }
 }
 
-void _onBackgroundFetch(String taskId) async {
-  //var timestamp = DateTime.now();
+Future<void> _updatePosition() async {
+  try {
+    _lastKnownPosition = await Geolocator.getLastKnownPosition();
+  } catch (e) {
+    debugPrint("Failed to get last known position: $e");
+  }
 
+  if (_lastKnownPosition == null) {
+    try {
+      _lastKnownPosition = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.low,
+          timeLimit: const Duration(seconds: 10));
+    } catch (e) {
+      debugPrint("Failed to get current position actively: $e");
+    }
+  }
+
+  if (_lastKnownPosition == null) {
+    try {
+      final double? lat = await HomeWidget.getWidgetData<double>('last_latitude');
+      final double? lon = await HomeWidget.getWidgetData<double>('last_longitude');
+      if (lat != null && lon != null) {
+        _lastKnownPosition = Position(
+          latitude: lat,
+          longitude: lon,
+          timestamp: DateTime.now(),
+          accuracy: 0.0,
+          altitude: 0.0,
+          altitudeAccuracy: 0.0,
+          heading: 0.0,
+          headingAccuracy: 0.0,
+          speed: 0.0,
+          speedAccuracy: 0.0,
+        );
+        debugPrint("Restored last known location from cache: $_lastKnownPosition");
+      }
+    } catch (e) {
+      debugPrint("Failed to read location cache: $e");
+    }
+  } else {
+    try {
+      await HomeWidget.saveWidgetData<double>('last_latitude', _lastKnownPosition!.latitude);
+      await HomeWidget.saveWidgetData<double>('last_longitude', _lastKnownPosition!.longitude);
+    } catch (e) {
+      debugPrint("Failed to save position to cache: $e");
+    }
+  }
+}
+
+void _onBackgroundFetch(String taskId) async {
   // This is the fetch-event callback.
   print("[BackgroundFetch] Event received: $taskId");
 
-  if (taskId == "flutter_background_fetch") {
-    _lastKnownPosition = await Geolocator.getLastKnownPosition();
+  await _ensureInitialized();
+
+  if (taskId == "flutter_background_fetch" || taskId == "com.transistorsoft.customtask") {
+    await _updatePosition();
     await getReportedFlightsNearMe();
     await getServicePercentage();
   }
@@ -133,9 +202,11 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
     BackgroundFetch.finish(taskId);
     return;
   }
-  print('[BackgroundFetch] Headless event received.');
+  print('[BackgroundFetch] Headless event received: $taskId');
 
-  _lastKnownPosition = await Geolocator.getLastKnownPosition();
+  await _ensureInitialized();
+
+  await _updatePosition();
   await getReportedFlightsNearMe();
   await getServicePercentage();
 
@@ -157,13 +228,32 @@ Future<void> getReportedFlightsNearMe() async {
       FlutterLocalNotificationsPlugin();
 
   int minutes;
-  if (_lastCheckDate == null) {
+  DateTime now = DateTime.now();
+  String? lastCheckStr;
+  try {
+    lastCheckStr = await HomeWidget.getWidgetData<String>('last_check_date');
+  } catch (e) {
+    debugPrint("Failed to get last_check_date: $e");
+  }
+
+  if (lastCheckStr == null) {
     minutes = 30;
   } else {
-    DateTime now = DateTime.now();
-    minutes = (now.millisecondsSinceEpoch - _lastCheckDate!.millisecondsSinceEpoch) ~/ 1000 ~/ 60;
-    _lastCheckDate = now;
+    try {
+      DateTime lastCheck = DateTime.parse(lastCheckStr);
+      minutes = (now.millisecondsSinceEpoch - lastCheck.millisecondsSinceEpoch) ~/ 1000 ~/ 60;
+    } catch (e) {
+      minutes = 30;
+    }
   }
+
+  try {
+    await HomeWidget.saveWidgetData<String>('last_check_date', now.toIso8601String());
+  } catch (e) {
+    debugPrint("Failed to save last_check_date: $e");
+  }
+
+  if (minutes <= 0) minutes = 30;
 
   int numFlights = 0;
   int closestDistance = 0;

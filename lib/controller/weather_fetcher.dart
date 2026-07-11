@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_google_maps_webservices/places.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:nuptialflight/responses/onecall_response.dart';
@@ -41,6 +42,14 @@ class WeatherFetcher {
           position = await Geolocator.getLastKnownPosition();
         }
         if (position != null) {
+          if (!kIsWeb) {
+            try {
+              await HomeWidget.saveWidgetData<double>('last_latitude', position.latitude);
+              await HomeWidget.saveWidgetData<double>('last_longitude', position.longitude);
+            } catch (e) {
+              print("Failed to save location to HomeWidget: $e");
+            }
+          }
           if (_lat == null ||
               _lon == null ||
               _lat!.toStringAsFixed(2) !=
@@ -83,18 +92,42 @@ class WeatherFetcher {
     _lat = latLng.latitude;
     _lon = latLng.longitude;
     print('setLocation: _lat=$_lat _lon=$_lon');
+    if (!kIsWeb) {
+      try {
+        HomeWidget.saveWidgetData<double>('last_latitude', _lat!);
+        HomeWidget.saveWidgetData<double>('last_longitude', _lon!);
+      } catch (e) {
+        print("Failed to save location to HomeWidget: $e");
+      }
+    }
   }
 
   void setPosition(Position position) {
     _lat = position.latitude;
     _lon = position.longitude;
     print('setLocation: _lat=$_lat _lon=$_lon');
+    if (!kIsWeb) {
+      try {
+        HomeWidget.saveWidgetData<double>('last_latitude', _lat!);
+        HomeWidget.saveWidgetData<double>('last_longitude', _lon!);
+      } catch (e) {
+        print("Failed to save location to HomeWidget: $e");
+      }
+    }
   }
 
   void setLocationPlace(PlacesDetailsResponse detail) {
     _lat = detail.result.geometry!.location.lat;
     _lon = detail.result.geometry!.location.lng;
     print('setLocation: _lat=$_lat _lon=$_lon');
+    if (!kIsWeb) {
+      try {
+        HomeWidget.saveWidgetData<double>('last_latitude', _lat!);
+        HomeWidget.saveWidgetData<double>('last_longitude', _lon!);
+      } catch (e) {
+        print("Failed to save location to HomeWidget: $e");
+      }
+    }
   }
 
   Future<ReverseGeocodingResponse> fetchReverseGeocoding() async {

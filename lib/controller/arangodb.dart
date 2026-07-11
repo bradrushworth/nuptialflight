@@ -13,6 +13,7 @@ class ArangoSingleton {
 
   // Create client for Arango database
   Database? _arangoClient;
+  Future<void>? _connectFuture;
   var _weatherCurrentKey;
   var _weatherHistoricalKey;
   var _weatherFlightsKey;
@@ -22,16 +23,23 @@ class ArangoSingleton {
   }
 
   ArangoSingleton._privateConstructor() {
-    init();
+    _connectFuture = init();
   }
 
-  void init() async {
+  Future<void> init() async {
     _arangoClient = Database('https://api.bitbot.com.au:8530');
     await _arangoClient!.connect('nuptialFlight', 'nuptialflight', 'fdggdsgdfstg34wfwfwff');
   }
 
+  Future<void> _ensureConnected() async {
+    if (_connectFuture != null) {
+      await _connectFuture;
+    }
+  }
+
   void createWeather(String? version, String? buildNumber, OneCallResponse? _weather,
       OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather) async {
+    await _ensureConnected();
 
     String? deviceId;
     if (kIsWeb) {
@@ -79,6 +87,8 @@ class ArangoSingleton {
 
   void updateWeather(String? version, String? buildNumber, String? size, OneCallResponse? _weather,
       OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather) async {
+    await _ensureConnected();
+
     String? deviceId;
     if (kIsWeb) {
       deviceId = 'web';
@@ -124,6 +134,8 @@ class ArangoSingleton {
   }
 
   Future<List> getRecentFlights() async {
+    await _ensureConnected();
+
     Aql aql = _arangoClient!.aql();
     String query = """
 FOR f IN current
@@ -155,6 +167,9 @@ RETURN {
     if (minutes > 0) {
       minutes = -minutes;
     }
+
+    await _ensureConnected();
+
     Aql aql = _arangoClient!.aql();
     String query = """
 FOR f IN current
