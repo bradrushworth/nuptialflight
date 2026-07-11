@@ -32,8 +32,9 @@ class WeatherFetcher {
         if (kIsWeb || waitForPosition) {
           try {
             position = await Geolocator.getCurrentPosition(
-                desiredAccuracy: LocationAccuracy.low,
-                timeLimit: Duration(seconds: 30));
+                locationSettings: const LocationSettings(
+                    accuracy: LocationAccuracy.low,
+                    timeLimit: Duration(seconds: 30)));
           } catch (exception) {
             developer.log("Can't get current position: exception=$exception",
                 name: 'WeatherFetcher', error: exception);
