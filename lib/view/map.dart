@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_html/flutter_html.dart' as html;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:memory_info/memory_info.dart';
@@ -48,6 +47,47 @@ class _MapPageState extends State<MapPage> {
   List<Marker> _markers = <Marker>[];
   Memory? _memory;
 
+  // Weather overlays are expensive (extra WMS fetches + color filters). Throttle
+  // their tile load/prune work during pan/zoom so the base map stays responsive.
+  // Each layer needs its own transformer instance (internal timer state); keep
+  // them as fields so rebuilds do not allocate new timers.
+  static const Duration _weatherTileThrottle = Duration(milliseconds: 300);
+  final TileUpdateTransformer _cloudsTileUpdateTransformer =
+      TileUpdateTransformers.throttle(_weatherTileThrottle);
+  final TileUpdateTransformer _windTileUpdateTransformer =
+      TileUpdateTransformers.throttle(_weatherTileThrottle);
+  final TileUpdateTransformer _tempTileUpdateTransformer =
+      TileUpdateTransformers.throttle(_weatherTileThrottle);
+
+  // Previous visual used Opacity(0.165) over the filtered tiles. Fold that into
+  // the alpha row so we avoid an extra Opacity compositing layer per weather layer.
+  static const double _weatherOpacity = 0.165;
+
+  // Solid red where clouds exist; alpha from source (boosted), then opacity.
+  static final ColorFilter _cloudsFilter = ColorFilter.matrix(<double>[
+    0, 0, 0, 0, 255, // R
+    0, 0, 0, 0, 0, // G
+    0, 0, 0, 0, 0, // B
+    0, 0, 0, 2 * _weatherOpacity, 0, // A = 0.33 * sourceA (0 stays 0)
+  ]);
+
+  // Solid red where wind is drawn; alpha from source (boosted), then opacity.
+  static final ColorFilter _windFilter = ColorFilter.matrix(<double>[
+    0, 0, 0, 0, 255, // R
+    0, 0, 0, 0, 0, // G
+    0, 0, 0, 0, 0, // B
+    0, 0, 0, 2 * _weatherOpacity, 0, // A = 0.33 * sourceA (0 stays 0)
+  ]);
+
+  // Keep the original red extraction; drive alpha from the same signal so
+  // non-matching temps stay transparent, with opacity folded into A.
+  static final ColorFilter _tempFilter = ColorFilter.matrix(<double>[
+    1, -2, 6, 0, -255, // R
+    0, 0, 0, 0, 0, // G
+    0, 0, 0, 0, 0, // B
+    1 * _weatherOpacity, -2 * _weatherOpacity, 6 * _weatherOpacity, 0, -255 * _weatherOpacity, // A
+  ]);
+
   @override
   void initState() {
     super.initState();
@@ -88,6 +128,30 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
+  bool get _showClouds =>
+      kIsWeb ||
+      !Platform.isAndroid ||
+      (Platform.isAndroid &&
+          _memory != null &&
+          _memory!.totalMem != null &&
+          _memory!.totalMem! >= 10000);
+
+  bool get _showWind =>
+      kIsWeb ||
+      !Platform.isAndroid ||
+      (Platform.isAndroid &&
+          _memory != null &&
+          _memory!.totalMem != null &&
+          _memory!.totalMem! >= 4000);
+
+  bool get _showTemp =>
+      kIsWeb ||
+      !Platform.isAndroid ||
+      (Platform.isAndroid &&
+          _memory != null &&
+          _memory!.totalMem != null &&
+          _memory!.totalMem! >= 8000);
+
   @override
   Widget build(BuildContext context) {
     //debugPrint("build: context=$context");
@@ -111,6 +175,7 @@ class _MapPageState extends State<MapPage> {
           initialZoom: defaultZoom,
           minZoom: 2,
           maxZoom: 9,
+          backgroundColor: Colors.black,
           onLongPress: (position, latLng) {
             _weatherFetcher.setLocation(latLng);
             Navigator.of(context).push(
@@ -141,81 +206,54 @@ class _MapPageState extends State<MapPage> {
             userAgentPackageName: 'au.com.bitbot.nuptialflight',
             minZoom: 0,
             maxZoom: 20,
+            // Instant show avoids fade animations fighting pan/zoom.
+            tileDisplay: const TileDisplay.instantaneous(),
+            // Slightly tighter than defaults (keep=2, pan=1) to cut retained tiles.
+            keepBuffer: 1,
+            panBuffer: 0,
             additionalOptions: {
               'ext': 'png',
               //'apiKey': dotenv.env['MAPTILER_MAP_KEY']!,
             },
           ),
 
-          if (kIsWeb ||
-              !Platform.isAndroid ||
-              (Platform.isAndroid &&
-                  _memory != null &&
-                  _memory!.totalMem != null &&
-                  _memory!.totalMem! >= 10000))
-            // Weather tiles are RGBA with partial alpha. Matrices must keep
-            // source A==0 fully transparent; otherwise Opacity(0.165) greys the map.
+          // Weather tiles are RGBA with partial alpha. Matrices must keep
+          // source A==0 fully transparent; opacity is folded into the A row.
+          if (_showClouds)
             _openWeatherMapWidget(
               'clouds_new',
-              const ColorFilter.matrix(<double>[
-                // Solid red where clouds exist; alpha from source (boosted).
-                0, 0, 0, 0, 255, // R
-                0, 0, 0, 0, 0, // G
-                0, 0, 0, 0, 0, // B
-                0, 0, 0, 2, 0, // A = 2 * sourceA (0 stays 0)
-              ]),
+              _cloudsFilter,
+              _cloudsTileUpdateTransformer,
             ),
-          if (kIsWeb ||
-              !Platform.isAndroid ||
-              (Platform.isAndroid &&
-                  _memory != null &&
-                  _memory!.totalMem != null &&
-                  _memory!.totalMem! >= 4000))
+          if (_showWind)
             _openWeatherMapWidget(
               'wind_new',
-              const ColorFilter.matrix(<double>[
-                // Solid red where wind is drawn; alpha from source (boosted).
-                0, 0, 0, 0, 255, // R
-                0, 0, 0, 0, 0, // G
-                0, 0, 0, 0, 0, // B
-                0, 0, 0, 2, 0, // A = 2 * sourceA (0 stays 0)
-              ]),
+              _windFilter,
+              _windTileUpdateTransformer,
             ),
-          if (kIsWeb ||
-              !Platform.isAndroid ||
-              (Platform.isAndroid &&
-                  _memory != null &&
-                  _memory!.totalMem != null &&
-                  _memory!.totalMem! >= 8000))
+          if (_showTemp)
             _openWeatherMapWidget(
               'temp_new',
-              const ColorFilter.matrix(<double>[
-                // Keep the original red extraction; drive alpha from the same
-                // signal so non-matching temps stay transparent (not a full wash).
-                1, -2, 6, 0, -255, // R
-                0, 0, 0, 0, 0, // G
-                0, 0, 0, 0, 0, // B
-                1, -2, 6, 0, -255, // A = same as R (neg/zero => transparent)
-              ]),
+              _tempFilter,
+              _tempTileUpdateTransformer,
             ),
 
           MarkerLayer(markers: _markers),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: html.Html(
-              data:
-                  '<div style="color: #00ffff;">Markers show last 48hr nuptial flights.<br/>Marker size indicates species size.<br/>Weather <a href="http://openweathermap.org">&copy; OpenWeatherMap</a><br/>Tiles <a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a><br/>Map data <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap</a><br/><br/><br/></div>',
-              onLinkTap: (url, attributes, element) => Utils.launchURL(url!),
-            ),
-          ),
+          const _MapAttribution(),
         ],
       ),
     );
   }
 
-  SingleChildRenderObjectWidget _openWeatherMapWidget(String layer, ColorFilter colorFilter) {
-    return Opacity(
-      opacity: 0.165,
+  /// One [ColorFiltered] around the whole layer (not per-tile) is much cheaper
+  /// during pan/zoom than a [tileBuilder] wrapping every tile.
+  Widget _openWeatherMapWidget(
+    String layer,
+    ColorFilter colorFilter,
+    TileUpdateTransformer tileUpdateTransformer,
+  ) {
+    return ColorFiltered(
+      colorFilter: colorFilter,
       child: TileLayer(
         wmsOptions: WMSTileLayerOptions(
           baseUrl: 'https://maps.bitbot.com.au/service?',
@@ -229,14 +267,15 @@ class _MapPageState extends State<MapPage> {
         userAgentPackageName: 'au.com.bitbot.nuptialflight',
         minZoom: 0,
         maxZoom: 19,
+        tileDisplay: const TileDisplay.instantaneous(),
+        // Weather overlays can lag the camera a bit; prefer fewer tile churn events.
+        tileUpdateTransformer: tileUpdateTransformer,
+        keepBuffer: 1,
+        panBuffer: 0,
         additionalOptions: {
           'ext': 'png',
           'layer': layer,
           //'apiKey': dotenv.env['OPENWEATHERMAP_MAP_KEY']!,
-        },
-        //backgroundColor: Colors.black,
-        tileBuilder: (context, tileWidget, tile) {
-          return ColorFiltered(colorFilter: colorFilter, child: tileWidget);
         },
       ),
     );
@@ -288,5 +327,65 @@ class _MapPageState extends State<MapPage> {
       });
       debugPrint("_getMemoryInfo: totalMem=${memory.totalMem}");
     }
+  }
+}
+
+/// Lightweight attribution (no flutter_html parsing on every map rebuild).
+class _MapAttribution extends StatelessWidget {
+  const _MapAttribution();
+
+  static const TextStyle _style = TextStyle(
+    color: Color(0xFF00FFFF),
+    fontSize: 11,
+    height: 1.25,
+  );
+
+  static const TextStyle _linkStyle = TextStyle(
+    color: Color(0xFF00FFFF),
+    fontSize: 11,
+    height: 1.25,
+    decoration: TextDecoration.underline,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomLeft,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(6, 0, 6, 28),
+        child: DefaultTextStyle(
+          style: _style,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Markers show last 48hr nuptial flights.'),
+              const Text('Marker size indicates species size.'),
+              _linkLine('Weather ', '© OpenWeatherMap', 'http://openweathermap.org'),
+              _linkLine('Tiles ', '© MapTiler', 'https://www.maptiler.com/copyright/'),
+              _linkLine('Map data ', '© OpenStreetMap', 'https://www.openstreetmap.org/copyright'),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _linkLine(String prefix, String label, String url) {
+    return Text.rich(
+      TextSpan(
+        text: prefix,
+        children: [
+          WidgetSpan(
+            alignment: PlaceholderAlignment.baseline,
+            baseline: TextBaseline.alphabetic,
+            child: GestureDetector(
+              onTap: () => Utils.launchURL(url),
+              child: Text(label, style: _linkStyle),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
