@@ -56,17 +56,19 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _loadData() async {
-    ArangoSingleton().getRecentFlights().then(
-      (value) => value.forEach((row) {
-        //debugPrint("_loadData: row=$row");
-        _markers.add(
-          Marker(
-            point: new LatLng(row['lat'], row['lon']),
-            child: _MarkerIcon(key: row['key'], size: row['size'], weather: row['weather']),
-          ),
-        );
-      }),
-    );
+    ArangoSingleton().getRecentFlights().then((value) {
+      if (!mounted) return;
+      setState(() {
+        _markers = value
+            .map(
+              (row) => Marker(
+                point: LatLng(row['lat'], row['lon']),
+                child: _MarkerIcon(key: row['key'], size: row['size'], weather: row['weather']),
+              ),
+            )
+            .toList();
+      });
+    });
 
     try {
       //debugPrint("_loadData: Before findLocation()");
@@ -151,13 +153,16 @@ class _MapPageState extends State<MapPage> {
                   _memory != null &&
                   _memory!.totalMem != null &&
                   _memory!.totalMem! >= 10000))
+            // Weather tiles are RGBA with partial alpha. Matrices must keep
+            // source A==0 fully transparent; otherwise Opacity(0.165) greys the map.
             _openWeatherMapWidget(
               'clouds_new',
               const ColorFilter.matrix(<double>[
-                0, 0, 0, 510, 0, // R
+                // Solid red where clouds exist; alpha from source (boosted).
+                0, 0, 0, 0, 255, // R
                 0, 0, 0, 0, 0, // G
                 0, 0, 0, 0, 0, // B
-                0, 0, 0, -2, 510, // A
+                0, 0, 0, 2, 0, // A = 2 * sourceA (0 stays 0)
               ]),
             ),
           if (kIsWeb ||
@@ -169,10 +174,11 @@ class _MapPageState extends State<MapPage> {
             _openWeatherMapWidget(
               'wind_new',
               const ColorFilter.matrix(<double>[
-                0, 0, 0, 637, 0, // R
+                // Solid red where wind is drawn; alpha from source (boosted).
+                0, 0, 0, 0, 255, // R
                 0, 0, 0, 0, 0, // G
                 0, 0, 0, 0, 0, // B
-                0, 0, 0, 637, 0, // A
+                0, 0, 0, 2, 0, // A = 2 * sourceA (0 stays 0)
               ]),
             ),
           if (kIsWeb ||
@@ -184,10 +190,12 @@ class _MapPageState extends State<MapPage> {
             _openWeatherMapWidget(
               'temp_new',
               const ColorFilter.matrix(<double>[
+                // Keep the original red extraction; drive alpha from the same
+                // signal so non-matching temps stay transparent (not a full wash).
                 1, -2, 6, 0, -255, // R
                 0, 0, 0, 0, 0, // G
                 0, 0, 0, 0, 0, // B
-                0, 0, 2, 0, -60, // A
+                1, -2, 6, 0, -255, // A = same as R (neg/zero => transparent)
               ]),
             ),
 

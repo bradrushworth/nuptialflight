@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:darango/darango.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 
@@ -27,8 +28,22 @@ class ArangoSingleton {
   }
 
   Future<void> init() async {
-    _arangoClient = Database('https://api.bitbot.com.au:8530');
-    await _arangoClient!.connect('nuptialFlight', 'nuptialflight', 'fdggdsgdfstg34wfwfwff');
+    // Ensure dotenv is loaded before accessing env keys
+    if (!dotenv.isInitialized) {
+      try {
+        await dotenv.load(fileName: 'assets/.env');
+      } catch (e) {
+        debugPrint("Failed to load .env in ArangoSingleton: $e");
+      }
+    }
+
+    final String url = dotenv.env['ARANGO_URL'] ?? 'https://api.bitbot.com.au:8530';
+    final String dbName = dotenv.env['ARANGO_DB_NAME'] ?? 'nuptialFlight';
+    final String user = dotenv.env['ARANGO_USER'] ?? 'nuptialflight';
+    final String password = dotenv.env['ARANGO_PASSWORD'] ?? 'fdggdsgdfstg34wfwfwff';
+
+    _arangoClient = Database(url);
+    await _arangoClient!.connect(dbName, user, password);
   }
 
   Future<void> _ensureConnected() async {
