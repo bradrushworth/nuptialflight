@@ -175,7 +175,9 @@ class _MapPageState extends State<MapPage> {
           initialZoom: defaultZoom,
           minZoom: 2,
           maxZoom: 9,
-          backgroundColor: Colors.black,
+          // Match MapTiler backdrop charcoal so unloaded tiles aren't stark black.
+          backgroundColor: const Color(0xFF2A2A2A),
+
           onLongPress: (position, latLng) {
             _weatherFetcher.setLocation(latLng);
             Navigator.of(context).push(
@@ -192,18 +194,13 @@ class _MapPageState extends State<MapPage> {
           ),
         ),
         children: <Widget>[
+          // OSM/Google-compatible tile service (not /tms — that inverts Y).
+          // Requires `tiles:` under services in mapproxy.yaml. Weather stays on WMS.
           TileLayer(
-            wmsOptions: WMSTileLayerOptions(
-              baseUrl: 'https://maps.bitbot.com.au/service?',
-              layers: ['backdrop'],
-            ),
-            // urlTemplate:
-            // //'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}',
-            // //'https://maps.bitbot.com.au/tiles/backdrop/{z}/{x}/{y}.{ext}?origin=sw',
-            // 'https://maps.bitbot.com.au/tms/1.0.0/backdrop/EPSG3857/{z}/{x}/{y}.{ext}?origin=nw',
-            // //'https://api.maptiler.com/maps/backdrop/{z}/{x}/{y}.png?key={apiKey}',
-            subdomains: ['a', 'b', 'c'],
+            urlTemplate:
+                'https://maps.bitbot.com.au/tiles/1.0.0/backdrop/EPSG3857/{z}/{x}/{y}.png',
             userAgentPackageName: 'au.com.bitbot.nuptialflight',
+
             minZoom: 0,
             maxZoom: 20,
             // Instant show avoids fade animations fighting pan/zoom.
@@ -211,10 +208,6 @@ class _MapPageState extends State<MapPage> {
             // Slightly tighter than defaults (keep=2, pan=1) to cut retained tiles.
             keepBuffer: 1,
             panBuffer: 0,
-            additionalOptions: {
-              'ext': 'png',
-              //'apiKey': dotenv.env['MAPTILER_MAP_KEY']!,
-            },
           ),
 
           // Weather tiles are RGBA with partial alpha. Matrices must keep
