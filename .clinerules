@@ -60,15 +60,27 @@ calls. Caching in `HomeWidget`/`shared_preferences` would make repeat
 launches instant — a good future task.
 
 ## Verification
-- `flutter analyze` reports 0 errors in the edited files. The only
-  findings are pre-existing `deprecated_member_use` info-warnings in
-  `screenshots_other.dart`, `widgets_mobile.dart`, `utils.dart`
-  (use of `dart:html`, `registerBackgroundCallback`, `canLaunch`/`launch`).
-  Do not "fix" these by upgrading packages unless asked — they are
-  out of scope and risk breaking the build.
+- `flutter analyze` reports 0 errors. The only findings are pre-existing
+  `deprecated_member_use` info-warnings in `screenshots_other.dart`,
+  `widgets_mobile.dart`, `utils.dart` (use of `dart:html`,
+  `registerBackgroundCallback`, `canLaunch`/`launch`). Do not "fix" these
+  by upgrading packages unless asked — they are out of scope and risk
+  breaking the build.
+- Current app version: **2.13.5+130** (bumped 2026-07-18 along with
+  `geolocator` ^14.0.3, `device_preview_plus` ^2.8.4, and transitive
+  deps). `flutter analyze` stayed at 0 errors after the bump.
 
 ## Guardrails
 - Keep first-page load fast: do not re-introduce `await` on
   `initializeService()` or the notification permission before `runApp()`.
 - Do not hand-edit the generated `models/*.dart` score trees.
 - Prefer `git -C` and verify with `flutter analyze` before claiming done.
+- `flutter pub upgrade` has been observed to HANG for many minutes
+  (stuck resolving git deps). If it does not finish quickly, kill the
+  `dart.exe` processes and use `flutter pub get` instead to reconcile
+  `pubspec.lock`. Note: `flutter pub get` may print a non-fatal
+  Windows error about deleting `windows/flutter/ephemeral/.plugin_symlinks`
+  — that is a desktop-build dir permission quirk and is safe to ignore.
+- README.md was expanded (2026-07-18) with features, data flow,
+  setup/.env template, and project structure — keep it in sync if you
+  add user-facing features or change required API keys.

@@ -11,6 +11,10 @@ widget and background-fetch notifications.
 Repo: https://github.com/bradrushworth/nuptialflight
 Web: https://nuptialflight.app/
 
+Current app version: **2.13.5+130** (deps bumped 2026-07-18:
+`geolocator` ^14.0.3, `device_preview_plus` ^2.8.4, plus transitive).
+`flutter analyze` reports 0 errors (only pre-existing deprecation info-warnings).
+
 ## Build / tooling notes
 - Flutter SDK lives at `C:/Users/Brad/flutter` (not the pub cache).
 - The agent's *primary working directory* is often a pub-cache `android`
@@ -58,7 +62,15 @@ calls. Caching in `HomeWidget`/`shared_preferences` would make repeat
 launches instant — a good future task.
 
 ## Verification
-- `flutter analyze` reports 0 errors in the edited files. The only
-  findings are pre-existing `deprecated_member_use` info-warnings in
-  `screenshots_other.dart`, `widgets_mobile.dart`, `utils.dart`
-  (use of `dart:html`, `registerBackgroundCallback`, `canLaunch`/`launch`).
+- `flutter analyze` reports 0 errors. The only findings are pre-existing
+  `deprecated_member_use` info-warnings in `screenshots_other.dart`,
+  `widgets_mobile.dart`, `utils.dart` (use of `dart:html`,
+  `registerBackgroundCallback`, `canLaunch`/`launch`). Do not "fix"
+  these by upgrading packages unless asked — they are out of scope.
+- README.md was expanded (2026-07-18) with features, data flow,
+  setup/.env template, and project structure — keep it in sync if you
+  add user-facing features or change required API keys.
+- `flutter pub upgrade` has been observed to HANG for many minutes
+  (stuck resolving git deps). If it does not finish quickly, kill the
+  `dart.exe` processes and use `flutter pub get` to reconcile
+  `pubspec.lock` instead.
