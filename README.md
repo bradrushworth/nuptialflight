@@ -1,7 +1,7 @@
 # Ant Nuptial Flight Predictor
 
 A Flutter app (Android / iOS / Web) that tells you the best days to go
-ant-watching. It downloads the weather at your location and estimates the
+ant collecting. It downloads the weather at your location and estimates the
 likelihood that queen ants are undertaking their nuptial (mating) flights
 near you — today and for the next week. When the percentage is high, it's
 time to get outside and look for ants in your local area!
