@@ -25,8 +25,8 @@ Web: https://nuptialflight.app/
 
 ## Key source files
 - `lib/main.dart` — app entry (`main()`), `MyHomePage` / `_MyHomePageState`.
-  Owns the first-page load flow: `_loadData()` → `_getLocation()` →
-  `_getWeather()` → `_updateWeather()`. Shows a `CircularProgressIndicator`
+  Owns the first-page load flow: `_loadData()` -> `_getLocation()` ->
+  `_getWeather()` -> `_updateWeather()`. Shows a `CircularProgressIndicator`
   until `loaded == true`.
 - `lib/controller/weather_fetcher.dart` — `WeatherFetcher`: location
   lookup (`findLocation`), and the 3 OpenWeatherMap calls
@@ -51,7 +51,7 @@ non-rendering work. Fixed in commit `6123340`:
    and only falls back to an active GPS fix when none exists, avoiding the
    previous double full weather fetch on every launch. Also fixes the
    first-launch case (no cached position) which used to throw.
-4. Active-GPS `timeLimit` reduced 30s → 10s (`weather_fetcher.dart`).
+4. Active-GPS `timeLimit` reduced 30s -> 10s (`weather_fetcher.dart`).
 
 NOT yet done: response caching. Every launch still repeats the 3 OWM
 calls. Caching in `HomeWidget`/`shared_preferences` would make repeat
