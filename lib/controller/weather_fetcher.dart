@@ -31,10 +31,22 @@ class WeatherFetcher {
         Position? position;
         if (kIsWeb || waitForPosition) {
           try {
-          position = await Geolocator.getCurrentPosition(
-              locationSettings: const LocationSettings(
-                  accuracy: LocationAccuracy.low,
-                  timeLimit: Duration(seconds: 10)));
+            // NOTE: geolocator's web backend ignores `timeLimit` inside
+            // LocationSettings (it only maps to enableHighAccuracy), so a
+            // blocked/dismissed browser geolocation prompt can hang forever
+            // and leave the app on a permanent spinner. Enforce a real
+            // Dart-level timeout so we always fall through to the error path.
+            position = await Geolocator.getCurrentPosition(
+                    locationSettings: const LocationSettings(
+                        accuracy: LocationAccuracy.low,
+                        timeLimit: Duration(seconds: 10)))
+                .timeout(const Duration(seconds: 8));
+          } on TimeoutException {
+            developer.log(
+                "Timed out waiting for current position (web geolocation "
+                "may be blocked or requires a user gesture).",
+                name: 'WeatherFetcher');
+            position = null;
           } catch (exception) {
             developer.log("Can't get current position: exception=$exception",
                 name: 'WeatherFetcher', error: exception);
