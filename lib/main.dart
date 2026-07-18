@@ -46,9 +46,6 @@ const int amberThreshold = 50;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initialiseWidget();
-  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-    await initializeService();
-  }
   runApp(
     DevicePreview(
       enabled: !kReleaseMode && kIsWeb,
@@ -56,6 +53,10 @@ Future<void> main() async {
       tools: kIsWeb ? [...DevicePreview.defaultTools, simpleScreenShotModesPlugin] : [],
     ),
   );
+  // Initialise background services without blocking the first frame.
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+    unawaited(initializeService());
+  }
 }
 
 class MyMaterialApp extends StatefulWidget {
@@ -253,9 +254,14 @@ class _MyHomePageState extends State<MyHomePage> {
     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
 
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestNotificationsPermission();
+    // Requesting notification permission can block the first data fetch, so do
+    // not await it. The permission prompt resolves in parallel with the network
+    // calls that actually fill the first page.
+    unawaited(
+      flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+          ?.requestNotificationsPermission(),
+    );
 
     // Get location data now and every hour
     _getLocation(false);
@@ -289,22 +295,24 @@ class _MyHomePageState extends State<MyHomePage> {
           )
           .catchError((e) => handleError(e));
     } else {
-      // Try to passively then actively determine the location.
-      // Only update the Android widget for the current location.
-      weatherFetcher
-          .findLocation(false)
-          .then((updated) => updated || forceUpdate ? _getWeather() : Future.value())
-          .then((nothing) => updateAppWidget(_dailyPercentage))
-          .then(
-            (nothing) => print("findLocation(passive): _percentage=" + _dailyPercentage.toString()),
-          )
-          .then((nothing) => weatherFetcher.findLocation(true))
-          .then((updated) => updated ? _getWeather() : Future.value())
-          .then((nothing) => updateAppWidget(_dailyPercentage))
-          .then(
-            (nothing) => print("findLocation(active): _percentage=" + _dailyPercentage.toString()),
-          )
-          .catchError((e) => handleLocationError(e));
+      // Get a fast passive location first and render the page. Only fall back to
+      // an active GPS fix (with a short timeout) if the passive lookup failed,
+      // which avoids doing the whole 3-call weather fetch twice on every launch.
+      weatherFetcher.findLocation(false).then((updated) {
+        if (updated || forceUpdate) {
+          return _getWeather().then((_) => updateAppWidget(_dailyPercentage));
+        }
+        print("findLocation(passive): no update _percentage=" + _dailyPercentage.toString());
+        // Passive location unavailable (e.g. first launch) - try active GPS.
+        return weatherFetcher
+            .findLocation(true)
+            .then((updated2) => updated2 ? _getWeather() : Future.value())
+            .then((_) => updateAppWidget(_dailyPercentage))
+            .then(
+              (nothing) =>
+                  print("findLocation(active): _percentage=" + _dailyPercentage.toString()),
+            );
+      }).catchError((e) => handleLocationError(e));
     }
   }
 
