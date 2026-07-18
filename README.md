@@ -46,6 +46,25 @@ OPENWEATHERMAP_API_KEY=<your secret key>
 
 setting your free https://home.openweathermap.org/api_keys key.
 
+## First-load performance
+
+The first page shows a spinner until location + weather are fetched. To keep that
+fast, the startup path avoids blocking work:
+
+* `initializeService()` (background-fetch config + notification channels) runs
+  **after** `runApp()` via `unawaited(...)`, so it never delays the first frame.
+* The notification-permission prompt is **not** awaited in `_loadData()` — it is
+  fired with `unawaited(...)` so the location/weather network calls start immediately.
+* `_getLocation()` does a fast passive `getLastKnownPosition()` first and only
+  falls back to an active GPS fix when no cached position exists. This avoids
+  fetching the 3 OpenWeatherMap endpoints twice on every launch.
+* The active GPS fix uses a 10-second `timeLimit` (was 30s) so a first launch
+  with no cached position cannot hang for half a minute.
+
+There is intentionally **no response caching** yet — every launch repeats the
+weather calls. Adding caching (e.g. in `HomeWidget`/`shared_preferences`) would
+make repeat launches instant.
+
 ## Attribution
 
 Code originally forked from https://github.com/ashgarg143/AppWidgetFlutter
