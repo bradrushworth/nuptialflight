@@ -342,10 +342,14 @@ class _MapAttribution extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Keep the attribution clear of the Android system navigation bar
+    // (3-button / gesture). MediaQuery.padding.bottom is the system
+    // UI inset, so the text no longer sits under the nav buttons.
+    final double navInset = MediaQuery.of(context).padding.bottom;
     return Align(
       alignment: Alignment.bottomLeft,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(6, 0, 6, 28),
+        padding: EdgeInsets.fromLTRB(6, 0, 6, 28 + navInset),
         child: DefaultTextStyle(
           style: _style,
           child: Column(
