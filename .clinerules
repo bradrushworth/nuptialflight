@@ -66,9 +66,9 @@ launches instant — a good future task.
   `registerBackgroundCallback`, `canLaunch`/`launch`). Do not "fix" these
   by upgrading packages unless asked — they are out of scope and risk
   breaking the build.
-- Current app version: **2.13.5+130** (bumped 2026-07-18 along with
+- Current app version: **2.13.6+131** (web geolocation-hang fix bump; 2.13.5+130 bumped 2026-07-18 along with
   `geolocator` ^14.0.3, `device_preview_plus` ^2.8.4, and transitive
-  deps). `flutter analyze` stayed at 0 errors after the bump.
+  deps). `flutter analyze` stays at 0 errors.
 
 ## Guardrails
 - Keep first-page load fast: do not re-introduce `await` on
