@@ -11,7 +11,8 @@ widget and background-fetch notifications.
 Repo: https://github.com/bradrushworth/nuptialflight
 Web: https://nuptialflight.app/
 
-Current app version: **2.13.8+133** (response caching via shared_preferences + map attribution contrast; 2.13.7+132 web map crash fix).
+Current app version: **2.13.9+134** (fix shared_preferences MissingPluginException in tests; 2.13.8+133 response caching + map attribution contrast).
+flutter analyze stays at 0 errors (only pre-existing deprecation info-warnings).
 flutter analyze stays at 0 errors (only pre-existing deprecation info-warnings).
 `flutter analyze` reports 0 errors (only pre-existing deprecation info-warnings).
 

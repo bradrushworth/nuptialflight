@@ -67,7 +67,7 @@ reuse cached responses, cutting paid OWM calls.
   `registerBackgroundCallback`, `canLaunch`/`launch`). Do not "fix" these
   by upgrading packages unless asked — they are out of scope and risk
   breaking the build.
-- Current app version: **2.13.8+133** (response caching via shared_preferences + map attribution contrast; 2.13.7+132 web map crash fix for the memory_info MissingPluginException). `flutter analyze` stays at 0 errors.
+- Current app version: **2.13.9+134** (fix shared_preferences MissingPluginException in tests; 2.13.8+133 response caching + map attribution contrast). `flutter analyze` stays at 0 errors.
 
 ## Guardrails
 - Keep first-page load fast: do not re-introduce `await` on
