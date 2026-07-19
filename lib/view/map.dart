@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -299,13 +299,18 @@ class _MapPageState extends State<MapPage> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> _getMemoryInfo() async {
+    // memory_info has no web (or desktop) implementation, so skip it there to
+    // avoid a MissingPluginException. The web/desktop tiles don't depend on
+    // _memory (the show* getters short-circuit on kIsWeb / non-Android).
+    if (kIsWeb) return;
+
     Memory? memory;
 
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
       memory = await MemoryInfoPlugin().memoryInfo;
-    } on PlatformException catch (e) {
+    } catch (e) {
       print('error $e');
     }
 
