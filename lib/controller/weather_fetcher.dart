@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:nuptialflight/responses/onecall_response.dart';
 import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:nuptialflight/responses/weather_response.dart';
 
 class WeatherFetcher {
@@ -159,6 +160,59 @@ class WeatherFetcher {
     }
   }
 
+  // --- OpenWeatherMap response caching (shared_preferences) ---
+  // Cuts paid OWM API calls: repeat launches and the 15-min background
+  // fetch reuse a recent response while it is still fresh. The cache key
+  // is scoped to the rounded lat/lon so a real move invalidates it.
+  static const Duration _ttlForecast = Duration(minutes: 30);
+  static const Duration _ttlReverseGeocode = Duration(hours: 24);
+  static const Duration _ttlHistorical = Duration(days: 30);
+
+  String _cacheKey(String endpoint, {int? dt}) {
+    final lat = (_lat ?? 0).toStringAsFixed(2);
+    final lon = (_lon ?? 0).toStringAsFixed(2);
+    var key = 'owm_' + endpoint + '_' + lat + '_' + lon;
+    if (dt != null) key += '_' + dt.toString();
+    return key;
+  }
+
+  Future<T> _fetchCached<T>({
+    required String url,
+    required String endpoint,
+    required Duration ttl,
+    required String errorPrefix,
+    required T Function(String body) parse,
+    int? dt,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = _cacheKey(endpoint, dt: dt);
+    final raw = prefs.getString(key);
+    if (raw != null) {
+      try {
+        final map = jsonDecode(raw) as Map<String, dynamic>;
+        final ts = (map['ts'] as int?) ?? 0;
+        if (DateTime.now().millisecondsSinceEpoch - ts < ttl.inMilliseconds) {
+          return parse(map['body'] as String);
+        }
+      } catch (_) {
+        // Corrupt entry - fall through to a fresh network fetch.
+      }
+    }
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode != 200) {
+      throw Exception(errorPrefix + '!\n\n' + response.body);
+    }
+    final body = response.body;
+    try {
+      await prefs.setString(
+        key,
+        jsonEncode({'ts': DateTime.now().millisecondsSinceEpoch, 'body': body}),
+      );
+    } catch (_) {
+      // Persistence is best-effort; never block the UI on a write failure.
+    }
+    return parse(body);
+  }
   Future<ReverseGeocodingResponse> fetchReverseGeocoding() async {
     if (_lat == null || _lon == null)
       throw Exception(
@@ -168,21 +222,19 @@ class WeatherFetcher {
         'https://api.openweathermap.org/geo/1.0/reverse?lat=${_lat!.toStringAsFixed(4)}&lon=${_lon!.toStringAsFixed(4)}&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&limit=1';
     print("url=$url");
 
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      List json = jsonDecode(response.body);
-      if (json.length != 1) {
-        throw Exception('Unexpected reverse geocoding response!');
-      }
-      return ReverseGeocodingResponse.fromJson(json.first);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load reverse geocoding!\n\n' + response.body);
-    }
+    return _fetchCached<ReverseGeocodingResponse>(
+      url: url,
+      endpoint: 'reverse',
+      ttl: _ttlReverseGeocode,
+      errorPrefix: 'Failed to load reverse geocoding',
+      parse: (b) {
+        final json = jsonDecode(b) as List;
+        if (json.length != 1) {
+          throw Exception('Unexpected reverse geocoding response!');
+        }
+        return ReverseGeocodingResponse.fromJson(json.first);
+      },
+    );
   }
 
   Future<CurrentWeatherResponse> fetchNearestWeatherLocation() async {
@@ -194,17 +246,13 @@ class WeatherFetcher {
         'https://api.openweathermap.org/data/2.5/weather?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&mode=json';
     print("url=$url");
 
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return CurrentWeatherResponse.fromJson(jsonDecode(response.body));
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to download current weather!\n\n' + response.body);
-    }
+    return _fetchCached<CurrentWeatherResponse>(
+      url: url,
+      endpoint: 'nearest',
+      ttl: _ttlForecast,
+      errorPrefix: 'Failed to download current weather',
+      parse: (b) => CurrentWeatherResponse.fromJson(jsonDecode(b)),
+    );
   }
 
   Future<OneCallResponse> fetchWeather() async {
@@ -215,17 +263,13 @@ class WeatherFetcher {
         'https://api.openweathermap.org/data/3.0/onecall?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&exclude=minutely,current';
     print("url=$url");
 
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return OneCallResponse.fromJson(jsonDecode(response.body));
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to download weather!\n\n' + response.body);
-    }
+    return _fetchCached<OneCallResponse>(
+      url: url,
+      endpoint: 'onecall',
+      ttl: _ttlForecast,
+      errorPrefix: 'Failed to download weather',
+      parse: (b) => OneCallResponse.fromJson(jsonDecode(b)),
+    );
   }
 
   Future<OneCallResponse> fetchHistoricalWeather(int dt) async {
@@ -237,17 +281,13 @@ class WeatherFetcher {
         'https://api.openweathermap.org/data/3.0/onecall/timemachine?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&dt=$dt';
     print("url=$url");
 
-    final response = await http.get(Uri.parse(url));
-    print("WeatherFetcher: response=${response.body}");
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return OneCallResponse.fromJson(jsonDecode(response.body));
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to download historical weather!\n\n' + response.body);
-    }
+    return _fetchCached<OneCallResponse>(
+      url: url,
+      endpoint: 'timemachine',
+      ttl: _ttlHistorical,
+      dt: dt,
+      errorPrefix: 'Failed to download historical weather',
+      parse: (b) => OneCallResponse.fromJson(jsonDecode(b)),
+    );
   }
 }

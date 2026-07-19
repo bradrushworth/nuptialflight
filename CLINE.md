@@ -57,9 +57,10 @@ non-rendering work. Fixed in commit `6123340`:
    first-launch case (no cached position) which used to throw.
 4. Active-GPS `timeLimit` reduced 30s -> 10s (`weather_fetcher.dart`).
 
-NOT yet done: response caching. Every launch still repeats the 3 OWM
-calls. Caching in `HomeWidget`/`shared_preferences` would make repeat
-launches instant — a good future task.
+Response caching is implemented in `weather_fetcher.dart` via `_fetchCached`
+(`shared_preferences`, keyed by rounded lat/lon). Per-endpoint TTLs: 30 min
+current/forecast, 24 h reverse geocode, 30 days historical. Repeat launches
+reuse cached responses, cutting paid OWM calls.
 
 ## Verification
 - `flutter analyze` reports 0 errors. The only findings are pre-existing

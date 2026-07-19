@@ -162,9 +162,11 @@ fast, the startup path avoids blocking work:
 * The active GPS fix uses a 10-second `timeLimit` (was 30s) so a first launch
   with no cached position cannot hang for half a minute.
 
-There is intentionally **no response caching** yet — every launch repeats the
-weather calls. Adding caching (e.g. in `HomeWidget`/`shared_preferences`) would
-make repeat launches instant.
+OpenWeatherMap responses are now cached in `shared_preferences` (keyed by rounded
+lat/lon, so a real move invalidates the cache) with per-endpoint TTLs: 30 min for
+current/forecast, 24 h for reverse geocoding, 30 days for historical. Repeat
+launches and the 15-min background fetch reuse a fresh-enough response, cutting
+paid OWM API calls.
 
 ---
 
