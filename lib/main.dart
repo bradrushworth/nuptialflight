@@ -145,7 +145,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final AutoSizeGroup headingGroup = AutoSizeGroup();
   final AutoSizeGroup parameterGroup = AutoSizeGroup();
   final AutoSizeGroup suitabilityGroup = AutoSizeGroup();
-  final AutoSizeGroup histogramGroup = AutoSizeGroup();
   final AutoSizeGroup histogramLegendGroup = AutoSizeGroup();
 
   late final List<Choice> choices;
@@ -616,7 +615,9 @@ class _MyHomePageState extends State<MyHomePage> {
               // ignored the app bar / system UI / keyboard and caused
               // inconsistent element gating across screen sizes.
               final double availH = constraints.maxHeight;
-              final bool isTall = availH >= 680;
+              // Compact layout for small portrait phones so the whole page fits without
+              // scrolling (emoji scale + version stay on screen).
+              final bool compact = orientation == Orientation.portrait && availH < 680;
               //print('constraints.maxHeight=${constraints.maxHeight}');
               return errorMessage != null
                   ? _buildErrorMessage()
@@ -644,7 +645,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             shrinkWrap: true,
                             padding: EdgeInsets.symmetric(vertical: 0),
                             children: [
-                                  if (orientation == Orientation.landscape || isTall)
+                                  if (orientation == Orientation.portrait || orientation == Orientation.landscape)
                                     _buildNuptialHeading(orientation),
                               GestureDetector(
                                 onTap: () {
@@ -674,23 +675,22 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ],
                                 ),
                               ),
-                                  if (orientation == Orientation.portrait && isTall)
+                                  if (orientation == Orientation.portrait)
                                     _buildTodayHistogram(constraints),
                               _buildTodayWeather(orientation),
                             ],
                           ),
                         ),
-                            if (orientation == Orientation.landscape && isTall)
+                            if (orientation == Orientation.landscape)
                               _buildTodayHistogram(constraints),
-                            _buildWeatherGrid(orientation, constraints),
+                            _buildWeatherGrid(orientation, constraints, compact),
                             _buildUpcomingWeek(orientation, availH),
                             if (orientation == Orientation.portrait)
-                              Container(padding: const EdgeInsets.symmetric(vertical: 20))
+                              Container(padding: EdgeInsets.symmetric(vertical: compact ? 4 : 20))
                             else
                               Container(padding: const EdgeInsets.symmetric(vertical: 10)),
-                            if (orientation == Orientation.portrait || isTall)
-                              _buildEmojiInstructions(),
-                            if (orientation == Orientation.portrait || !isTall)
+                            _buildEmojiInstructions(),
+                            if (orientation == Orientation.portrait)
                               Container(padding: const EdgeInsets.symmetric(vertical: 0))
                             else
                               Container(padding: const EdgeInsets.symmetric(vertical: 4)),
@@ -702,7 +702,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         // TODO: Hack for bug in Android at the moment
                             if (!kIsWeb && Platform.isAndroid && orientation == Orientation.portrait)
-                              Container(padding: const EdgeInsets.symmetric(vertical: 20)),
+                              Container(padding: EdgeInsets.symmetric(vertical: compact ? 4 : 20)),
                           ],
                         ),
                       ),
@@ -898,12 +898,12 @@ class _MyHomePageState extends State<MyHomePage> {
               ? 'Confidence of Nuptial Flight'
               : 'Confidence of Ant\nNuptial Flight',
           style: TextStyle(
-            height: orientation == Orientation.portrait ? 3.0 : 1.2,
+            height: orientation == Orientation.portrait ? 2.6 : 1.2,
             fontSize: 22,
             fontWeight: FontWeight.w600,
           ),
           minFontSize: 16,
-          maxFontSize: 24,
+          maxFontSize: 22,
           textScaleFactor: 1,
           textAlign: TextAlign.center,
           softWrap: true,
@@ -982,28 +982,10 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            Container(
-              height: constraints.maxHeight * 0.15,
-              child: FittedBox(
-                child: RotatedBox(
-                  quarterTurns: 0,
-                  child: AutoSizeText(
-                    ' ', //percentage > 0 ? '${percentage}%' : '???',
-                    minFontSize: 2,
-                    maxFontSize: 12,
-                    stepGranularity: 1.0,
-                    group: histogramGroup,
-                    style: TextStyle(color: getColorGradient(percentage), fontSize: 2),
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                  ),
-                ),
-              ),
-            ),
             SizedBox(height: constraints.maxHeight * 0.05),
             Container(
-              height: constraints.maxHeight * 0.6,
-              width: width / 32,
+              height: constraints.maxHeight * 0.75,
+              width: width / 24 * 0.72,
               child: Stack(
                 children: <Widget>[
                   Container(
@@ -1037,7 +1019,7 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(height: constraints.maxHeight * 0.05),
             Container(
               height: constraints.maxHeight * 0.15,
-              width: width / 32,
+              width: width / 24 * 0.72,
               child: FittedBox(
                 child: AutoSizeText(
                   //index.toString().padLeft(2, '0'),
@@ -1091,7 +1073,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _buildWeatherGrid(Orientation orientation, BoxConstraints constraints) {
+  Widget _buildWeatherGrid(Orientation orientation, BoxConstraints constraints, bool compact) {
     // Use the *available* body height (constraints), not raw MediaQuery
     // height, so the extra weather rows appear consistently regardless
     // of app bar / system UI / keyboard on any screen size.
@@ -1109,7 +1091,7 @@ class _MyHomePageState extends State<MyHomePage> {
         childAspectRatio: constraints.maxHeight >= 1000
             ? 3.75
             : orientation == Orientation.portrait
-            ? 1.90
+            ? (compact ? 1.55 : 1.90)
             : constraints.maxHeight <= 400
             ? 1.90
             : 1.95,
