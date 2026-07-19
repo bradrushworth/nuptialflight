@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as developer;
 
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_google_maps_webservices/places.dart';
@@ -15,11 +15,19 @@ import 'package:nuptialflight/responses/weather_response.dart';
 
 class WeatherFetcher {
   late bool _mockLocation;
+  // True only when mock mode was auto-enabled for a debug web launch (as opposed
+  // to a caller explicitly passing mockLocation: true, e.g. the test suite).
+  late bool _debugWebLocation;
   double? _lat;
   double? _lon;
 
   WeatherFetcher({bool mockLocation = false}) {
-    _mockLocation = mockLocation;
+    // In debug WEB builds, default to a hardwired (mock) location so the first
+    // page renders without the slow/blocking browser geolocation prompt. Mobile
+    // debug builds and all release builds still use real GPS. Callers can also
+    // force mock mode explicitly via the constructor argument.
+    _debugWebLocation = !mockLocation && kDebugMode && kIsWeb;
+    _mockLocation = mockLocation || _debugWebLocation;
   }
 
   Future<bool> findLocation(bool waitForPosition) async {
@@ -87,7 +95,15 @@ class WeatherFetcher {
         throw Exception(
             'Location permissions are denied!\n\nPlease manually enter your location.');
       }
+    } else if (_debugWebLocation) {
+      // Debug web launch: hardwire Canberra, ACT and report it as a change so the
+      // first page actually fetches weather (instead of spinning forever).
+      _lat = -35.2809;
+      _lon = 149.1300;
+      print('findLocation(debug-web): hardwired Canberra _lat=' + _lat.toString() + ' _lon=' + _lon.toString());
+      return true;
     } else {
+      // Explicit mock (e.g. the test suite): Batemans Bay fixture.
       _lat = -35.7600;
       _lon = 150.2053;
     }
