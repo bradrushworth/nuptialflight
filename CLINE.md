@@ -11,7 +11,7 @@ widget and background-fetch notifications.
 Repo: https://github.com/bradrushworth/nuptialflight
 Web: https://nuptialflight.app/
 
-Current app version: **2.13.6+131** (2.13.5+130 deps bumped 2026-07-18:
+Current app version: **2.13.7+132** (2.13.6+131 web geolocation-hang fix; 2.13.5+130 deps bumped 2026-07-18:
 `geolocator` ^14.0.3, `device_preview_plus` ^2.8.4, plus transitive).
 `flutter analyze` reports 0 errors (only pre-existing deprecation info-warnings).
 
