@@ -332,17 +332,35 @@ class _MapPageState extends State<MapPage> {
 class _MapAttribution extends StatelessWidget {
   const _MapAttribution();
 
+  // Dark body text with a soft light halo reads clearly on the white/red
+  // map tiles; no background box is used.
   static const TextStyle _style = TextStyle(
-    color: Color(0xFF00FFFF),
+    color: Colors.black87,
     fontSize: 11,
     height: 1.25,
+    shadows: <Shadow>[
+      Shadow(
+        offset: Offset(0.5, 0.5),
+        blurRadius: 2,
+        color: Color(0xAAFFFFFF),
+      ),
+    ],
   );
 
+  // Links use the same cyan as the map markers (underlined) so they
+  // stand out from the dark body text.
   static const TextStyle _linkStyle = TextStyle(
-    color: Color(0xFF00FFFF),
+    color: Colors.cyanAccent,
     fontSize: 11,
     height: 1.25,
     decoration: TextDecoration.underline,
+    shadows: <Shadow>[
+      Shadow(
+        offset: Offset(0.5, 0.5),
+        blurRadius: 2,
+        color: Color(0xAAFFFFFF),
+      ),
+    ],
   );
 
   @override
