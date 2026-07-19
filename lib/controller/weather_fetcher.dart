@@ -184,9 +184,17 @@ class WeatherFetcher {
     required T Function(String body) parse,
     int? dt,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences? prefs;
+    try {
+      prefs = await SharedPreferences.getInstance();
+    } catch (e) {
+      // The plugin can be unimplemented on some platforms (e.g. the flutter
+      // test runner or web). Degrade gracefully to no caching instead of
+      // crashing -- this mirrors how memory_info is guarded elsewhere.
+      prefs = null;
+    }
     final key = _cacheKey(endpoint, dt: dt);
-    final raw = prefs.getString(key);
+    final raw = prefs?.getString(key);
     if (raw != null) {
       try {
         final map = jsonDecode(raw) as Map<String, dynamic>;
@@ -204,7 +212,7 @@ class WeatherFetcher {
     }
     final body = response.body;
     try {
-      await prefs.setString(
+      await prefs?.setString(
         key,
         jsonEncode({'ts': DateTime.now().millisecondsSinceEpoch, 'body': body}),
       );
