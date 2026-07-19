@@ -569,7 +569,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget buildUI(String title) {
-    double height = MediaQuery.of(context).size.height;
     //double width = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -612,32 +611,41 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context, orientation) {
           return LayoutBuilder(
             builder: (ctx, constraints) {
+              // Responsive breakpoints from the body's *available* space
+              // (constraints), not raw MediaQuery height. Using MediaQuery
+              // ignored the app bar / system UI / keyboard and caused
+              // inconsistent element gating across screen sizes.
+              final double availH = constraints.maxHeight;
+              final bool isTall = availH >= 680;
               //print('constraints.maxHeight=${constraints.maxHeight}');
               return errorMessage != null
                   ? _buildErrorMessage()
                   : !loaded
-                  ? _buildCircularProgressIndicator()
-                  : Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: orientation == Orientation.portrait
-                          ? MainAxisAlignment.spaceEvenly
-                          : MainAxisAlignment.spaceEvenly,
+                      ? _buildCircularProgressIndicator()
+                          : SingleChildScrollView(
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(minHeight: availH),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: orientation == Orientation.portrait
+                                  ? MainAxisAlignment.spaceEvenly
+                                  : MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         SizedBox(
                           child: GridView.count(
                             crossAxisCount: orientation == Orientation.portrait ? 1 : 3,
                             // width/height ratio
-                            childAspectRatio: constraints.maxHeight >= 1000
-                                ? 8
-                                : orientation == Orientation.portrait
-                                ? 6
-                                : 4,
+                                childAspectRatio: availH >= 1000
+                                    ? 8
+                                    : orientation == Orientation.portrait
+                                        ? 6
+                                        : 4,
                             shrinkWrap: true,
                             padding: EdgeInsets.symmetric(vertical: 0),
                             children: [
-                              if (orientation == Orientation.landscape || height >= 860)
-                                _buildNuptialHeading(orientation),
+                                  if (orientation == Orientation.landscape || isTall)
+                                    _buildNuptialHeading(orientation),
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
@@ -666,27 +674,26 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ],
                                 ),
                               ),
-                              if (orientation == Orientation.portrait &&
-                                  constraints.maxHeight >= 700)
-                                _buildTodayHistogram(constraints),
+                                  if (orientation == Orientation.portrait && isTall)
+                                    _buildTodayHistogram(constraints),
                               _buildTodayWeather(orientation),
                             ],
                           ),
                         ),
-                        if (orientation == Orientation.landscape && constraints.maxHeight > 600)
-                          _buildTodayHistogram(constraints),
-                        _buildWeatherGrid(orientation, constraints),
-                        _buildUpcomingWeek(orientation, height),
-                        if (orientation == Orientation.portrait)
-                          Container(padding: const EdgeInsets.symmetric(vertical: 20))
-                        else
-                          Container(padding: const EdgeInsets.symmetric(vertical: 10)),
-                        if (orientation == Orientation.portrait || constraints.maxHeight > 600)
-                          _buildEmojiInstructions(),
-                        if (orientation == Orientation.portrait || constraints.maxHeight <= 600)
-                          Container(padding: const EdgeInsets.symmetric(vertical: 0))
-                        else
-                          Container(padding: const EdgeInsets.symmetric(vertical: 4)),
+                            if (orientation == Orientation.landscape && isTall)
+                              _buildTodayHistogram(constraints),
+                            _buildWeatherGrid(orientation, constraints),
+                            _buildUpcomingWeek(orientation, availH),
+                            if (orientation == Orientation.portrait)
+                              Container(padding: const EdgeInsets.symmetric(vertical: 20))
+                            else
+                              Container(padding: const EdgeInsets.symmetric(vertical: 10)),
+                            if (orientation == Orientation.portrait || isTall)
+                              _buildEmojiInstructions(),
+                            if (orientation == Orientation.portrait || !isTall)
+                              Container(padding: const EdgeInsets.symmetric(vertical: 0))
+                            else
+                              Container(padding: const EdgeInsets.symmetric(vertical: 4)),
                         Text(
                           (kIsWeb ? 'Web' : toBeginningOfSentenceCase(Platform.operatingSystem)) +
                               ' Version $version+$buildNumber',
@@ -694,9 +701,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: TextStyle(fontSize: 8, color: Colors.grey),
                         ),
                         // TODO: Hack for bug in Android at the moment
-                        if (!kIsWeb && Platform.isAndroid && orientation == Orientation.portrait)
-                          Container(padding: const EdgeInsets.symmetric(vertical: 20)),
-                      ],
+                            if (!kIsWeb && Platform.isAndroid && orientation == Orientation.portrait)
+                              Container(padding: const EdgeInsets.symmetric(vertical: 20)),
+                          ],
+                        ),
+                      ),
                     );
             },
           );
@@ -937,7 +946,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildTodayHistogram(BoxConstraints constraints) {
-    double height = MediaQuery.of(context).size.height;
+    // Use the *available* body height (constraints), not raw MediaQuery
+    // height, so the histogram is sized consistently with the rest of the
+    // body regardless of app bar / system UI / keyboard on any screen size.
+    final double height = constraints.maxHeight;
     return SizedBox(
       height: height / 8,
       width: constraints.maxWidth,
@@ -1080,7 +1092,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildWeatherGrid(Orientation orientation, BoxConstraints constraints) {
-    double height = MediaQuery.of(context).size.height;
+    // Use the *available* body height (constraints), not raw MediaQuery
+    // height, so the extra weather rows appear consistently regardless
+    // of app bar / system UI / keyboard on any screen size.
+    final double height = constraints.maxHeight;
     return SizedBox(
       child: GridView.count(
         padding: EdgeInsets.fromLTRB(
