@@ -1139,12 +1139,12 @@ class _MyHomePageState extends State<MyHomePage> {
         crossAxisCount: orientation == Orientation.portrait ? 3 : 6,
         // width/height ratio
         childAspectRatio: constraints.maxHeight >= 1000
-            ? 4.1
+            ? 4.0
             : orientation == Orientation.portrait
-            ? (compact ? 1.70 : 2.10)
+            ? (compact ? 1.66 : 2.05)
             : constraints.maxHeight <= 400
-            ? 2.05
-            : 2.10,
+            ? 2.00
+            : 2.05,
         shrinkWrap: true,
         children: [
           _buildTemperature('Dew Point', _weather!.daily!.first.dewPoint!),
