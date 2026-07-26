@@ -1093,6 +1093,7 @@ class _MyHomePageState extends State<MyHomePage> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
+        SizedBox(height: 10),
       ],
     );
   }
@@ -1103,11 +1104,11 @@ class _MyHomePageState extends State<MyHomePage> {
   String _flightLikelihoodText() {
     final int pct = _dailyPercentage[0];
     if (pct < amberThreshold) {
-      return 'Nuptial flight unlikely today';
+      return 'Flight unlikely';
     }
     String qualifier = pct >= greenThreshold ? 'likely' : 'possible';
     if (_weather?.lat == null) {
-      return 'Nuptial flight $qualifier today';
+      return 'Flight $qualifier';
     }
     final Map<String, int> sizePct =
         sizeSeasonalPercentages(pct, _weather!.lat!, DateTime.now().toUtc());
@@ -1119,12 +1120,7 @@ class _MyHomePageState extends State<MyHomePage> {
         bestSize = e.key;
       }
     }
-    const Map<String, String> sizeLabel = {
-      'small': 'small (~10mm)',
-      'medium': 'medium (~20mm)',
-      'large': 'large (~30mm)',
-    };
-    return 'Nuptial flight $qualifier today - most likely ${sizeLabel[bestSize]} species';
+    return 'Flight $qualifier - probably $bestSize species';
   }
 
   Widget _buildWeatherGrid(Orientation orientation, BoxConstraints constraints, bool compact) {
