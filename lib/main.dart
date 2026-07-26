@@ -53,6 +53,9 @@ Future<void> main() async {
       tools: kIsWeb ? [...DevicePreview.defaultTools, simpleScreenShotModesPlugin] : [],
     ),
   );
+  // Start parsing the forest-model JSON assets without blocking the first
+  // frame; _getWeather() awaits Nuptials.ensureLoaded() before scoring.
+  unawaited(Nuptials.ensureLoaded());
   // Initialise background services without blocking the first frame.
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
     unawaited(initializeService());
@@ -324,6 +327,8 @@ class _MyHomePageState extends State<MyHomePage> {
           weatherFetcher.fetchNearestWeatherLocation(),
           weatherFetcher.fetchHistoricalWeather(dt),
           weatherFetcher.fetchWeather(),
+          // Ensure the forest models are parsed before _updateWeather scores.
+          Nuptials.ensureLoaded(),
         ])
         .then((List responses) => _updateWeather(responses[0], responses[1], responses[2]))
         .catchError((e) => handleError(e));
@@ -474,7 +479,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
       for (int i = 0; i < _dailyPercentage.length; i++) {
         _dailyPercentage[i] =
-            (nuptialDailyPercentageModel(weather.lat!, weather.lon!, weather.daily!.elementAt(i)) *
+            (nuptialDailyPercentageModel(weather.lat!, weather.lon!, weather.daily!.elementAt(i),
+                        pop1: i + 1 < weather.daily!.length
+                            ? weather.daily!.elementAt(i + 1).pop
+                            : null,
+                        pop2: i + 2 < weather.daily!.length
+                            ? weather.daily!.elementAt(i + 2).pop
+                            : null) *
                     100.0)
                 .toInt();
       }

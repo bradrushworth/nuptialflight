@@ -295,10 +295,13 @@ Future<void> getServicePercentage() async {
     debugPrint('getServicePercentage: Last known position is ' + _lastKnownPosition.toString());
     WeatherFetcher weatherFetcher = WeatherFetcher();
     weatherFetcher.setPosition(_lastKnownPosition!);
+    await Nuptials.ensureLoaded();
     int percentage = 0;
     await weatherFetcher.fetchWeather().then((OneCallResponse weather) {
       percentage =
-          (nuptialDailyPercentageModel(weather.lat!, weather.lon!, weather.daily!.elementAt(0)) *
+          (nuptialDailyPercentageModel(weather.lat!, weather.lon!, weather.daily!.elementAt(0),
+                  pop1: weather.daily!.length > 1 ? weather.daily!.elementAt(1).pop : null,
+                  pop2: weather.daily!.length > 2 ? weather.daily!.elementAt(2).pop : null) *
               100.0)
               .toInt();
     });

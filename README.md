@@ -81,22 +81,24 @@ originally encoded rules derived from the literature:
 
 Newer versions of the app replace hand-written rules with **data-science models** —
 Random-Forest classifiers trained on user-contributed sighting/weather data
-(see `lib/models/*.ipynb` notebooks and the generated `lib/models/*.dart`
-scoring trees bundled as assets `assets/final_model.json` and
-`assets/hour_model.json`).
+(see the training notebooks `lib/models/*.ipynb`). The trained forests are
+bundled as sklite-JSON assets (`assets/final_model.json`,
+`assets/hour_model.json`) and scored at runtime by the hand-written
+tree-walker `lib/models/forest_model.dart` (sklearn `predict_proba`
+parity ~1e-14, verified by `test/production_model_parity_test.dart`).
 
 ### Model inputs (feature order)
 The generated scoring trees expect features in a fixed order that matches the
 training notebooks (`lib/models/*.ipynb`). The call sites in
 `lib/controller/nuptials.dart` pass exactly these:
 
-| Model | File | Inputs (in order) |
+| Model | Asset | Inputs (in order) |
 | --- | --- | --- |
-| Daily | `final_model.dart` (10) | `lat`, `lon`, `temp`, `wind`, `rain`, `humid`, `cloud`, `press`, `dewPoint`, `daysSinceSpring` |
-| Hourly | `hour_model.dart` (9) | `lat`, `lon`, `hour`, `temp`, `wind`, `humid`, `press`, `dewPoint`, `daysSinceSpring` |
+| Daily | `assets/final_model.json` (15) | `lat`, `lon`, `hemisphere`, `sin_doy`, `cos_doy`, `temp`, `wind`, `rain`, `humid`, `cloud`, `press`, `dewPoint`, `dew_dep`, `rain1`, `rain2` |
+| Hourly | `assets/hour_model.json` (12) | `lat`, `lon`, `hemisphere`, `sin_doy`, `cos_doy`, `hour`, `temp`, `wind`, `humid`, `press`, `dewPoint`, `dew_dep` |
 
-The hourly model was trained **without** rain and cloud (they are commented out
-in the hourly notebook) and adds `hour` as the 3rd input. If you retrain a model
+The hourly model is trained **without** rain and cloud (as in earlier
+versions) and adds the UTC `hour`. If you retrain a model
 with a different feature set/order, update the call site in `nuptials.dart` and
 the model tests (`test/nuptials_test.dart`, `test/hourly_test.dart`,
 `test/model_test.dart`) to match.
@@ -110,9 +112,10 @@ predicts the base rate). An improved config (150 trees, depth 14,
 day-of-year, hemisphere, dew-point depression and antecedent-rain features)
 lifts AUC to 0.663 and average precision from 0.048 to 0.110, verified by a
 Dart/Python parity test (`test/improved_model_parity_test.dart`, max error
-~7e-16). It has **not** been shipped - it uses a different 15-feature order
-and is too large to bundle as-is. Full details, limitations (m2cgen cannot
-export calibrated models) and the shipping checklist are in
+~1e-14). A compact variant (24 trees, `max_leaf_nodes=128`; daily AUC 0.643,
+hourly AUC 0.668) **is now shipped** as the bundled JSON assets, scored by
+`lib/models/forest_model.dart`. Full details and limitations (m2cgen cannot
+export calibrated models) are in
 [`docs/model_training_findings.md`](docs/model_training_findings.md).
 ---
 
@@ -213,16 +216,15 @@ lib/
     screenshots_*.dart    # Screenshot/device-preview plumbing (mobile vs web)
     widgets_*.dart         # Platform widget glue (mobile vs web)
   models/
-    final_model.dart       # Generated daily-model scoring tree
-    hour_model.dart        # Generated hourly-model scoring tree
+    forest_model.dart      # RandomForest predict_proba walker (reads JSON assets)
     *.ipynb               # Training notebooks (Random Forest)
   responses/              # JSON response model classes (OWM, geocoding)
   view/
     map.dart               # Standalone interactive map page
 assets/
   .env                    # API keys (not committed)
-  final_model.json        # Bundled daily model
-  hour_model.json         # Bundled hourly model
+  final_model.json        # Bundled daily model (sklite JSON, 24-tree RF)
+  hour_model.json         # Bundled hourly model (sklite JSON, 24-tree RF)
 test/                     # Unit/widget tests (flutter test)
 ```
 

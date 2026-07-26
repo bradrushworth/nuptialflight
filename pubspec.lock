@@ -971,14 +971,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.4"
-  sklite:
-    dependency: "direct main"
-    description:
-      name: sklite
-      sha256: "6301d4b6cc17c5603d07021cb9c4c4510e4385c371e859bce3663468a1a8ac01"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

@@ -90,3 +90,35 @@ Neither candidate has been shipped; `lib/models/final_model.dart` and
   unauthorised changes.
 - Working artifacts (data cache, models, exports, holdout, scripts) live in
   `%TEMP%` — see `.clinerules` "Resumable work" for the inventory.
+
+## SHIPPED (2026-07-26, later the same day)
+
+User approved shipping. What actually shipped (version 2.15.0+137):
+
+- **Compact daily model**: RF(24 trees, `max_features='sqrt'`,
+  `max_leaf_nodes=128`, `min_samples_leaf=5`,
+  `class_weight='balanced_subsample'`, `random_state=42`), same 15 features.
+  **AUC 0.6430, AP 0.0870** (vs 0.663/0.110 for the impractical 150-tree
+  version, and 0.500/0.048 for the degenerate old config). 398 KB JSON.
+- **Compact hourly model** (same recipe) on 207,101 hourly rows (4.73%
+  positives): **AUC 0.6676, AP 0.0927**. 12 features `[lat, lon, hemisphere,
+  sin_doy, cos_doy, hour, temp, windSpeed, humid, press, dewPoint, dew_dep]`
+  (still no rain/cloud; hour = UTC 0-23). 397 KB JSON.
+- **JSON-only runtime**: the m2cgen-generated Dart score trees were RETIRED.
+  `lib/models/forest_model.dart` (hand-written, pure-Dart predict_proba
+  tree-walker) scores the bundled sklite JSON assets directly. Parity with
+  Python `predict_proba`: max |err| ~2e-14 (daily) / ~1e-14 (hourly), see
+  `test/production_model_parity_test.dart`. The `sklite` pub dependency was
+  removed (its Dart classifier only implements majority-vote `predict()`).
+- `Nuptials.ensureLoaded()` parses the assets once; it is kicked off right
+  after `runApp()` and awaited in the weather pipeline before scoring.
+- Size story: old shipped artifacts ~1.09 MB of generated Dart + 0.30 MB
+  JSON; new: 0.80 MB JSON + a 3 KB walker, with both models retrained and
+  no longer degenerate.
+- Test fixtures in `nuptials_test.dart` were rebuilt around the model's
+  partial-dependence optima (warm ~30 C, calm ~1.5 m/s, ~67% humidity,
+  overcast, high pressure ~1035 hPa); model scores now rank
+  Perfect .60 > Great .55 > Ordinary .50 > Bad .41 > Worst .01.
+- The training notebooks (`lib/models/*.ipynb`) were rewritten to the new
+  pipeline (projected AQL fetch, engineered features, compact RF config,
+  sklite export + parity fixtures); autosklearn is no longer used.

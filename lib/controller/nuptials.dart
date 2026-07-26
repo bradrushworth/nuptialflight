@@ -1,15 +1,11 @@
-import 'dart:convert';
 import 'dart:math';
 
 //import 'dart:developer' as developer;
 import 'package:intl/intl.dart';
 
-import 'package:nuptialflight/models/final_model.dart' as DailyModel;
-import 'package:nuptialflight/models/hour_model.dart' as HourlyModel;
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:nuptialflight/models/forest_model.dart';
 import 'package:nuptialflight/responses/onecall_response.dart';
-import 'package:sklite/base.dart';
-import 'package:sklite/ensemble/forest.dart';
-import 'package:sklite/utils/io.dart';
 
 ///
 /// https://www.antwiki.org/wiki/images/d/dd/Boomsma%2C_J.J.%2C_Leusink%2C_A._1981._Weather_conditions_during_nuptial_flights_of_four_European_ant_species_.pdf
@@ -38,8 +34,9 @@ final DateFormat hourFormat = DateFormat("HH");
 
 class Nuptials {
   static final Nuptials _instance = Nuptials._internal();
-  late RandomForestClassifier _dailyModel;
-  late RandomForestClassifier _hourlyModel;
+  ForestModel? _dailyModel;
+  ForestModel? _hourlyModel;
+  static Future<void>? _loading;
 
   // using a factory is important
   // because it promises to return _an_ object of this type
@@ -48,30 +45,31 @@ class Nuptials {
     return _instance;
   }
 
-  // This named constructor is the "real" constructor
-  // It'll be called exactly once, by the static property assignment above
-  // it's also private, so it can only be called in this class
-  Nuptials._internal() {
-    loadModel('assets/final_model.json').then((value) {
-      //print("value=$value");
-      this._dailyModel = RandomForestClassifier.fromMap(json.decode(value));
-    });
+  Nuptials._internal();
 
-    loadModel('assets/hour_model.json').then((value) {
-      //print("value=$value");
-      this._hourlyModel = RandomForestClassifier.fromMap(json.decode(value));
-    });
+  /// Loads both forest models from the bundled sklite JSON assets. Safe to
+  /// call repeatedly; the models are only parsed once. MUST complete before
+  /// any scoring/gauge function is used.
+  static Future<void> ensureLoaded() => _loading ??= _load();
+
+  static Future<void> _load() async {
+    _instance._dailyModel = ForestModel.fromJsonString(
+        await rootBundle.loadString('assets/final_model.json'));
+    _instance._hourlyModel = ForestModel.fromJsonString(
+        await rootBundle.loadString('assets/hour_model.json'));
   }
 
-  Classifier getDailyModel() {
-    return _dailyModel;
+  /// Test hook: inject models parsed from raw JSON strings (used by plain
+  /// package:test tests that cannot use rootBundle).
+  static void loadFromStrings(String dailyJson, String hourlyJson) {
+    _instance._dailyModel = ForestModel.fromJsonString(dailyJson);
+    _instance._hourlyModel = ForestModel.fromJsonString(hourlyJson);
+    _loading = Future.value();
   }
 
-  Classifier getHourlyModel() {
-    return _hourlyModel;
-  }
+  ForestModel get daily => _dailyModel!;
+  ForestModel get hourly => _hourlyModel!;
 }
-
 double nuptialHourlyPercentage(Hourly hourly) {
   double temp = temperatureContribution(hourly.temp!);
   double windSpeed = windContribution(hourly.windSpeed!);
@@ -122,69 +120,46 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
   double humid = hourly.humidity!.toDouble();
   double press = hourly.pressure!.toDouble();
   double dewPoint = hourly.dewPoint!.toDouble();
-  double northern = lat > 0 ? 1.0 : 0.0;
+  double hemisphere = lat > 0 ? 1.0 : 0.0;
   int dayOfYear = int.parse(dayOfYearFormat
       .format(DateTime.fromMillisecondsSinceEpoch((hourly.dt!) * 1000, isUtc: true)));
-  double daysSinceSpring = (dayOfYear - (31 + 28 + 31 + 30 + 31 + 30 + 31 + 31)) % 365;
   int hour = int.parse(
       hourFormat.format(DateTime.fromMillisecondsSinceEpoch((hourly.dt!) * 1000, isUtc: true)));
-  if (northern == 1.0) daysSinceSpring = (daysSinceSpring - (31 + 30 + 31 + 30 + 31 + 31)) % 365;
+  // Cyclical encoding of the day of year (replaces daysSinceSpring).
+  double sinDoy = sin(2 * pi * dayOfYear / 365.25);
+  double cosDoy = cos(2 * pi * dayOfYear / 365.25);
+  // Dew-point depression: how far the air is from saturation.
+  double dewDep = temp - dewPoint;
 
   if (temp < 5) return 0.01;
   if (wind > 15) return 0.01;
   if (gust > 20) return 0.01;
-  //if (humid < 40) return 0.01;
-  //if (press < 995) return 0.01;
-
-  // Classifier? model = Nuptials._instance.getHourlyModel();
-  // if (model == null) return 0.00;
-  // return min(
-  //     0.99,
-  //     max(
-  //         0.01,
-  //         model.predict([
-  //               lat.toDouble(),
-  //               lon.toDouble(),
-  //               hour.toDouble(),
-  //               temp, //temperatureContribution(temp),
-  //               //morn,
-  //               wind, //windContribution(wind),
-  //               //gust,
-  //               //windDeg,
-  //               rain,
-  //               humid, //humidityContribution(humid),
-  //               cloud, //cloudinessContribution(cloud),
-  //               press, //pressureContribution(press),
-  //               //dewPoint,
-  //               //northern,
-  //               daysSinceSpring,
-  //             ]) /
-  //             100.0));
 
   return min(
       0.99,
       max(
           0.01,
-          // hour_model.dart was trained (see autosklearn_classification-hourly.ipynb)
-          // on these 9 features in this exact order. It does NOT use rain or
-          // cloud, which is why they are not passed here.
-          HourlyModel.score([
+          // hour_model (retrained 2026-07-26) expects these 12 features in
+          // this exact order - keep in sync with the training pipeline
+          // (see docs/model_training_findings.md). No rain/cloud, as before.
+          Nuptials().hourly.scorePositive([
             lat.toDouble(),
             lon.toDouble(),
+            hemisphere,
+            sinDoy,
+            cosDoy,
             hour.toDouble(),
             temp,
             wind,
             humid,
             press,
             dewPoint,
-            daysSinceSpring,
-          ])[1]));
+            dewDep,
+          ])));
 }
-
-double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturnal = false}) {
-  //double temp = nocturnal ? daily.temp!.eve!.toDouble() : daily.temp!.day!.toDouble();
+double nuptialDailyPercentageModel(num lat, num lon, Daily daily,
+    {bool nocturnal = false, num? pop1, num? pop2}) {
   double temp = daily.temp!.day!.toDouble();
-  //double morn = daily.temp!.morn!.toDouble();
   double wind = daily.windSpeed!.toDouble();
   double gust = daily.windGust?.toDouble() ?? daily.windSpeed!.toDouble();
   double rain = daily.pop!.toDouble();
@@ -192,60 +167,48 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily, {bool nocturna
   double cloud = daily.clouds!.toDouble();
   double press = daily.pressure!.toDouble();
   double dewPoint = daily.dewPoint!.toDouble();
-  double northern = lat > 0 ? 1.0 : 0.0;
+  double hemisphere = lat > 0 ? 1.0 : 0.0;
   int dayOfYear = int.parse(
       dayOfYearFormat.format(DateTime.fromMillisecondsSinceEpoch((daily.dt!) * 1000, isUtc: true)));
-  double daysSinceSpring = (dayOfYear - (31 + 28 + 31 + 30 + 31 + 30 + 31 + 31)) % 365;
-  if (northern == 1.0) daysSinceSpring = (daysSinceSpring - (31 + 30 + 31 + 30 + 31 + 31)) % 365;
+  // Cyclical encoding of the day of year (replaces daysSinceSpring).
+  double sinDoy = sin(2 * pi * dayOfYear / 365.25);
+  double cosDoy = cos(2 * pi * dayOfYear / 365.25);
+  // Dew-point depression: how far the air is from saturation.
+  double dewDep = temp - dewPoint;
+  // Antecedent rain: probability of precipitation on the next two days
+  // (daily[i+1]/daily[i+2].pop). Missing values default to 0, matching the
+  // training pipeline (fillna(0)).
+  double rain1 = pop1?.toDouble() ?? 0.0;
+  double rain2 = pop2?.toDouble() ?? 0.0;
 
   if (temp < 5) return 0.01;
   if (wind > 15) return 0.01;
   if (gust > 20) return 0.01;
-  //if (humid < 40) return 0.01;
-  //if (press < 995) return 0.01;
-
-  // Classifier? model = Nuptials._instance.getDailyModel();
-  // if (model == null) return 0.00;
-  // return min(
-  //     0.99,
-  //     max(
-  //         0.01,
-  //         model.predict([
-  //               lat.toDouble(),
-  //               lon.toDouble(),
-  //               temp, //temperatureContribution(temp),
-  //               //morn,
-  //               wind, //windContribution(wind),
-  //               //gust,
-  //               rain,
-  //               humid, //humidityContribution(humid),
-  //               cloud, //cloudinessContribution(cloud),
-  //               press, //pressureContribution(press),
-  //               //dewPoint,
-  //               //northern,
-  //               daysSinceSpring,
-  //             ]) /
-  //             100.0));
 
   return min(
       0.99,
       max(
           0.01,
-          DailyModel.score([
+          // final_model.dart (retrained 2026-07-26) expects these 15 features
+          // in this exact order - keep in sync with the training pipeline
+          // (see docs/model_training_findings.md).
+          Nuptials().daily.scorePositive([
             lat.toDouble(),
             lon.toDouble(),
-            temp, //temperatureContribution(temp),
-            //morn,
-            wind, //windContribution(wind),
-            //gust,
+            hemisphere,
+            sinDoy,
+            cosDoy,
+            temp,
+            wind,
             rain,
-            humid, //humidityContribution(humid),
-            cloud, //cloudinessContribution(cloud),
-            press, //pressureContribution(press),
+            humid,
+            cloud,
+            press,
             dewPoint,
-            //northern,
-            daysSinceSpring,
-          ])[1]));
+            dewDep,
+            rain1,
+            rain2,
+          ])));
 }
 
 ///
@@ -285,32 +248,34 @@ double nuptialCalculator(List<Map<String, num>> values) {
 
 /// Representative baseline contexts used to marginalise the non-target
 /// features when computing a partial-dependence curve. Each entry is a full
-/// 10-element daily-model input vector:
-/// [lat, lon, temp, wind, rain, humid, cloud, press, dewPoint, daysSinceSpring].
+/// 15-element daily-model input vector:
+/// [lat, lon, hemisphere, sin_doy, cos_doy, temp, wind, rain0, humid, cloud,
+///  press, dewPoint, dew_dep, rain1, rain2].
 /// The target feature is overwritten per query, so only the non-target values
 /// matter.
 List<List<double>> _buildPdContexts() {
-  // Geography x seasonal-offset anchors (lat, lon, daysSinceSpring).
+  // Geography x season anchors (lat, lon, dayOfYear): early/mid/late flight
+  // season for each hemisphere.
   const anchors = <List<double>>[
-    [50, 10, 30], // NH Europe, early season
-    [50, 10, 120], // NH Europe, mid season
-    [50, 10, 210], // NH Europe, late season
-    [40, -90, 30], // NH North America, early
-    [40, -90, 120], // NH North America, mid
-    [40, -90, 210], // NH North America, late
-    [-33, 151, 30], // SH Australia, early
-    [-33, 151, 120], // SH Australia, mid
-    [-33, 151, 210], // SH Australia, late
-    [-30, -60, 30], // SH South America, early
-    [-30, -60, 120], // SH South America, mid
-    [-30, -60, 210], // SH South America, late
+    [50, 10, 122], // NH Europe, early season (May)
+    [50, 10, 212], // NH Europe, mid season (Jul/Aug)
+    [50, 10, 302], // NH Europe, late season (Oct)
+    [40, -90, 122], // NH North America, early
+    [40, -90, 212], // NH North America, mid
+    [40, -90, 302], // NH North America, late
+    [-33, 151, 273], // SH Australia, early (Sep/Oct)
+    [-33, 151, 363], // SH Australia, mid (Dec)
+    [-33, 151, 88], // SH Australia, late (Mar)
+    [-30, -60, 273], // SH South America, early
+    [-30, -60, 363], // SH South America, mid
+    [-30, -60, 88], // SH South America, late
   ];
-  // Representative weather states: [wind, rain, humid, cloud, press, dew, temp].
-  // temp only matters as a baseline for non-temperature curves.
+  // Representative weather states:
+  // [wind, rain0, humid, cloud, press, dew, temp, rain1, rain2].
   const states = <List<double>>[
-    [3.0, 0.0, 65.0, 35.0, 1016.0, 12.0, 22.0], // ideal
-    [5.7, 0.0, 77.0, 70.0, 1014.0, 12.0, 16.5], // typical (matches AVG consts)
-    [8.0, 0.15, 88.0, 85.0, 1006.0, 15.0, 14.0], // marginal
+    [3.0, 0.0, 65.0, 35.0, 1016.0, 12.0, 22.0, 0.0, 0.0], // ideal
+    [5.7, 0.0, 77.0, 70.0, 1014.0, 12.0, 16.5, 0.2, 0.2], // typical
+    [8.0, 0.15, 88.0, 85.0, 1006.0, 15.0, 14.0, 0.5, 0.4], // marginal
   ];
   final contexts = <List<double>>[];
   for (final a in anchors) {
@@ -318,20 +283,24 @@ List<List<double>> _buildPdContexts() {
       contexts.add([
         a[0], // 0 lat
         a[1], // 1 lon
-        s[6], // 2 temp (overwritten by temperature queries)
-        s[0], // 3 wind
-        s[1], // 4 rain
-        s[2], // 5 humidity
-        s[3], // 6 cloud
-        s[4], // 7 pressure
-        s[5], // 8 dewPoint
-        a[2], // 9 daysSinceSpring
+        a[0] > 0 ? 1.0 : 0.0, // 2 hemisphere
+        sin(2 * pi * a[2] / 365.25), // 3 sin_doy
+        cos(2 * pi * a[2] / 365.25), // 4 cos_doy
+        s[6], // 5 temp (overwritten by temperature queries)
+        s[0], // 6 wind
+        s[1], // 7 rain0
+        s[2], // 8 humidity
+        s[3], // 9 cloud
+        s[4], // 10 pressure
+        s[5], // 11 dewPoint
+        s[6] - s[5], // 12 dew_dep (baseline; held constant per context)
+        s[7], // 13 rain1
+        s[8], // 14 rain2
       ]);
     }
   }
   return contexts;
 }
-
 final List<List<double>> _pdContexts = _buildPdContexts();
 
 /// Average model flight-probability when [featureIndex] is fixed to [value]
@@ -341,7 +310,7 @@ double _rawPd(int featureIndex, double value) {
   for (final ctx in _pdContexts) {
     final input = List<double>.from(ctx);
     input[featureIndex] = value;
-    sum += DailyModel.score(input)[1];
+    sum += Nuptials().daily.scorePositive(input);
   }
   return sum / _pdContexts.length;
 }
@@ -392,26 +361,26 @@ class _PdCurve {
   }
 }
 
-late final _PdCurve _tempCurve = _PdCurve(2, 0, 40, 1);
-late final _PdCurve _windCurve = _PdCurve(3, 0, 32, 0.5);
-late final _PdCurve _rainCurve = _PdCurve(4, 0, 1, 0.05);
-late final _PdCurve _humidCurve = _PdCurve(5, 0, 100, 2.5);
-late final _PdCurve _cloudCurve = _PdCurve(6, 0, 100, 2.5);
-late final _PdCurve _pressCurve = _PdCurve(7, 980, 1040, 1.5);
+late final _PdCurve _tempCurve = _PdCurve(5, 0, 40, 1);
+late final _PdCurve _windCurve = _PdCurve(6, 0, 32, 0.5);
+late final _PdCurve _rainCurve = _PdCurve(7, 0, 1, 0.05);
+late final _PdCurve _humidCurve = _PdCurve(8, 0, 100, 2.5);
+late final _PdCurve _cloudCurve = _PdCurve(9, 0, 100, 2.5);
+late final _PdCurve _pressCurve = _PdCurve(10, 980, 1040, 1.5);
 
-/// Daytime temperature (Celsius). Model marginal response to feature index 2.
+/// Daytime temperature (Celsius). Model marginal response to feature index 5.
 double temperatureContribution(num temp) =>
     _tempCurve.valueAt(temp.toDouble());
 
-/// Humidity (%). Model marginal response to feature 5.
+/// Humidity (%). Model marginal response to feature 8.
 double humidityContribution(num humidity) =>
     _humidCurve.valueAt(humidity.toDouble());
 
-/// Wind speed (m/s). Model marginal response to feature 3.
+/// Wind speed (m/s). Model marginal response to feature 6.
 double windContribution(num windSpeed) =>
     _windCurve.valueAt(windSpeed.toDouble());
 
-/// Probability of precipitation (0..1). Model marginal response to feature 4.
+/// Probability of precipitation (0..1). Model marginal response to feature 7.
 double rainContribution(num pop) => _rainCurve.valueAt(pop.toDouble());
 
 /// Atmospheric temperature (varying according to pressure and humidity) below
@@ -420,11 +389,11 @@ double rainContribution(num pop) => _rainCurve.valueAt(pop.toDouble());
 //   return max(0, min(10, daily.temp!.eve! - dewPoint) / 10.0);
 // }
 
-/// Cloudiness (%). Model marginal response to feature 6.
+/// Cloudiness (%). Model marginal response to feature 9.
 double cloudinessContribution(num clouds) =>
     _cloudCurve.valueAt(clouds.toDouble());
 
-/// Air pressure (hPa). Model marginal response to feature 7.
+/// Air pressure (hPa). Model marginal response to feature 10.
 double pressureContribution(num pressure) =>
     _pressCurve.valueAt(pressure.toDouble());
 
