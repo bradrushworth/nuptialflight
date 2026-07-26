@@ -125,3 +125,86 @@ reuse cached responses, cutting paid OWM calls.
   training notebooks (`lib/models/*.ipynb`). The hourly model uses 9 features
   (no rain/cloud); the daily uses 10. A mismatched order silently produces
   wrong predictions — the hourly call site was mis-wired until 2026-07-26.
+
+## Resumable work — model retrain + training findings (2026-07-26)
+A model-improvement effort is in progress (NOT yet committed to production).
+Resume from the state below. Do NOT overwrite `lib/models/final_model.dart`
+or `assets/final_model.json` without explicit user approval.
+
+### Live training data source
+- ArangoDB at `https://api.bitbot.com.au:8530` (TLS only), db
+  `nuptialFlight`, collection `flights` (212,504 docs). DB credentials are the
+  ones already committed in `lib/models/autosklearn_classification.ipynb`
+  (user `notebook` + the password in that notebook) — not duplicated here.
+  Connect with python-arango:
+  `ArangoClient(hosts='https://api.bitbot.com.au:8530'); db=client.db('nuptialFlight', username='notebook', password=<from notebook>)`.
+- ⚠️ Security: the DB contains a defaced collection
+  `u have been pwned bro contact me at: policenational@cyberfear.com`.
+  Rotate the `notebook` DB user's password and audit for unauthorised changes.
+
+### Tooling constraints (this environment)
+- Shell commands have a **30 s per-call cap**; **background processes are
+  reaped between calls**. Run inline and keep each call <30 s; for long
+  fetches use resumable chunked scripts (state file + dedup-on-read).
+- **Project only needed fields in AQL** (`RETURN {field…}` not `RETURN f`)
+  — ~30× faster transfers (60 k docs in ~2 s).
+- Python 3.9.13 + sklearn/pandas/numpy/arango/m2cgen/sklite installed.
+  matplotlib/seaborn/nbconvert/xgboost are NOT installed (not needed).
+
+### Cached state (in `%TEMP%` = `C:\Users\Brad\AppData\Local\Temp`)
+- `flights_cache.csv` — all 212,504 flights; cols
+  `target,lat,lon,dayOfYear,dt,day,windSpeed,rain0,humid,cloud,press,dewPoint,rain1,rain2,key`
+  (dedup-safe on `key`).
+- `df.pkl` — feature-engineered DataFrame (212,504 rows; 10,127 positives =
+  4.77%). Added cols: `dss` (daysSinceSpring = `(dayOfYear-243)%365`, NH
+  subtract 184), `hemisphere`, `sin_doy`, `cos_doy`, `dew_dep=day-dewPoint`,
+  `lat_r`, `lon_r`.
+- `baseline_model.pkl` — RF reproducing production params (64 trees,
+  `max_features=10`, `min_samples_split=3`, `ccp_alpha=0.0008`).
+  **DEGENERATE:** every tree pruned to a single leaf (`node_count=1`,
+  importances sum 0.0, **AUC 0.500, AP 0.048**). ⇒ production
+  `ccp_alpha=0.0008` collapses the forest under 4.77% class imbalance.
+- `improved_model.pkl` — RF(150, `max_features='sqrt'`,
+  `min_samples_leaf=5`, `max_depth=14`, `class_weight='balanced_subsample'`,
+  no ccp_alpha). Features (`imp_cols`, 15):
+  `[lat, lon, hemisphere, sin_doy, cos_doy, day, windSpeed, rain0, humid,
+  cloud, press, dewPoint, dew_dep, rain1, rain2]`.
+  **Result: acc_te 0.895, f1 0.164, AUC 0.663, AP 0.110** (vs baseline
+  AUC 0.500). Top importances: lat .12, lon .117, day .101, dewPoint .088,
+  windSpeed .087, sin_doy .081, dew_dep .073.
+- `features.json` = `{"base":[...10...], "imp":[...15...]}`.
+- `holdout.pkl` — 2000 test samples (`{'X':df,'y':series}`) for parity.
+- Scripts in TEMP: `fetch_chunk.py` (resumable projected fetch,
+  `FETCH_BATCH` env), `prep.py`, `train_base.py`, `diag_imp.py`.
+
+### Remaining steps
+1. ~~Export improved model + parity test~~ **DONE (2026-07-26).**
+   `%TEMP%/final_model_improved.json` (sklite, 34 MB) and
+   `%TEMP%/expected.json` (200 holdout rows with Python predict_proba)
+   exported; `%TEMP%/final_model_improved.dart` (m2cgen per-tree, ~82 MB —
+   too big to compile/ship; chunked resumable exporter
+   `%TEMP%/export_dart_chunk.py` + `m2c_state.json`).
+   `test/improved_model_parity_test.dart` walks the sklite JSON in Dart
+   (sklearn-style predict_proba; inputs cast to **float32** like sklearn)
+   and matches Python to max |err| ~7e-16; self-skips when TEMP artifacts
+   are absent (CI-safe).
+2. ~~Document findings~~ **DONE:** `docs/model_training_findings.md` +
+   README "Model retraining findings" section. Covers the ccp_alpha
+   collapse, improved metrics, the 82 MB/34 MB export-size problem, and
+   that m2cgen cannot export CalibratedClassifierCV (calibration would be
+   an in-app Platt/isotonic post-step).
+3. **Production overwrite decision (needs user OK):** the improved model uses
+   a DIFFERENT 15-feature order (no `dss`; adds sin/cos/hemisphere/dew_dep/
+   rain1/rain2) — NOT drop-in, and at 150 trees is too large to bundle
+   (34 MB JSON). Shipping requires a smaller retrain (fewer/shallower trees)
+   plus rewriting `nuptialDailyPercentageModel`'s call site, re-pointing the
+   gauge `_PdCurve` feature indices, and updating `model_test.dart` /
+   `nuptials_test.dart` expectations. A lower-risk alternative is a
+   **drop-in retrain** (same 10 production features but drop `ccp_alpha` +
+   add `class_weight='balanced_subsample'`). Present both to the user; do
+   not overwrite production until approved.
+### Verify before claiming done
+`dart analyze lib/controller/nuptials.dart test/*.dart` (no issues);
+`flutter test test/nuptials_test.dart test/hourly_test.dart test/model_test.dart`
+(all pass); `flutter analyze` (only the 4 pre-existing
+`deprecated_member_use` infos).

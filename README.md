@@ -101,6 +101,19 @@ with a different feature set/order, update the call site in `nuptials.dart` and
 the model tests (`test/nuptials_test.dart`, `test/hourly_test.dart`,
 `test/model_test.dart`) to match.
 
+### Model retraining findings (2026-07-26)
+A retraining effort against the live flights DB (212k rows, ~4.8% positives)
+found that the production training config's `ccp_alpha=0.0008` prunes every
+tree to a single leaf under that class imbalance (AUC 0.500 - the model
+predicts the base rate). An improved config (150 trees, depth 14,
+`class_weight='balanced_subsample'`, no `ccp_alpha`, plus cyclical
+day-of-year, hemisphere, dew-point depression and antecedent-rain features)
+lifts AUC to 0.663 and average precision from 0.048 to 0.110, verified by a
+Dart/Python parity test (`test/improved_model_parity_test.dart`, max error
+~7e-16). It has **not** been shipped - it uses a different 15-feature order
+and is too large to bundle as-is. Full details, limitations (m2cgen cannot
+export calibrated models) and the shipping checklist are in
+[`docs/model_training_findings.md`](docs/model_training_findings.md).
 ---
 
 ## Getting Started
