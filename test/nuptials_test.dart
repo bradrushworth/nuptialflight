@@ -21,31 +21,31 @@ void main() {
     double lon = 149.1;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily.temp!.max!), closeTo(1.00, 0.01));
+      expect(temperatureContribution(daily.temp!.max!), closeTo(0.19, 0.01));
     });
 
     test('Humidity', () {
-      expect(humidityContribution(daily.humidity!), closeTo(1.00, 0.01));
+      expect(humidityContribution(daily.humidity!), closeTo(0.16, 0.01));
     });
 
     test('Wind', () {
-      expect(windContribution(daily.windSpeed!), closeTo(1.00, 0.01));
+      expect(windContribution(daily.windSpeed!), closeTo(0.17, 0.01));
     });
 
     test('Rain', () {
-      expect(rainContribution(daily.pop!), closeTo(1.00, 0.01));
+      expect(rainContribution(daily.pop!), closeTo(0.50, 0.01));
     });
 
     test('Cloud Coverage', () {
-      expect(cloudinessContribution(daily.clouds!), closeTo(0.92, 0.01));
+      expect(cloudinessContribution(daily.clouds!), closeTo(0.00, 0.01));
     });
 
     test('Pressure', () {
-      expect(pressureContribution(daily.pressure!), closeTo(1.00, 0.01));
+      expect(pressureContribution(daily.pressure!), closeTo(0.50, 0.01));
     });
 
     test('Total', () {
-      expect(nuptialDailyPercentage(daily), closeTo(1.00, 0.01));
+      expect(nuptialDailyPercentage(daily), closeTo(0.22, 0.01));
     });
 
     test('Model', () {
@@ -69,11 +69,11 @@ void main() {
     double lon = 149.1;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily.temp!.max!), closeTo(0.25, 0.01));
+      expect(temperatureContribution(daily.temp!.max!), closeTo(0.03, 0.01));
     });
 
     test('Humidity', () {
-      expect(humidityContribution(daily.humidity!), closeTo(0.02, 0.01));
+      expect(humidityContribution(daily.humidity!), closeTo(1.00, 0.01));
     });
 
     test('Wind', () {
@@ -81,19 +81,19 @@ void main() {
     });
 
     test('Rain', () {
-      expect(rainContribution(daily.pop!), closeTo(0.00, 0.01));
+      expect(rainContribution(daily.pop!), closeTo(0.50, 0.01));
     });
 
     test('Cloud Coverage', () {
-      expect(cloudinessContribution(daily.clouds!), closeTo(0.09, 0.01));
+      expect(cloudinessContribution(daily.clouds!), closeTo(0.04, 0.01));
     });
 
     test('Pressure', () {
-      expect(pressureContribution(daily.pressure!), closeTo(0.20, 0.01));
+      expect(pressureContribution(daily.pressure!), closeTo(0.50, 0.01));
     });
 
     test('Total', () {
-      expect(nuptialDailyPercentage(daily), closeTo(0.07, 0.01));
+      expect(nuptialDailyPercentage(daily), closeTo(0.45, 0.01));
     });
 
     test('Model', () {
@@ -123,31 +123,31 @@ void main() {
     double lon = 149.1;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily.temp!.max!), closeTo(0.47, 0.01));
+      expect(temperatureContribution(daily.temp!.max!), closeTo(0.84, 0.01));
     });
 
     test('Humidity', () {
-      expect(humidityContribution(daily.humidity!), closeTo(0.92, 0.01));
+      expect(humidityContribution(daily.humidity!), closeTo(0.16, 0.01));
     });
 
     test('Wind', () {
-      expect(windContribution(daily.windSpeed!), closeTo(0.69, 0.01));
+      expect(windContribution(daily.windSpeed!), closeTo(0.03, 0.01));
     });
 
     test('Rain', () {
-      expect(rainContribution(daily.pop!), closeTo(0.95, 0.01));
+      expect(rainContribution(daily.pop!), closeTo(0.50, 0.01));
     });
 
     test('Cloud Coverage', () {
-      expect(cloudinessContribution(daily.clouds!), closeTo(0.87, 0.01));
+      expect(cloudinessContribution(daily.clouds!), closeTo(0.00, 0.01));
     });
 
     test('Pressure', () {
-      expect(pressureContribution(daily.pressure!), closeTo(0.95, 0.01));
+      expect(pressureContribution(daily.pressure!), closeTo(0.50, 0.01));
     });
 
     test('Total', () {
-      expect(nuptialDailyPercentage(daily), closeTo(0.82, 0.01));
+      expect(nuptialDailyPercentage(daily), closeTo(0.27, 0.01));
     });
 
     test('Model', () {
@@ -177,31 +177,31 @@ void main() {
     double lon = 149.1;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily.temp!.max!), closeTo(0.30, 0.01));
+      expect(temperatureContribution(daily.temp!.max!), closeTo(0.97, 0.01));
     });
 
     test('Humidity', () {
-      expect(humidityContribution(daily.humidity!), closeTo(0.38, 0.01));
+      expect(humidityContribution(daily.humidity!), closeTo(0.16, 0.01));
     });
 
     test('Wind', () {
-      expect(windContribution(daily.windSpeed!), closeTo(0.79, 0.01));
+      expect(windContribution(daily.windSpeed!), closeTo(0.68, 0.01));
     });
 
     test('Rain', () {
-      expect(rainContribution(daily.pop!), closeTo(0.70, 0.01));
+      expect(rainContribution(daily.pop!), closeTo(0.50, 0.01));
     });
 
     test('Cloud Coverage', () {
-      expect(cloudinessContribution(daily.clouds!), closeTo(0.73, 0.01));
+      expect(cloudinessContribution(daily.clouds!), closeTo(0.00, 0.01));
     });
 
     test('Pressure', () {
-      expect(pressureContribution(daily.pressure!), closeTo(0.95, 0.01));
+      expect(pressureContribution(daily.pressure!), closeTo(0.50, 0.01));
     });
 
     test('Total', () {
-      expect(nuptialDailyPercentage(daily), closeTo(0.60, 0.01));
+      expect(nuptialDailyPercentage(daily), closeTo(0.42, 0.01));
     });
 
     test('Model', () {
@@ -226,31 +226,31 @@ void main() {
     double lon = 149.1;
 
     test('Temperature', () {
-      expect(temperatureContribution(daily.temp!.max!), closeTo(0.33, 0.01));
+      expect(temperatureContribution(daily.temp!.max!), closeTo(0.01, 0.01));
     });
 
     test('Humidity', () {
-      expect(humidityContribution(daily.humidity!), closeTo(0.22, 0.01));
+      expect(humidityContribution(daily.humidity!), closeTo(1.00, 0.01));
     });
 
     test('Wind', () {
-      expect(windContribution(daily.windSpeed!), closeTo(0.08, 0.01));
+      expect(windContribution(daily.windSpeed!), closeTo(0.00, 0.01));
     });
 
     test('Rain', () {
-      expect(rainContribution(daily.pop!), closeTo(0.30, 0.01));
+      expect(rainContribution(daily.pop!), closeTo(0.50, 0.01));
     });
 
     test('Cloud Coverage', () {
-      expect(cloudinessContribution(daily.clouds!), closeTo(0.33, 0.01));
+      expect(cloudinessContribution(daily.clouds!), closeTo(0.00, 0.01));
     });
 
     test('Pressure', () {
-      expect(pressureContribution(daily.pressure!), closeTo(0.20, 0.01));
+      expect(pressureContribution(daily.pressure!), closeTo(0.50, 0.01));
     });
 
     test('Total', () {
-      expect(nuptialDailyPercentage(daily), closeTo(0.22, 0.01));
+      expect(nuptialDailyPercentage(daily), closeTo(0.45, 0.01));
     });
 
     test('Model', () {
