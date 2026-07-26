@@ -64,12 +64,16 @@ before any scoring. Tests inject models with `Nuptials.loadFromStrings(...)`
 Each model expects features in a FIXED order that MUST match the training
 notebook. The call sites in `lib/controller/nuptials.dart` must pass exactly:
 
-- **Daily model** (`assets/final_model.json`, 15 inputs since 2026-07-26):
+- **Daily model** (`assets/final_model.json`, 21 inputs since 2026-07-26 part 4):
   `[lat, lon, hemisphere, sin_doy, cos_doy, temp(day), wind, rain(pop), humid,
-  cloud, press, dewPoint, dew_dep, rain1, rain2]`
-- **Hourly model** (`assets/hour_model.json`, 12 inputs since 2026-07-26 — still
-  NO rain, NO cloud): `[lat, lon, hemisphere, sin_doy, cos_doy, hour, temp,
-  wind, humid, press, dewPoint, dew_dep]` (`hour` = UTC 0-23).
+  cloud, press, dewPoint, dew_dep, popNext1, popNext2, uvi, windGust, rainMm,
+  daylength, moonSin, moonCos]`. The first 15 keep their old order; the 6 new
+  fields are appended. NB `popNext1/popNext2` = FORECAST pop for the next two
+  days (daily[i+1]/[i+2].pop), NOT antecedent rain (renamed from rain1/rain2).
+- **Hourly model** (`assets/hour_model.json`, 14 inputs since 2026-07-26 part 4 —
+  still NO rain, NO cloud, NO visibility): `[lat, lon, hemisphere, sin_doy,
+  cos_doy, hour, temp, wind, humid, press, dewPoint, dew_dep, uvi, windGust]`
+  (`hour` = UTC 0-23).
 
 If a model is retrained with a different feature set/order, update BOTH the
 call site in `nuptials.dart` AND the expectations in `test/nuptials_test.dart`,
@@ -113,7 +117,11 @@ reuse cached responses, cutting paid OWM calls.
   `registerBackgroundCallback`, `canLaunch`/`launch`). Do not "fix" these
   by upgrading packages unless asked — they are out of scope and risk
   breaking the build.
-- Current app version: **2.15.1+138** (suitability-based map weather-overlay shading). Previous 2.15.0+137 = retrained daily+hourly models, JSON-only forest runtime, sklite dep removed. `flutter analyze` stays at 0 errors.
+- Current app version: **2.16.0+139** (unused-field retrain: daily 21 feats
+  AUC 0.654, hourly 14 feats AUC 0.670; per-size seasonal prior UX; rain1/rain2
+  renamed popNext1/popNext2). Previous 2.15.1+138 = suitability-based map
+  weather-overlay shading; 2.15.0+137 = JSON-only forest runtime. `flutter
+  analyze` stays at 0 errors.
 - (2026-07-26) Models retrained + moved to a JSON-only runtime
   (`lib/models/forest_model.dart` over the sklite JSON assets); daily is now
   15 features, hourly 12. Per-attribute suitability gauges and the map
@@ -141,23 +149,21 @@ COMMITTED; (b) and (c) are the in-progress "Task queue" below.
   "Small (10mm) 12%").
 - `test/size_seasonal_test.dart` NEW (6 tests, all pass). README updated.
 
-### Task queue (in progress — part 4)
-1. Retrain BOTH models adding the unused DB fields that are already stored in
-   every doc: daily has `moon_phase`, `sunrise`/`sunset` (=> daylength +
-   hours-since-sunrise), `wind_gust`, `uvi`, and rain *amount* (`rain` mm, vs
-   just `pop`); hourly has `uvi`, `visibility`, `wind_gust`. Re-fetch via the
-   resumable projected AQL scripts in %TEMP% (`fetch_chunk.py` /
-   `fetch_hourly_chunk.py` — extend the RETURN projection), re-run
-   `prep.py`/`ship_train.py` + hourly equivalents, export sklite JSON, rebuild
-   parity fixtures. Keep the compact recipe (24 trees / 128 leaves) for app size.
-2. Fix mislabelled rain1/rain2: `flights.weather.daily` is today + 7-day
-   FORECAST (verified — daily[0]=report day, daily[-1]=+7d), so rain1/rain2 are
-   forward-looking `pop`, NOT antecedent. Rename to `popNext1`/`popNext2` (honest
-   forecast-rain) in `nuptials.dart` + notebooks + docs. True antecedent rain
-   would need an OWM timemachine backfill (not stored in DB) — documented as a
-   future lever in docs/model_training_findings.md, NOT done here.
-3. Update notebooks (`lib/models/*.ipynb`), tests (model/nuptials/hourly/parity),
-   README, docs/model_training_findings.md, bump version, commit + deploy.
+### Task queue (part 4) — DONE + shipped (v2.16.0+139)
+1. ~~Retrain BOTH models with unused DB fields~~ DONE. Daily 15->21 feats
+   (+uvi, windGust, rainMm, daylength, moonSin, moonCos): AUC 0.643->0.654,
+   AP 0.087->0.097. Hourly 12->14 feats (+uvi, windGust; visibility DROPPED as
+   noise): AUC 0.668->0.670, AP 0.093->0.097. Grown to 48 trees / 256 leaves
+   (~1.5 MB JSON each; ~500 KB gzipped). Scripts: `fetch_chunk2.py`/`prep2.py`/
+   `ship2.py` (daily), `fetch_hourly_chunk2.py`/`hourly_final2.py` (hourly).
+2. ~~Fix mislabelled rain1/rain2~~ DONE — renamed `popNext1`/`popNext2`
+   (forecast pop) everywhere in nuptials.dart + docs. True antecedent rain still
+   needs an OWM timemachine backfill (future lever, documented in findings doc).
+3. ~~Tests + docs + version + deploy~~ DONE — model/hourly/nuptials fixtures +
+   gauges recalibrated (48/51 rewritten), parity fixtures rebuilt (max err
+   ~8e-15), README/findings/.clinerules updated, version 2.16.0+139.
+   REMAINING: update notebooks (`lib/models/*.ipynb`) to the 21/14-feature
+   pipeline (in progress — code/models/tests already shipped).
 
 ### DB schema notes (verified 2026-07-26)
 - `flights.weather` = {lat, lon, timezone, daily[8]} (today + 7-day forecast; NO

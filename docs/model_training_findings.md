@@ -122,3 +122,56 @@ User approved shipping. What actually shipped (version 2.15.0+137):
 - The training notebooks (`lib/models/*.ipynb`) were rewritten to the new
   pipeline (projected AQL fetch, engineered features, compact RF config,
   sklite export + parity fixtures); autosklearn is no longer used.
+
+## Part 4 — unused-field retrain, size prior, rain relabel (2026-07-26, v2.16.0+139)
+
+Three user-requested changes shipped together.
+
+### 1. Per-size seasonal prior (UX)
+The `flights` collection stores a queen `size` (small/medium/large) on every
+confirmed sighting — 10,127 sized positives (small 5,036 / medium 2,930 /
+large 2,159; 2 null). Analysis:
+- Size classes overlap almost completely on *weather* (mean temp 23.8-24.4C,
+  wind ~5.1, humidity ~55 across all three) — so three separate weather models
+  would just thin the data for no gain.
+- They differ in *seasonal timing* (NH: small peaks Jul, medium Jun-Jul, large
+  earlier/broader May-Jun; SH offset ~6 months).
+Therefore we ship a **seasonal prior**, not separate forests:
+`sizeSeasonalMultiplier()` / `sizeSeasonalPercentages()` in `nuptials.dart`
+(per-hemisphere monthly weight tables, 3-month smoothed, peak-normalised to
+1.0), surfaced on the report-dialog buttons ("Small (10mm) 12%").
+
+### 2. Retrain both models with previously-unused DB fields
+Both retrains keep RF(`max_features=sqrt`, `min_samples_leaf=5`,
+`class_weight=balanced_subsample`, `random_state=42`) but grow to **48 trees /
+256 leaves** (the richer feature set benefits from more capacity; assets ~1.5 MB
+each, ~500 KB gzipped for web — acceptable).
+
+- **Daily**: 15 -> **21 features**, appending `uvi`, `windGust`, `rainMm`
+  (rain amount, not just pop), `daylength` (from sunrise/sunset), and
+  `moonSin`/`moonCos` (cyclical moon phase). **AUC 0.643 -> 0.654, AP
+  0.087 -> 0.097.** New-field importances: daylength .065, windGust .057,
+  uvi .05, moon ~.04, rainMm .015. The first 15 features keep their order
+  (new ones appended 15-20) so the PD-gauge indices are unchanged.
+- **Hourly**: 12 -> **14 features**, appending `uvi` + `windGust`.
+  **AUC 0.668 -> 0.670, AP 0.093 -> 0.097.** Visibility was tested and
+  DROPPED (importance 0.004 = noise).
+
+### 3. rain1/rain2 relabelled popNext1/popNext2 (honesty fix)
+Verified `flights.weather.daily` is **today + 7-day forecast** (daily[0] =
+report day, daily[-1] = +7d), with NO past days stored anywhere. The old
+`rain1`/`rain2` (from daily[1]/[2].pop) are therefore *forward-looking forecast
+pop*, NOT antecedent rain. Renamed to `popNext1`/`popNext2` everywhere. True
+antecedent / "lead-up change" features (first warm day after rain, pressure
+trend, days-since-rain) would require an **OWM timemachine backfill** of each
+report's prior days — not stored in the DB, so documented here as the main
+future accuracy lever, NOT done in this release.
+
+### Verify / reproduce
+Parity: `test/production_model_parity_test.dart` max |err| ~8e-15 (daily) /
+~6e-15 (hourly). TEMP artifacts (random_state=42): `fetch_chunk2.py` ->
+`prep2.py` -> `ship2.py` (daily, `df2.pkl`, `features2.json`,
+`ship_model2.*`, `ship_expected2.json`); `fetch_hourly_chunk2.py` ->
+`hourly_final2.py` (hourly). Day-quality fixtures + gauges recalibrated;
+all model/nuptials/hourly/size/parity tests pass; `flutter analyze` = 4
+pre-existing infos only.

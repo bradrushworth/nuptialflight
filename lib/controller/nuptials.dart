@@ -171,6 +171,7 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
   double humid = hourly.humidity!.toDouble();
   double press = hourly.pressure!.toDouble();
   double dewPoint = hourly.dewPoint!.toDouble();
+  double uvi = hourly.uvi?.toDouble() ?? 0.0;
   double hemisphere = lat > 0 ? 1.0 : 0.0;
   int dayOfYear = int.parse(dayOfYearFormat
       .format(DateTime.fromMillisecondsSinceEpoch((hourly.dt!) * 1000, isUtc: true)));
@@ -190,9 +191,10 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
       0.99,
       max(
           0.01,
-          // hour_model (retrained 2026-07-26) expects these 12 features in
-          // this exact order - keep in sync with the training pipeline
-          // (see docs/model_training_findings.md). No rain/cloud, as before.
+          // hour_model (retrained 2026-07-26 part 4) expects these 14 features
+          // in this exact order - keep in sync with the training pipeline
+          // (see docs/model_training_findings.md). No rain/cloud, as before;
+          // now adds uvi + windGust (visibility was dropped as noise).
           Nuptials().hourly.scorePositive([
             lat.toDouble(),
             lon.toDouble(),
@@ -206,6 +208,8 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
             press,
             dewPoint,
             dewDep,
+            uvi,
+            gust,
           ])));
 }
 double nuptialDailyPercentageModel(num lat, num lon, Daily daily,
@@ -218,6 +222,8 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily,
   double cloud = daily.clouds!.toDouble();
   double press = daily.pressure!.toDouble();
   double dewPoint = daily.dewPoint!.toDouble();
+  double uvi = daily.uvi?.toDouble() ?? 0.0;
+  double rainMm = daily.rain?.toDouble() ?? 0.0;
   double hemisphere = lat > 0 ? 1.0 : 0.0;
   int dayOfYear = int.parse(
       dayOfYearFormat.format(DateTime.fromMillisecondsSinceEpoch((daily.dt!) * 1000, isUtc: true)));
@@ -226,11 +232,20 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily,
   double cosDoy = cos(2 * pi * dayOfYear / 365.25);
   // Dew-point depression: how far the air is from saturation.
   double dewDep = temp - dewPoint;
-  // Antecedent rain: probability of precipitation on the next two days
-  // (daily[i+1]/daily[i+2].pop). Missing values default to 0, matching the
-  // training pipeline (fillna(0)).
-  double rain1 = pop1?.toDouble() ?? 0.0;
-  double rain2 = pop2?.toDouble() ?? 0.0;
+  // FORECAST rain: probability of precipitation on the NEXT two days
+  // (daily[i+1]/daily[i+2].pop). NB these are forward-looking forecast pop,
+  // NOT antecedent rain (the DB stores only today + 7-day forecast, no past
+  // days). Missing values default to 0, matching training fillna(0).
+  double popNext1 = pop1?.toDouble() ?? 0.0;
+  double popNext2 = pop2?.toDouble() ?? 0.0;
+  // Daylength (hours) from sunrise/sunset; median-ish fallback when absent.
+  double daylength = (daily.sunrise != null && daily.sunset != null)
+      ? ((daily.sunset! - daily.sunrise!) / 3600.0).clamp(0.0, 24.0)
+      : 12.0;
+  // Moon phase (0..1) encoded cyclically.
+  double moon = daily.moonPhase?.toDouble() ?? 0.5;
+  double moonSin = sin(2 * pi * moon);
+  double moonCos = cos(2 * pi * moon);
 
   if (temp < 5) return 0.01;
   if (wind > 15) return 0.01;
@@ -240,9 +255,11 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily,
       0.99,
       max(
           0.01,
-          // final_model.dart (retrained 2026-07-26) expects these 15 features
-          // in this exact order - keep in sync with the training pipeline
-          // (see docs/model_training_findings.md).
+          // final_model.json (retrained 2026-07-26 part 4) expects these 21
+          // features in this exact order - keep in sync with the training
+          // pipeline (see docs/model_training_findings.md). The first 15 are
+          // unchanged; appended: uvi, windGust, rainMm, daylength, moonSin,
+          // moonCos.
           Nuptials().daily.scorePositive([
             lat.toDouble(),
             lon.toDouble(),
@@ -257,8 +274,14 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily,
             press,
             dewPoint,
             dewDep,
-            rain1,
-            rain2,
+            popNext1,
+            popNext2,
+            uvi,
+            gust,
+            rainMm,
+            daylength,
+            moonSin,
+            moonCos,
           ])));
 }
 
@@ -299,9 +322,10 @@ double nuptialCalculator(List<Map<String, num>> values) {
 
 /// Representative baseline contexts used to marginalise the non-target
 /// features when computing a partial-dependence curve. Each entry is a full
-/// 15-element daily-model input vector:
-/// [lat, lon, hemisphere, sin_doy, cos_doy, temp, wind, rain0, humid, cloud,
-///  press, dewPoint, dew_dep, rain1, rain2].
+/// 21-element daily-model input vector:
+/// [lat, lon, hemisphere, sin_doy, cos_doy, temp, wind, rain0(pop), humid,
+///  cloud, press, dewPoint, dew_dep, popNext1, popNext2, uvi, windGust, rainMm,
+///  daylength, moonSin, moonCos].
 /// The target feature is overwritten per query, so only the non-target values
 /// matter.
 List<List<double>> _buildPdContexts() {
@@ -322,7 +346,7 @@ List<List<double>> _buildPdContexts() {
     [-30, -60, 88], // SH South America, late
   ];
   // Representative weather states:
-  // [wind, rain0, humid, cloud, press, dew, temp, rain1, rain2].
+  // [wind, rain0, humid, cloud, press, dew, temp, popNext1, popNext2].
   const states = <List<double>>[
     [3.0, 0.0, 65.0, 35.0, 1016.0, 12.0, 22.0, 0.0, 0.0], // ideal
     [5.7, 0.0, 77.0, 70.0, 1014.0, 12.0, 16.5, 0.2, 0.2], // typical
@@ -345,8 +369,14 @@ List<List<double>> _buildPdContexts() {
         s[4], // 10 pressure
         s[5], // 11 dewPoint
         s[6] - s[5], // 12 dew_dep (baseline; held constant per context)
-        s[7], // 13 rain1
-        s[8], // 14 rain2
+        s[7], // 13 popNext1 (forecast pop next day)
+        s[8], // 14 popNext2 (forecast pop day after)
+        6.0, // 15 uvi (moderate baseline)
+        s[0] + 2.0, // 16 windGust (~wind + a little)
+        0.0, // 17 rainMm (no rain baseline)
+        13.0, // 18 daylength (hours; flight-season typical)
+        0.0, // 19 moonSin (new moon baseline)
+        1.0, // 20 moonCos
       ]);
     }
   }
