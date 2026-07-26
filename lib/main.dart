@@ -728,23 +728,30 @@ class _MyHomePageState extends State<MyHomePage> {
           ? null
           : FloatingActionButton(
               onPressed: () async {
+                // Per-size seasonal likelihood for today's location, shown on
+                // each button so keepers hunting a specific species get
+                // species-appropriate timing (derived from the flights data).
+                final Map<String, int> sizePct = (_weather?.lat != null)
+                    ? sizeSeasonalPercentages(
+                        _dailyPercentage[0], _weather!.lat!, DateTime.now().toUtc())
+                    : const {'small': 0, 'medium': 0, 'large': 0};
                 // set up the buttons
                 Widget smallButton = ElevatedButton(
-                  child: Text("Small\n(10mm)", textAlign: TextAlign.center),
+                  child: Text("Small\n(10mm)\n${sizePct['small']}%", textAlign: TextAlign.center),
                   style: ElevatedButton.styleFrom(alignment: Alignment.centerLeft),
                   onPressed: () {
                     _sawNuptialFlight('small');
                   },
                 );
                 Widget mediumButton = ElevatedButton(
-                  child: Text("Medium\n(20mm)", textAlign: TextAlign.center),
+                  child: Text("Medium\n(20mm)\n${sizePct['medium']}%", textAlign: TextAlign.center),
                   style: ElevatedButton.styleFrom(alignment: Alignment.center),
                   onPressed: () {
                     _sawNuptialFlight('medium');
                   },
                 );
                 Widget largeButton = ElevatedButton(
-                  child: Text("Large\n(30mm)", textAlign: TextAlign.center),
+                  child: Text("Large\n(30mm)\n${sizePct['large']}%", textAlign: TextAlign.center),
                   style: ElevatedButton.styleFrom(alignment: Alignment.centerRight),
                   onPressed: () {
                     _sawNuptialFlight('large');

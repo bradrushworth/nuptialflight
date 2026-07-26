@@ -121,6 +121,55 @@ reuse cached responses, cutting paid OWM calls.
   partial-dependence curves. `flutter analyze` stays at 0 errors; all
   nuptials/model/hourly/parity tests pass.
 
+## Per-size seasonal prior — SHIPPED (2026-07-26, part 4)
+User asked to (a) add a size/species UX feature, (b) retrain both models with
+the unused DB fields, (c) fix the mislabelled rain1/rain2. Part (a) is DONE and
+COMMITTED; (b) and (c) are the in-progress "Task queue" below.
+
+### DONE + committed (size UX)
+- `lib/controller/nuptials.dart`: added `_sizeSeasonalN`/`_sizeSeasonalS`
+  (per-hemisphere small/medium/large monthly weight tables, 3-month smoothed,
+  peak-normalised to 1.0), plus `sizeSeasonalMultiplier(size, lat, dateUtc)` and
+  `sizeSeasonalPercentages(basePercentage, lat, dateUtc)`.
+- Data source: AQL COLLECT of `flights` positives by (hemisphere, size, month)
+  — 10,125 sized positives (small 5,036 / medium 2,930 / large 2,159; 2 null).
+  Finding: size classes overlap heavily on *weather* (temp/wind/humid nearly
+  identical) but differ in *seasonal timing* (NH: small peaks Jul, medium
+  Jun-Jul, large earlier May-Jun; SH offset ~6 months) — so a seasonal PRIOR,
+  not 3 separate weather forests, is the right design.
+- `lib/main.dart`: report dialog buttons now show each size's seasonal % (e.g.
+  "Small (10mm) 12%").
+- `test/size_seasonal_test.dart` NEW (6 tests, all pass). README updated.
+
+### Task queue (in progress — part 4)
+1. Retrain BOTH models adding the unused DB fields that are already stored in
+   every doc: daily has `moon_phase`, `sunrise`/`sunset` (=> daylength +
+   hours-since-sunrise), `wind_gust`, `uvi`, and rain *amount* (`rain` mm, vs
+   just `pop`); hourly has `uvi`, `visibility`, `wind_gust`. Re-fetch via the
+   resumable projected AQL scripts in %TEMP% (`fetch_chunk.py` /
+   `fetch_hourly_chunk.py` — extend the RETURN projection), re-run
+   `prep.py`/`ship_train.py` + hourly equivalents, export sklite JSON, rebuild
+   parity fixtures. Keep the compact recipe (24 trees / 128 leaves) for app size.
+2. Fix mislabelled rain1/rain2: `flights.weather.daily` is today + 7-day
+   FORECAST (verified — daily[0]=report day, daily[-1]=+7d), so rain1/rain2 are
+   forward-looking `pop`, NOT antecedent. Rename to `popNext1`/`popNext2` (honest
+   forecast-rain) in `nuptials.dart` + notebooks + docs. True antecedent rain
+   would need an OWM timemachine backfill (not stored in DB) — documented as a
+   future lever in docs/model_training_findings.md, NOT done here.
+3. Update notebooks (`lib/models/*.ipynb`), tests (model/nuptials/hourly/parity),
+   README, docs/model_training_findings.md, bump version, commit + deploy.
+
+### DB schema notes (verified 2026-07-26)
+- `flights.weather` = {lat, lon, timezone, daily[8]} (today + 7-day forecast; NO
+  past days). daily[i] keys: clouds, dew_point, dt, feels_like, humidity,
+  moon_phase, moonrise, moonset, pop, pressure, rain, sunrise, sunset, temp
+  (day/min/max/night/eve/morn), uvi, weather, wind_deg, wind_gust, wind_speed.
+- `historical.weather` = {current, hourly[24] of the flight day only}. hourly[i]
+  keys add: visibility; (no rain-amount split, has pop).
+- `current.weather` = single OWM current snapshot.
+- No pre-flight days are stored anywhere => "change/lead-up" features need an
+  external OWM timemachine backfill (future work).
+
 ## Guardrails
 - Keep first-page load fast: do not re-introduce `await` on
   `initializeService()` or the notification permission before `runApp()`.

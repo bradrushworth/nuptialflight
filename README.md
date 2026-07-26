@@ -29,6 +29,10 @@ time to get outside and look for ants in your local area!
 - **Crowd-sourced reports** — users can report a nuptial flight they observed.
   Reports are stored in a backend database (ArangoDB) and shown back to other
   users nearby ("X flights reported near you").
+- **Per-size seasonal likelihood** — when reporting a sighting, the app shows a
+  small/medium/large queen-size breakdown of today's flight chance, using a
+  data-derived seasonal prior (different size classes peak in different months),
+  so keepers hunting a specific species get species-appropriate timing.
 - **Background updates & notifications** — a background-fetch task periodically
   recomputes the percentage and can post a notification when the local flight
   chance is high, or when nearby users report a flight.

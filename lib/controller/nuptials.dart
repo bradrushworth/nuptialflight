@@ -70,6 +70,57 @@ class Nuptials {
   ForestModel get daily => _dailyModel!;
   ForestModel get hourly => _hourlyModel!;
 }
+
+// ---------------------------------------------------------------------------
+// Per-size seasonal prior.
+//
+// Queen ants of different sizes fly at slightly different times of year. The
+// shared weather model captures the *conditions* but not this seasonal timing,
+// so we layer on a data-derived seasonal multiplier per size class.
+//
+// Derived from the ArangoDB `flights` collection (10,125 sized positives):
+// counts of confirmed flights per (hemisphere, size, calendar month), 3-month
+// smoothed and normalised so each size's peak month == 1.0. Index 0 = January.
+// See docs/model_training_findings.md and lib/models/*.ipynb.
+// ---------------------------------------------------------------------------
+const Map<String, List<double>> _sizeSeasonalN = {
+  'small': [0.1129, 0.1667, 0.2505, 0.4015, 0.6841, 0.9962, 1.0, 0.7401, 0.3809, 0.2304, 0.1539, 0.1171],
+  'medium': [0.1449, 0.2049, 0.346, 0.5357, 0.8247, 1.0, 0.9378, 0.6571, 0.3839, 0.2625, 0.1942, 0.151],
+  'large': [0.2362, 0.3106, 0.4904, 0.7266, 0.9448, 1.0, 0.8945, 0.6391, 0.4568, 0.3321, 0.295, 0.2422],
+};
+
+const Map<String, List<double>> _sizeSeasonalS = {
+  'small': [0.8522, 0.7581, 0.5618, 0.5323, 0.4301, 0.3253, 0.2903, 0.4973, 0.6801, 0.8925, 0.8817, 1.0],
+  'medium': [0.9702, 0.8214, 0.7262, 0.5952, 0.5119, 0.4048, 0.4345, 0.4643, 0.5536, 0.6845, 0.8869, 1.0],
+  'large': [0.9159, 0.9626, 1.0, 0.785, 0.5981, 0.3738, 0.4206, 0.5607, 0.757, 0.9907, 0.9907, 0.9813],
+};
+
+/// Seasonal likelihood multiplier in [0.0, 1.0] that a queen of the given
+/// [size] ('small' | 'medium' | 'large') is flying at the given [dateUtc] and
+/// latitude [lat]. 1.0 = this size's peak flight month; lower = out of season.
+/// Returns 1.0 for an unknown/null size (no seasonal adjustment).
+double sizeSeasonalMultiplier(String? size, num lat, DateTime dateUtc) {
+  if (size == null) return 1.0;
+  final table = lat > 0 ? _sizeSeasonalN : _sizeSeasonalS;
+  final row = table[size];
+  if (row == null) return 1.0;
+  final monthIndex = dateUtc.month - 1; // DateTime.month is 1..12
+  return row[monthIndex];
+}
+
+/// Returns the per-size seasonal likelihood for all three size classes at the
+/// given location/date, expressed as integer percentages (0..100) relative to
+/// the base daily flight [basePercentage]. Used by the UI to show, e.g.,
+/// "Large 48% / Medium 30% / Small 12%" so keepers hunting a specific species
+/// get species-appropriate timing.
+Map<String, int> sizeSeasonalPercentages(int basePercentage, num lat, DateTime dateUtc) {
+  final result = <String, int>{};
+  for (final size in const ['small', 'medium', 'large']) {
+    result[size] = (basePercentage * sizeSeasonalMultiplier(size, lat, dateUtc)).round();
+  }
+  return result;
+}
+
 double nuptialHourlyPercentage(Hourly hourly) {
   double temp = temperatureContribution(hourly.temp!);
   double windSpeed = windContribution(hourly.windSpeed!);
