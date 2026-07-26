@@ -37,37 +37,51 @@ Web: https://nuptialflight.app/
   config + notification channels), `getServicePercentage()`, `getReportedFlightsNearMe()`.
 - `lib/controller/nuptials.dart` — prediction math. `Nuptials` loads two
   RandomForest models; `nuptialDailyPercentageModel` / `nuptialHourlyPercentageModel`
-  score weather. The `models/*.dart` `score()` trees are GENERATED — do not hand-edit.
+  score weather via `lib/models/forest_model.dart` over the JSON assets.
 - `lib/controller/arangodb.dart` — ArangoDB reporting of sightings/weather.
-- `lib/view/map.dart` — map page.
+- `lib/view/map.dart` — map page. Weather overlays (clouds/wind/temp) are
+  recoloured by `ColorFilter.matrix` to show nuptial-flight SUITABILITY:
+  BLUE-GREEN/teal = favourable, RED = unfavourable, tinted per the model's PD
+  distribution (see the map-shading note under Verification).
 - `lib/responses/*.dart` — OWM response models.
 
 ## Models & feature wiring (IMPORTANT)
-The two RandomForest models are GENERATED Dart (`score()` trees in
-`lib/models/*.dart`), exported from the training notebooks
-`lib/models/*.ipynb` (autosklearn classifiers → Dart via `m2cgen`,
-→ JSON via `sklite`). Do not hand-edit the trees.
+The two RandomForest models ship as **sklite JSON assets**
+(`assets/final_model.json`, `assets/hour_model.json`) and are scored at runtime
+by the hand-written pure-Dart tree-walker `lib/models/forest_model.dart`
+(`ForestModel.fromJsonString(...)` -> `scorePositive(List<double>)`, which
+computes sklearn-style `predict_proba` = mean of the per-tree normalised leaf
+values). The old m2cgen-generated `lib/models/final_model.dart` /
+`hour_model.dart` score trees were DELETED (2026-07-26) and `sklite` was
+removed from `pubspec.yaml`. Do not hand-edit the JSON assets — regenerate
+them from the training notebooks `lib/models/*.ipynb`.
+
+`Nuptials.ensureLoaded()` parses both JSON assets once (via `rootBundle`);
+it is kicked off after `runApp()` and awaited in the `_getWeather()` pipeline
+before any scoring. Tests inject models with `Nuptials.loadFromStrings(...)`
+(File IO, no rootBundle).
 
 Each model expects features in a FIXED order that MUST match the training
-notebook's `features.append({...})` / `X1_train.columns` order. The call sites
-in `lib/controller/nuptials.dart` must pass exactly these:
+notebook. The call sites in `lib/controller/nuptials.dart` must pass exactly:
 
-- **Daily model** (`final_model.dart` / `DailyModel.score`, 15 inputs since
-  2026-07-26): `[lat, lon, hemisphere, sin_doy, cos_doy, temp(day), wind,
-  rain(pop), humid, cloud, press, dewPoint, dew_dep, rain1, rain2]`
-- **Hourly model** (`hour_model.dart` / `HourlyModel.score`, 9 inputs — NO rain,
-  NO cloud, which are commented out in `autosklearn_classification-hourly.ipynb`):
-  `[lat, lon, hour, temp, wind, humid, press, dewPoint, daysSinceSpring]`
+- **Daily model** (`assets/final_model.json`, 15 inputs since 2026-07-26):
+  `[lat, lon, hemisphere, sin_doy, cos_doy, temp(day), wind, rain(pop), humid,
+  cloud, press, dewPoint, dew_dep, rain1, rain2]`
+- **Hourly model** (`assets/hour_model.json`, 12 inputs since 2026-07-26 — still
+  NO rain, NO cloud): `[lat, lon, hemisphere, sin_doy, cos_doy, hour, temp,
+  wind, humid, press, dewPoint, dew_dep]` (`hour` = UTC 0-23).
 
 If a model is retrained with a different feature set/order, update BOTH the
 call site in `nuptials.dart` AND the expectations in `test/nuptials_test.dart`,
-`test/hourly_test.dart`, `test/model_test.dart`.
+`test/hourly_test.dart`, `test/model_test.dart`,
+`test/production_model_parity_test.dart`.
 
 The per-attribute "suitability" gauges (`temperatureContribution`,
 `humidityContribution`, `windContribution`, `rainContribution`,
 `cloudinessContribution`, `pressureContribution`, `uviContribution`) in
 `nuptials.dart` are NOT hand-tuned distributions — they are derived from
-`final_model.dart` via per-feature partial-dependence curves (the model's
+the daily model (`assets/final_model.json` via `forest_model.dart`) via
+per-feature partial-dependence curves (the model's
 average flight probability as one feature varies, others held at
 representative flight-season baseline contexts), normalised to [0,1].
 Features the model barely uses (rain, pressure) resolve to a neutral 0.5.
@@ -99,19 +113,20 @@ reuse cached responses, cutting paid OWM calls.
   `registerBackgroundCallback`, `canLaunch`/`launch`). Do not "fix" these
   by upgrading packages unless asked — they are out of scope and risk
   breaking the build.
-- Current app version: **2.15.0+137** (retrained daily+hourly models, JSON-only forest runtime, sklite dep removed). `flutter analyze` stays at 0 errors.
-- (2026-07-26) Per-attribute suitability gauges in `nuptials.dart` rewritten to
-  derive from `final_model.dart` via per-feature partial-dependence curves
-  (replacing the old hand-tuned Normal-CDF gauges); fixed the hourly model
-  call-site mis-wire so `nuptialHourlyPercentageModel` passes the model's real
-  9-feature order `[lat, lon, hour, temp, wind, humid, press, dewPoint,
-  daysSinceSpring]`. `flutter analyze` stays at 0 errors; `nuptials_test.dart`,
-  `hourly_test.dart`, `model_test.dart` all pass.
+- Current app version: **2.15.1+138** (suitability-based map weather-overlay shading). Previous 2.15.0+137 = retrained daily+hourly models, JSON-only forest runtime, sklite dep removed. `flutter analyze` stays at 0 errors.
+- (2026-07-26) Models retrained + moved to a JSON-only runtime
+  (`lib/models/forest_model.dart` over the sklite JSON assets); daily is now
+  15 features, hourly 12. Per-attribute suitability gauges and the map
+  weather-overlay shading are both derived from the daily model's per-feature
+  partial-dependence curves. `flutter analyze` stays at 0 errors; all
+  nuptials/model/hourly/parity tests pass.
 
 ## Guardrails
 - Keep first-page load fast: do not re-introduce `await` on
   `initializeService()` or the notification permission before `runApp()`.
-- Do not hand-edit the generated `models/*.dart` score trees.
+- Do not hand-edit the sklite JSON model assets (`assets/*_model.json`) or
+  the `lib/models/forest_model.dart` walker by hand; regenerate JSON from the
+  notebooks. (The old generated `models/*.dart` score trees are gone.)
 - Prefer `git -C` and verify with `flutter analyze` before claiming done.
 - `flutter pub upgrade` has been observed to HANG for many minutes
   (stuck resolving git deps). If it does not finish quickly, kill the
@@ -123,130 +138,72 @@ reuse cached responses, cutting paid OWM calls.
   setup/.env template, and project structure — keep it in sync if you
   add user-facing features or change required API keys.
 - Keep the model call-site feature orders in `nuptials.dart` in sync with the
-  training notebooks/pipeline. The hourly model uses 9 features (no rain/
-  cloud); the daily uses 15 as of the 2026-07-26 retrain (see Resumable
-  work below). A mismatched order silently produces
-  wrong predictions — the hourly call site was mis-wired until 2026-07-26.
+  training notebooks/pipeline. As of the 2026-07-26 retrain the daily model
+  uses 15 features and the hourly model uses 12 (both add hemisphere +
+  cyclical sin/cos day-of-year + dew-point depression; hourly still has no
+  rain/cloud). A mismatched order silently produces wrong predictions.
 
-## Resumable work — model retrain SHIPPING IN PROGRESS (2026-07-26, part 2)
-User APPROVED shipping the improved daily model (compact retrain) and asked
-for more: JSON-only runtime, hourly retrain, test-fixture redesign, notebook
-updates. Working tree is DIRTY (uncommitted). Resume from "Task queue" below.
+## Model retrain + JSON runtime — SHIPPED & COMMITTED (2026-07-26)
+All of the retrain/runtime/notebook/test work below is DONE and committed
+(`598cc8a` Release 2.15.0+137; findings/parity groundwork in `6239f04`).
+Working tree is clean except ongoing map-shading tweaks.
 
-### DONE in working tree (uncommitted)
-- **Ship daily model** = RF(24 trees, max_features=sqrt, max_leaf_nodes=128,
+### What shipped
+- **Daily model** RF(24 trees, max_features=sqrt, max_leaf_nodes=128,
   min_samples_leaf=5, class_weight=balanced_subsample, random_state=42),
-  15 features `[lat, lon, hemisphere, sin_doy, cos_doy, day(temp), windSpeed,
-  rain0, humid, cloud, press, dewPoint, dew_dep, rain1, rain2]`.
-  Metrics: **AUC 0.6430, AP 0.0870** (vs prod-baseline 0.500/0.048; full
-  150-tree improved 0.663/0.110). 6,120 nodes. Sweep history: 32x128 AUC
-  .6433; 24x128 .6430 (chosen); 20x128 .6413; 16x128 .6384.
-- `lib/models/final_model.dart` REPLACED (721 KB m2cgen export + header);
-  `assets/final_model.json` REPLACED (398 KB sklite). Old prod files only in
-  git history (HEAD).
-- `nuptials.dart`: `nuptialDailyPercentageModel(lat, lon, daily, {nocturnal,
-  pop1, pop2})` now passes the 15-feature order; sin/cos use `365.25`;
-  dayOfYear from UTC dt; rain1/rain2 = pop1/pop2 ?? 0.0 (matches training
-  fillna(0)). `_buildPdContexts` emits 15-elem vectors (anchors carry
-  dayOfYear now, sin/cos computed inline); `_PdCurve` indices: temp=5,
-  wind=6, rain=7, humid=8, cloud=9, press=10.
-- `main.dart` + `services.dart` call sites pass pop1/pop2 from
-  daily[i+1]/[i+2].pop (guarded by length).
-- Tests: `model_test.dart` rewritten (15 inputs, expects ~0.48);
-  `production_model_parity_test.dart` NEW (final_model.dart score vs
-  `%TEMP%/ship_expected.json`, max err 2e-14, self-skips w/o TEMP);
-  `improved_model_parity_test.dart` (150-tree JSON walker, float32 cast);
-  `nuptials_test.dart` gauge + Model expectations recalibrated
-  (`%TEMP%/recal.py`); ALL nuptials/model/hourly/parity tests pass.
+  15 features -> **AUC 0.643, AP 0.087** (old prod config was degenerate at
+  AUC 0.500 because ccp_alpha=0.0008 pruned every tree to one leaf).
+- **Hourly model** same recipe on 207,101 rows -> **AUC 0.668, AP 0.093**,
+  12 features (no rain/cloud).
+- **JSON-only runtime**: `lib/models/forest_model.dart` walks the sklite JSON
+  assets; generated `*_model.dart` deleted; `sklite` dep removed. Parity vs
+  Python predict_proba ~2e-14 (daily) / ~1e-14 (hourly) in
+  `test/production_model_parity_test.dart`.
+- Notebooks rewritten to the new pipeline; README + docs/model_training_
+  findings.md updated (with a SHIPPED addendum); version 2.15.0+137.
+- Tests recalibrated; day-quality fixtures rebuilt from the PD optima
+  (Perfect .60 > Great .55 > Ordinary .50 > Bad .41 > Worst .01).
 
-### Additional DONE (part 3, uncommitted)
-- **JSON-only runtime SHIPPED**: `lib/models/forest_model.dart` NEW
-  (pure-Dart `ForestModel`/`DecisionTree` predict_proba walker over the
-  sklite JSON). Generated `lib/models/final_model.dart` + `hour_model.dart`
-  DELETED (-1.3 MB). `sklite` dependency REMOVED from pubspec (pub get run).
-  `Nuptials` now: `static Future<void> ensureLoaded()` (parses both JSON
-  assets once via rootBundle), `loadFromStrings()` test hook, `.daily`/
-  `.hourly` getters. main.dart: `unawaited(Nuptials.ensureLoaded())` after
-  runApp + added to the `_getWeather()` Future.wait; services.dart
-  `getServicePercentage()` awaits ensureLoaded before scoring.
-- **Hourly model RETRAINED + SHIPPED**: `assets/hour_model.json` replaced
-  (397 KB sklite; old 226 KB). RF(24, sqrt, max_leaf_nodes=128,
-  min_samples_leaf=5, balanced_subsample, random_state=42) on 207,101 rows
-  (4.73% pos): **AUC 0.6676, AP 0.0927**. 12 features:
-  `[lat, lon, hemisphere, sin_doy, cos_doy, hour, temp, windSpeed, humid,
-  press, dewPoint, dew_dep]` (no rain/cloud, as before; hour = UTC 0-23).
-  Call site `nuptialHourlyPercentageModel` rewritten accordingly.
-- Tests all rewritten to ForestModel-over-JSON: `model_test.dart` (0.48),
-  `hourly_test.dart` (12 feats, 0.34), `production_model_parity_test.dart`
-  (BOTH models vs `%TEMP%/ship_expected.json` + `ship_hour_expected.json`;
-  max err 2e-14 / 1e-14), `nuptials_test.dart` (setUpAll loads models via
-  `Nuptials.loadFromStrings` + File IO; Hourly Model expect 0.34).
-  **45/45 pass**; `dart analyze lib test` = only the 4 pre-existing infos.
-- Hourly TEMP artifacts: `hourly_cache.csv` (207,101 rows),
-  `hourly_df.pkl`, `hourly_features.json`, `ship_hour_model.pkl/.dart/.json`,
-  `ship_hour_expected.json`; scripts `fetch_hourly_chunk.py` (+ state),
-  `hourly_train.py`, `hourly_ship.py`.
+### Reproducibility artifacts (`%TEMP%` = C:\Users\Brad\AppData\Local\Temp)
+May be wiped between sessions. Deterministic re-create (random_state=42):
+- Daily: `fetch_chunk.py` (resumable projected AQL) -> `prep.py` -> `df.pkl`
+  (212,504 rows) -> `ship_train.py` -> `ship_model.pkl/.json` +
+  `ship_expected.json` (200-row float32 parity fixture) +
+  `features.json` ({base:10, imp:15}).
+- Hourly: `fetch_hourly_chunk.py` (loop until 0) -> `hourly_train.py` ->
+  `hourly_df.pkl` -> `hourly_ship.py` -> `ship_hour_model.pkl/.json` +
+  `ship_hour_expected.json` + `hourly_features.json`.
+- Analysis: `pd_sweep.py` (per-feature partial-dependence optima used for the
+  gauges, test fixtures, AND the map shading), `recal.py`/`recal2.py`/
+  `refix.py` (recalibrate test expectations), `calc_expect.py`.
+- The parity tests self-skip when their `%TEMP%/ship_expected.json` /
+  `ship_hour_expected.json` are absent (CI-safe). Copy those two files back
+  into `%TEMP%` before running them.
 
-### Task queue (user-requested, NOT started/incomplete)
-1. ~~JSON-only runtime~~ DONE (see part 3 above). Was: (user: "replace the dart files with the json files
-   if they do the same thing"): replace generated `lib/models/*.dart` score
-   trees with a small predict_proba tree-walker over the sklite JSON assets
-   (walker logic proven in the parity tests; sklite pkg predict() is
-   majority-vote only — NOT usable). ⚠️ `_PdCurve`/score are currently
-   synchronous; asset loading is async — needs an await-able init (e.g.
-   `Nuptials.ensureLoaded()`) before first score; tests must load JSON from
-   file system not rootBundle (or use TestWidgetsFlutterBinding + asset).
-2. ~~Hourly retrain~~ DONE (see part 3 above). Was: with same improvements. BLOCKER found: first-doc probe
-   showed `weather.hourly == null` (len 0) — count docs with hourly != null
-   first (`%TEMP%/probe_hourly.py`); old notebook filtered on it. Fetch via
-   resumable chunked AQL projection; features analogous to daily (+hour).
-3. ~~Test-fixture redesign~~ DONE (part 3): fixtures rebuilt from the PD
-   optima (Perfect 30C/1.5ms/67%/cloud95/1035hPa ... Worst 3C/30ms). Model
-   scores now rank Perfect .60 > Great .55 > Ordinary .50 > Bad .41 >
-   Worst .01; gauges recalibrated (`%TEMP%/refix.py` + `recal2.py`);
-   41/41 nuptials tests pass. Was: (user: make good/perfect/bad day tests reflect
-   discovered patterns). PD sweep of ship model (`%TEMP%/pd_sweep.py`):
-   temp BEST 34C/WORST 0C (span .094); wind BEST 1.5/WORST 12.5 m/s (.057);
-   press BEST 1038.5/WORST 1004 hPa (.038); humid BEST 67.5/WORST 95 (.021);
-   cloud BEST 97.5/WORST 2.5 (.018); rain0 near-flat (.009). Redesign
-   fixtures around these + rerun recalibration.
-4. ~~Notebook updates~~ DONE: both ipynbs REWRITTEN from scratch (6 cells
-   each, no outputs, ~8 KB vs old 580 KB autosklearn relics): projected
-   AQL fetch, engineered features, compact RF config, sklite export +
-   parity fixtures, shipping checklist. Was:: `lib/models/autosklearn_classification.ipynb` (71
-   cells; cell 5 = old docker-host fetch `RETURN {f}`) + hourly ipynb —
-   update to: TLS host, projected AQL, engineered features, the ship-model
-   RF config, m2cgen/sklite export, and note the ccp_alpha finding.
-5. ~~Wrap-up~~ DONE: findings doc has a SHIPPED addendum; README table
-   now daily-15/hourly-12 + forest_model.dart runtime; version bumped to
-   2.15.0+137; flutter analyze = 4 pre-existing infos only; all model/
-   nuptials/widget tests pass (full `flutter test` exceeds the 30s shell
-   cap on the network tests - run suites individually). Was:: update `docs/model_training_findings.md` + README (currently
-   say "NOT shipped" — now shipped), bump version in pubspec.yaml
-   (currently 2.14.1+136), full `flutter analyze` + `flutter test`, commit.
-
-### Key TEMP artifacts (`%TEMP%` = C:\Users\Brad\AppData\Local\Temp)
-- `ship_model.pkl/.dart/.json`, `ship_expected.json`, `ship_train.py` (the
-  shipped compact model + parity fixtures; retrain reproducible via
-  random_state=42 on df.pkl).
-- `df.pkl` (212,504 rows engineered), `flights_cache.csv` (raw fetch),
-  `features.json` ({base:10, imp:15}), `holdout.pkl`,
-  `improved_model.pkl` (150 trees), `baseline_model.pkl` (degenerate),
-  `final_model_improved.json/.dart`, `expected.json`.
-- Scripts: `fetch_chunk.py` (resumable AQL fetch), `prep.py`,
-  `train_compact*.py`, `ship_train.py`, `calc_expect.py`, `recal.py`,
-  `pd_sweep.py`, `probe_hourly.py`, `export_dart_chunk.py`.
-- If TEMP was wiped: re-fetch with fetch_chunk.py loop, prep.py, then
-  ship_train.py (deterministic, random_state=42).
+### Map shading (2026-07-26, lib/view/map.dart)
+The three OWM weather overlays are recoloured via `ColorFilter.matrix` to show
+SUITABILITY per the model's PD distribution: BLUE-GREEN/teal = favourable,
+RED = unfavourable. Per-layer opacity is weighted by each feature's PD span
+(temp 1.00, wind 0.61, cloud 0.19). Temperature is bidirectional. NB the OWM
+temp palette has high red across yellow/orange/red, so favourable green is
+GATED on `R-G-B` (only *pure red*/hottest passes; yellow/orange/green/cyan
+reject) not `R-B` (which lit green almost everywhere); cold => red via `B-R`.
+Favourable green/blue is DAMPED (G=(R-G-B)/2, B=(R-G-B)/5) because green reads
+~3x brighter than red at equal alpha — keep it below the red or it dominates. Clouds are faint teal (overcast is weakly
+favourable); wind is red (calm has no signal to paint).
 
 ### DB / security
 - ArangoDB `https://api.bitbot.com.au:8530`, db `nuptialFlight`, user
   `notebook` (creds in the ipynb). AQL projection is ~30x faster.
 - Defaced collection "u have been pwned bro…" is EMPTY; `notebook` and
-  `nuptialflight` users both get HTTP 403 on drop (need admin/root — user
-  said auth was added server-side; deletion still pending admin creds).
+  `nuptialflight` users both get HTTP 403 on drop (needs admin/root; user
+  added server-side auth — deletion still pending admin creds).
+
 ### Verify before claiming done
-`dart analyze lib/controller/nuptials.dart test/*.dart` (no issues);
-`flutter test test/nuptials_test.dart test/hourly_test.dart test/model_test.dart`
-(all pass); `flutter analyze` (only the 4 pre-existing
-`deprecated_member_use` infos).
+`dart analyze lib test` (only the 4 pre-existing `deprecated_member_use`
+infos in screenshots_other.dart/widgets_mobile.dart/utils.dart). Run test
+suites individually (full `flutter test` exceeds the 30s shell cap on the
+network tests): `flutter test test/nuptials_test.dart test/hourly_test.dart
+test/model_test.dart test/production_model_parity_test.dart` (all pass; the
+parity test self-skips unless `%TEMP%/ship_expected.json` +
+`ship_hour_expected.json` are present).

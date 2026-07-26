@@ -59,33 +59,65 @@ class _MapPageState extends State<MapPage> {
   final TileUpdateTransformer _tempTileUpdateTransformer =
       TileUpdateTransformers.throttle(_weatherTileThrottle);
 
-  // Previous visual used Opacity(0.165) over the filtered tiles. Fold that into
-  // the alpha row so we avoid an extra Opacity compositing layer per weather layer.
+  // Weather overlays are recoloured to reflect nuptial-flight SUITABILITY,
+  // matching the shipped model's learned distribution. The per-attribute
+  // weights below are the normalised spans of each feature's partial-
+  // dependence curve (see docs/model_training_findings.md PD sweep):
+  //   temperature .094  (BEST ~32C  / WORST ~0C)   -> strongest signal
+  //   wind        .057  (BEST ~1.5  / WORST ~12.5 m/s)
+  //   cloud       .018  (weakly FAVOURABLE when overcast)
+  // Each overlay is tinted in proportion so the map's visual weight tracks how
+  // much each pattern actually drives flight probability. Convention:
+  // BLUE/GREEN (teal) = favourable for flights, RED = unfavourable.
+  //
+  // The alpha row also folds in the old Opacity(0.165) so we avoid an extra
+  // Opacity compositing layer per weather layer.
   static const double _weatherOpacity = 0.165;
+  static const double _tempWeight = 1.00; // .094/.094
+  static const double _windWeight = 0.61; // .057/.094
+  static const double _cloudWeight = 0.19; // .018/.094
+  static const double _tempOpacity = _weatherOpacity * _tempWeight;
+  static const double _windOpacity = _weatherOpacity * _windWeight;
+  static const double _cloudOpacity = _weatherOpacity * _cloudWeight;
 
-  // Solid red where clouds exist; alpha from source (boosted), then opacity.
+  // Clouds: the retrained model finds overcast conditions WEAKLY FAVOURABLE,
+  // so tint them faint BLUE-GREEN/teal (not red) and keep the intensity low to
+  // reflect the small importance weight.
   static final ColorFilter _cloudsFilter = ColorFilter.matrix(<double>[
-    0, 0, 0, 0, 255, // R
-    0, 0, 0, 0, 0, // G
-    0, 0, 0, 0, 0, // B
-    0, 0, 0, 2 * _weatherOpacity, 0, // A = 0.33 * sourceA (0 stays 0)
+    0, 0, 0, 0, 0, // R
+    0, 0, 0, 0, 140, // G (faint favourable green where clouds are drawn - damped)
+    0, 0, 0, 0, 80, // B (slight blue => blue-green/teal favourable)
+    0, 0, 0, 2 * _cloudOpacity, 0, // A = weighted source alpha (0 stays 0)
   ]);
 
-  // Solid red where wind is drawn; alpha from source (boosted), then opacity.
+  // Wind: calm is favourable, strong wind is unfavourable. The OWM wind layer's
+  // source alpha grows with wind speed, so painting RED with alpha driven from
+  // that alpha already shows stronger (more unfavourable) winds more intensely.
   static final ColorFilter _windFilter = ColorFilter.matrix(<double>[
-    0, 0, 0, 0, 255, // R
+    0, 0, 0, 0, 255, // R (unfavourable red)
     0, 0, 0, 0, 0, // G
     0, 0, 0, 0, 0, // B
-    0, 0, 0, 2 * _weatherOpacity, 0, // A = 0.33 * sourceA (0 stays 0)
+    0, 0, 0, 2 * _windOpacity, 0, // A = weighted source alpha (0 stays 0)
   ]);
 
-  // Keep the original red extraction; drive alpha from the same signal so
-  // non-matching temps stay transparent, with opacity folded into A.
+  // Temperature: the OWM temp palette runs cold=blue -> cool=cyan -> mild=green
+  // -> warm=yellow/orange -> hot=red. CRUCIALLY red is high across most of the
+  // palette (yellow AND orange AND red all have R~255), so a naive `warm=R-B`
+  // green lights up almost everywhere. The model's favourable band is NARROW
+  // (BEST ~30C), which is only the *pure red* end. So gate favourable green on
+  // `R - G - B`, which passes pure red (255,0,0 -> 255) but rejects yellow
+  // (255,255,0 -> 0), orange (partial), green and cyan (negative -> 0). Cold
+  // stays red via `B - R` (blue/purple poles). Negatives clamp to 0.
+  //   R_out = B - R              (cold/blue  => red, unfavourable)
+  //   G_out = (R - G - B) / 2    (only pure-red/hot => green; damped, green reads brighter)
+  //   B_out = (R - G - B) / 5    (only pure-red/hot => slight blue => teal)
+  // Alpha is high for both extremes (hot pure-red via R-G, cold via B) and near
+  // zero for the mild yellow/green/cyan mid-range, scaled by the temp weight.
   static final ColorFilter _tempFilter = ColorFilter.matrix(<double>[
-    1, -2, 6, 0, -255, // R
-    0, 0, 0, 0, 0, // G
-    0, 0, 0, 0, 0, // B
-    1 * _weatherOpacity, -2 * _weatherOpacity, 6 * _weatherOpacity, 0, -255 * _weatherOpacity, // A
+    -1, 0, 1, 0, 0, // R = B - R              (cold => red, unfavourable) - full strength
+    0.5, -0.5, -0.5, 0, 0, // G = (R - G - B) / 2    (only hot pure-red => green) - damped
+    0.2, -0.2, -0.2, 0, 0, // B = (R - G - B) / 5    (only hot pure-red => slight blue => teal)
+    _tempOpacity, -_tempOpacity, _tempOpacity, 0, -20 * _tempOpacity, // A = op*(R - G + B) - bias
   ]);
 
   @override
