@@ -85,6 +85,22 @@ Random-Forest classifiers trained on user-contributed sighting/weather data
 scoring trees bundled as assets `assets/final_model.json` and
 `assets/hour_model.json`).
 
+### Model inputs (feature order)
+The generated scoring trees expect features in a fixed order that matches the
+training notebooks (`lib/models/*.ipynb`). The call sites in
+`lib/controller/nuptials.dart` pass exactly these:
+
+| Model | File | Inputs (in order) |
+| --- | --- | --- |
+| Daily | `final_model.dart` (10) | `lat`, `lon`, `temp`, `wind`, `rain`, `humid`, `cloud`, `press`, `dewPoint`, `daysSinceSpring` |
+| Hourly | `hour_model.dart` (9) | `lat`, `lon`, `hour`, `temp`, `wind`, `humid`, `press`, `dewPoint`, `daysSinceSpring` |
+
+The hourly model was trained **without** rain and cloud (they are commented out
+in the hourly notebook) and adds `hour` as the 3rd input. If you retrain a model
+with a different feature set/order, update the call site in `nuptials.dart` and
+the model tests (`test/nuptials_test.dart`, `test/hourly_test.dart`,
+`test/model_test.dart`) to match.
+
 ---
 
 ## Getting Started

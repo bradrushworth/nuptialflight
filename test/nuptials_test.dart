@@ -257,4 +257,25 @@ void main() {
       expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.41, 0.01));
     });
   });
+
+  group('Hourly Model', () {
+    Hourly hourly = Hourly();
+    hourly.dt = 1665226800; // 2022-10-08 11:00 UTC -> dayOfYear 281, hour 11, SH daysSinceSpring 38
+    hourly.temp = 16.4;
+    hourly.windSpeed = 5.7;
+    hourly.windGust = 7.0;
+    hourly.windDeg = 194;
+    hourly.humidity = 77;
+    hourly.pressure = 1015;
+    hourly.dewPoint = 12.0;
+    double lat = -35.2;
+    double lon = 149.1;
+
+    test('Model', () {
+      // Guards the call-site wiring: hour_model.dart expects the 9 features
+      // [lat, lon, hour, temp, wind, humid, press, dewPoint, daysSinceSpring]
+      // (no rain/cloud). With this input it scores ~0.38 (cf. hourly_test.dart).
+      expect(nuptialHourlyPercentageModel(lat, lon, hourly), closeTo(0.38, 0.01));
+    });
+  });
 }

@@ -119,11 +119,7 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
   double temp = hourly.temp!.toDouble();
   double wind = hourly.windSpeed!.toDouble();
   double gust = hourly.windGust?.toDouble() ?? hourly.windSpeed!.toDouble();
-  // ignore: unused_local_variable
-  double windDeg = hourly.windDeg!.toDouble();
-  double rain = hourly.pop?.toDouble() ?? 0.0;
   double humid = hourly.humidity!.toDouble();
-  double cloud = hourly.clouds!.toDouble();
   double press = hourly.pressure!.toDouble();
   double dewPoint = hourly.dewPoint!.toDouble();
   double northern = lat > 0 ? 1.0 : 0.0;
@@ -169,21 +165,18 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
       0.99,
       max(
           0.01,
+          // hour_model.dart was trained (see autosklearn_classification-hourly.ipynb)
+          // on these 9 features in this exact order. It does NOT use rain or
+          // cloud, which is why they are not passed here.
           HourlyModel.score([
             lat.toDouble(),
             lon.toDouble(),
             hour.toDouble(),
-            temp, //temperatureContribution(temp),
-            //morn,
-            wind, //windContribution(wind),
-            //gust,
-            //windDeg,
-            rain,
-            humid, //humidityContribution(humid),
-            cloud, //cloudinessContribution(cloud),
-            press, //pressureContribution(press),
+            temp,
+            wind,
+            humid,
+            press,
             dewPoint,
-            //northern,
             daysSinceSpring,
           ])[1]));
 }

@@ -42,6 +42,37 @@ Web: https://nuptialflight.app/
 - `lib/view/map.dart` — map page.
 - `lib/responses/*.dart` — OWM response models.
 
+## Models & feature wiring (IMPORTANT)
+The two RandomForest models are GENERATED Dart (`score()` trees in
+`lib/models/*.dart`), exported from the training notebooks
+`lib/models/*.ipynb` (autosklearn classifiers → Dart via `m2cgen`,
+→ JSON via `sklite`). Do not hand-edit the trees.
+
+Each model expects features in a FIXED order that MUST match the training
+notebook's `features.append({...})` / `X1_train.columns` order. The call sites
+in `lib/controller/nuptials.dart` must pass exactly these:
+
+- **Daily model** (`final_model.dart` / `DailyModel.score`, 10 inputs):
+  `[lat, lon, temp(day), wind, rain(pop), humid, cloud, press, dewPoint, daysSinceSpring]`
+- **Hourly model** (`hour_model.dart` / `HourlyModel.score`, 9 inputs — NO rain,
+  NO cloud, which are commented out in `autosklearn_classification-hourly.ipynb`):
+  `[lat, lon, hour, temp, wind, humid, press, dewPoint, daysSinceSpring]`
+
+If a model is retrained with a different feature set/order, update BOTH the
+call site in `nuptials.dart` AND the expectations in `test/nuptials_test.dart`,
+`test/hourly_test.dart`, `test/model_test.dart`.
+
+The per-attribute "suitability" gauges (`temperatureContribution`,
+`humidityContribution`, `windContribution`, `rainContribution`,
+`cloudinessContribution`, `pressureContribution`, `uviContribution`) in
+`nuptials.dart` are NOT hand-tuned distributions — they are derived from
+`final_model.dart` via per-feature partial-dependence curves (the model's
+average flight probability as one feature varies, others held at
+representative flight-season baseline contexts), normalised to [0,1].
+Features the model barely uses (rain, pressure) resolve to a neutral 0.5.
+`uviContribution` has no direct model input (UVI is not a feature in either
+model) and delegates to the cloudiness curve via an inverse UVI→cloud map.
+
 ## First-load performance (work done 2026-07-18, commit `6123340`)
 The first page was slow because the startup path blocked on serialised,
 non-rendering work. Fixed:
@@ -68,6 +99,13 @@ reuse cached responses, cutting paid OWM calls.
   by upgrading packages unless asked — they are out of scope and risk
   breaking the build.
 - Current app version: **2.13.9+134** (fix shared_preferences MissingPluginException in tests; 2.13.8+133 response caching + map attribution contrast). `flutter analyze` stays at 0 errors.
+- (2026-07-26) Per-attribute suitability gauges in `nuptials.dart` rewritten to
+  derive from `final_model.dart` via per-feature partial-dependence curves
+  (replacing the old hand-tuned Normal-CDF gauges); fixed the hourly model
+  call-site mis-wire so `nuptialHourlyPercentageModel` passes the model's real
+  9-feature order `[lat, lon, hour, temp, wind, humid, press, dewPoint,
+  daysSinceSpring]`. `flutter analyze` stays at 0 errors; `nuptials_test.dart`,
+  `hourly_test.dart`, `model_test.dart` all pass.
 
 ## Guardrails
 - Keep first-page load fast: do not re-introduce `await` on
@@ -83,3 +121,7 @@ reuse cached responses, cutting paid OWM calls.
 - README.md was expanded (2026-07-18) with features, data flow,
   setup/.env template, and project structure — keep it in sync if you
   add user-facing features or change required API keys.
+- Keep the model call-site feature orders in `nuptials.dart` in sync with the
+  training notebooks (`lib/models/*.ipynb`). The hourly model uses 9 features
+  (no rain/cloud); the daily uses 10. A mismatched order silently produces
+  wrong predictions — the hourly call site was mis-wired until 2026-07-26.
