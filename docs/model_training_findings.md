@@ -139,7 +139,7 @@ large 2,159; 2 null). Analysis:
 Therefore we ship a **seasonal prior**, not separate forests:
 `sizeSeasonalMultiplier()` / `sizeSeasonalPercentages()` in `nuptials.dart`
 (per-hemisphere monthly weight tables, 3-month smoothed, peak-normalised to
-1.0), surfaced on the report-dialog buttons ("Small (10mm) 12%").
+1.0), surfaced as a likelihood line on the main screen under the date/weather text ("Nuptial flight likely today - most likely small (~10mm) species").
 
 ### 2. Retrain both models with previously-unused DB fields
 Both retrains keep RF(`max_features=sqrt`, `min_samples_leaf=5`,

@@ -150,8 +150,12 @@ COMMITTED; (b) and (c) are the in-progress "Task queue" below.
   identical) but differ in *seasonal timing* (NH: small peaks Jul, medium
   Jun-Jul, large earlier May-Jun; SH offset ~6 months) — so a seasonal PRIOR,
   not 3 separate weather forests, is the right design.
-- `lib/main.dart`: report dialog buttons now show each size's seasonal % (e.g.
-  "Small (10mm) 12%").
+- `lib/main.dart`: main screen now shows a likelihood line under the date/weather
+  text (_flightLikelihoodText() in _buildTodayWeather): 'unlikely' below
+  amberThreshold, 'possible'/'likely' above, plus the most-likely size class
+  from sizeSeasonalPercentages(). (Per-size % labels REMOVED from the
+  report-dialog buttons 2026-07-26 part 5 - buttons are plain Small/Medium/
+  Large again.)
 - `test/size_seasonal_test.dart` NEW (6 tests, all pass). README updated.
 
 ### Task queue (part 4) — DONE + shipped (v2.16.0+139)

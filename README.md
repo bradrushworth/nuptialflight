@@ -33,10 +33,11 @@ time to get outside and look for ants in your local area!
   once per install, stored locally via shared_preferences; see
   lib/controller/install_id.dart) so bursty or abusive reports can be
   de-duplicated without tracking the device or user.
-- **Per-size seasonal likelihood** — when reporting a sighting, the app shows a
-  small/medium/large queen-size breakdown of today's flight chance, using a
-  data-derived seasonal prior (different size classes peak in different months),
-  so keepers hunting a specific species get species-appropriate timing.
+- **Per-size seasonal likelihood** — the main screen shows, under the date
+  and weather line, whether a flight is likely today and which queen-size
+  class (small/medium/large) is most likely right now, using a data-derived
+  seasonal prior (different size classes peak in different months), so keepers
+  hunting a specific species get species-appropriate timing.
 - **Background updates & notifications** — a background-fetch task periodically
   recomputes the percentage and can post a notification when the local flight
   chance is high, or when nearby users report a flight.

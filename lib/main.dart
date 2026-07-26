@@ -728,30 +728,23 @@ class _MyHomePageState extends State<MyHomePage> {
           ? null
           : FloatingActionButton(
               onPressed: () async {
-                // Per-size seasonal likelihood for today's location, shown on
-                // each button so keepers hunting a specific species get
-                // species-appropriate timing (derived from the flights data).
-                final Map<String, int> sizePct = (_weather?.lat != null)
-                    ? sizeSeasonalPercentages(
-                        _dailyPercentage[0], _weather!.lat!, DateTime.now().toUtc())
-                    : const {'small': 0, 'medium': 0, 'large': 0};
                 // set up the buttons
                 Widget smallButton = ElevatedButton(
-                  child: Text("Small\n(10mm)\n${sizePct['small']}%", textAlign: TextAlign.center),
+                  child: Text("Small\n(10mm)", textAlign: TextAlign.center),
                   style: ElevatedButton.styleFrom(alignment: Alignment.centerLeft),
                   onPressed: () {
                     _sawNuptialFlight('small');
                   },
                 );
                 Widget mediumButton = ElevatedButton(
-                  child: Text("Medium\n(20mm)\n${sizePct['medium']}%", textAlign: TextAlign.center),
+                  child: Text("Medium\n(20mm)", textAlign: TextAlign.center),
                   style: ElevatedButton.styleFrom(alignment: Alignment.center),
                   onPressed: () {
                     _sawNuptialFlight('medium');
                   },
                 );
                 Widget largeButton = ElevatedButton(
-                  child: Text("Large\n(30mm)\n${sizePct['large']}%", textAlign: TextAlign.center),
+                  child: Text("Large\n(30mm)", textAlign: TextAlign.center),
                   style: ElevatedButton.styleFrom(alignment: Alignment.centerRight),
                   onPressed: () {
                     _sawNuptialFlight('large');
@@ -1087,8 +1080,51 @@ class _MyHomePageState extends State<MyHomePage> {
           stepGranularity: 1.0,
           maxLines: 1,
         ),
+        AutoSizeText(
+          _flightLikelihoodText(),
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
+            color: getColorGradient(_dailyPercentage[0]),
+          ),
+          minFontSize: 13,
+          maxFontSize: 18,
+          stepGranularity: 1.0,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
       ],
     );
+  }
+
+  /// One-line summary under the date/weather heading: whether a nuptial
+  /// flight is likely today and, if so, which species size is most likely
+  /// right now (from the per-size seasonal prior in nuptials.dart).
+  String _flightLikelihoodText() {
+    final int pct = _dailyPercentage[0];
+    if (pct < amberThreshold) {
+      return 'Nuptial flight unlikely today';
+    }
+    String qualifier = pct >= greenThreshold ? 'likely' : 'possible';
+    if (_weather?.lat == null) {
+      return 'Nuptial flight $qualifier today';
+    }
+    final Map<String, int> sizePct =
+        sizeSeasonalPercentages(pct, _weather!.lat!, DateTime.now().toUtc());
+    String bestSize = 'small';
+    int best = -1;
+    for (final MapEntry<String, int> e in sizePct.entries) {
+      if (e.value > best) {
+        best = e.value;
+        bestSize = e.key;
+      }
+    }
+    const Map<String, String> sizeLabel = {
+      'small': 'small (~10mm)',
+      'medium': 'medium (~20mm)',
+      'large': 'large (~30mm)',
+    };
+    return 'Nuptial flight $qualifier today - most likely ${sizeLabel[bestSize]} species';
   }
 
   Widget _buildWeatherGrid(Orientation orientation, BoxConstraints constraints, bool compact) {
