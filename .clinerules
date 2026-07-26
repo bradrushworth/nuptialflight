@@ -39,6 +39,11 @@ Web: https://nuptialflight.app/
   RandomForest models; `nuptialDailyPercentageModel` / `nuptialHourlyPercentageModel`
   score weather via `lib/models/forest_model.dart` over the JSON assets.
 - `lib/controller/arangodb.dart` — ArangoDB reporting of sightings/weather.
+  Each report doc carries an anonymous install_id (random UUID, generated
+  once per install + persisted in shared_preferences via
+  lib/controller/install_id.dart) alongside the older device_id, so
+  bursty/abusive reports can be grouped + de-duplicated without device/user
+  tracking. uuid is now a direct dependency.
 - `lib/view/map.dart` — map page. Weather overlays (clouds/wind/temp) are
   recoloured by `ColorFilter.matrix` to show nuptial-flight SUITABILITY:
   BLUE-GREEN/teal = favourable, RED = unfavourable, tinted per the model's PD

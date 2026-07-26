@@ -29,6 +29,10 @@ time to get outside and look for ants in your local area!
 - **Crowd-sourced reports** — users can report a nuptial flight they observed.
   Reports are stored in a backend database (ArangoDB) and shown back to other
   users nearby ("X flights reported near you").
+  Each report is tagged with an anonymous install id (a random UUID generated
+  once per install, stored locally via shared_preferences; see
+  lib/controller/install_id.dart) so bursty or abusive reports can be
+  de-duplicated without tracking the device or user.
 - **Per-size seasonal likelihood** — when reporting a sighting, the app shows a
   small/medium/large queen-size breakdown of today's flight chance, using a
   data-derived seasonal prior (different size classes peak in different months),

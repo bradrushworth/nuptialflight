@@ -40,6 +40,7 @@ dependencies:
   geolocator: ^14.0.3
   flutter_dotenv: ^6.0.1
   shared_preferences: ^2.5.3
+  uuid: ^4.5.1
   url_launcher: ^6.3.1
   auto_size_text: ^3.0.0
   html: ^0.15.3

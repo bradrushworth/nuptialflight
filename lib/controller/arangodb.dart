@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 
+import 'install_id.dart';
 import '../responses/onecall_response.dart';
 import '../responses/weather_response.dart';
 
@@ -65,6 +66,8 @@ class ArangoSingleton {
       deviceId = Platform.localHostname;
     }
 
+    final String installId = await InstallId.get();
+
     {
       // Let's create a new database post
       Collection? collection = await _arangoClient!.collection('flights');
@@ -72,6 +75,7 @@ class ArangoSingleton {
         'flight': 'unknown',
         'version': '$version+$buildNumber',
         'device_id': deviceId,
+        'install_id': installId,
         'weather': _weather!.toJson()
       });
       _weatherFlightsKey = createResult.key;
@@ -83,6 +87,7 @@ class ArangoSingleton {
         'flight': 'unknown',
         'version': '$version+$buildNumber',
         'device_id': deviceId,
+        'install_id': installId,
         'weather': _historical!.toJson()
       });
       _weatherHistoricalKey = createResult.key;
@@ -94,6 +99,7 @@ class ArangoSingleton {
         'flight': 'unknown',
         'version': '$version+$buildNumber',
         'device_id': deviceId,
+        'install_id': installId,
         'weather': _currentWeather!.toJson()
       });
       _weatherCurrentKey = createResult.key;
@@ -113,6 +119,8 @@ class ArangoSingleton {
       deviceId = Platform.localHostname;
     }
 
+    final String installId = await InstallId.get();
+
     {
       // Let's update the existing database entry
       Collection? collection = await _arangoClient!.collection('flights');
@@ -121,6 +129,7 @@ class ArangoSingleton {
         'size': size,
         'version': '$version+$buildNumber',
         'device_id': deviceId,
+        'install_id': installId,
         'weather': _weather!.toJson()
       });
     }
@@ -132,6 +141,7 @@ class ArangoSingleton {
         'size': size,
         'version': '$version+$buildNumber',
         'device_id': deviceId,
+        'install_id': installId,
         'weather': _historical!.toJson()
       });
     }
@@ -143,6 +153,7 @@ class ArangoSingleton {
         'size': size,
         'version': '$version+$buildNumber',
         'device_id': deviceId,
+        'install_id': installId,
         'weather': _currentWeather!.toJson()
       });
     }
