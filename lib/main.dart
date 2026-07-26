@@ -1141,7 +1141,7 @@ class _MyHomePageState extends State<MyHomePage> {
         childAspectRatio: constraints.maxHeight >= 1000
             ? 4.0
             : orientation == Orientation.portrait
-            ? (compact ? 1.66 : 2.05)
+            ? (compact ? 1.58 : 1.92)
             : constraints.maxHeight <= 400
             ? 2.00
             : 2.05,
