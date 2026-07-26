@@ -1132,19 +1132,19 @@ class _MyHomePageState extends State<MyHomePage> {
       child: GridView.count(
         padding: EdgeInsets.fromLTRB(
           0,
-          (orientation == Orientation.landscape && height >= 750 ? 30 : 0),
+          (orientation == Orientation.landscape && height >= 750 ? 15 : 0),
           0,
           0,
         ),
         crossAxisCount: orientation == Orientation.portrait ? 3 : 6,
         // width/height ratio
         childAspectRatio: constraints.maxHeight >= 1000
-            ? 3.75
+            ? 4.1
             : orientation == Orientation.portrait
-            ? (compact ? 1.55 : 1.90)
+            ? (compact ? 1.70 : 2.10)
             : constraints.maxHeight <= 400
-            ? 1.90
-            : 1.95,
+            ? 2.05
+            : 2.10,
         shrinkWrap: true,
         children: [
           _buildTemperature('Dew Point', _weather!.daily!.first.dewPoint!),
