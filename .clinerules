@@ -171,8 +171,8 @@ COMMITTED; (b) and (c) are the in-progress "Task queue" below.
 3. ~~Tests + docs + version + deploy~~ DONE — model/hourly/nuptials fixtures +
    gauges recalibrated (48/51 rewritten), parity fixtures rebuilt (max err
    ~8e-15), README/findings/.clinerules updated, version 2.16.0+139.
-   REMAINING: update notebooks (`lib/models/*.ipynb`) to the 21/14-feature
-   pipeline (in progress — code/models/tests already shipped).
+   Notebooks updated to the 21/14-feature pipeline (commit eb588fd) -
+   part 4 is fully COMPLETE.
 
 ### DB schema notes (verified 2026-07-26)
 - `flights.weather` = {lat, lon, timezone, daily[8]} (today + 7-day forecast; NO
