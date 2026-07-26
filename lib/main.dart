@@ -1083,17 +1083,17 @@ class _MyHomePageState extends State<MyHomePage> {
         AutoSizeText(
           _flightLikelihoodText(),
           style: TextStyle(
-            fontSize: 15,
+            fontSize: 13,
             fontWeight: FontWeight.w400,
             color: getColorGradient(_dailyPercentage[0]),
           ),
-          minFontSize: 13,
-          maxFontSize: 18,
+          minFontSize: 11,
+          maxFontSize: 16,
           stepGranularity: 1.0,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        SizedBox(height: 10),
+
       ],
     );
   }
