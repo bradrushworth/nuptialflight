@@ -3,6 +3,8 @@ import 'package:nuptialflight/controller/weather_fetcher.dart';
 import 'package:nuptialflight/responses/onecall_response.dart';
 import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
 import 'package:test/test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 
 void main() {
   group('Download', () {
@@ -25,6 +27,23 @@ void main() {
       String? response =
           (await weatherFetcher.fetchNearestWeatherLocation()).name;
       expect(response, 'Batemans Bay');
+    });
+
+    test('Fetch Weather returns rate-limit message on HTTP 429', () async {
+      final client = MockClient((request) async {
+        return http.Response('rate limit exceeded', 429);
+      });
+      final fetcher = WeatherFetcher(mockLocation: true, httpClient: client);
+      fetcher.findLocation(false);
+
+      await expectLater(
+        fetcher.fetchWeather(),
+        throwsA(isA<Exception>().having(
+          (e) => e.toString(),
+          'message',
+          contains('The app has exceeded global usage limited. Please try again later!'),
+        )),
+      );
     });
 
     test('Fetch Weather', () async {

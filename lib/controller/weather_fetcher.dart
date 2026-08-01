@@ -21,8 +21,10 @@ class WeatherFetcher {
   late bool _debugWebLocation;
   double? _lat;
   double? _lon;
+  final http.Client? _httpClient;
 
-  WeatherFetcher({bool mockLocation = false}) {
+  WeatherFetcher({bool mockLocation = false, http.Client? httpClient})
+      : _httpClient = httpClient {
     // In debug WEB builds, default to a hardwired (mock) location so the first
     // page renders without the slow/blocking browser geolocation prompt. Mobile
     // debug builds and all release builds still use real GPS. Callers can also
@@ -182,6 +184,7 @@ class WeatherFetcher {
     required Duration ttl,
     required String errorPrefix,
     required T Function(String body) parse,
+    String? rateLimitMessage,
     int? dt,
   }) async {
     SharedPreferences? prefs;
@@ -206,7 +209,10 @@ class WeatherFetcher {
         // Corrupt entry - fall through to a fresh network fetch.
       }
     }
-    final response = await http.get(Uri.parse(url));
+    final response = await (_httpClient?.get(Uri.parse(url)) ?? http.get(Uri.parse(url)));
+    if (response.statusCode == 429 && rateLimitMessage != null) {
+      throw Exception(rateLimitMessage);
+    }
     if (response.statusCode != 200) {
       throw Exception(errorPrefix + '!\n\n' + response.body);
     }
@@ -276,6 +282,7 @@ class WeatherFetcher {
       endpoint: 'onecall',
       ttl: _ttlForecast,
       errorPrefix: 'Failed to download weather',
+      rateLimitMessage: 'The app has exceeded global usage limited. Please try again later!',
       parse: (b) => OneCallResponse.fromJson(jsonDecode(b)),
     );
   }
