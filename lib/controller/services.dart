@@ -87,7 +87,7 @@ Future<void> initializeService() async {
   // Configure BackgroundFetch.
   try {
     var status = await BackgroundFetch.configure(BackgroundFetchConfig(
-        minimumFetchInterval: 15,
+        minimumFetchInterval: 30,
         forceAlarmManager: false,
         stopOnTerminate: false,
         startOnBoot: true,
@@ -289,6 +289,37 @@ Future<void> getServicePercentage() async {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+  // Only refresh the nuptial-flight percentage during local daytime.
+  // Ants don't fly at night and the daily % barely changes hour-to-hour, so
+  // skipping ~23:00-05:00 local cuts ~40% of the (paid) OneCall calls with no
+  // loss to the widget, which keeps showing the last computed percentage
+  // (persisted via updateAppWidget / the 30-min shared_preferences cache).
+  final now = DateTime.now();
+  if (now.hour < 6 || now.hour >= 23) {
+    debugPrint('getServicePercentage: skipping night-time refresh (hour=${now.hour})');
+    return;
+  }
+  // Throttle the (paid) OneCall weather poll to at most every 4 hours, while
+  // the free ArangoDB report-check still runs on the background-fetch cadence.
+  int lastOneCallMs = 0;
+  try {
+    lastOneCallMs = await HomeWidget.getWidgetData<int>(
+          'last_onecall_check',
+          defaultValue: 0,
+        ) ??
+        0;
+  } catch (e) {
+    debugPrint('getServicePercentage: failed to read last_onecall_check: $e');
+  }
+  if (DateTime.now().millisecondsSinceEpoch - lastOneCallMs <
+      4 * 60 * 60 * 1000) {
+    debugPrint('getServicePercentage: skipping OneCall, last call < 4h ago');
+    return;
+  }
+
+
+
+
   if (_lastKnownPosition == null) {
     debugPrint('getServicePercentage: Last known position is null');
   } else {
@@ -307,6 +338,14 @@ Future<void> getServicePercentage() async {
     });
     debugPrint('getServicePercentage: Percentage for nuptial flights: $percentage');
     updateAppWidget([percentage]);
+    try {
+      await HomeWidget.saveWidgetData<int>(
+        'last_onecall_check',
+        DateTime.now().millisecondsSinceEpoch,
+      );
+    } catch (e) {
+      debugPrint('getServicePercentage: failed to save last_onecall_check: $e');
+    }
 
     if (percentage >= greenThreshold) {
       flutterLocalNotificationsPlugin.show(
