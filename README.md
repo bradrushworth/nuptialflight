@@ -150,11 +150,14 @@ export calibrated models) are in
    GOOGLE_API_KEY=<your google maps key>
    ARANGO_URL=https://your-arango-host:8530
    ARANGO_USER=<user>
-   ARANGO_PASS=<password>
-   ARANGO_DB=<database>
+   ARANGO_PASSWORD=<password>
+   ARANGO_DB_NAME=<database>
    ```
    (The exact variable names live in `lib/controller/weather_fetcher.dart` and
-   `lib/controller/arangodb.dart` — keep them in sync with the code.)
+   `lib/controller/arangodb.dart` — keep them in sync with the code. The code reads
+   `ARANGO_PASSWORD` and `ARANGO_DB_NAME` (the names `ARANGO_PASS`/`ARANGO_DB` shown
+   in older copies of this template are incorrect). `assets/.env` is gitignored, so
+   real keys/passwords must never be committed.)
 3. Run:
    ```bash
    flutter run            # current platform
