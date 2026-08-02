@@ -15,23 +15,27 @@ import 'nuptials.dart';
 import 'weather_fetcher.dart';
 import 'widgets_mobile.dart';
 
-// this will be used as notification channel id
+// Android notification channel id for "nearby users reported a flight" alerts.
 const notificationChannelIdReport = 'report_flight';
 
-// this will be used for notification id, So you can update your custom notification with this id.
+// Android notification id for the report alert (used to update/replace it).
 const notificationIdReport = 100;
 
-// this will be used as notification channel id
+// Android notification channel id for the daily percentage / widget alerts.
 const notificationChannelIdPercentage = 'percentage';
 
-// this will be used for notification id, So you can update your custom notification with this id.
+// Android notification id for the percentage alert (used to update/replace it).
 const notificationIdPercentage = 101;
 
-// not allowed to get position in the background
+// Background fetch runs without a UI context, so we stash the last known position
+// here (geolocator forbids a fresh GPS fix in the background) and reuse it for
+// the proximity and percentage checks.
 Position? _lastKnownPosition;
 
 bool _isServiceInitialized = false;
 
+/// Lazily configures the notification channels and plugin registrant exactly once
+/// (called from both the foreground entry and the headless background task).
 Future<void> _ensureInitialized() async {
   if (_isServiceInitialized) return;
 
@@ -77,6 +81,10 @@ Future<void> _ensureInitialized() async {
   _isServiceInitialized = true;
 }
 
+/// Entry point for the background-fetch service. Wires up the headless task,
+/// configures the periodic fetch (min 15 min), and schedules an initial
+/// one-shot task. Intended to be launched *after* runApp() via `unawaited(...)`
+/// so it never blocks the first frame (see main()).
 Future<void> initializeService() async {
   await _ensureInitialized();
 
@@ -116,6 +124,10 @@ Future<void> initializeService() async {
   }
 }
 
+/// Resolves the best available position for the background task, in order of
+/// preference: a cached GPS fix, an active low-accuracy GPS fix, then the last
+/// position persisted to the home widget. Background fetch cannot request a
+/// fresh fix reliably, hence the fallbacks.
 Future<void> _updatePosition() async {
   try {
     _lastKnownPosition = await Geolocator.getLastKnownPosition();
@@ -166,6 +178,10 @@ Future<void> _updatePosition() async {
   }
 }
 
+/// Foreground BackgroundFetch callback. Refreshes the cached position, then asks
+/// the backend about nearby recent flights and recomputes today's percentage for
+/// the widget/notification. Must call `BackgroundFetch.finish` to avoid OS
+/// throttling (see the related timeout handler below).
 void _onBackgroundFetch(String taskId) async {
   // This is the fetch-event callback.
   print("[BackgroundFetch] Event received: $taskId");
@@ -228,6 +244,9 @@ Future<void> getReportedFlightsNearMe() async {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+  // Work out how many minutes have elapsed since the last check (default/ floor
+  // 30) so we only notify about genuinely *new* nearby reports, then persist this
+  // check time so the next run uses a sliding window.
   int minutes;
   DateTime now = DateTime.now();
   String? lastCheckStr;
@@ -285,6 +304,10 @@ Future<void> getReportedFlightsNearMe() async {
   }
 }
 
+/// Recomputes today's nuptial-flight percentage at the cached location, pushes it
+/// to the home-screen widget, and — when it clears [greenThreshold] — raises the
+/// "Good weather for a nuptial flight!" notification. Runs from the background
+/// fetch (and from the headless task) to keep the widget/notification fresh.
 Future<void> getServicePercentage() async {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();

@@ -10,12 +10,27 @@ import 'install_id.dart';
 import '../responses/onecall_response.dart';
 import '../responses/weather_response.dart';
 
+/// Singleton wrapper around the ArangoDB backend that stores crowd-sourced
+/// weather snapshots and nuptial-flight reports.
+///
+/// Every fetch writes three linked documents — one per collection:
+///   * `current`    — a single present-conditions OWM snapshot
+///   * `historical` — the 24h history of the flight day (timemachine)
+///   * `flights`    — the 8-day One Call forecast
+///
+/// `createWeather` inserts the three, `updateWeather` edits the same three
+/// documents once the user reports whether they saw a flight (flipping
+/// `flight` from 'unknown' to 'yes' and tagging `size`). The `_weather*Key`
+/// fields cache the document handles from `createWeather` so `updateWeather`
+/// can target them.
 class ArangoSingleton {
   static final ArangoSingleton _singleton = ArangoSingleton._privateConstructor();
 
   // Create client for Arango database
   Database? _arangoClient;
   Future<void>? _connectFuture;
+  // Cached ArangoDB document handles for the three documents created by the
+  // most recent createWeather() call (see class doc). Used by updateWeather().
   var _weatherCurrentKey;
   var _weatherHistoricalKey;
   var _weatherFlightsKey;
@@ -53,6 +68,12 @@ class ArangoSingleton {
     }
   }
 
+  /// Persists a fresh weather snapshot as three linked documents (see the class
+  /// doc): `flights` (the 8-day forecast), `historical` (24h history) and
+  /// `current` (present snapshot). Each starts with `flight: 'unknown'`; the
+  /// `_weather*Key` handles are cached so [updateWeather] can later mark the
+  /// report confirmed. Called passively on every first-page load (unless in
+  /// debug mode or a fixed/manual location, see main._recordWeather).
   void createWeather(String? version, String? buildNumber, OneCallResponse? _weather,
       OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather) async {
     await _ensureConnected();
@@ -106,6 +127,11 @@ class ArangoSingleton {
     }
   }
 
+  /// Marks the three documents previously created by [createWeather] as a
+  /// confirmed sighting: `flight` becomes `'yes'` (or stays `'unknown'` when the
+  /// user reports *no* flight, [size] == null) and the chosen queen [size]
+  /// ('small'/'medium'/'large') is tagged on each. Called when the user taps a
+  /// report button on the home page (see main._sawNuptialFlight).
   void updateWeather(String? version, String? buildNumber, String? size, OneCallResponse? _weather,
       OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather) async {
     await _ensureConnected();
@@ -159,6 +185,9 @@ class ArangoSingleton {
     }
   }
 
+  /// Returns all confirmed flight reports (`flight == 'yes'`) from the last 48
+  /// hours across the whole planet, projected to the fields the map needs
+  /// (location + size + weather description). Used by MapPage to drop markers.
   Future<List> getRecentFlights() async {
     await _ensureConnected();
 
@@ -182,6 +211,10 @@ RETURN {
     return result;
   }
 
+  /// Returns confirmed flight reports within ~500 km of [position] from the last
+  /// [minutes] minutes (negative or zero normalised to a 30-minute window), with
+  /// each row carrying a rounded `distance` in km. Used by the background fetch
+  /// to raise "flights near you" notifications.
   Future<List> getRecentFlightsNearMe(Position? position, int minutes) async {
     if (position == null) {
       debugPrint("Could not find last known position!");

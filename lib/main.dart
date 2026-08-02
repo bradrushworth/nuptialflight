@@ -109,7 +109,11 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
 }
 
 class MyHomePage extends StatefulWidget {
+  // Callback to retint the whole app's primary colour from the predicted
+  // suitability (green/amber/red). Null for nested "fixed location" pages.
   final void Function(MaterialColor s)? primarySwatch;
+  // When true the page shows a manually chosen location and disables reporting
+  // (reports must come from the user's real, current location).
   final bool fixedLocation;
   final WeatherFetcher weatherFetcher;
 
@@ -154,26 +158,36 @@ class _MyHomePageState extends State<MyHomePage> {
   late final bool fixedLocation;
   late final WeatherFetcher weatherFetcher;
 
+  // App/package metadata shown in the menu (populated from PackageInfo).
   String? appName, packageName, version, buildNumber;
+  // Reverse-geocoded place label for the current location (or "Unknown Location").
   String? _geocoding;
+  // The three OWM payloads: present snapshot, 24h history, and the 8-day forecast.
   CurrentWeatherResponse? _currentWeather;
   OneCallResponse? _historical;
   OneCallResponse? _weather;
+  // `loaded` gates the first-paint spinner; `advancedMode` toggles the numeric
+  // percentage vs the emoji scale; `errorMessage` drives the error screen.
   bool loaded = false;
   bool advancedMode = false;
   String? errorMessage;
+  // Refreshes the location + weather every hour while the app is open.
   Timer? _everyHour;
 
+  // The single hourly/daily entries used for the "Next 11am" / "Next 7pm" tiles.
   Hourly? _indexOfDiurnalHour;
   Hourly? _indexOfNocturnalHour;
   int _diurnalHourPercentage = 0;
   int _nocturnalHourPercentage = 0;
+  // Rolling 48-slot hourly probability list (the API can return <24 on the first
+  // day, so we cap the histogram at 48 to avoid index errors).
   List<int> _hourlyPercentage = List.generate(
     48, // 24 * 2
     (index) {
       return 0;
     },
   );
+  // Today + next 7 days daily probabilities (indices 1..7 used in the week table).
   List<int> _dailyPercentage = [0, 0, 0, 0, 0, 0, 0, 0];
 
   @override
@@ -191,6 +205,10 @@ class _MyHomePageState extends State<MyHomePage> {
     _everyHour?.cancel();
   }
 
+  /// Builds the overflow-menu entries (location search, map, report issue, store
+  /// links, source code). The exact set depends on the platform (e.g. Android/iOS
+  /// store links are hidden on web). Called once PackageInfo has loaded the
+  /// version/build so the "Report Issue" mailto can include them.
   void createMenu() {
     choices = <Choice>[];
     choices.add(const Choice(title: 'Select Location', url: '', icon: Icons.add_location_alt));
@@ -318,6 +336,9 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  /// Fetches the three weather payloads in parallel, waits for the forest models
+  /// to be ready, then scores them via [_updateWeather]. Safe to call once the
+  /// location is known.
   Future<void> _getWeather() {
     DateTime now = new DateTime.now().toUtc();
     DateTime today = new DateTime.utc(now.year, now.month, now.day);
@@ -382,6 +403,10 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  /// Consumes the three fetched payloads, resolves the place label, finds the
+  /// 11am/7pm hourly entries, scores every hour/day through the forest models,
+  /// sets the app colour from today's percentage, and finally records the weather
+  /// to the backend. Runs inside setState so the UI updates in one pass.
   void _updateWeather(
     CurrentWeatherResponse current,
     OneCallResponse historical,
@@ -797,10 +822,13 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  // Returns the text style (colour + semibold) used for a percentage label.
   static TextStyle getColorTextStyle(int percentage) {
     return TextStyle(color: getColorGradient(percentage), fontWeight: FontWeight.w600);
   }
 
+  /// Maps a flight-probability percentage to a semantic colour: red below
+  /// [amberThreshold], orange below [greenThreshold], green at/above it.
   static Color getColorGradient(int percentage) {
     Color? color = (percentage < amberThreshold
         ? Colors.red[800]
@@ -819,6 +847,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return color;
   }
 
+  /// Maps a flight-probability percentage to a single glyph on the confidence
+  /// scale (thumb-down -> pinch -> crossed-fingers -> ant thumbs-up -> ant heart).
+  /// Used in place of the numeric percentage when [advancedMode] is off.
   String getEmojiText(int percentage) {
     if (percentage < 45) return '👎'; // 🙅😞
     if (percentage < 50) return '🤏'; // 🤷🫤
@@ -1639,9 +1670,10 @@ class _MyHomePageState extends State<MyHomePage> {
 */
 }
 
-///
-/// Menu on the top left hand side
-///
+/// A single overflow-menu / action item. [title] is the displayed label, [url]
+/// the target (opened via Utils.launchURL for http(s), or handled specially when
+/// empty for in-app actions like location search and the map), and [icon] the
+/// leading glyph in the menu row.
 class Choice {
   const Choice({required this.title, required this.url, required this.icon});
 

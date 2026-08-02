@@ -114,12 +114,16 @@ class WeatherFetcher {
     return false;
   }
 
+  /// Returns the current lat/lon as a [LatLng], or (0,0) before a location has
+  /// been resolved.
   LatLng getLocation() {
     if (_lat == null || _lon == null) return LatLng(0, 0);
     print("getLocation: _lat=$_lat _lon=$_lon ");
     return LatLng(_lat!, _lon!);
   }
 
+  /// Sets the location from a raw [LatLng] (e.g. a long-press on the map page)
+  /// and caches it to the home widget.
   void setLocation(LatLng latLng) {
     _lat = latLng.latitude;
     _lon = latLng.longitude;
@@ -134,6 +138,7 @@ class WeatherFetcher {
     }
   }
 
+  /// Sets the location from a resolved [Position] and caches it to the home widget.
   void setPosition(Position position) {
     _lat = position.latitude;
     _lon = position.longitude;
@@ -148,6 +153,8 @@ class WeatherFetcher {
     }
   }
 
+  /// Sets the location from a Google Places autocomplete result and caches it to
+  /// the home widget (used when the user picks a place from the search dialog).
   void setLocationPlace(PlacesDetailsResponse detail) {
     _lat = detail.result.geometry!.location.lat;
     _lon = detail.result.geometry!.location.lng;

@@ -1,6 +1,12 @@
 ///
 /// https://javiercbk.github.io/json_to_dart/
 ///
+/// Strongly-typed model of the OpenWeatherMap **One Call 3.0** endpoint
+/// (`/data/3.0/onecall` and `/data/3.0/onecall/timemachine`). This is the main
+/// forecast payload the app scores: `hourly` drives the hourly nuptial model and
+/// `daily` (today + 7-day) drives the daily model. `current`/`minutely` are
+/// requested but mostly unused; `minutely` and `current` are excluded at fetch
+/// time (see WeatherFetcher.fetchWeather).
 class OneCallResponse {
   num? lat;
   num? lon;

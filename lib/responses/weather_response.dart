@@ -1,6 +1,10 @@
 ///
 /// https://javiercbk.github.io/json_to_dart/
 ///
+/// Strongly-typed model of the OpenWeatherMap **Current Weather** endpoint
+/// (`/data/2.5/weather`). Despite the name it is a *snapshot* of the present
+/// conditions at a single location (used here mainly for the reverse-geocoded
+/// `name`/place label and as the `current` collection stored in ArangoDB).
 class CurrentWeatherResponse {
   Coordinates? coord;
   List<WeatherDescription>? weather;

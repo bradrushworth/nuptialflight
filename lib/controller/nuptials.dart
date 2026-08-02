@@ -121,6 +121,10 @@ Map<String, int> sizeSeasonalPercentages(int basePercentage, num lat, DateTime d
   return result;
 }
 
+/// Legacy weighted heuristic: combines the per-attribute suitability gauges
+/// (temperature / wind / rain / humidity / cloud / pressure / uvi) with fixed
+/// weights into a single 0..1 probability. Kept for tests; the live UI uses the
+/// RandomForest-based [nuptialHourlyPercentageModel] instead.
 double nuptialHourlyPercentage(Hourly hourly) {
   double temp = temperatureContribution(hourly.temp!);
   double windSpeed = windContribution(hourly.windSpeed!);
@@ -142,6 +146,10 @@ double nuptialHourlyPercentage(Hourly hourly) {
   return nuptialCalculator(values);
 }
 
+/// Legacy weighted heuristic (daily equivalent of [nuptialHourlyPercentage]):
+/// averages the per-attribute suitability gauges with fixed weights into a 0..1
+/// probability. Kept for tests; the live UI uses the RandomForest-based
+/// [nuptialDailyPercentageModel] instead.
 double nuptialDailyPercentage(Daily daily, {bool nocturnal = false}) {
   //double temp = temperatureContribution(nocturnal ? daily.temp!.eve! : daily.temp!.day!);
   double temp = temperatureContribution(daily.temp!.max!);

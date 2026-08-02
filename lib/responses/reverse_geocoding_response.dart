@@ -1,6 +1,9 @@
 ///
 /// https://javiercbk.github.io/json_to_dart/
 ///
+/// Strongly-typed model of the OpenWeatherMap **Reverse Geocoding** endpoint
+/// (`/geo/1.0/reverse`). Given a lat/lon it returns the human-readable place
+/// name (town/city), state and country used as the app's location label.
 class ReverseGeocodingResponse {
   String? name;
   LocalNames? localNames;
