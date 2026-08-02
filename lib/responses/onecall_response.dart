@@ -1,6 +1,24 @@
 ///
-/// https://javiercbk.github.io/json_to_dart/
+/// Response models for the OpenWeatherMap **One Call API 4.0**.
 ///
+/// One Call 4.0 returns a flat `data` array for every timeline endpoint
+/// (current / hourly / daily / historical). The individual record shapes are
+/// unchanged from 3.0, so the [Hourly], [Daily], [Current], [Weather] and
+/// [Rain] classes are reused. The top-level wrapper [OneCallResponse] detects
+/// whether `data` holds hourly or daily records by inspecting the shape of
+/// `temp` (a number for hourly/current, an object for daily).
+///
+/// See https://openweathermap.org/api/one-call-4
+///
+
+/// Parse a precipitation value that may be either a bare number (3.0-style
+/// daily `rain`/`snow`) or an object with a `1h` key (4.0-style).
+num? _precip(dynamic value) {
+  if (value is num) return value;
+  if (value is Map && value['1h'] is num) return value['1h'];
+  return null;
+}
+
 class OneCallResponse {
   num? lat;
   num? lon;
@@ -10,6 +28,10 @@ class OneCallResponse {
   List<Minutely>? minutely;
   List<Hourly>? hourly;
   List<Daily>? daily;
+  // One Call 4.0 timeline pagination links (unused by this app, but parsed so
+  // the raw response round-trips faithfully).
+  String? next;
+  String? prev;
 
   OneCallResponse(
       {this.lat,
@@ -19,31 +41,31 @@ class OneCallResponse {
       this.current,
       this.minutely,
       this.hourly,
-      this.daily});
+      this.daily,
+      this.next,
+      this.prev});
 
   OneCallResponse.fromJson(Map<String, dynamic> json) {
     lat = json['lat'];
     lon = json['lon'];
     timezone = json['timezone'];
     timezoneOffset = json['timezone_offset'];
-    current = json['current'] != null ? new Current.fromJson(json['current']) : null;
-    if (json['minutely'] != null) {
-      minutely = <Minutely>[];
-      json['minutely'].forEach((v) {
-        minutely!.add(new Minutely.fromJson(v));
-      });
-    }
-    if (json['hourly'] != null) {
-      hourly = <Hourly>[];
-      json['hourly'].forEach((v) {
-        hourly!.add(new Hourly.fromJson(v));
-      });
-    }
-    if (json['daily'] != null) {
-      daily = <Daily>[];
-      json['daily'].forEach((v) {
-        daily!.add(new Daily.fromJson(v));
-      });
+    next = json['next'];
+    prev = json['prev'];
+    // One Call API 4.0 wraps every timeline in a flat `data` array. The record
+    // type is detected from the shape of `temp`: daily records carry `temp` as
+    // an object ({day,min,max,...}) while hourly/current records carry `temp`
+    // as a number.
+    final data = json['data'];
+    if (data != null && data is List) {
+      if (data.isNotEmpty) {
+        final first = data[0] as Map<String, dynamic>;
+        if (first['temp'] is Map) {
+          daily = data.map((v) => Daily.fromJson(v as Map<String, dynamic>)).toList();
+        } else {
+          hourly = data.map((v) => Hourly.fromJson(v as Map<String, dynamic>)).toList();
+        }
+      }
     }
   }
 
@@ -53,18 +75,14 @@ class OneCallResponse {
     data['lon'] = this.lon;
     data['timezone'] = this.timezone;
     data['timezone_offset'] = this.timezoneOffset;
-    if (this.current != null) {
-      data['current'] = this.current!.toJson();
-    }
-    if (this.minutely != null) {
-      data['minutely'] = this.minutely!.map((v) => v.toJson()).toList();
-    }
     if (this.hourly != null) {
       data['hourly'] = this.hourly!.map((v) => v.toJson()).toList();
     }
     if (this.daily != null) {
       data['daily'] = this.daily!.map((v) => v.toJson()).toList();
     }
+    if (this.next != null) data['next'] = this.next;
+    if (this.prev != null) data['prev'] = this.prev;
     return data;
   }
 }
@@ -360,7 +378,9 @@ class Daily {
     clouds = json['clouds'];
     pop = json['pop'];
     uvi = json['uvi'];
-    rain = json['rain'];
+    // One Call 4.0 may return daily precipitation as an object with a `1h`
+    // key; 3.0 returned a bare number. Accept either.
+    rain = _precip(json['rain']);
   }
 
   Map<String, dynamic> toJson() {

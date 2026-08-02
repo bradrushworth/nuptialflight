@@ -19,6 +19,10 @@ class ArangoSingleton {
   var _weatherCurrentKey;
   var _weatherHistoricalKey;
   var _weatherFlightsKey;
+  var _weatherLeadUpKey;
+  // Collections we've already attempted to create this session (best-effort,
+  // once each) so the new ML-training table exists before we write to it.
+  final Set<String> _ensuredCollections = <String>{};
 
   factory ArangoSingleton() {
     return _singleton;
@@ -53,8 +57,24 @@ class ArangoSingleton {
     }
   }
 
+  /// Best-effort creation of a collection (e.g. the ML-training `leadup` table)
+  /// so the app can upload to a fresh table without manual DB provisioning.
+  /// Tolerates an already-existing collection; the subsequent write surfaces
+  /// any genuine permission/connectivity problem.
+  Future<void> _ensureCollection(String name) async {
+    if (_ensuredCollections.contains(name)) return;
+    _ensuredCollections.add(name);
+    try {
+      await _arangoClient!.createCollection({'name': name});
+    } catch (_) {
+      // Ignored - createCollection handles conflicts internally; a real write
+      // failure is reported by the caller's add()/update().
+    }
+  }
+
   void createWeather(String? version, String? buildNumber, OneCallResponse? _weather,
-      OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather) async {
+      OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather,
+      {OneCallResponse? leadUp, int leadUpDays = 7}) async {
     await _ensureConnected();
 
     String? deviceId;
@@ -104,10 +124,39 @@ class ArangoSingleton {
       });
       _weatherCurrentKey = createResult.key;
     }
+    {
+      // New schema (One Call 4.0, lead-up antecedent weather) for ML training.
+      // Stores the full weather context - current + forecast + the N days of
+      // daily weather *before* the report - in one enriched document with
+      // lat/lon at the top level so training can filter by location without
+      // digging into nested weather (see docs/model_training_findings.md
+      // Part 4 #3).
+      if (leadUp != null) {
+        await _ensureCollection('leadup');
+        Collection? collection = await _arangoClient!.collection('leadup');
+        Document createResult = await collection!.document().add({
+          'flight': 'unknown',
+          'version': '$version+$buildNumber',
+          'device_id': deviceId,
+          'install_id': installId,
+          'lat': _weather!.lat,
+          'lon': _weather!.lon,
+          'lead_up_days': leadUpDays,
+          'collected_at': DateTime.now().toUtc().millisecondsSinceEpoch,
+          'weather': {
+            'current': _currentWeather!.toJson(),
+            'forecast': _weather!.toJson(),
+            'leadup': leadUp!.toJson(),
+          }
+        });
+        _weatherLeadUpKey = createResult.key;
+      }
+    }
   }
 
   void updateWeather(String? version, String? buildNumber, String? size, OneCallResponse? _weather,
-      OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather) async {
+      OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather,
+      {OneCallResponse? leadUp, int leadUpDays = 7}) async {
     await _ensureConnected();
 
     String? deviceId;
@@ -156,6 +205,29 @@ class ArangoSingleton {
         'install_id': installId,
         'weather': _currentWeather!.toJson()
       });
+    }
+    {
+      // New schema (One Call 4.0, lead-up antecedent weather) for ML training.
+      if (leadUp != null) {
+        await _ensureCollection('leadup');
+        Collection? collection = await _arangoClient!.collection('leadup');
+        await collection!.document(document_handle: _weatherLeadUpKey).update({
+          'flight': size == null ? 'unknown' : 'yes',
+          'size': size,
+          'version': '$version+$buildNumber',
+          'device_id': deviceId,
+          'install_id': installId,
+          'lat': _weather!.lat,
+          'lon': _weather!.lon,
+          'lead_up_days': leadUpDays,
+          'collected_at': DateTime.now().toUtc().millisecondsSinceEpoch,
+          'weather': {
+            'current': _currentWeather!.toJson(),
+            'forecast': _weather!.toJson(),
+            'leadup': leadUp!.toJson(),
+          }
+        });
+      }
     }
   }
 

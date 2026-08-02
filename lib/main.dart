@@ -159,6 +159,8 @@ class _MyHomePageState extends State<MyHomePage> {
   CurrentWeatherResponse? _currentWeather;
   OneCallResponse? _historical;
   OneCallResponse? _weather;
+  OneCallResponse? _leadUp;
+  static const int _leadUpDays = 7;
   bool loaded = false;
   bool advancedMode = false;
   String? errorMessage;
@@ -318,20 +320,34 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future<void> _getWeather() {
+  Future<void> _getWeather() async {
     DateTime now = new DateTime.now().toUtc();
     DateTime today = new DateTime.utc(now.year, now.month, now.day);
     int dt = today.millisecondsSinceEpoch ~/ 1000;
 
-    return Future.wait([
-          weatherFetcher.fetchNearestWeatherLocation(),
-          weatherFetcher.fetchHistoricalWeather(dt),
-          weatherFetcher.fetchWeather(),
-          // Ensure the forest models are parsed before _updateWeather scores.
-          Nuptials.ensureLoaded(),
-        ])
-        .then((List responses) => _updateWeather(responses[0], responses[1], responses[2]))
-        .catchError((e) => handleError(e));
+    try {
+      // Fetch current + historical + forecast + the antecedent ("lead-up")
+      // daily weather for the days before today in parallel. The lead-up data
+      // is what the ML training pipeline needs for lead-up-change features
+      // (days-since-rain, pressure trend, first warm day after rain) - see
+      // docs/model_training_findings.md (Part 4, #3).
+      final List<dynamic> responses = await Future.wait([
+        weatherFetcher.fetchNearestWeatherLocation(),
+        weatherFetcher.fetchHistoricalWeather(dt),
+        weatherFetcher.fetchWeather(),
+        weatherFetcher.fetchLeadUpWeather(_leadUpDays),
+        // Ensure the forest models are parsed before _updateWeather scores.
+        Nuptials.ensureLoaded(),
+      ]);
+      _leadUp = responses[3] as OneCallResponse;
+      _applyWeather(
+        responses[0] as CurrentWeatherResponse,
+        responses[1] as OneCallResponse,
+        responses[2] as OneCallResponse,
+      );
+    } catch (e) {
+      handleError(e);
+    }
   }
 
   void _findPlaceName() {
@@ -382,11 +398,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _updateWeather(
-    CurrentWeatherResponse current,
-    OneCallResponse historical,
-    OneCallResponse weather,
-  ) {
+  void _applyWeather(CurrentWeatherResponse current, OneCallResponse historical, OneCallResponse weather) {
     setState(() {
       _currentWeather = current;
       _historical = historical;
@@ -518,7 +530,8 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    ArangoSingleton().createWeather(version, buildNumber, _weather, _historical, _currentWeather);
+    ArangoSingleton().createWeather(version, buildNumber, _weather, _historical, _currentWeather,
+        leadUp: _leadUp, leadUpDays: _leadUpDays);
   }
 
   /// Create an alert dialog
@@ -563,6 +576,8 @@ class _MyHomePageState extends State<MyHomePage> {
       _weather,
       _historical,
       _currentWeather,
+      leadUp: _leadUp,
+      leadUpDays: _leadUpDays,
     );
     showAlert('Success', 'Thank you for submitting!');
   }
