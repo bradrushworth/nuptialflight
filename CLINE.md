@@ -34,8 +34,25 @@ flutter analyze stays at 0 errors (only pre-existing deprecation info-warnings).
   `_getWeather()` -> `_updateWeather()`. Shows a `CircularProgressIndicator`
   until `loaded == true`.
 - `lib/controller/weather_fetcher.dart` — `WeatherFetcher`: location
-  lookup (`findLocation`), and the 3 OpenWeatherMap calls
-  (`fetchNearestWeatherLocation`, `fetchHistoricalWeather`, `fetchWeather`).
+  lookup (`findLocation`), and the OpenWeatherMap calls. `fetchWeather()` and
+  `fetchHistoricalWeather()` use **One Call API 4.0** timeline endpoints
+  (`/data/4.0/onecall/timeline/1h` + `/1day`; history via `start` in the past,
+  since 4.0 dropped the old `/timemachine` endpoint). `fetchNearestWeatherLocation()`
+  still uses the separate Current Weather (2.5) API because it supplies the
+  place `name` used for the location label (One Call 4.0 has no `name` field).
+  `fetchLeadUpWeather(days)` is a **new** One Call 4.0 `/timeline/1day` call
+  anchored `days` ago that returns the daily weather for the days *before* the
+  flight — the antecedent ("lead-up") data the training docs say was never
+  stored (model_training_findings.md Part 4 #3). It is fetched in `_getWeather`
+  alongside the other calls and threaded into `_updateWeather`/`_recordWeather`.
+- `lib/controller/arangodb.dart` — ArangoDB reporting of sightings/weather.
+  `createWeather()`/`updateWeather()` still write the legacy `flights` /
+  `historical` / `current` collections, and now **also** write an enriched
+  document to a **new `leadup` collection** (best-effort auto-created): one
+  doc per report carrying `current` + `forecast` + `leadup` weather with
+  `lat`/`lon`/`lead_up_days`/`collected_at` at the top level — the
+  training-ready schema for lead-up-change features (days-since-rain, pressure
+  trend, first warm day after rain).
 - `lib/controller/services.dart` — `initializeService()` (background_fetch
   config + notification channels), `getServicePercentage()`, `getReportedFlightsNearMe()`.
 - `lib/controller/nuptials.dart` — prediction math. `Nuptials` loads two

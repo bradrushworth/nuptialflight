@@ -134,6 +134,8 @@ class _MyHomePageState extends State<MyHomePage> {
   OneCallResponse? _historical;
   OneCallResponse? _weather;
   // `loaded` gates the first-paint spinner; `errorMessage` drives the error screen.
+  OneCallResponse? _leadUp;
+  static const int _leadUpDays = 7;
   bool loaded = false;
   String? errorMessage;
   // Refreshes the location + weather every hour while the app is open.
@@ -304,23 +306,37 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   /// Fetches the three weather payloads in parallel, waits for the forest models
-  /// to be ready, then scores them via [_updateWeather]. Safe to call once the
+  /// to be ready, then scores them via [_applyWeather]. Safe to call once the
   /// location is known.
-  Future<void> _getWeather() {
+  Future<void> _getWeather() async {
     DateTime now = new DateTime.now().toUtc();
     DateTime today = new DateTime.utc(now.year, now.month, now.day);
     int dt = today.millisecondsSinceEpoch ~/ 1000;
 
-    return Future.wait([
-          weatherFetcher.fetchNearestWeatherLocation(),
-          weatherFetcher.fetchHistoricalWeather(dt),
-          weatherFetcher.fetchWeather(),
-          // Ensure the forest models and stats are parsed before scoring.
-          Nuptials.ensureLoaded(),
-          FlightIndex.ensureLoaded(),
-        ])
-        .then((List responses) => _updateWeather(responses[0], responses[1], responses[2]))
-        .catchError((e) => handleError(e));
+    try {
+      // Fetch current + historical + forecast + the antecedent ("lead-up")
+      // daily weather for the days before today in parallel. The lead-up data
+      // is what the ML training pipeline needs for lead-up-change features
+      // (days-since-rain, pressure trend, first warm day after rain) - see
+      // docs/model_training_findings.md (Part 4, #3).
+      final List<dynamic> responses = await Future.wait([
+        weatherFetcher.fetchNearestWeatherLocation(),
+        weatherFetcher.fetchHistoricalWeather(dt),
+        weatherFetcher.fetchWeather(),
+        weatherFetcher.fetchLeadUpWeather(_leadUpDays),
+        // Ensure the forest models and stats are parsed before scoring.
+        Nuptials.ensureLoaded(),
+        FlightIndex.ensureLoaded(),
+      ]);
+      _leadUp = responses[3] as OneCallResponse;
+      _applyWeather(
+        responses[0] as CurrentWeatherResponse,
+        responses[1] as OneCallResponse,
+        responses[2] as OneCallResponse,
+      );
+    } catch (e) {
+      handleError(e);
+    }
   }
 
   void _findPlaceName() {
@@ -373,7 +389,7 @@ class _MyHomePageState extends State<MyHomePage> {
   /// Consumes the three fetched payloads, resolves the place label, scores
   /// every hour/day through the forest models, and finally records the weather
   /// to the backend. Runs inside setState so the UI updates in one pass.
-  void _updateWeather(
+  void _applyWeather(
     CurrentWeatherResponse current,
     OneCallResponse historical,
     OneCallResponse weather,
@@ -427,7 +443,8 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    ArangoSingleton().createWeather(version, buildNumber, _weather, _historical, _currentWeather);
+    ArangoSingleton().createWeather(version, buildNumber, _weather, _historical, _currentWeather,
+        leadUp: _leadUp, leadUpDays: _leadUpDays);
   }
 
   int _monthOfDt(int dt) =>
@@ -692,6 +709,8 @@ class _MyHomePageState extends State<MyHomePage> {
       _weather,
       _historical,
       _currentWeather,
+      leadUp: _leadUp,
+      leadUpDays: _leadUpDays,
     );
     _showSnack(result.sawNothing
         ? context.l10n.snackThanksNoFlight

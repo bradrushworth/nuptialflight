@@ -288,18 +288,39 @@ class WeatherFetcher {
     if (_lat == null || _lon == null)
       throw Exception('Location is unknown! Perhaps you didn\'t allow location permissions?');
 
-    String url =
-        'https://api.openweathermap.org/data/3.0/onecall?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&exclude=minutely,current';
-    print("url=$url");
+    // One Call API 4.0 splits the forecast across two timeline endpoints:
+    //   - hourly -> /data/4.0/onecall/timeline/1h
+    //   - daily  -> /data/4.0/onecall/timeline/1day
+    // Each returns a flat `data` array that OneCallResponse parses into the
+    // matching list; we fetch both and merge them into a single response so
+    // the rest of the app keeps working unchanged.
+    final key = dotenv.env['OPENWEATHERMAP_API_KEY'];
+    final hourlyUrl =
+        'https://api.openweathermap.org/data/4.0/onecall/timeline/1h?lat=$_lat&lon=$_lon&appid=$key&units=metric';
+    final dailyUrl =
+        'https://api.openweathermap.org/data/4.0/onecall/timeline/1day?lat=$_lat&lon=$_lon&appid=$key&units=metric';
+    print("hourlyUrl=$hourlyUrl");
+    print("dailyUrl=$dailyUrl");
 
-    return _fetchCached<OneCallResponse>(
-      url: url,
-      endpoint: 'onecall',
-      ttl: _ttlForecast,
-      errorPrefix: 'Failed to download weather',
-      rateLimitMessage: 'The app has exceeded global usage limited. Please try again later!',
-      parse: (b) => OneCallResponse.fromJson(jsonDecode(b)),
-    );
+    final results = await Future.wait([
+      _fetchCached<OneCallResponse>(
+        url: hourlyUrl,
+        endpoint: 'onecall_hourly',
+        ttl: _ttlForecast,
+        errorPrefix: 'Failed to download hourly weather',
+        parse: (b) => OneCallResponse.fromJson(jsonDecode(b)),
+      ),
+      _fetchCached<OneCallResponse>(
+        url: dailyUrl,
+        endpoint: 'onecall_daily',
+        ttl: _ttlForecast,
+        errorPrefix: 'Failed to download daily weather',
+        parse: (b) => OneCallResponse.fromJson(jsonDecode(b)),
+      ),
+    ]);
+    // Merge: keep the hourly list and attach the daily list.
+    results[0].daily = results[1].daily;
+    return results[0];
   }
 
   Future<OneCallResponse> fetchHistoricalWeather(int dt) async {
@@ -307,8 +328,13 @@ class WeatherFetcher {
       throw Exception(
           'Location is unknown! Perhaps you didn\'t allow location permissions?');
 
-    String url =
-        'https://api.openweathermap.org/data/3.0/onecall/timemachine?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&dt=$dt';
+    // One Call API 4.0 removed the dedicated /timemachine endpoint. Historical
+    // data is now served by the same hourly timeline: anchor `start` at the
+    // requested timestamp (today's UTC midnight) and pull enough hourly steps
+    // to cover the diurnal (11AM) / nocturnal (7PM) lookups done in main.dart.
+    final key = dotenv.env['OPENWEATHERMAP_API_KEY'];
+    final url =
+        'https://api.openweathermap.org/data/4.0/onecall/timeline/1h?lat=$_lat&lon=$_lon&appid=$key&units=metric&start=$dt&cnt=24';
     print("url=$url");
 
     return _fetchCached<OneCallResponse>(
@@ -317,6 +343,41 @@ class WeatherFetcher {
       ttl: _ttlHistorical,
       dt: dt,
       errorPrefix: 'Failed to download historical weather',
+      parse: (b) => OneCallResponse.fromJson(jsonDecode(b)),
+    );
+  }
+
+  /// Fetches the antecedent ("lead-up") daily weather for the [days] before
+  /// today, anchored in the past on the One Call 4.0 daily timeline. This is
+  /// the data the ML training pipeline needs for lead-up-change features
+  /// (days-since-rain, pressure trend, first warm day after rain) that the
+  /// previous schema never stored — see docs/model_training_findings.md
+  /// (Part 4, #3). The returned [OneCallResponse.daily] holds one record per
+  /// past day (day -[days] .. yesterday), i.e. the weather leading up to the
+  /// nuptial flight rather than just the forecast afterwards.
+  Future<OneCallResponse> fetchLeadUpWeather({int days = 7}) async {
+    if (_lat == null || _lon == null)
+      throw Exception(
+          'Location is unknown! Perhaps you didn\'t allow location permissions?');
+
+    // The daily timeline returns at most 10 records per page, so clamp to that.
+    final requested = days.clamp(1, 10);
+    final now = DateTime.now().toUtc();
+    final start = DateTime.utc(now.year, now.month, now.day)
+        .subtract(Duration(days: requested));
+    final startDt = start.millisecondsSinceEpoch ~/ 1000;
+
+    final key = dotenv.env['OPENWEATHERMAP_API_KEY'];
+    final url =
+        'https://api.openweathermap.org/data/4.0/onecall/timeline/1day?lat=$_lat&lon=$_lon&appid=$key&units=metric&start=$startDt&cnt=$requested';
+    print("leadUpUrl=$url");
+
+    return _fetchCached<OneCallResponse>(
+      url: url,
+      endpoint: 'leadup',
+      ttl: _ttlHistorical,
+      dt: startDt,
+      errorPrefix: 'Failed to download lead-up weather',
       parse: (b) => OneCallResponse.fromJson(jsonDecode(b)),
     );
   }

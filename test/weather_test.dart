@@ -52,7 +52,8 @@ void main() {
       expect(response.lat, -35.76);
       expect(response.lon, 150.2053);
       anyOf(response.timezoneOffset, 36000, 39600); // 39600 in daylight savings
-      expect(response.daily!.length, 8);
+      // One Call 4.0's /timeline/1day returns up to 10 daily records.
+      expect(response.daily!.length, greaterThanOrEqualTo(7));
       expect(response.daily!.first.uvi, greaterThanOrEqualTo(0));
     });
   });
