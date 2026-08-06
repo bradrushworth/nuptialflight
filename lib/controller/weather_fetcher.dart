@@ -284,6 +284,14 @@ class WeatherFetcher {
     );
   }
 
+  /// Number of antecedent ("lead-up") days to collect alongside the forecast.
+  /// The daily-timeline endpoint caps a single page at 10 records, so this is
+  /// sized so leadUpDays + 8 forecast days (today..+7) fits one response ->
+  /// one paid call -> zero *extra* One Call calls versus the pre-lead-up path.
+  /// Raise beyond 2 and the combined window spills past the 10-record page,
+  /// requiring an extra paginated request.
+  static const int leadUpDays = 2;
+
   Future<OneCallResponse> fetchWeather() async {
     if (_lat == null || _lon == null)
       throw Exception('Location is unknown! Perhaps you didn\'t allow location permissions?');
@@ -294,11 +302,31 @@ class WeatherFetcher {
     // Each returns a flat `data` array that OneCallResponse parses into the
     // matching list; we fetch both and merge them into a single response so
     // the rest of the app keeps working unchanged.
+    //
+    // Split-and-route: the daily timeline is anchored `leadUpDays` into the
+    // past (start = today UTC midnight - leadUpDays) and sized so a single
+    // page holds the antecedent days AND the 8-day forecast (leadUpDays + 8
+    // <= 10 records = the 4.0 page cap). We then split the combined `data`
+    // array at today's UTC midnight:
+    //   - dt < today  -> antecedent / "lead-up" days (training features)
+    //   - dt >= today -> forecast, in order, so daily[0] is still *today*
+    // This collects the lead-up weather that docs/model_training_findings.md
+    // (Part 4 #3) named as the main accuracy lever - at ZERO extra One Call
+    // calls: the daily request the app already makes simply reaches a little
+    // into the past. The legacy `flights.weather.daily` schema is unchanged
+    // (daily[0] == today), so years of stored training history stay valid.
+    final now = DateTime.now().toUtc();
+    final todayMidnight = DateTime.utc(now.year, now.month, now.day);
+    final todayStart = todayMidnight.millisecondsSinceEpoch ~/ 1000;
+    final pastStart =
+        todayMidnight.subtract(const Duration(days: leadUpDays)).millisecondsSinceEpoch ~/ 1000;
+    final cnt = leadUpDays + 8; // 10 -> fits one daily-timeline page
+
     final key = dotenv.env['OPENWEATHERMAP_API_KEY'];
     final hourlyUrl =
         'https://api.openweathermap.org/data/4.0/onecall/timeline/1h?lat=$_lat&lon=$_lon&appid=$key&units=metric';
     final dailyUrl =
-        'https://api.openweathermap.org/data/4.0/onecall/timeline/1day?lat=$_lat&lon=$_lon&appid=$key&units=metric';
+        'https://api.openweathermap.org/data/4.0/onecall/timeline/1day?lat=$_lat&lon=$_lon&appid=$key&units=metric&start=$pastStart&cnt=$cnt';
     print("hourlyUrl=$hourlyUrl");
     print("dailyUrl=$dailyUrl");
 
@@ -318,9 +346,29 @@ class WeatherFetcher {
         parse: (b) => OneCallResponse.fromJson(jsonDecode(b)),
       ),
     ]);
-    // Merge: keep the hourly list and attach the daily list.
-    results[0].daily = results[1].daily;
-    return results[0];
+    // Merge: keep the hourly list and attach the (split) daily list.
+    final merged = results[0];
+    final allDaily = results[1].daily ?? const <Daily>[];
+    final forecast = <Daily>[];
+    final leadUp = <Daily>[];
+    for (final d in allDaily) {
+      // Daily records are anchored at local midnight; compare by day bucket
+      // using the response timezone so the split lands on the report day the
+      // user actually experienced (not a raw UTC seam).
+      final dayStart = (d.dt ?? 0) + (results[1].timezoneOffset ?? 0);
+      final localMidnight = DateTime.fromMillisecondsSinceEpoch(dayStart * 1000, isUtc: true);
+      final localToday = localMidnight.year == todayMidnight.year &&
+          localMidnight.month == todayMidnight.month &&
+          localMidnight.day == todayMidnight.day;
+      if (localToday || d.dt == null || (d.dt! >= todayStart)) {
+        forecast.add(d);
+      } else {
+        leadUp.add(d);
+      }
+    }
+    merged.daily = forecast;
+    merged.leadUpDaily = leadUp;
+    return merged;
   }
 
   Future<OneCallResponse> fetchHistoricalWeather(int dt) async {
@@ -343,41 +391,6 @@ class WeatherFetcher {
       ttl: _ttlHistorical,
       dt: dt,
       errorPrefix: 'Failed to download historical weather',
-      parse: (b) => OneCallResponse.fromJson(jsonDecode(b)),
-    );
-  }
-
-  /// Fetches the antecedent ("lead-up") daily weather for the [days] before
-  /// today, anchored in the past on the One Call 4.0 daily timeline. This is
-  /// the data the ML training pipeline needs for lead-up-change features
-  /// (days-since-rain, pressure trend, first warm day after rain) that the
-  /// previous schema never stored — see docs/model_training_findings.md
-  /// (Part 4, #3). The returned [OneCallResponse.daily] holds one record per
-  /// past day (day -[days] .. yesterday), i.e. the weather leading up to the
-  /// nuptial flight rather than just the forecast afterwards.
-  Future<OneCallResponse> fetchLeadUpWeather({int days = 7}) async {
-    if (_lat == null || _lon == null)
-      throw Exception(
-          'Location is unknown! Perhaps you didn\'t allow location permissions?');
-
-    // The daily timeline returns at most 10 records per page, so clamp to that.
-    final requested = days.clamp(1, 10);
-    final now = DateTime.now().toUtc();
-    final start = DateTime.utc(now.year, now.month, now.day)
-        .subtract(Duration(days: requested));
-    final startDt = start.millisecondsSinceEpoch ~/ 1000;
-
-    final key = dotenv.env['OPENWEATHERMAP_API_KEY'];
-    final url =
-        'https://api.openweathermap.org/data/4.0/onecall/timeline/1day?lat=$_lat&lon=$_lon&appid=$key&units=metric&start=$startDt&cnt=$requested';
-    print("leadUpUrl=$url");
-
-    return _fetchCached<OneCallResponse>(
-      url: url,
-      endpoint: 'leadup',
-      ttl: _ttlHistorical,
-      dt: startDt,
-      errorPrefix: 'Failed to download lead-up weather',
       parse: (b) => OneCallResponse.fromJson(jsonDecode(b)),
     );
   }

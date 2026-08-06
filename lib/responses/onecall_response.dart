@@ -28,6 +28,12 @@ class OneCallResponse {
   List<Minutely>? minutely;
   List<Hourly>? hourly;
   List<Daily>? daily;
+  // Antecedent ("lead-up") daily records split out by WeatherFetcher from the
+  // same daily-timeline response that also holds the forecast (days before
+  // today). Transient - never parsed from JSON or serialized; derived in the
+  // fetcher so the ML leadup collection gets the past-day slice without an
+  // extra One Call API call.
+  List<Daily>? leadUpDaily;
   // One Call 4.0 timeline pagination links (unused by this app, but parsed so
   // the raw response round-trips faithfully).
   String? next;
@@ -42,6 +48,7 @@ class OneCallResponse {
       this.minutely,
       this.hourly,
       this.daily,
+      this.leadUpDaily,
       this.next,
       this.prev});
 

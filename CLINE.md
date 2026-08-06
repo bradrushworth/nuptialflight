@@ -40,11 +40,19 @@ flutter analyze stays at 0 errors (only pre-existing deprecation info-warnings).
   since 4.0 dropped the old `/timemachine` endpoint). `fetchNearestWeatherLocation()`
   still uses the separate Current Weather (2.5) API because it supplies the
   place `name` used for the location label (One Call 4.0 has no `name` field).
-  `fetchLeadUpWeather(days)` is a **new** One Call 4.0 `/timeline/1day` call
-  anchored `days` ago that returns the daily weather for the days *before* the
-  flight — the antecedent ("lead-up") data the training docs say was never
-  stored (model_training_findings.md Part 4 #3). It is fetched in `_getWeather`
-  alongside the other calls and threaded into `_updateWeather`/`_recordWeather`.
+  **Split-and-route (zero extra calls):** `fetchWeather()` anchors its single
+  daily-timeline request `leadUpDays` (= 2) into the past (`start = today − 2`,
+  `cnt = 10` = the 4.0 page cap), so one request holds both the antecedent days
+  *and* the 8-day forecast. It splits the combined `data` array at today's UTC
+  midnight: `dt >= today` → `daily` (so `daily[0]` is still *today*, keeping the
+  legacy `flights.weather.daily` training schema valid), `dt < today` → the
+  transient `leadUpDaily` field. This collects the antecedent ("lead-up")
+  weather the training docs say was never stored (model_training_findings.md
+  Part 4 #3) at **zero** extra One Call calls — the daily request the app
+  already makes simply reaches a couple of days into the past. `_getWeather`
+  derives the `_leadUp` `OneCallResponse` from that split and threads it into
+  `createWeather`/`updateWeather`. Raise `leadUpDays` beyond 2 and the combined
+  window spills past the 10-record page, requiring an extra paginated request.
 - `lib/controller/arangodb.dart` — ArangoDB reporting of sightings/weather.
   `createWeather()`/`updateWeather()` still write the legacy `flights` /
   `historical` / `current` collections, and now **also** write an enriched
@@ -58,7 +66,6 @@ flutter analyze stays at 0 errors (only pre-existing deprecation info-warnings).
 - `lib/controller/nuptials.dart` — prediction math. `Nuptials` loads two
   RandomForest models; `nuptialDailyPercentageModel` / `nuptialHourlyPercentageModel`
   score weather. (The `models/*.dart` `score()` trees are generated — do not hand-edit.)
-- `lib/controller/arangodb.dart` — ArangoDB reporting of sightings/weather.
 - `lib/view/map.dart` — map page.
 - `lib/responses/*.dart` — OWM response models.
 

@@ -167,7 +167,7 @@ class ArangoSingleton {
           'weather': {
             'current': _currentWeather!.toJson(),
             'forecast': _weather!.toJson(),
-            'leadup': leadUp!.toJson(),
+            'leadup': leadUp.toJson(),
           }
         });
         _weatherLeadUpKey = createResult.key;
@@ -250,7 +250,7 @@ class ArangoSingleton {
           'weather': {
             'current': _currentWeather!.toJson(),
             'forecast': _weather!.toJson(),
-            'leadup': leadUp!.toJson(),
+            'leadup': leadUp.toJson(),
           }
         });
       }
