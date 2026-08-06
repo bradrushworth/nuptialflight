@@ -141,5 +141,58 @@ void main() {
       expect(() => r.toJson(), returnsNormally);
       expect(r.toJson()['hourly'], isNotNull);
     });
+
+    // Regression test for the split-and-route optimisation in
+    // WeatherFetcher.fetchWeather(): the daily-timeline request is anchored
+    // `leadUpDays` into the past and sized so one page holds the antecedent
+    // days AND the 8-day forecast (leadUpDays + 8 <= 10 = the 4.0 page cap).
+    // OneCallResponse parses the combined array into `.daily` in order; the
+    // fetcher then splits at today's midnight. This test guarantees the parser
+    // handles the full 10-record combined page that the split relies on.
+    test('split-and-route: 10-record combined daily page parses in order', () {
+      // 2 lead-up days (dt < today) + 8 forecast days (dt >= today), where
+      // "today" is 1700000000 (arbitrary fixed epoch) for test determinism.
+      final today = 1700000000;
+      final oneDay = 86400;
+      final dailyRecords = <Map<String, dynamic>>[];
+      for (var i = 2; i >= 1; i--) {
+        dailyRecords.add({
+          'dt': today - i * oneDay,
+          'temp': {'day': 20.0, 'min': 15.0, 'max': 25.0},
+          'pop': 0.1 * i,
+          'rain': 0.1 * i,
+        });
+      }
+      for (var i = 0; i < 8; i++) {
+        dailyRecords.add({
+          'dt': today + i * oneDay,
+          'temp': {'day': 25.0 + i, 'min': 18.0, 'max': 30.0 + i},
+          'pop': 0.2 + i * 0.05,
+        });
+      }
+      final body = jsonEncode({
+        'lat': -35.28,
+        'lon': 149.13,
+        'timezone': 'Australia/Sydney',
+        'timezone_offset': 39600,
+        'data': dailyRecords,
+      });
+      final r = OneCallResponse.fromJson(jsonDecode(body));
+      expect(r.daily, isNotNull);
+      expect(r.daily!.length, 10);
+      // Records stay in the order the API returned them (past-first), which is
+      // what the fetcher's split loop depends on.
+      expect(r.daily!.first.dt, today - 2 * oneDay);
+      expect(r.daily!.last.dt, today + 7 * oneDay);
+      // The transient leadUpDaily field is null from fromJson (it is derived
+      // by the fetcher, not parsed).
+      expect(r.leadUpDaily, isNull);
+      // The split boundary: first 2 records are "before today", last 8 are
+      // "today and later" — verify the fields the split uses are present.
+      expect(r.daily![0].dt! < today, isTrue);
+      expect(r.daily![1].dt! < today, isTrue);
+      expect(r.daily![2].dt! >= today, isTrue);
+      expect(r.daily![9].dt! >= today, isTrue);
+    });
   });
 }

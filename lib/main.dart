@@ -160,7 +160,9 @@ class _MyHomePageState extends State<MyHomePage> {
   OneCallResponse? _historical;
   OneCallResponse? _weather;
   OneCallResponse? _leadUp;
-  static const int _leadUpDays = 7;
+  // Must mirror WeatherFetcher.leadUpDays: the daily-timeline page caps at 10
+  // records, so leadUpDays + 8 forecast days (today..+7) fits one response.
+  static const int _leadUpDays = 2;
   bool loaded = false;
   bool advancedMode = false;
   String? errorMessage;
@@ -326,24 +328,37 @@ class _MyHomePageState extends State<MyHomePage> {
     int dt = today.millisecondsSinceEpoch ~/ 1000;
 
     try {
-      // Fetch current + historical + forecast + the antecedent ("lead-up")
-      // daily weather for the days before today in parallel. The lead-up data
-      // is what the ML training pipeline needs for lead-up-change features
-      // (days-since-rain, pressure trend, first warm day after rain) - see
-      // docs/model_training_findings.md (Part 4, #3).
+      // Fetch current + historical + forecast in parallel. The forecast call
+      // (fetchWeather) now also returns the antecedent ("lead-up") daily days
+      // for the days *before* today via split-and-route - anchored a couple of
+      // days into the past on the same daily-timeline request, then split at
+      // today's midnight. That lead-up data is what the ML training pipeline
+      // needs for lead-up-change features (days-since-rain, pressure trend,
+      // first warm day after rain) - see docs/model_training_findings.md
+      // (Part 4, #3) - collected at ZERO extra One Call calls.
       final List<dynamic> responses = await Future.wait([
         weatherFetcher.fetchNearestWeatherLocation(),
         weatherFetcher.fetchHistoricalWeather(dt),
         weatherFetcher.fetchWeather(),
-        weatherFetcher.fetchLeadUpWeather(_leadUpDays),
         // Ensure the forest models are parsed before _updateWeather scores.
         Nuptials.ensureLoaded(),
       ]);
-      _leadUp = responses[3] as OneCallResponse;
+      final weather = responses[2] as OneCallResponse;
+      // Derive the lead-up OneCallResponse from the forecast's split-out past
+      // slice so createWeather/updateWeather keep their existing signature
+      // (leadUp: OneCallResponse?). Null/empty -> no leadup doc is written.
+      _leadUp = (weather.leadUpDaily != null && weather.leadUpDaily!.isNotEmpty)
+          ? OneCallResponse(
+              lat: weather.lat,
+              lon: weather.lon,
+              timezone: weather.timezone,
+              timezoneOffset: weather.timezoneOffset,
+              daily: weather.leadUpDaily)
+          : null;
       _applyWeather(
         responses[0] as CurrentWeatherResponse,
         responses[1] as OneCallResponse,
-        responses[2] as OneCallResponse,
+        weather,
       );
     } catch (e) {
       handleError(e);
