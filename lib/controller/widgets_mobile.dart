@@ -9,7 +9,9 @@ void initialiseWidget() {
 }
 
 void widgetInitState(Function function) {
-  HomeWidget.widgetClicked.listen((Uri? uri) => function);
+  // NB: must invoke the callback — passing the bare reference silently did
+  // nothing when the home-screen widget was tapped.
+  HomeWidget.widgetClicked.listen((Uri? uri) => function());
 }
 
 // Called when Doing Background Work initiated from Widget
