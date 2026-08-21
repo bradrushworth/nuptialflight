@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'controller/arangodb.dart';
+import 'controller/geo.dart';
 import 'controller/nuptials.dart';
 import 'controller/screenshots_mobile.dart'
     if (dart.library.io) 'controller/screenshots_mobile.dart'
@@ -474,16 +475,27 @@ class _MyHomePageState extends State<MyHomePage> {
       if (d.pressure != null) MapEntry('Pressure', pressureContribution(d.pressure!)),
     ];
     entries.sort((a, b) => (b.value - 0.5).abs().compareTo((a.value - 0.5).abs()));
+    // Severity bands match the Why sheet's tags (see _FeatureCard._tagFor):
+    // <=0.38 hurts strongly (-2), <=0.45 hurts a little (-1), >=0.55 helps.
     return entries
         .take(3)
         .map((e) => WhyDriver(
               label: e.key,
-              direction: e.value >= 0.55 ? 1 : e.value <= 0.45 ? -1 : 0,
+              direction: e.value >= 0.55
+                  ? 1
+                  : e.value <= 0.38
+                      ? -2
+                      : e.value <= 0.45
+                          ? -1
+                          : 0,
             ))
         .toList();
   }
 
   void _openWhySheet() {
+    // Same API-shape defensiveness as _drivers(): the row is always rendered,
+    // so a missing/empty daily list must degrade to a no-op, not a crash.
+    if (_weather?.daily?.isNotEmpty != true) return;
     final Daily d = _weather!.daily!.first;
     showWhySheet(
       context,
@@ -595,18 +607,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _showNearbyReports() async {
     try {
       final latLng = weatherFetcher.getLocation();
-      final Position position = Position(
-        latitude: latLng.latitude,
-        longitude: latLng.longitude,
-        timestamp: DateTime.now(),
-        accuracy: 0.0,
-        altitude: 0.0,
-        altitudeAccuracy: 0.0,
-        heading: 0.0,
-        headingAccuracy: 0.0,
-        speed: 0.0,
-        speedAccuracy: 0.0,
-      );
+      final Position position = syntheticPosition(latLng.latitude, latLng.longitude);
       final List flights =
           await ArangoSingleton().getRecentFlightsNearMe(position, -24 * 60);
       if (!mounted || flights.isEmpty) return;

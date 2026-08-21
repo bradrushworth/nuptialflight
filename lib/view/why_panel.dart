@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'verdict.dart';
 
 /// One of the top drivers behind today's forecast, shown as a chip in the
-/// "Why?" row. [direction] is +1 (helps), 0 (neutral) or -1 (hurts).
+/// "Why?" row. [direction] is +1 (helps), 0 (neutral), -1 (hurts a little) or
+/// -2 (hurts strongly) — the same severity scale the detail sheet's tags use,
+/// so chip and tag colours always agree.
 class WhyDriver {
   const WhyDriver({required this.label, required this.direction});
 
@@ -95,14 +97,18 @@ class WhyChipsRow extends StatelessWidget {
   }
 
   Widget _driverChip(BuildContext context, WhyDriver d) {
+    // Mirrors _FeatureCard._tagFor: green = helps, amber = hurts a little,
+    // red = hurts strongly, neutral grey otherwise.
     final VerdictColors c = d.direction > 0
         ? verdictColors(context, Verdict.likely)
-        : d.direction < 0
-            ? verdictColors(context, Verdict.possible)
-            : VerdictColors(
-                Theme.of(context).colorScheme.onSurfaceVariant,
-                Theme.of(context).colorScheme.surfaceContainerHighest,
-              );
+        : d.direction <= -2
+            ? verdictColors(context, Verdict.unlikely)
+            : d.direction < 0
+                ? verdictColors(context, Verdict.possible)
+                : VerdictColors(
+                    Theme.of(context).colorScheme.onSurfaceVariant,
+                    Theme.of(context).colorScheme.surfaceContainerHighest,
+                  );
     final String arrow = d.direction > 0 ? '↑' : d.direction < 0 ? '↓' : '·';
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
