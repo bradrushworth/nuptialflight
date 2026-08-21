@@ -1,12 +1,8 @@
-//import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
-//import 'dart:developer' as developer;
-
 import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:io';
 import 'dart:math';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:device_preview_plus/device_preview_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,34 +10,48 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_google_maps_webservices/places.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'controller/arangodb.dart';
+import 'controller/geo.dart';
 import 'controller/nuptials.dart';
 import 'controller/screenshots_mobile.dart'
     if (dart.library.io) 'controller/screenshots_mobile.dart'
     if (dart.library.js) 'controller/screenshots_other.dart';
 import 'controller/services.dart';
-import 'controller/weather_fetcher.dart';
+import 'controller/units.dart';
 import 'controller/widgets_other.dart'
     if (dart.library.io) 'controller/widgets_mobile.dart'
     if (dart.library.js) 'controller/widgets_other.dart';
+import 'controller/weather_fetcher.dart';
 import 'responses/onecall_response.dart';
 import 'responses/weather_response.dart';
 import 'utils.dart';
+import 'view/app_icons.dart';
+import 'view/hero_card.dart';
+import 'view/hourly_chart.dart';
 import 'view/map.dart';
+import 'view/report_sheet.dart';
+import 'view/verdict.dart';
+import 'view/week_list.dart';
+import 'view/why_panel.dart';
 
-final DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+// The verdict thresholds moved to view/verdict.dart; re-exported so existing
+// importers (services.dart) keep working.
+export 'view/verdict.dart' show greenThreshold, amberThreshold;
+
 final DateFormat longDateFormat = DateFormat.MMMEd();
 final DateFormat weekdayFormat = DateFormat("E");
 final DateFormat timeOfDayFormat = DateFormat("ha");
-final DateFormat timeOfDay24HourFormat = DateFormat("HH");
 
 const String kGoogleApiKey = 'AIzaSyDNaPQ01hKnTmVRQoT_FM1ZTTxDnw6GoOU';
 
-const int greenThreshold = 60;
-const int amberThreshold = 50;
+/// The stable brand seed (eucalypt green). The whole-app red/amber retint is
+/// gone — verdict colours now appear only on the data itself (hero card,
+/// pills, chart bars), never on the chrome.
+const Color kSeedColor = Color(0xFF3D6B4F);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,24 +66,22 @@ Future<void> main() async {
   // Start parsing the forest-model JSON assets without blocking the first
   // frame; _getWeather() awaits Nuptials.ensureLoaded() before scoring.
   unawaited(Nuptials.ensureLoaded());
+  // Load the metric/imperial display preference.
+  unawaited(Units.load());
   // Initialise background services without blocking the first frame.
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
     unawaited(initializeService());
   }
 }
 
-class MyMaterialApp extends StatefulWidget {
+class MyMaterialApp extends StatelessWidget {
   MyMaterialApp({Key? key}) : super(key: key);
 
   @override
-  _MyMaterialAppState createState() => _MyMaterialAppState();
-}
-
-class _MyMaterialAppState extends State<MyMaterialApp> {
-  MaterialColor primarySwatch = Colors.blueGrey;
-
-  @override
   Widget build(BuildContext context) {
+    final ColorScheme lightScheme = ColorScheme.fromSeed(seedColor: kSeedColor);
+    final ColorScheme darkScheme =
+        ColorScheme.fromSeed(seedColor: kSeedColor, brightness: Brightness.dark);
     return MaterialApp(
       title: 'Ant Nuptial Flight Predictor',
       // Hide the dev banner
@@ -81,37 +89,15 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
       // For DevicePreview
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primarySwatch: primarySwatch,
-        useMaterial3: false,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: primarySwatch,
-        primaryColor: primarySwatch,
-        floatingActionButtonTheme: Theme.of(
-          context,
-        ).floatingActionButtonTheme.copyWith(backgroundColor: primarySwatch),
-        appBarTheme: Theme.of(context).appBarTheme.copyWith(backgroundColor: primarySwatch),
-        useMaterial3: false,
-      ),
+      theme: ThemeData(colorScheme: lightScheme, useMaterial3: true),
+      darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
       themeMode: ThemeMode.system,
-      home: MyHomePage(primarySwatch: setPrimarySwatch, weatherFetcher: WeatherFetcher()),
+      home: MyHomePage(weatherFetcher: WeatherFetcher()),
     );
-  }
-
-  void setPrimarySwatch(MaterialColor s) {
-    setState(() {
-      primarySwatch = s;
-    });
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  // Callback to retint the whole app's primary colour from the predicted
-  // suitability (green/amber/red). Null for nested "fixed location" pages.
-  final void Function(MaterialColor s)? primarySwatch;
   // When true the page shows a manually chosen location and disables reporting
   // (reports must come from the user's real, current location).
   final bool fixedLocation;
@@ -119,42 +105,18 @@ class MyHomePage extends StatefulWidget {
 
   MyHomePage({
     Key? key,
-
-    void Function(MaterialColor s)? this.primarySwatch,
     this.fixedLocation = false,
     required this.weatherFetcher,
   }) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
-
-  void setPrimarySwatch(MaterialColor swatch) {
-    if (primarySwatch != null) {
-      primarySwatch!(swatch);
-    }
-  }
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static const _kFontFam = 'WingedAnt';
-  static const String? _kFontPkg = null;
-  // static const IconData winged_ant =
-  //     IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData halictus_rubicundus_silhouette = IconData(
-    0xe801,
-    fontFamily: _kFontFam,
-    fontPackage: _kFontPkg,
-  );
-  static const int LARGE_SCREEN_HEIGHT = 800;
-
   final String corsProxyUrl = 'https://api.bitbot.com.au/cors/https://maps.googleapis.com/maps/api';
 
-  final AutoSizeGroup headingGroup = AutoSizeGroup();
-  final AutoSizeGroup parameterGroup = AutoSizeGroup();
-  final AutoSizeGroup suitabilityGroup = AutoSizeGroup();
-  final AutoSizeGroup histogramLegendGroup = AutoSizeGroup();
-
-  late final List<Choice> choices;
+  List<Choice> choices = <Choice>[];
   late final bool fixedLocation;
   late final WeatherFetcher weatherFetcher;
 
@@ -166,35 +128,24 @@ class _MyHomePageState extends State<MyHomePage> {
   CurrentWeatherResponse? _currentWeather;
   OneCallResponse? _historical;
   OneCallResponse? _weather;
-  // `loaded` gates the first-paint spinner; `advancedMode` toggles the numeric
-  // percentage vs the emoji scale; `errorMessage` drives the error screen.
+  // `loaded` gates the first-paint spinner; `errorMessage` drives the error screen.
   bool loaded = false;
-  bool advancedMode = false;
   String? errorMessage;
   // Refreshes the location + weather every hour while the app is open.
   Timer? _everyHour;
 
-  // The single hourly/daily entries used for the "Next 11am" / "Next 7pm" tiles.
-  Hourly? _indexOfDiurnalHour;
-  Hourly? _indexOfNocturnalHour;
-  int _diurnalHourPercentage = 0;
-  int _nocturnalHourPercentage = 0;
-  // Rolling 48-slot hourly probability list (the API can return <24 on the first
-  // day, so we cap the histogram at 48 to avoid index errors).
-  List<int> _hourlyPercentage = List.generate(
-    48, // 24 * 2
-    (index) {
-      return 0;
-    },
-  );
-  // Today + next 7 days daily probabilities (indices 1..7 used in the week table).
-  List<int> _dailyPercentage = [0, 0, 0, 0, 0, 0, 0, 0];
+  // Rolling 48-slot hourly probability list (the API can return fewer entries;
+  // _updateWeather zero-fills the tail so the list length is always safe).
+  final List<int> _hourlyPercentage = List<int>.filled(48, 0);
+  // Today + next 7 days daily probabilities (indices 1..7 used in the week list).
+  final List<int> _dailyPercentage = List<int>.filled(8, 0);
 
   @override
   void initState() {
     super.initState();
     this.fixedLocation = widget.fixedLocation;
     this.weatherFetcher = widget.weatherFetcher;
+    createMenu();
     widgetInitState(_loadData);
     _loadData(); // This will load data every time app is opened
   }
@@ -205,14 +156,11 @@ class _MyHomePageState extends State<MyHomePage> {
     _everyHour?.cancel();
   }
 
-  /// Builds the overflow-menu entries (location search, map, report issue, store
-  /// links, source code). The exact set depends on the platform (e.g. Android/iOS
-  /// store links are hidden on web). Called once PackageInfo has loaded the
-  /// version/build so the "Report Issue" mailto can include them.
+  /// Builds the overflow-menu entries (links + report issue). Location search
+  /// and the map moved out of the overflow into the app bar; the exact set of
+  /// store links depends on the platform.
   void createMenu() {
     choices = <Choice>[];
-    choices.add(const Choice(title: 'Select Location', url: '', icon: Icons.add_location_alt));
-    choices.add(const Choice(title: 'Show Map', url: '', icon: Icons.map));
     choices.add(
       Choice(
         title: 'Report Issue',
@@ -286,19 +234,19 @@ class _MyHomePageState extends State<MyHomePage> {
     // Get location data now and every hour
     _getLocation(false);
     _everyHour = Timer.periodic(Duration(hours: 1), (Timer t) {
-      print('Periodic state refresh...');
+      debugPrint('Periodic state refresh...');
       _getLocation(true);
     });
 
-    // Get platform information and then create the menu
+    // Get platform information and then rebuild the menu
     PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
       setState(() {
         appName = packageInfo.appName;
         packageName = packageInfo.packageName;
         version = packageInfo.version;
         buildNumber = packageInfo.buildNumber;
+        createMenu(); // After version and buildNumber is loaded
       });
-      createMenu(); // After version and buildNumber is loaded
     });
   }
 
@@ -311,7 +259,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _getWeather()
           .then(
             (nothing) =>
-                print("findLocation(fixed): _dailyPercentage=" + _dailyPercentage.toString()),
+                debugPrint("findLocation(fixed): _dailyPercentage=" + _dailyPercentage.toString()),
           )
           .catchError((e) => handleError(e));
     } else {
@@ -322,7 +270,7 @@ class _MyHomePageState extends State<MyHomePage> {
         if (updated || forceUpdate) {
           return _getWeather().then((_) => updateAppWidget(_dailyPercentage));
         }
-        print("findLocation(passive): no update _percentage=" + _dailyPercentage.toString());
+        debugPrint("findLocation(passive): no update _percentage=" + _dailyPercentage.toString());
         // Passive location unavailable (e.g. first launch) - try active GPS.
         return weatherFetcher
             .findLocation(true)
@@ -330,7 +278,7 @@ class _MyHomePageState extends State<MyHomePage> {
             .then((_) => updateAppWidget(_dailyPercentage))
             .then(
               (nothing) =>
-                  print("findLocation(active): _percentage=" + _dailyPercentage.toString()),
+                  debugPrint("findLocation(active): _percentage=" + _dailyPercentage.toString()),
             );
       }).catchError((e) => handleLocationError(e));
     }
@@ -358,7 +306,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void _findPlaceName() {
     PlacesAutocomplete.show(
           context: context,
-          //location: weatherFetcher.getLatLng(),
           apiKey: kGoogleApiKey,
           proxyBaseUrl: corsProxyUrl,
           mode: Mode.fullscreen,
@@ -382,8 +329,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       );
     } else {
-      print('_findPlaceName: User cancelled search!');
-      handleSearchError(Exception('User cancelled search!'));
+      // User dismissed the search: stay on the current page.
+      debugPrint('_findPlaceName: user cancelled search');
     }
   }
 
@@ -403,9 +350,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  /// Consumes the three fetched payloads, resolves the place label, finds the
-  /// 11am/7pm hourly entries, scores every hour/day through the forest models,
-  /// sets the app colour from today's percentage, and finally records the weather
+  /// Consumes the three fetched payloads, resolves the place label, scores
+  /// every hour/day through the forest models, and finally records the weather
   /// to the backend. Runs inside setState so the UI updates in one pass.
   void _updateWeather(
     CurrentWeatherResponse current,
@@ -423,114 +369,32 @@ class _MyHomePageState extends State<MyHomePage> {
       } else {
         _geocoding = current.name;
       }
-      print('_updateWeather: geocoding=$_geocoding');
+      debugPrint('_updateWeather: geocoding=$_geocoding');
 
-      DateTime now = new DateTime.now().toUtc();
-      now.add(Duration(milliseconds: weather.timezoneOffset!));
-      print('now.hour=${now.hour}');
-      try {
-        if (now.hour > 11 && historical.hourly != null) {
-          _indexOfDiurnalHour = historical.hourly!.lastWhere(
-            (e) =>
-                timeOfDayFormat.format(
-                  DateTime.fromMillisecondsSinceEpoch(
-                    (e.dt! + historical.timezoneOffset!) * 1000,
-                    isUtc: true,
-                  ),
-                ) ==
-                '11AM',
-          );
-        } else {
-          _indexOfDiurnalHour = weather.hourly!.firstWhere(
-            (e) =>
-                timeOfDayFormat.format(
-                  DateTime.fromMillisecondsSinceEpoch(
-                    (e.dt! + weather.timezoneOffset!) * 1000,
-                    isUtc: true,
-                  ),
-                ) ==
-                '11AM',
-          );
-        }
-        _diurnalHourPercentage =
-            (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, _indexOfDiurnalHour!) * 100.0)
-                .toInt();
-      } on StateError {
-        _indexOfDiurnalHour = null;
-        _diurnalHourPercentage = 0;
-      }
-
-      try {
-        if (now.hour > 19 && historical.hourly != null) {
-          _indexOfNocturnalHour = historical.hourly!.lastWhere(
-            (e) =>
-                timeOfDayFormat.format(
-                  DateTime.fromMillisecondsSinceEpoch(
-                    (e.dt! + historical.timezoneOffset!) * 1000,
-                    isUtc: true,
-                  ),
-                ) ==
-                '7PM',
-          );
-        } else {
-          _indexOfNocturnalHour = weather.hourly!.firstWhere(
-            (e) =>
-                timeOfDayFormat.format(
-                  DateTime.fromMillisecondsSinceEpoch(
-                    (e.dt! + weather.timezoneOffset!) * 1000,
-                    isUtc: true,
-                  ),
-                ) ==
-                '7PM',
-          );
-        }
-        _nocturnalHourPercentage =
-            (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, _indexOfNocturnalHour!) *
-                    100.0)
-                .toInt();
-      } on StateError {
-        _indexOfNocturnalHour = null;
-        _nocturnalHourPercentage = 0;
-      }
-
-      // Sometimes API returns less than 24 hours worth of data, but it is always the most recent
-      int j = 0;
+      // The API can return fewer hourly entries than our rolling window;
+      // guard the index and zero-fill the tail instead of crashing.
+      final List<Hourly> hourly = weather.hourly ?? <Hourly>[];
+      final int hourlyCount = min(_hourlyPercentage.length, hourly.length);
       for (int i = 0; i < _hourlyPercentage.length; i++) {
-        _hourlyPercentage[i] =
-            (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, weather.hourly![j]) * 100.0)
-                .toInt();
-        j++;
+        _hourlyPercentage[i] = i < hourlyCount
+            ? (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, hourly[i]) * 100.0).toInt()
+            : 0;
       }
 
+      final List<Daily> daily = weather.daily ?? <Daily>[];
+      final int dailyCount = min(_dailyPercentage.length, daily.length);
       for (int i = 0; i < _dailyPercentage.length; i++) {
-        _dailyPercentage[i] =
-            (nuptialDailyPercentageModel(weather.lat!, weather.lon!, weather.daily!.elementAt(i),
-                        pop1: i + 1 < weather.daily!.length
-                            ? weather.daily!.elementAt(i + 1).pop
-                            : null,
-                        pop2: i + 2 < weather.daily!.length
-                            ? weather.daily!.elementAt(i + 2).pop
-                            : null) *
+        _dailyPercentage[i] = i < dailyCount
+            ? (nuptialDailyPercentageModel(weather.lat!, weather.lon!, daily[i],
+                        pop1: i + 1 < daily.length ? daily[i + 1].pop : null,
+                        pop2: i + 2 < daily.length ? daily[i + 2].pop : null) *
                     100.0)
-                .toInt();
+                .toInt()
+            : 0;
       }
 
-      if (_dailyPercentage[0] >= greenThreshold) {
-        widget.setPrimarySwatch(Colors.lightGreen);
-      } else if (_dailyPercentage[0] >= amberThreshold) {
-        widget.setPrimarySwatch(Colors.amber);
-      } else {
-        widget.setPrimarySwatch(Colors.red);
-      }
       loaded = true;
     });
-    print(
-      "_updateWeather: _diurnalHourPercentage=$_diurnalHourPercentage _indexOfDiurnalHour=${_indexOfDiurnalHour?.dt}",
-    );
-    print(
-      "_updateWeather: _nocturnalHourPercentage=$_nocturnalHourPercentage _indexOfNocturnalHour=${_indexOfNocturnalHour?.dt}",
-    );
-    print("_updateWeather: _hourlyPercentage=" + _hourlyPercentage.toString());
     _recordWeather();
   }
 
@@ -546,601 +410,39 @@ class _MyHomePageState extends State<MyHomePage> {
     ArangoSingleton().createWeather(version, buildNumber, _weather, _historical, _currentWeather);
   }
 
-  /// Create an alert dialog
-  Future<void> showAlert(String title, String message) async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  /// Feature to record user saw a nuptial flight
-  void _sawNuptialFlight(String? size) async {
-    Navigator.of(context).pop();
-
-    if (fixedLocation) {
-      showAlert('Error', 'Can only report current location!');
-      return;
+  /// The best three-hour flight window in the next 24 hours, computed from the
+  /// hourly model scores (replaces the old hardcoded 11am/7pm tiles). Null
+  /// when no window clears the "possible" bar.
+  String? _bestWindowLabel() {
+    final List<Hourly>? hourly = _weather?.hourly;
+    final int? offset = _weather?.timezoneOffset;
+    if (hourly == null || offset == null) return null;
+    final int n = min(24, min(hourly.length, _hourlyPercentage.length));
+    if (n < 3) return null;
+    int bestStart = 0;
+    double bestAvg = -1;
+    for (int i = 0; i + 3 <= n; i++) {
+      final double avg =
+          (_hourlyPercentage[i] + _hourlyPercentage[i + 1] + _hourlyPercentage[i + 2]) / 3.0;
+      if (avg > bestAvg) {
+        bestAvg = avg;
+        bestStart = i;
+      }
     }
-
-    if (kDebugMode) {
-      showAlert('Error', 'Not supported in debug mode!');
-      return;
-    }
-
-    ArangoSingleton().updateWeather(
-      version,
-      buildNumber,
-      size,
-      _weather,
-      _historical,
-      _currentWeather,
-    );
-    showAlert('Success', 'Thank you for submitting!');
+    if (bestAvg < amberThreshold) return null;
+    String fmt(int dt) => timeOfDayFormat
+        .format(DateTime.fromMillisecondsSinceEpoch((dt + offset) * 1000, isUtc: true))
+        .toLowerCase();
+    final String start = fmt(hourly[bestStart].dt!);
+    final String end = fmt(hourly[bestStart + 2].dt! + 3600);
+    return 'Best window $start–$end';
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return buildUI('Ant Nuptial Flight Predictor');
-  }
-
-  Widget buildUI(String title) {
-    //double width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(title),
-        centerTitle: true,
-        toolbarHeight: 45,
-        actions: <Widget>[
-          // overflow menu
-          PopupMenuButton<Choice>(
-            onSelected: (Choice c) {
-              if (c.icon == Icons.add_location_alt) {
-                _findPlaceName();
-              } else if (c.icon == Icons.map) {
-                _showMap();
-              } else {
-                Utils.launchURL('${c.url}');
-              }
-            },
-            itemBuilder: (BuildContext context) {
-              return choices.map((Choice choice) {
-                return PopupMenuItem<Choice>(
-                  value: choice,
-                  child: Row(
-                    children: [
-                      Icon(choice.icon, size: 20, color: Theme.of(context).primaryColor),
-                      Text('    '),
-                      Text('${choice.title}'),
-                    ],
-                  ),
-                );
-              }).toList();
-            },
-          ),
-        ],
-      ),
-      body: OrientationBuilder(
-        builder: (context, orientation) {
-          return LayoutBuilder(
-            builder: (ctx, constraints) {
-              // Responsive breakpoints from the body's *available* space
-              // (constraints), not raw MediaQuery height. Using MediaQuery
-              // ignored the app bar / system UI / keyboard and caused
-              // inconsistent element gating across screen sizes.
-              final double availH = constraints.maxHeight;
-              // Compact layout for small portrait phones so the whole page fits without
-              // scrolling (emoji scale + version stay on screen).
-              final bool compact = orientation == Orientation.portrait && availH < 680;
-              //print('constraints.maxHeight=${constraints.maxHeight}');
-              return errorMessage != null
-                  ? _buildErrorMessage()
-                  : !loaded
-                      ? _buildCircularProgressIndicator()
-                          : SingleChildScrollView(
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(minHeight: availH),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: orientation == Orientation.portrait
-                                  ? MainAxisAlignment.spaceEvenly
-                                  : MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        SizedBox(
-                          child: GridView.count(
-                            crossAxisCount: orientation == Orientation.portrait ? 1 : 3,
-                            // width/height ratio
-                                childAspectRatio: availH >= 1000
-                                    ? 8
-                                    : orientation == Orientation.portrait
-                                        ? 6
-                                        : 4,
-                            shrinkWrap: true,
-                            padding: EdgeInsets.symmetric(vertical: 0),
-                            children: [
-                                  if (orientation == Orientation.portrait || orientation == Orientation.landscape)
-                                    _buildNuptialHeading(orientation),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    advancedMode = !advancedMode;
-                                  });
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: <Widget>[
-                                    _buildTodayPercentage(
-                                      orientation,
-                                      'Next 11am',
-                                      _diurnalHourPercentage,
-                                    ),
-                                    _buildTodayPercentage(
-                                      orientation,
-                                      'Today Overall',
-                                      _dailyPercentage[0],
-                                    ),
-                                    _buildTodayPercentage(
-                                      orientation,
-                                      'Next 7pm',
-                                      _nocturnalHourPercentage,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                                  if (orientation == Orientation.portrait)
-                                    _buildTodayHistogram(constraints),
-                              _buildTodayWeather(orientation),
-                            ],
-                          ),
-                        ),
-                            if (orientation == Orientation.landscape)
-                              _buildTodayHistogram(constraints),
-                            _buildWeatherGrid(orientation, constraints, compact),
-                            _buildUpcomingWeek(orientation, availH),
-                            if (orientation == Orientation.portrait)
-                              Container(padding: EdgeInsets.symmetric(vertical: compact ? 4 : 20))
-                            else
-                              Container(padding: const EdgeInsets.symmetric(vertical: 10)),
-                            _buildEmojiInstructions(),
-                            if (orientation == Orientation.portrait)
-                              Container(padding: const EdgeInsets.symmetric(vertical: 0))
-                            else
-                              Container(padding: const EdgeInsets.symmetric(vertical: 4)),
-                        Text(
-                          (kIsWeb ? 'Web' : toBeginningOfSentenceCase(Platform.operatingSystem)) +
-                              ' Version $version+$buildNumber',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 8, color: Colors.grey),
-                        ),
-                        // TODO: Hack for bug in Android at the moment
-                            if (!kIsWeb && Platform.isAndroid && orientation == Orientation.portrait)
-                              Container(padding: EdgeInsets.symmetric(vertical: compact ? 4 : 20)),
-                          ],
-                        ),
-                      ),
-                    );
-            },
-          );
-        },
-      ),
-
-      /// Future feature to record that the user saw a nuptial flight today
-      floatingActionButton: fixedLocation
-          ? null
-          : FloatingActionButton(
-              onPressed: () async {
-                // set up the buttons
-                Widget smallButton = ElevatedButton(
-                  child: Text("Small\n(10mm)", textAlign: TextAlign.center),
-                  style: ElevatedButton.styleFrom(alignment: Alignment.centerLeft),
-                  onPressed: () {
-                    _sawNuptialFlight('small');
-                  },
-                );
-                Widget mediumButton = ElevatedButton(
-                  child: Text("Medium\n(20mm)", textAlign: TextAlign.center),
-                  style: ElevatedButton.styleFrom(alignment: Alignment.center),
-                  onPressed: () {
-                    _sawNuptialFlight('medium');
-                  },
-                );
-                Widget largeButton = ElevatedButton(
-                  child: Text("Large\n(30mm)", textAlign: TextAlign.center),
-                  style: ElevatedButton.styleFrom(alignment: Alignment.centerRight),
-                  onPressed: () {
-                    _sawNuptialFlight('large');
-                  },
-                );
-                Widget cancelButton = ElevatedButton(
-                  child: Text("No Flight", textAlign: TextAlign.center),
-                  style: ElevatedButton.styleFrom(
-                    alignment: Alignment.center,
-                    backgroundColor: Colors.redAccent,
-                  ),
-                  onPressed: () {
-                    _sawNuptialFlight(null);
-                  },
-                );
-                // set up the AlertDialog
-                AlertDialog alert = AlertDialog(
-                  title: Center(child: Text('Report Nuptial Flight')),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          "What size queen ant did you see fly? Please only report real sightings. This data improves the app.",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Text(''),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[smallButton, mediumButton, largeButton],
-                      ),
-                      Text(''),
-                      cancelButton,
-                    ],
-                  ),
-                );
-                // show the dialog
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return alert;
-                  },
-                );
-              },
-              tooltip: 'Saw Nuptial Flight',
-              child: Icon(halictus_rubicundus_silhouette, size: 45, color: Colors.white),
-            ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
-    );
-  }
-
-  // Returns the text style (colour + semibold) used for a percentage label.
-  static TextStyle getColorTextStyle(int percentage) {
-    return TextStyle(color: getColorGradient(percentage), fontWeight: FontWeight.w600);
-  }
-
-  /// Maps a flight-probability percentage to a semantic colour: red below
-  /// [amberThreshold], orange below [greenThreshold], green at/above it.
-  static Color getColorGradient(int percentage) {
-    Color? color = (percentage < amberThreshold
-        ? Colors.red[800]
-        : (percentage < greenThreshold ? Colors.orange[800] : Colors.green[700]));
-    return color!;
-  }
-
-  // ignore: unused_element
-  static Color? getContinuousColorGradient(int percentage) {
-    // Bias towards red and green and away from the middle
-    int r = max(0, (1.0 * 255 * (100 - percentage * 1.2)) ~/ 100);
-    int g = min(255, (1.0 * 255 * percentage * 1.2) ~/ 100);
-    int b = 0;
-    Color color = Color.fromARGB(255, r, g, b);
-
-    return color;
-  }
-
-  /// Maps a flight-probability percentage to a single glyph on the confidence
-  /// scale (thumb-down -> pinch -> crossed-fingers -> ant thumbs-up -> ant heart).
-  /// Used in place of the numeric percentage when [advancedMode] is off.
-  String getEmojiText(int percentage) {
-    if (percentage < 45) return '👎'; // 🙅😞
-    if (percentage < 50) return '🤏'; // 🤷🫤
-    if (percentage < 55) return '🤞'; // 🚶🤔
-    if (percentage < 60) return '🐜👌'; // 🏃😁🤗
-    if (percentage < 65) return '🐜👍'; //
-    if (percentage < 70) return '🐜💪'; //
-    return '🐜🫶';
-  }
-
-  String getEmojiInstructions() {
-    //return '😞🫤🤔😁🐜';
-    return '👎🤏🤞👌👍💪🫶';
-  }
-
-  Widget _buildEmojiInstructions() {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          advancedMode = !advancedMode;
-        });
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Center(
-            child: AutoSizeText(
-              'Confidence Scale',
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-              minFontSize: 17,
-              maxFontSize: 20,
-              stepGranularity: 1.0,
-              maxLines: 2,
-            ),
-          ),
-          Center(
-            child: AutoSizeText(
-              getEmojiInstructions(),
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300, wordSpacing: 0),
-              minFontSize: 17,
-              maxFontSize: 20,
-              stepGranularity: 1.0,
-              maxLines: 2,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildErrorMessage() {
-    //                  return AlertDialog(
-    //                     title: const Text('That is correct!'),
-    //                     content: const Text('13 is the right answer.'),
-    //                     actions: <Widget>[
-    //                       TextButton(
-    //                         onPressed: () {
-    //                           Navigator.pop(context);
-    //                         },
-    //                         child: const Text('OK'),
-    //                       ),
-    //                     ],
-    return Center(
-      child: Text(
-        '$errorMessage',
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
-
-  Widget _buildCircularProgressIndicator() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [CircularProgressIndicator()],
-      ),
-    );
-  }
-
-  Widget _buildNuptialHeading(Orientation orientation) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        AutoSizeText(
-          orientation == Orientation.portrait
-              ? 'Confidence of Nuptial Flight'
-              : 'Confidence of Ant\nNuptial Flight',
-          style: TextStyle(
-            height: orientation == Orientation.portrait ? 2.6 : 1.2,
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-          ),
-          minFontSize: 16,
-          maxFontSize: 22,
-          textScaleFactor: 1,
-          textAlign: TextAlign.center,
-          softWrap: true,
-          maxLines: 2,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTodayPercentage(Orientation orientation, String heading, int percentage) {
-    return Column(
-      mainAxisAlignment: orientation == Orientation.portrait
-          ? MainAxisAlignment.spaceAround
-          : MainAxisAlignment.spaceEvenly,
-      children: [
-        AutoSizeText(
-          heading,
-          group: headingGroup,
-          style: TextStyle(fontSize: 14, height: orientation == Orientation.portrait ? 0.95 : 0.90),
-          minFontSize: 14,
-          maxFontSize: 22,
-          stepGranularity: 1.0,
-          textAlign: TextAlign.center,
-        ),
-        AutoSizeText(
-          advancedMode ? '${percentage}%' : getEmojiText(percentage),
-          style: TextStyle(
-            color: getColorGradient(percentage),
-            height: orientation == Orientation.portrait ? 0.95 : 0.90,
-            fontSize: 37,
-            fontWeight: FontWeight.w900,
-          ),
-          minFontSize: 37,
-          maxFontSize: 48,
-          stepGranularity: 1.0,
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTodayHistogram(BoxConstraints constraints) {
-    // Use the *available* body height (constraints), not raw MediaQuery
-    // height, so the histogram is sized consistently with the rest of the
-    // body regardless of app bar / system UI / keyboard on any screen size.
-    final double height = constraints.maxHeight;
-    return SizedBox(
-      height: height / 8,
-      width: constraints.maxWidth,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: List.generate(
-          min(24, _weather!.hourly!.length),
-          (index) => _buildTodayHistogramElement(index),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTodayHistogramElement(int index) {
-    Hourly hourly = _weather!.hourly![index];
-    String time = timeOfDay24HourFormat.format(
-      DateTime.fromMillisecondsSinceEpoch(
-        (hourly.dt! + _weather!.timezoneOffset!) * 1000,
-        isUtc: true,
-      ),
-    );
-    int percentage = _hourlyPercentage[index];
-    if (percentage < 10) percentage = 10;
-    double width = MediaQuery.of(context).size.width;
-    return LayoutBuilder(
-      builder: (ctx, constraints) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            SizedBox(height: constraints.maxHeight * 0.05),
-            Container(
-              height: constraints.maxHeight * 0.75,
-              width: width / 24 * 0.72,
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Theme.of(context).textTheme.bodyLarge!.color!.withValues(
-                          alpha: 0.1,
-                        ), // Color.fromRGBO(220, 220, 220, 0.2),
-                        width: 0.5,
-                      ),
-                      //color: Colors.white,//Color.fromRGBO(220, 220, 220, 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: FractionallySizedBox(
-                      heightFactor: percentage / 100,
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: getColorGradient(percentage),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: constraints.maxHeight * 0.05),
-            Container(
-              height: constraints.maxHeight * 0.15,
-              width: width / 24 * 0.72,
-              child: FittedBox(
-                child: AutoSizeText(
-                  //index.toString().padLeft(2, '0'),
-                  time,
-                  minFontSize: 2,
-                  maxFontSize: 12,
-                  stepGranularity: 1.0,
-                  group: histogramLegendGroup,
-                  style: TextStyle(fontSize: 2),
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildTodayWeather(Orientation orientation) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        AutoSizeText(
-          (_geocoding == null ? 'Today\'s Weather' : '$_geocoding Weather'),
-          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-          minFontSize: 17,
-          maxFontSize: 26,
-          stepGranularity: 1.0,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        AutoSizeText(
-          longDateFormat.format(
-                DateTime.fromMillisecondsSinceEpoch(
-                  (_weather!.hourly!.first.dt! + _weather!.timezoneOffset!) * 1000,
-                  isUtc: true,
-                ),
-              ) +
-              ' - ' +
-              toBeginningOfSentenceCase(_weather!.hourly!.first.weather!.first.description)!,
-          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
-          minFontSize: 17,
-          maxFontSize: 20,
-          stepGranularity: 1.0,
-          maxLines: 1,
-        ),
-        AutoSizeText(
-          _flightLikelihoodText(),
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w400,
-            color: getColorGradient(_dailyPercentage[0]),
-          ),
-          minFontSize: 11,
-          maxFontSize: 16,
-          stepGranularity: 1.0,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-
-      ],
-    );
-  }
-
-  /// One-line summary under the date/weather heading: whether a nuptial
-  /// flight is likely today and, if so, which species size is most likely
-  /// right now (from the per-size seasonal prior in nuptials.dart).
-  String _flightLikelihoodText() {
+  /// "Likely small species" — which queen-size class is most in season right
+  /// now (from the per-size seasonal prior). Null when a flight is unlikely.
+  String? _sizeLine() {
     final int pct = _dailyPercentage[0];
-    if (pct < amberThreshold) {
-      return 'Flight unlikely';
-    }
-    String qualifier = pct >= greenThreshold ? 'likely' : 'possible';
-    if (_weather?.lat == null) {
-      return 'Flight $qualifier';
-    }
+    if (pct < amberThreshold || _weather?.lat == null) return null;
     final Map<String, int> sizePct =
         sizeSeasonalPercentages(pct, _weather!.lat!, DateTime.now().toUtc());
     String bestSize = 'small';
@@ -1151,452 +453,448 @@ class _MyHomePageState extends State<MyHomePage> {
         bestSize = e.key;
       }
     }
-    return 'Flight $qualifier - probably $bestSize species';
+    return 'Likely $bestSize species';
   }
 
-  Widget _buildWeatherGrid(Orientation orientation, BoxConstraints constraints, bool compact) {
-    // Use the *available* body height (constraints), not raw MediaQuery
-    // height, so the extra weather rows appear consistently regardless
-    // of app bar / system UI / keyboard on any screen size.
-    final double height = constraints.maxHeight;
-    return SizedBox(
-      child: GridView.count(
-        padding: EdgeInsets.fromLTRB(
-          0,
-          (orientation == Orientation.landscape && height >= 750 ? 15 : 0),
-          0,
-          0,
-        ),
-        crossAxisCount: orientation == Orientation.portrait ? 3 : 6,
-        // width/height ratio
-        childAspectRatio: constraints.maxHeight >= 1000
-            ? 4.0
-            : orientation == Orientation.portrait
-            ? (compact ? 1.58 : 1.92)
-            : constraints.maxHeight <= 400
-            ? 2.00
-            : 2.05,
-        shrinkWrap: true,
-        children: [
-          _buildTemperature('Dew Point', _weather!.daily!.first.dewPoint!),
-          if (orientation == Orientation.landscape && height >= LARGE_SCREEN_HEIGHT)
-            _buildTemperature('Min Temp', _weather!.daily!.first.temp!.min!),
-          _indexOfDiurnalHour != null
-              ? _buildTemperature(
-                  timeOfDayFormat
-                          .format(
-                            DateTime.fromMillisecondsSinceEpoch(
-                              (_indexOfDiurnalHour!.dt! + _weather!.timezoneOffset!) * 1000,
-                              isUtc: true,
-                            ),
-                          )
-                          .toLowerCase() +
-                      ' Temp',
-                  _indexOfDiurnalHour!.temp!,
-                )
-              : _buildTemperature('Missing', 0),
-          if (orientation == Orientation.landscape && height >= LARGE_SCREEN_HEIGHT)
-            _buildTemperature('Day Temp', _weather!.daily!.first.temp!.day!),
-          //_buildTemperature('Max Temp', _weather!.daily!.first.temp!.max!),
-          _indexOfNocturnalHour != null
-              ? _buildTemperature(
-                  timeOfDayFormat
-                          .format(
-                            DateTime.fromMillisecondsSinceEpoch(
-                              (_indexOfNocturnalHour!.dt! + _weather!.timezoneOffset!) * 1000,
-                              isUtc: true,
-                            ),
-                          )
-                          .toLowerCase() +
-                      ' Temp',
-                  _indexOfNocturnalHour!.temp!,
-                )
-              : _buildTemperature('Missing', 0),
-          if (orientation == Orientation.landscape && height >= LARGE_SCREEN_HEIGHT)
-            _buildTemperature('Eve Temp', _weather!.daily!.first.temp!.eve!),
-          _buildAirPressure(),
-          if (orientation == Orientation.portrait || height >= LARGE_SCREEN_HEIGHT)
-            _buildWindSpeed(),
-          _buildWindGust(),
-          _buildHumidity(),
-          if (orientation == Orientation.portrait || height >= LARGE_SCREEN_HEIGHT)
-            _buildCloudiness(),
-          if (orientation == Orientation.portrait || height >= LARGE_SCREEN_HEIGHT)
-            _buildPrecipitation(),
-          //if (height >= LARGE_SCREEN_HEIGHT) _buildUVI(),
-        ],
-      ),
+  /// The three strongest drivers of today's forecast, from the model's own
+  /// per-attribute gauges (0.5 = the model is indifferent).
+  List<WhyDriver> _drivers() {
+    final Daily? d = _weather?.daily?.isNotEmpty == true ? _weather!.daily!.first : null;
+    if (d == null) return const <WhyDriver>[];
+    final List<MapEntry<String, double>> entries = <MapEntry<String, double>>[
+      if (d.temp?.day != null)
+        MapEntry('Temp ${Units.temp(d.temp!.day!, decimals: 0, withUnit: false)}',
+            temperatureContribution(d.temp!.day!)),
+      if (d.windSpeed != null)
+        MapEntry('Wind ${Units.speed(d.windSpeed!, decimals: 0)}', windContribution(d.windSpeed!)),
+      if (d.humidity != null)
+        MapEntry('Humidity ${d.humidity}%', humidityContribution(d.humidity!)),
+      if (d.clouds != null) MapEntry('Cloud ${d.clouds}%', cloudinessContribution(d.clouds!)),
+      if (d.pop != null)
+        MapEntry('Rain ${(d.pop! * 100).round()}%', rainContribution(d.pop!)),
+      if (d.pressure != null) MapEntry('Pressure', pressureContribution(d.pressure!)),
+    ];
+    entries.sort((a, b) => (b.value - 0.5).abs().compareTo((a.value - 0.5).abs()));
+    // Severity bands match the Why sheet's tags (see _FeatureCard._tagFor):
+    // <=0.38 hurts strongly (-2), <=0.45 hurts a little (-1), >=0.55 helps.
+    return entries
+        .take(3)
+        .map((e) => WhyDriver(
+              label: e.key,
+              direction: e.value >= 0.55
+                  ? 1
+                  : e.value <= 0.38
+                      ? -2
+                      : e.value <= 0.45
+                          ? -1
+                          : 0,
+            ))
+        .toList();
+  }
+
+  void _openWhySheet() {
+    // Same API-shape defensiveness as _drivers(): the row is always rendered,
+    // so a missing/empty daily list must degrade to a no-op, not a crash.
+    if (_weather?.daily?.isNotEmpty != true) return;
+    final Daily d = _weather!.daily!.first;
+    showWhySheet(
+      context,
+      conditions: <String>[
+        if (d.temp?.day != null) Units.temp(d.temp!.day!),
+        if (d.windSpeed != null) '${Units.speed(d.windSpeed!)} wind',
+        if (d.humidity != null) '${d.humidity}% humidity',
+        if (d.pressure != null) '${d.pressure!.toStringAsFixed(0)}\u{00A0}hPa',
+        if (d.dewPoint != null)
+          'Dew point ${Units.temp(d.dewPoint!, decimals: 0, withUnit: false)}',
+      ],
+      features: <WhyFeature>[
+        if (d.temp?.day != null)
+          WhyFeature(
+            name: 'Temperature',
+            note: 'Warmth is the model\'s strongest signal',
+            fn: temperatureContribution,
+            lo: 0,
+            hi: 40,
+            current: d.temp!.day!.toDouble(),
+          ),
+        if (d.windSpeed != null)
+          WhyFeature(
+            name: 'Wind',
+            note: 'Calm air scores best; strong wind grounds queens',
+            fn: windContribution,
+            lo: 0,
+            hi: 20,
+            current: d.windSpeed!.toDouble(),
+          ),
+        if (d.humidity != null)
+          WhyFeature(
+            name: 'Humidity',
+            note: 'Moist air after rain generally helps',
+            fn: humidityContribution,
+            lo: 0,
+            hi: 100,
+            current: d.humidity!.toDouble(),
+          ),
+        if (d.clouds != null)
+          WhyFeature(
+            name: 'Cloud cover',
+            note: 'The model\'s learned response to cloudiness',
+            fn: cloudinessContribution,
+            lo: 0,
+            hi: 100,
+            current: d.clouds!.toDouble(),
+          ),
+        if (d.pop != null)
+          WhyFeature(
+            name: 'Rain chance',
+            note: 'Today\'s probability of precipitation',
+            fn: rainContribution,
+            lo: 0,
+            hi: 1,
+            current: d.pop!.toDouble(),
+          ),
+        if (d.pressure != null)
+          WhyFeature(
+            name: 'Air pressure',
+            note: 'Pressure rarely moves the forecast much',
+            fn: pressureContribution,
+            lo: 980,
+            hi: 1040,
+            current: d.pressure!.toDouble(),
+          ),
+      ],
+      sizePercentages: _weather?.lat != null
+          ? sizeSeasonalPercentages(_dailyPercentage[0], _weather!.lat!, DateTime.now().toUtc())
+          : const <String, int>{},
     );
   }
 
-  Widget _buildTemperature(String heading, num temp) {
-    return SizedBox(
-      child: Column(
-        children: [
-          AutoSizeText(
-            heading,
-            style: TextStyle(fontSize: 14),
-            stepGranularity: 1.0,
-            group: headingGroup,
+  /// Opens the report bottom sheet and submits the result. After a real
+  /// sighting, follows up with how many other flights were reported nearby —
+  /// the reward that closes the crowd-sourcing loop.
+  Future<void> _openReportSheet() async {
+    final ReportResult? result =
+        await showReportSheet(context, locationLabel: _geocoding ?? 'your location');
+    if (result == null || !mounted) return;
+
+    if (fixedLocation) {
+      _showSnack('Reports must come from your real, current location.');
+      return;
+    }
+    if (kDebugMode) {
+      _showSnack('Reporting is disabled in debug builds.');
+      return;
+    }
+
+    ArangoSingleton().updateWeather(
+      version,
+      buildNumber,
+      result.size,
+      _weather,
+      _historical,
+      _currentWeather,
+    );
+    _showSnack(result.sawNothing
+        ? 'Thanks — no-flight reports improve the model too.'
+        : 'Thank you! Your sighting helps train the forecast.');
+    if (!result.sawNothing) {
+      unawaited(_showNearbyReports());
+    }
+  }
+
+  /// Fetches confirmed flights within 500 km in the last 24 h and surfaces the
+  /// count, so reporters immediately see they are part of a bigger event.
+  Future<void> _showNearbyReports() async {
+    try {
+      final latLng = weatherFetcher.getLocation();
+      final Position position = syntheticPosition(latLng.latitude, latLng.longitude);
+      final List flights =
+          await ArangoSingleton().getRecentFlightsNearMe(position, -24 * 60);
+      if (!mounted || flights.isEmpty) return;
+      final int n = flights.length;
+      _showSnack(
+          '$n flight${n == 1 ? '' : 's'} reported within 500 km in the last 24 h — see the map!');
+    } catch (e) {
+      debugPrint('_showNearbyReports: $e');
+    }
+  }
+
+  void _showSnack(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme scheme = Theme.of(context).colorScheme;
+    return ValueListenableBuilder<bool>(
+      valueListenable: Units.imperial,
+      builder: (context, imperial, _) {
+        return Scaffold(
+          resizeToAvoidBottomInset: true,
+          appBar: AppBar(
+            titleSpacing: 12,
+            title: Align(alignment: Alignment.centerLeft, child: _locationChip(scheme)),
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.map_outlined),
+                tooltip: 'Show map',
+                onPressed: _showMap,
+              ),
+              PopupMenuButton<Choice>(
+                tooltip: 'More options',
+                onSelected: (Choice c) {
+                  if (c.url == '_units') {
+                    Units.toggle();
+                  } else {
+                    Utils.launchURL('${c.url}');
+                  }
+                },
+                itemBuilder: (BuildContext context) {
+                  final List<PopupMenuEntry<Choice>> items = <PopupMenuEntry<Choice>>[
+                    PopupMenuItem<Choice>(
+                      value: Choice(
+                        title: imperial ? 'Use °C · m/s' : 'Use °F · mph',
+                        url: '_units',
+                        icon: Icons.thermostat,
+                      ),
+                      child: _menuRow(
+                          Icons.thermostat, imperial ? 'Use °C · m/s' : 'Use °F · mph'),
+                    ),
+                    const PopupMenuDivider(),
+                  ];
+                  items.addAll(choices.map((Choice choice) {
+                    return PopupMenuItem<Choice>(
+                      value: choice,
+                      child: _menuRow(choice.icon, choice.title),
+                    );
+                  }));
+                  return items;
+                },
+              ),
+            ],
           ),
-          AutoSizeText(
-            (temp).toStringAsFixed(1) + "°C",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-            stepGranularity: 1.0,
-            group: parameterGroup,
-          ),
-          AutoSizeText(
-            "Suitability: " + (temperatureContribution(temp) * 100).toStringAsFixed(0) + "%",
-            style: TextStyle(fontSize: 12),
-            minFontSize: 2,
-            maxFontSize: 12,
-            stepGranularity: 1.0,
-            group: suitabilityGroup,
-          ),
-        ],
-      ),
+          body: errorMessage != null
+              ? _buildErrorMessage()
+              : !loaded
+                  ? _buildLoading()
+                  : _buildContent(context),
+
+          /// Report a nuptial flight at the current location.
+          floatingActionButton: fixedLocation || !loaded || errorMessage != null
+              ? null
+              : FloatingActionButton.extended(
+                  onPressed: _openReportSheet,
+                  tooltip: 'Report a nuptial flight you saw',
+                  icon: const Icon(AppIcons.wingedAnt, size: 26),
+                  label: const Text('Report flight'),
+                ),
+        );
+      },
     );
   }
 
-  Widget _buildWindSpeed() {
-    return SizedBox(
-      child: Column(
-        children: [
-          AutoSizeText(
-            'Wind Speed',
-            style: TextStyle(fontSize: 14),
-            stepGranularity: 1.0,
-            group: headingGroup,
-          ),
-          AutoSizeText(
-            '${_weather!.daily!.first.windSpeed!.toStringAsFixed(1)}\u{00A0}m/s',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-            stepGranularity: 1.0,
-            group: parameterGroup,
-          ),
-          AutoSizeText(
-            "Suitability: " +
-                (windContribution(_weather!.daily!.first.windSpeed!) * 100).toStringAsFixed(0) +
-                "%",
-            style: TextStyle(fontSize: 12),
-            minFontSize: 2,
-            maxFontSize: 12,
-            stepGranularity: 1.0,
-            group: suitabilityGroup,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildWindGust() {
-    return SizedBox(
-      child: Column(
-        children: [
-          AutoSizeText(
-            'Wind Gust',
-            style: TextStyle(fontSize: 14),
-            stepGranularity: 1.0,
-            group: headingGroup,
-          ),
-          AutoSizeText(
-            '${_weather!.daily!.first.windGust!.toStringAsFixed(1)}\u{00A0}m/s',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-            stepGranularity: 1.0,
-            group: parameterGroup,
-          ),
-          AutoSizeText(
-            "Suitability: " +
-                (windContribution(_weather!.daily!.first.windGust!) * 100).toStringAsFixed(0) +
-                "%",
-            style: TextStyle(fontSize: 12),
-            minFontSize: 2,
-            maxFontSize: 12,
-            stepGranularity: 1.0,
-            group: suitabilityGroup,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPrecipitation() {
-    return SizedBox(
-      child: Column(
-        children: [
-          AutoSizeText(
-            'Precipitation',
-            style: TextStyle(fontSize: 14),
-            stepGranularity: 1.0,
-            group: headingGroup,
-          ),
-          AutoSizeText(
-            (_weather!.daily!.first.pop! * 100).toStringAsFixed(0) + "%",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-            stepGranularity: 1.0,
-            group: parameterGroup,
-          ),
-          AutoSizeText(
-            "Suitability: " +
-                (rainContribution(_weather!.daily!.first.pop!) * 100).toStringAsFixed(0) +
-                "%",
-            style: TextStyle(fontSize: 12),
-            minFontSize: 2,
-            maxFontSize: 12,
-            stepGranularity: 1.0,
-            group: suitabilityGroup,
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ignore: unused_element
-  Widget _buildUVI() {
-    return SizedBox(
-      child: Column(
-        children: [
-          AutoSizeText(
-            'UVI',
-            style: TextStyle(fontSize: 14),
-            stepGranularity: 1.0,
-            group: headingGroup,
-          ),
-          AutoSizeText(
-            (_weather!.daily!.first.uvi!).toStringAsFixed(1),
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-            stepGranularity: 1.0,
-            group: parameterGroup,
-          ),
-          AutoSizeText(
-            "Suitability: " +
-                (uviContribution(_weather!.daily!.first.uvi!) * 100).toStringAsFixed(0) +
-                "%",
-            style: TextStyle(fontSize: 12),
-            minFontSize: 2,
-            maxFontSize: 12,
-            stepGranularity: 1.0,
-            group: suitabilityGroup,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHumidity() {
-    return SizedBox(
-      child: Column(
-        children: [
-          AutoSizeText(
-            'Humidity',
-            style: TextStyle(fontSize: 14),
-            stepGranularity: 1.0,
-            group: headingGroup,
-          ),
-          AutoSizeText(
-            '${_weather!.daily!.first.humidity!}%',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-            stepGranularity: 1.0,
-            group: parameterGroup,
-          ),
-          AutoSizeText(
-            "Suitability: " +
-                (humidityContribution(_weather!.daily!.first.humidity!) * 100).toStringAsFixed(0) +
-                "%",
-            style: TextStyle(fontSize: 12),
-            minFontSize: 2,
-            maxFontSize: 12,
-            stepGranularity: 1.0,
-            group: suitabilityGroup,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCloudiness() {
-    return SizedBox(
-      child: Column(
-        children: [
-          AutoSizeText(
-            'Cloudiness',
-            style: TextStyle(fontSize: 14),
-            stepGranularity: 1.0,
-            group: headingGroup,
-          ),
-          AutoSizeText(
-            '${_weather!.daily!.first.clouds!}%',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-            stepGranularity: 1.0,
-            group: parameterGroup,
-          ),
-          AutoSizeText(
-            "Suitability: " +
-                (cloudinessContribution(_weather!.daily!.first.clouds!) * 100).toStringAsFixed(0) +
-                "%",
-            style: TextStyle(fontSize: 12),
-            minFontSize: 2,
-            maxFontSize: 12,
-            stepGranularity: 1.0,
-            group: suitabilityGroup,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAirPressure() {
-    return SizedBox(
-      child: Column(
-        children: [
-          AutoSizeText(
-            'Air Pressure',
-            style: TextStyle(fontSize: 14),
-            stepGranularity: 1.0,
-            group: headingGroup,
-          ),
-          AutoSizeText(
-            (_weather!.daily!.first.pressure!).toStringAsFixed(0) + "\u{00A0}hPa",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-            stepGranularity: 1.0,
-            group: parameterGroup,
-          ),
-          AutoSizeText(
-            "Suitability: " +
-                (pressureContribution(_weather!.daily!.first.pressure!) * 100).toStringAsFixed(0) +
-                "%",
-            style: TextStyle(fontSize: 12),
-            minFontSize: 2,
-            maxFontSize: 12,
-            stepGranularity: 1.0,
-            group: suitabilityGroup,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildUpcomingWeek(Orientation orientation, double height) {
-    return Column(
+  Widget _menuRow(IconData icon, String title) {
+    return Row(
       children: [
-        // AutoSizeText doesn't work here because the parent is unconstrained
-        SizedBox(
-          child: AutoSizeText(
-            'Upcoming Week',
-            style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-          ),
-        ),
-        SizedBox(
-          child: DataTable(
-            headingRowHeight: 22,
-            dataRowMinHeight: 22,
-            dataRowMaxHeight: 22,
-            horizontalMargin: 22,
-            columnSpacing: 22,
-            dividerThickness: 0,
-            columns: [
-              DataColumn(label: Text('Day'), numeric: true),
-              DataColumn(label: Text('Temp'), numeric: true),
-              if (orientation == Orientation.landscape)
-                DataColumn(label: Text('Dew Point'), numeric: true),
-              if (orientation == Orientation.landscape)
-                DataColumn(label: Text('Pressure'), numeric: true),
-              if (orientation == Orientation.landscape)
-                DataColumn(label: Text('Humidity'), numeric: true),
-              DataColumn(label: Text('Wind Speed'), numeric: true),
-              DataColumn(label: Text('Prediction'), numeric: true),
-            ],
-            rows: [
-              _buildFuturePercentage(orientation, 1),
-              _buildFuturePercentage(orientation, 2),
-              _buildFuturePercentage(orientation, 3),
-              _buildFuturePercentage(orientation, 4),
-              _buildFuturePercentage(orientation, 5),
-              if (height >= LARGE_SCREEN_HEIGHT) _buildFuturePercentage(orientation, 6),
-              if (height >= LARGE_SCREEN_HEIGHT) _buildFuturePercentage(orientation, 7),
-            ],
-          ),
-        ),
+        Icon(icon, size: 20, color: Theme.of(context).colorScheme.primary),
+        const SizedBox(width: 14),
+        Text(title),
       ],
     );
   }
 
-  DataRow _buildFuturePercentage(Orientation orientation, int i) {
-    return DataRow(
-      cells: [
-        DataCell(
-          Text(
-            weekdayFormat.format(
-              DateTime.fromMillisecondsSinceEpoch(
-                (_weather!.daily!.elementAt(i).dt! + _weather!.timezoneOffset!) * 1000,
-                isUtc: true,
-              ),
+  Widget _locationChip(ColorScheme scheme) {
+    return Semantics(
+      button: true,
+      label: 'Location: ${_geocoding ?? 'locating'}. Tap to choose another place.',
+      excludeSemantics: true,
+      child: Material(
+        color: scheme.surfaceContainerHigh,
+        borderRadius: BorderRadius.circular(999),
+        child: InkWell(
+          onTap: _findPlaceName,
+          borderRadius: BorderRadius.circular(999),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 8, 12, 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.place_outlined, size: 18, color: scheme.primary),
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    _geocoding ?? 'Locating…',
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Icon(Icons.arrow_drop_down, size: 18, color: scheme.onSurfaceVariant),
+              ],
             ),
-            style: getColorTextStyle(_dailyPercentage[i]),
           ),
         ),
-        DataCell(
-          Text(
-            ' ${_weather!.daily!.elementAt(i).temp!.day!.toStringAsFixed(1)}°C',
-            style: getColorTextStyle(_dailyPercentage[i]),
+      ),
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    final ColorScheme scheme = Theme.of(context).colorScheme;
+    final OneCallResponse weather = _weather!;
+    final List<Hourly> hourly = weather.hourly ?? <Hourly>[];
+    final int hourlyCount = min(24, min(hourly.length, _hourlyPercentage.length));
+
+    final String dateLine = hourly.isNotEmpty
+        ? 'Today · ' +
+            longDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                (hourly.first.dt! + weather.timezoneOffset!) * 1000,
+                isUtc: true))
+        : 'Today';
+    final String? description = hourly.isNotEmpty && hourly.first.weather?.isNotEmpty == true
+        ? toBeginningOfSentenceCase(hourly.first.weather!.first.description)
+        : null;
+    final num? dayTemp = weather.daily?.isNotEmpty == true ? weather.daily!.first.temp?.day : null;
+    final String conditionLine = [
+      if (description != null) description,
+      if (dayTemp != null) Units.temp(dayTemp, decimals: 0),
+    ].join(' · ');
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 560),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              HeroVerdictCard(
+                percentage: _dailyPercentage[0],
+                dateLine: dateLine,
+                conditionLine: conditionLine,
+                bestWindow: _bestWindowLabel(),
+                sizeLine: _sizeLine(),
+              ),
+              const SizedBox(height: 18),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text('Next 24 hours',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(fontWeight: FontWeight.w700)),
+                  Text(
+                    'flight confidence by hour',
+                    style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              HourlyChart(
+                points: [
+                  for (int i = 0; i < hourlyCount; i++)
+                    HourlyPoint(hourly[i].dt!, _hourlyPercentage[i]),
+                ],
+                timezoneOffsetSeconds: weather.timezoneOffset ?? 0,
+              ),
+              const SizedBox(height: 14),
+              WhyChipsRow(drivers: _drivers(), onTap: _openWhySheet),
+              const SizedBox(height: 22),
+              Text('Upcoming week',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w700)),
+              const SizedBox(height: 4),
+              WeekList(days: _weekDays()),
+              const SizedBox(height: 16),
+              Text(
+                (kIsWeb ? 'Web' : toBeginningOfSentenceCase(Platform.operatingSystem)) +
+                    ' Version $version+$buildNumber',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 10, color: scheme.outline),
+              ),
+            ],
           ),
         ),
-        if (orientation == Orientation.landscape)
-          DataCell(
-            Text(
-              ' ${_weather!.daily!.elementAt(i).dewPoint!.toStringAsFixed(1)}°C',
-              style: getColorTextStyle(_dailyPercentage[i]),
-            ),
-          ),
-        if (orientation == Orientation.landscape)
-          DataCell(
-            Text(
-              ' ${_weather!.daily!.elementAt(i).pressure!.toStringAsFixed(0)}\u{00A0}hPa',
-              style: getColorTextStyle(_dailyPercentage[i]),
-            ),
-          ),
-        if (orientation == Orientation.landscape)
-          DataCell(
-            Text(
-              ' ${_weather!.daily!.elementAt(i).humidity!.toStringAsFixed(0)}%',
-              style: getColorTextStyle(_dailyPercentage[i]),
-            ),
-          ),
-        DataCell(
-          Text(
-            ' ${_weather!.daily!.elementAt(i).windGust!.toStringAsFixed(1)}\u{00A0}m/s',
-            style: getColorTextStyle(_dailyPercentage[i]),
+      ),
+    );
+  }
+
+  List<WeekDay> _weekDays() {
+    final List<Daily> daily = _weather?.daily ?? <Daily>[];
+    final int offset = _weather?.timezoneOffset ?? 0;
+    final int n = min(_dailyPercentage.length, daily.length);
+    return [
+      for (int i = 1; i < n; i++)
+        WeekDay(
+          day: weekdayFormat.format(DateTime.fromMillisecondsSinceEpoch(
+              (daily[i].dt! + offset) * 1000,
+              isUtc: true)),
+          temp: daily[i].temp?.day != null
+              ? Units.temp(daily[i].temp!.day!, decimals: 0, withUnit: false)
+              : '–',
+          wind: daily[i].windGust != null || daily[i].windSpeed != null
+              ? Units.speed(daily[i].windGust ?? daily[i].windSpeed!)
+              : '–',
+          percentage: _dailyPercentage[i],
+        ),
+    ];
+  }
+
+  Widget _buildErrorMessage() {
+    final ColorScheme scheme = Theme.of(context).colorScheme;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 420),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Icon(Icons.cloud_off, size: 44, color: scheme.onSurfaceVariant),
+              const SizedBox(height: 14),
+              Text(
+                '$errorMessage',
+                style: const TextStyle(fontSize: 17, height: 1.4),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 22),
+              FilledButton(
+                onPressed: () => _getLocation(true),
+                style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(48)),
+                child: const Text('Try again'),
+              ),
+              const SizedBox(height: 10),
+              OutlinedButton(
+                onPressed: _findPlaceName,
+                style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
+                child: const Text('Choose a location'),
+              ),
+            ],
           ),
         ),
-        if (advancedMode)
-          DataCell(
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  advancedMode = !advancedMode;
-                });
-              },
-              child: Text(
-                getEmojiText(_dailyPercentage[i]) + ' ${_dailyPercentage[i]}%',
-                style: getColorTextStyle(_dailyPercentage[i]),
-              ),
-            ),
-          )
-        else
-          DataCell(
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  advancedMode = !advancedMode;
-                });
-              },
-              child: Text(
-                getEmojiText(_dailyPercentage[i]),
-                style: getColorTextStyle(_dailyPercentage[i]),
-              ),
-            ),
+      ),
+    );
+  }
+
+  Widget _buildLoading() {
+    final ColorScheme scheme = Theme.of(context).colorScheme;
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const CircularProgressIndicator(),
+          const SizedBox(height: 16),
+          Text(
+            'Fetching your local weather…',
+            style: TextStyle(fontSize: 14, color: scheme.onSurfaceVariant),
           ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -1606,24 +904,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
       // Remove the percentage from the Android widget
       clearAppWidget();
-
-      // Wait then show location search dialog
-      Future.delayed(const Duration(milliseconds: 3000), () {
-        _findPlaceName();
-      });
     } else {
       developer.log('unhandledError: $e', error: e);
       throw e;
     }
-  }
-
-  void handleSearchError(e) {
-    handleError(e);
-
-    // Wait then try to get weather again
-    Future.delayed(const Duration(milliseconds: 3000), () {
-      _getLocation(false);
-    });
   }
 
   void handleError(e) {
@@ -1639,41 +923,15 @@ class _MyHomePageState extends State<MyHomePage> {
         errorMessage =
             'Unexpected error occurred. Please report to bitbot@bitbot.com.au ' + e.toString();
         developer.log('unhandledError: $e', error: e);
-        print(e);
       });
       throw e;
     }
   }
-
-  /*
-  FutureBuilder<WeatherResponse> weatherText() {
-    return FutureBuilder<WeatherResponse>(
-      future: _futureWeather,
-      builder: (context, weather) {
-        if (weather.hasData) {
-          return Text(
-            '${weather.requireData.daily?.first.temp?.max}',
-            style: Theme.of(context).textTheme.headline4,
-          );
-        } else if (weather.hasError) {
-          return Text(
-            '${weather.error}',
-            style: Theme.of(context).textTheme.headline6,
-          );
-        }
-
-        // By default, show a loading spinner.
-        return const CircularProgressIndicator();
-      },
-    );
-  }
-*/
 }
 
 /// A single overflow-menu / action item. [title] is the displayed label, [url]
-/// the target (opened via Utils.launchURL for http(s), or handled specially when
-/// empty for in-app actions like location search and the map), and [icon] the
-/// leading glyph in the menu row.
+/// the target (opened via Utils.launchURL for http(s)/mailto, or the special
+/// '_units' marker for the units toggle), and [icon] the leading glyph.
 class Choice {
   const Choice({required this.title, required this.url, required this.icon});
 

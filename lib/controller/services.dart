@@ -11,6 +11,7 @@ import 'package:home_widget/home_widget.dart';
 import '../main.dart';
 import '../responses/onecall_response.dart';
 import 'arangodb.dart';
+import 'geo.dart';
 import 'nuptials.dart';
 import 'weather_fetcher.dart';
 import 'widgets_mobile.dart';
@@ -151,18 +152,7 @@ Future<void> _updatePosition() async {
       final double? lat = await HomeWidget.getWidgetData<double>('last_latitude');
       final double? lon = await HomeWidget.getWidgetData<double>('last_longitude');
       if (lat != null && lon != null) {
-        _lastKnownPosition = Position(
-          latitude: lat,
-          longitude: lon,
-          timestamp: DateTime.now(),
-          accuracy: 0.0,
-          altitude: 0.0,
-          altitudeAccuracy: 0.0,
-          heading: 0.0,
-          headingAccuracy: 0.0,
-          speed: 0.0,
-          speedAccuracy: 0.0,
-        );
+        _lastKnownPosition = syntheticPosition(lat, lon);
         debugPrint("Restored last known location from cache: $_lastKnownPosition");
       }
     } catch (e) {
