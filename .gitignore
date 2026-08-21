@@ -54,3 +54,9 @@ app.*.map.json
 android/.kotlin/
 android/build/reports/problems/problems-report.html
 android/app/local.properties
+
+# Beads / Dolt files (added by bd init)
+.dolt/
+*.db
+.beads-credential-key
+.beads/proxieddb/
