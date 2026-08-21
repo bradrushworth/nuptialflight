@@ -149,7 +149,11 @@ Future<void> showWhySheet(
         builder: (context, scrollController) {
           return ListView(
             controller: scrollController,
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+            // Pad past the Android system navigation bar (edge-to-edge), or
+            // the last rows hide underneath it — same treatment as the
+            // report sheet.
+            padding: EdgeInsets.fromLTRB(
+                20, 0, 20, 24 + MediaQuery.of(context).viewPadding.bottom),
             children: [
               Text(
                 'Why this forecast?',

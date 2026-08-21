@@ -760,8 +760,12 @@ class _MyHomePageState extends State<MyHomePage> {
       if (dayTemp != null) Units.temp(dayTemp, decimals: 0),
     ].join(' · ');
 
+    // Bottom padding must clear the extended FAB (~56px + margins) AND the
+    // Android system navigation bar (edge-to-edge draws under it), otherwise
+    // the version line scrolls to rest underneath the Report flight button.
+    final double bottomInset = MediaQuery.of(context).viewPadding.bottom;
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
+      padding: EdgeInsets.fromLTRB(16, 8, 16, 120 + bottomInset),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 560),
