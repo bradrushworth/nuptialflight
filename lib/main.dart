@@ -899,32 +899,28 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void handleLocationError(e) {
-    if (e != null && e.toString().startsWith('Exception: ')) {
-      handleError(e);
+    handleError(e);
 
-      // Remove the percentage from the Android widget
-      clearAppWidget();
-    } else {
-      developer.log('unhandledError: $e', error: e);
-      throw e;
-    }
+    // Remove the percentage from the Android widget
+    clearAppWidget();
   }
 
+  // NB: called from catchError handlers — never rethrow here, or the error
+  // escapes as an unhandled async exception on top of the error screen.
   void handleError(e) {
     if (e != null && e.toString().startsWith('Exception: ')) {
       setState(() {
         loaded = true;
         errorMessage = e.toString().replaceFirst('Exception: ', '');
-        developer.log('handleError: $e', error: e);
       });
+      developer.log('handleError: $e', error: e);
     } else {
       setState(() {
         loaded = true;
         errorMessage =
             'Unexpected error occurred. Please report to bitbot@bitbot.com.au ' + e.toString();
-        developer.log('unhandledError: $e', error: e);
       });
-      throw e;
+      developer.log('unhandledError: $e', error: e);
     }
   }
 }

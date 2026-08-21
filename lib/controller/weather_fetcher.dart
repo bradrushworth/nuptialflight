@@ -47,11 +47,19 @@ class WeatherFetcher {
             // blocked/dismissed browser geolocation prompt can hang forever
             // and leave the app on a permanent spinner. Enforce a real
             // Dart-level timeout so we always fall through to the error path.
-            position = await Geolocator.getCurrentPosition(
-                    locationSettings: const LocationSettings(
-                        accuracy: LocationAccuracy.low,
-                        timeLimit: Duration(seconds: 10)))
-                .timeout(const Duration(seconds: 8));
+            final Future<Position> positionFuture = Geolocator.getCurrentPosition(
+                locationSettings: const LocationSettings(
+                    accuracy: LocationAccuracy.low,
+                    timeLimit: Duration(seconds: 10)));
+            // The timeout below abandons positionFuture. Without its own
+            // listener, a late failure (e.g. the browser permission prompt
+            // denied after our timeout, which errors inside the geolocator
+            // web plugin) surfaces as an unhandled exception in the console.
+            positionFuture.then<void>((_) {}, onError: (Object e) {
+              developer.log('Late geolocation failure (ignored): $e',
+                  name: 'WeatherFetcher');
+            });
+            position = await positionFuture.timeout(const Duration(seconds: 8));
           } on TimeoutException {
             developer.log(
                 "Timed out waiting for current position (web geolocation "
