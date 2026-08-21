@@ -1,0 +1,129 @@
+# Codemagic CI configuration — faithful translation of the "Default Workflow"
+# from the Codemagic Workflow Editor (read from the UI on 2026-08-21).
+#
+# NOTE: this file is NOT active until the app is switched to YAML mode in the
+# Codemagic UI ("Switch to YAML configuration" on the app's settings page).
+# Until then the Workflow Editor remains the source of truth and this file is
+# documentation + a migration path.
+#
+# Secrets are deliberately NOT in this file. Before switching to YAML, create
+# an environment variable group named `nuptialflight` (Team settings >
+# Environment variables) containing, all marked Secret:
+#   OPENWEATHERMAP_API_KEY               (currently embedded in the editor's post-clone script)
+#   OPENWEATHERMAP_MAP_KEY               (ditto)
+#   MAPTILER_MAP_KEY                     (ditto)
+#   GCLOUD_SERVICE_ACCOUNT_CREDENTIALS   (contents of the Play credentials JSON, api-49017...json)
+#   AWS_ACCESS_KEY_ID                    (S3 deploy user)
+#   AWS_SECRET_ACCESS_KEY                (ditto)
+# and upload the Android keystore (keystore.jks, alias `upload`) under
+# Team settings > Code signing identities with the reference name
+# `keystore_reference`. The App Store Connect API key "Codemagic Nuptial
+# Flight" (75423D3XRN) already exists in team settings and is referenced by
+# name below.
+#
+# Parity note: the Workflow Editor also publishes the web build to Codemagic
+# Static Pages (subdomain `nuptialflight.codemagic.app`). Static Pages has no
+# YAML publishing equivalent; the S3 deploy below covers the production site
+# (bucket `nuptialflight.app`).
+
+workflows:
+  default-workflow:
+    name: Default Workflow
+    instance_type: mac_mini_m4
+    max_build_duration: 60
+
+    environment:
+      groups:
+        - nuptialflight
+      vars:
+        JAVA_HOME: /Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
+        PACKAGE_NAME: au.com.bitbot.nuptialflight
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      android_signing:
+        - keystore_reference
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: au.com.bitbot.nuptialflight
+
+    integrations:
+      app_store_connect: Codemagic Nuptial Flight
+
+    cache:
+      cache_paths:
+        - $HOME/Library/Caches/CocoaPods
+        - $HOME/.gradle/caches
+        - $FLUTTER_ROOT/.pub-cache
+
+    triggering:
+      events:
+        - push
+        - tag
+      branch_patterns:
+        - pattern: master
+          include: true
+          source: true
+      tag_patterns:
+        - pattern: '*'
+          include: true
+      cancel_previous_builds: false
+
+    scripts:
+      # Workflow Editor parity: the post-clone script that creates the
+      # gitignored assets/.env the app (and its tests) require to build.
+      - name: Create assets/.env
+        script: |
+          #!/bin/sh
+          set -e
+          echo "OPENWEATHERMAP_API_KEY=$OPENWEATHERMAP_API_KEY" >> assets/.env
+          echo "OPENWEATHERMAP_MAP_KEY=$OPENWEATHERMAP_MAP_KEY" >> assets/.env
+          echo "MAPTILER_MAP_KEY=$MAPTILER_MAP_KEY" >> assets/.env
+      - name: Get Flutter packages
+        script: flutter packages pub get
+      # Workflow Editor: "Integration and unit tests" with arguments `test`,
+      # "Stop build if tests or analysis fail" checked (the default: a failing
+      # script fails the build). Static code analysis was disabled.
+      - name: Flutter test
+        script: flutter test
+      - name: Set up iOS code signing
+        script: xcode-project use-profiles
+      - name: Build AAB (release)
+        script: flutter build appbundle --release
+      - name: Build IPA (release)
+        script: flutter build ipa --release --export-options-plist=/Users/builder/export_options.plist
+      - name: Build web (release)
+        script: |
+          #!/bin/sh
+          set -e
+          flutter build web --release
+          cd build/web
+          zip -r ../web.zip .
+      - name: Deploy web to S3 (nuptialflight.app)
+        script: aws s3 sync build/web s3://nuptialflight.app --delete
+
+    artifacts:
+      - build/**/outputs/**/*.aab
+      - build/**/outputs/**/mapping.txt
+      - build/ios/ipa/*.ipa
+      - build/web.zip
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+
+    publishing:
+      email:
+        recipients:
+          - brushworth@bitbot.com.au
+        notify:
+          success: true
+          failure: true
+      google_play:
+        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+        track: beta
+        submit_as_draft: false
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        beta_groups:
+          - nuptialflight
+        submit_to_app_store: false
