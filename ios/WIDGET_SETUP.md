@@ -1,9 +1,15 @@
-# iOS Widget — one-time Xcode setup
+# iOS Widget — Xcode target setup (DONE 2026-08-22)
 
-The widget's source is complete in this repo (`ios/NuptialWidget/`), but Xcode
-project targets cannot be safely authored by hand, so the extension target must
-be added once in Xcode on a Mac. Five minutes, one time; after this every
-build (local and Codemagic) includes the widget.
+**This setup is complete.** The `NuptialWidget` extension target now lives in
+`project.pbxproj` (added programmatically with the `xcodeproj` gem on a
+Codemagic build machine over SSH, verified with `flutter build ios`: the
+built `Runner.app` contains `PlugIns/NuptialWidget.appex`). Every build
+(local and Codemagic) now includes the widget. The steps below are kept for
+reference in case the target ever needs to be recreated.
+
+NB the embed phase ("Embed Foundation Extensions") must sit BEFORE the
+Flutter "Thin Binary" script phase in Runner's Build Phases, or the build
+fails with a dependency cycle.
 
 ## Steps
 
