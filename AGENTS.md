@@ -175,6 +175,49 @@ orders are documented there, in README.md, and in `.clinerules`.
 - `debugPrint`/`developer.log` over `print`, and never log URLs containing
   `appid=` (the OWM key).
 
+## Using a Codemagic Mac as a remote workbench
+
+When a task needs macOS/Xcode (project surgery, iOS debugging) and no Mac
+is at hand, hold a Codemagic build machine open and drive it over SSH.
+Proven 2026-08-22 by adding the NuptialWidget extension target headlessly.
+
+1. **Branch + guard bypass**: push a branch whose HEAD commit message
+   contains `[force build]` (an empty commit is fine) so the build guard
+   lets it run. Pushes to non-master branches never trigger webhooks —
+   you start the build manually.
+2. **Keep the machine alive**: in the Workflow Editor, set the (normally
+   empty) **Pre-test script** to a sleep, guarded to your branch so a real
+   master release during the window is unaffected:
+   `if [ "$CM_BRANCH" = "<branch>" ] || [ "$FCI_BRANCH" = "<branch>" ]; then sleep 3300; fi`
+   The 60-min max build duration is a hard cap; sleep less than that.
+3. **Start the build** from the app page with **Enable SSH/VNC access**
+   ticked, selecting your branch. Expand "Explore build machine via SSH or
+   VNC client" once it starts. The SSH command is a
+   `curl .../ssh_access_script.sh | bash` one-liner; for non-interactive
+   use, fetch that script, extract the embedded RSA key and the
+   `ssh -p <port> builder@<ip>` details, then run
+   `ssh -i key -p <port> builder@<ip> '<command>'` per command. VNC
+   details (host:port, password) are also shown if a GUI is truly needed.
+4. **On the machine**: repo is at `~/clone` (post-clone script has already
+   created `assets/.env`). The workflow's Flutter is
+   `/Users/builder/programs/flutter/bin` (NOT the older default on PATH);
+   CocoaPods lives in the rbenv shims: use
+   `export PATH="$HOME/.rbenv/shims:/Users/builder/programs/flutter/bin:$PATH"`.
+   The rbenv rubies (`~/.rbenv/versions/*/bin/ruby`) have the `xcodeproj`
+   gem — Xcode project edits that "can't be done by hand" can be scripted
+   with it instead of clicking through Xcode.
+5. **Bring work home**: `git diff > patch` on the machine, `cat` it over
+   SSH to a local file, `git apply`, commit via the normal PR flow. The
+   machine's clone cannot push.
+6. **Clean up (do not skip)**: cancel the workbench build (stops billing),
+   delete the Pre-test keep-alive script in the Workflow Editor, and
+   delete the local copy of the SSH key.
+
+Related facts: "Trigger on tag creation" is OFF in the workflow, so tag
+pushes never start builds — only pushes to master (and manual starts) do.
+Xcode gotcha recorded in `ios/WIDGET_SETUP.md`: the Embed Foundation
+Extensions phase must come BEFORE Flutter's "Thin Binary" phase.
+
 <!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:970c3bf2 -->
 ## Beads Issue Tracker
 
