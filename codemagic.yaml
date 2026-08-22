@@ -9,8 +9,11 @@
 # Secrets are deliberately NOT in this file. They come from environment
 # variable groups (checked in the Codemagic UI on 2026-08-23):
 #   aws_credentials    (team global): AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
-#   google_credentials (team global): GCLOUD_SERVICE_ACCOUNT_CREDENTIALS,
-#                                     GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+#   google_credentials (team global): GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+#                       (also holds GCLOUD_SERVICE_ACCOUNT_CREDENTIALS, but
+#                       that value failed Codemagic's JSON validation - yaml
+#                       build #1 - so the GOOGLE_PLAY_ one, which the old
+#                       workflow editor demonstrably published with, is used)
 #   nuptialflight      (app level, Team settings > the app > Environment
 #                       variables): OPENWEATHERMAP_API_KEY,
 #                       OPENWEATHERMAP_MAP_KEY, MAPTILER_MAP_KEY,
@@ -205,7 +208,7 @@ workflows:
           success: true
           failure: true
       google_play:
-        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+        credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
         track: beta
         submit_as_draft: false
       app_store_connect:
