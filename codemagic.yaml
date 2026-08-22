@@ -163,7 +163,20 @@ workflows:
           cd build/web
           zip -r ../web.zip .
       - name: Deploy web to S3 (nuptialflight.app)
-        script: aws s3 sync build/web s3://nuptialflight.app --delete
+        script: |
+          #!/usr/bin/env sh
+          set -e
+          # Hashed/immutable-ish assets may cache for a day; the entry files
+          # must revalidate on every load or Cloudflare AND returning
+          # browsers serve a stale app for up to 4h after a release (S3
+          # objects carry no Cache-Control by default, so Cloudflare's 4h
+          # browser TTL fills the vacuum).
+          aws s3 sync build/web s3://nuptialflight.app --delete --cache-control "public, max-age=86400"
+          for f in index.html flutter_bootstrap.js flutter.js main.dart.js flutter_service_worker.js version.json; do
+            if [ -f "build/web/$f" ]; then
+              aws s3 cp "build/web/$f" "s3://nuptialflight.app/$f" --cache-control "no-cache"
+            fi
+          done
 
     artifacts:
       - build/**/outputs/**/*.aab
