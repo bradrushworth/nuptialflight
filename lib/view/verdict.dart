@@ -104,6 +104,8 @@ class BandPill extends StatelessWidget {
         ),
         child: Text(
           label,
+          maxLines: 1,
+          softWrap: false,
           style: TextStyle(
             color: c.fg,
             fontSize: compact ? 12 : 13,

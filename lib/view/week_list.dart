@@ -83,7 +83,12 @@ class WeekList extends StatelessWidget {
                     width: 88,
                     child: Align(
                       alignment: Alignment.centerRight,
-                      child: BandPill(band: d.band, compact: true),
+                      // scaleDown keeps long localized band names (e.g. German
+                      // "Vielversprechend") on one line instead of wrapping.
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: BandPill(band: d.band, compact: true),
+                      ),
                     ),
                   ),
                 ],
