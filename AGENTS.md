@@ -218,6 +218,20 @@ pushes never start builds — only pushes to master (and manual starts) do.
 Xcode gotcha recorded in `ios/WIDGET_SETUP.md`: the Embed Foundation
 Extensions phase must come BEFORE Flutter's "Thin Binary" phase.
 
+**Workbench limitation (learned 2026-08-22):** the App Store Connect API
+key never touches the build machine — Codemagic keeps it server-side and
+delivers only the distribution certificate (keychain) and pre-matched
+provisioning profiles. Apple *portal* operations (registering bundle ids,
+App Groups, creating profiles) therefore CANNOT be done from a workbench
+session. When a new target/bundle id is added (e.g. the NuptialWidget
+extension), someone must register the identifier and its App Group in the
+Apple Developer portal first, or add an ASC API key as Codemagic secret
+env vars so a build script can run
+`app-store-connect fetch-signing-files ... --create`. Until the widget's
+bundle id `au.com.bitbot.nuptialflight.NuptialWidget` + App Group
+`group.au.com.bitbot.nuptialflight` exist in the portal, every iOS build
+fails with "No profiles for ... were found" — which blocks ALL releases.
+
 <!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:970c3bf2 -->
 ## Beads Issue Tracker
 
