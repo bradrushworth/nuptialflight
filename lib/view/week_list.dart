@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../controller/flight_index.dart';
+import 'l10n_ext.dart';
 import 'verdict.dart';
 
 /// One row of the upcoming-week list.
@@ -43,7 +44,7 @@ class WeekList extends StatelessWidget {
         for (final WeekDay d in days)
           Semantics(
             label:
-                '${d.day}: flight index ${bandLabel(d.band).toLowerCase()}, better than ${d.percentile.round()} percent of days this season. ${d.temp}, wind ${d.wind}.',
+                '${d.day}: ${bandLabelOf(context.l10n, d.band)}, ${d.percentile.round()}%. ${d.temp}, ${d.wind}.',
             excludeSemantics: true,
             child: Container(
               constraints: const BoxConstraints(minHeight: 48),

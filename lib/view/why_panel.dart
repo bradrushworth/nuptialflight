@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'l10n_ext.dart';
 import 'verdict.dart';
 
 /// One of the top drivers behind today's forecast, shown as a chip in the
@@ -49,7 +50,7 @@ class WhyChipsRow extends StatelessWidget {
     return Semantics(
       button: true,
       label:
-          'Why this forecast? ${drivers.map((d) => '${d.label} ${d.direction > 0 ? 'helps' : d.direction < 0 ? 'hurts' : 'neutral'}').join(', ')}.',
+          '${context.l10n.whyTitle} ${drivers.map((d) => d.label).join(', ')}.',
       excludeSemantics: true,
       child: Material(
         color: scheme.surfaceContainerHigh,
@@ -63,7 +64,7 @@ class WhyChipsRow extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  'Why?',
+                  context.l10n.whyShort,
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
@@ -142,6 +143,7 @@ Future<void> showWhySheet(
     showDragHandle: true,
     builder: (context) {
       final ColorScheme scheme = Theme.of(context).colorScheme;
+      final AppLocalizations t = context.l10n;
       return DraggableScrollableSheet(
         expand: false,
         initialChildSize: 0.85,
@@ -157,7 +159,7 @@ Future<void> showWhySheet(
                 20, 0, 20, 24 + MediaQuery.of(context).viewPadding.bottom),
             children: [
               Text(
-                'Why this forecast?',
+                t.whyTitle,
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge
@@ -217,9 +219,7 @@ Future<void> showWhySheet(
               ],
               const SizedBox(height: 14),
               Text(
-                'Each curve is what the model learned about one condition. '
-                'The dot marks right now — high on the curve means that '
-                'condition is helping today\'s forecast.',
+                t.whyExplainer,
                 style: TextStyle(
                   fontSize: 13,
                   height: 1.45,
@@ -233,7 +233,7 @@ Future<void> showWhySheet(
               ],
               const SizedBox(height: 8),
               Text(
-                'Which size is in season?',
+                t.sizeSeasonTitle,
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium
@@ -241,8 +241,7 @@ Future<void> showWhySheet(
               ),
               const SizedBox(height: 4),
               Text(
-                'Different queen sizes peak in different months. Relative to '
-                'today\'s overall confidence:',
+                t.sizeSeasonExplainer,
                 style: TextStyle(
                   fontSize: 13,
                   height: 1.45,
@@ -251,19 +250,17 @@ Future<void> showWhySheet(
               ),
               const SizedBox(height: 10),
               _SizeSeasonRow(
-                  label: 'Small (~10 mm)',
+                  label: t.sizeRowSmall,
                   percentage: sizePercentages['small'] ?? 0),
               _SizeSeasonRow(
-                  label: 'Medium (~20 mm)',
+                  label: t.sizeRowMedium,
                   percentage: sizePercentages['medium'] ?? 0),
               _SizeSeasonRow(
-                  label: 'Large (~30 mm)',
+                  label: t.sizeRowLarge,
                   percentage: sizePercentages['large'] ?? 0),
               const SizedBox(height: 16),
               Text(
-                'Curves are the trained model\'s marginal response, not fixed '
-                'rules — they update when the model is retrained on new '
-                'sighting reports.',
+                t.whyFooter,
                 style: TextStyle(fontSize: 11.5, color: scheme.outline),
               ),
             ],
@@ -353,23 +350,24 @@ class _FeatureCard extends StatelessWidget {
   }
 
   _Tag _tagFor(BuildContext context, double v) {
+    final AppLocalizations t = context.l10n;
     if (v >= 0.62) {
-      return _Tag('Helps today', verdictColors(context, Verdict.likely));
+      return _Tag(t.tagHelps, verdictColors(context, Verdict.likely));
     }
     if (v >= 0.54) {
-      return _Tag('Slightly helps', verdictColors(context, Verdict.likely));
+      return _Tag(t.tagSlightlyHelps, verdictColors(context, Verdict.likely));
     }
     if (v > 0.46) {
       final ColorScheme scheme = Theme.of(context).colorScheme;
       return _Tag(
-        'No strong effect',
+        t.tagNeutral,
         VerdictColors(scheme.onSurfaceVariant, scheme.surfaceContainerHighest),
       );
     }
     if (v > 0.38) {
-      return _Tag('Hurts a little', verdictColors(context, Verdict.possible));
+      return _Tag(t.tagHurtsALittle, verdictColors(context, Verdict.possible));
     }
-    return _Tag('Hurts today', verdictColors(context, Verdict.unlikely));
+    return _Tag(t.tagHurts, verdictColors(context, Verdict.unlikely));
   }
 }
 

@@ -32,6 +32,7 @@ import 'responses/weather_response.dart';
 import 'utils.dart';
 import 'view/app_icons.dart';
 import 'view/hero_card.dart';
+import 'view/l10n_ext.dart';
 import 'view/hourly_chart.dart';
 import 'view/map.dart';
 import 'view/report_sheet.dart';
@@ -41,10 +42,6 @@ import 'view/why_panel.dart';
 // The verdict thresholds moved to view/verdict.dart; re-exported so existing
 // importers (services.dart) keep working.
 export 'view/verdict.dart' show greenThreshold, amberThreshold;
-
-final DateFormat longDateFormat = DateFormat.MMMEd();
-final DateFormat weekdayFormat = DateFormat("E");
-final DateFormat timeOfDayFormat = DateFormat("ha");
 
 const String kGoogleApiKey = 'AIzaSyDNaPQ01hKnTmVRQoT_FM1ZTTxDnw6GoOU';
 
@@ -86,6 +83,12 @@ class MyMaterialApp extends StatelessWidget {
         ColorScheme.fromSeed(seedColor: kSeedColor, brightness: Brightness.dark);
     return MaterialApp(
       title: 'Ant Nuptial Flight Predictor',
+      onGenerateTitle: (context) => context.l10n.appTitle,
+      // Ships in the languages of the countries that report the most flights
+      // (from the flights DB): en + tr, fil, es, fr, de, pl, cs, el, pt, nl,
+      // id, ms. Falls back to English for everything else.
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       // Hide the dev banner
       debugShowCheckedModeBanner: false,
       // For DevicePreview
@@ -431,6 +434,29 @@ class _MyHomePageState extends State<MyHomePage> {
   FlightBand _dailyBandAt(int i) =>
       bandFor(_dailyScore[i], _dailyPercentileAt(i));
 
+  /// BCP-47 tag of the ambient locale, for intl date formats. The
+  /// localizations delegates preload the matching date symbols.
+  String get _localeTag => Localizations.localeOf(context).toString();
+
+  /// Maps a menu entry to its localized label ([Choice.title] doubles as the
+  /// stable key; external brand words like "Android" pass through unchanged).
+  String _choiceTitle(AppLocalizations t, Choice c) {
+    switch (c.title) {
+      case 'Report Issue':
+        return t.menuReportIssue;
+      case 'Web App':
+        return t.menuWebApp;
+      case 'IOS':
+        return t.menuIos;
+      case 'Source Code':
+        return t.menuSourceCode;
+      case 'Buy Brad Coffee':
+        return t.menuCoffee;
+      default:
+        return c.title;
+    }
+  }
+
   /// The best three-hour flight window in the next 24 hours, computed from the
   /// hourly model scores (replaces the old hardcoded 11am/7pm tiles). Null
   /// when no window clears the "possible" bar.
@@ -455,12 +481,13 @@ class _MyHomePageState extends State<MyHomePage> {
     final double pct =
         FlightIndex().percentile(bestAvg / 100.0, _weather!.lat ?? 0, month);
     if (pct < 70) return null;
-    String fmt(int dt) => timeOfDayFormat
+    String fmt(int dt) => DateFormat.j(_localeTag)
         .format(DateTime.fromMillisecondsSinceEpoch((dt + offset) * 1000, isUtc: true))
-        .toLowerCase();
+        .toLowerCase()
+        .replaceAll(RegExp(r'\s+'), '');
     final String start = fmt(hourly[bestStart].dt!);
     final String end = fmt(hourly[bestStart + 2].dt! + 3600);
-    return 'Best window $start–$end';
+    return context.l10n.bestWindow(start, end);
   }
 
   /// "Likely small species" — which queen-size class is most in season right
@@ -483,7 +510,13 @@ class _MyHomePageState extends State<MyHomePage> {
         bestSize = e.key;
       }
     }
-    return 'Likely $bestSize species';
+    final AppLocalizations t = context.l10n;
+    final String sizeWord = bestSize == 'large'
+        ? t.sizeLarge
+        : bestSize == 'medium'
+            ? t.sizeMedium
+            : t.sizeSmall;
+    return t.likelySizeSpecies(sizeWord);
   }
 
   /// The three strongest drivers of today's forecast, from the model's own
@@ -491,18 +524,21 @@ class _MyHomePageState extends State<MyHomePage> {
   List<WhyDriver> _drivers() {
     final Daily? d = _weather?.daily?.isNotEmpty == true ? _weather!.daily!.first : null;
     if (d == null) return const <WhyDriver>[];
+    final AppLocalizations t = context.l10n;
     final List<MapEntry<String, double>> entries = <MapEntry<String, double>>[
       if (d.temp?.day != null)
-        MapEntry('Temp ${Units.temp(d.temp!.day!, decimals: 0, withUnit: false)}',
+        MapEntry(t.driverTemp(Units.temp(d.temp!.day!, decimals: 0, withUnit: false)),
             temperatureContribution(d.temp!.day!)),
       if (d.windSpeed != null)
-        MapEntry('Wind ${Units.speed(d.windSpeed!, decimals: 0)}', windContribution(d.windSpeed!)),
+        MapEntry(t.driverWind(Units.speed(d.windSpeed!, decimals: 0)),
+            windContribution(d.windSpeed!)),
       if (d.humidity != null)
-        MapEntry('Humidity ${d.humidity}%', humidityContribution(d.humidity!)),
-      if (d.clouds != null) MapEntry('Cloud ${d.clouds}%', cloudinessContribution(d.clouds!)),
+        MapEntry(t.driverHumidity('${d.humidity}'), humidityContribution(d.humidity!)),
+      if (d.clouds != null)
+        MapEntry(t.driverCloud('${d.clouds}'), cloudinessContribution(d.clouds!)),
       if (d.pop != null)
-        MapEntry('Rain ${(d.pop! * 100).round()}%', rainContribution(d.pop!)),
-      if (d.pressure != null) MapEntry('Pressure', pressureContribution(d.pressure!)),
+        MapEntry(t.driverRain('${(d.pop! * 100).round()}'), rainContribution(d.pop!)),
+      if (d.pressure != null) MapEntry(t.driverPressure, pressureContribution(d.pressure!)),
     ];
     entries.sort((a, b) => (b.value - 0.5).abs().compareTo((a.value - 0.5).abs()));
     // Severity bands match the Why sheet's tags (see _FeatureCard._tagFor):
@@ -527,21 +563,22 @@ class _MyHomePageState extends State<MyHomePage> {
     // so a missing/empty daily list must degrade to a no-op, not a crash.
     if (_weather?.daily?.isNotEmpty != true) return;
     final Daily d = _weather!.daily!.first;
+    final AppLocalizations t = context.l10n;
     showWhySheet(
       context,
       conditions: <String>[
         if (d.temp?.day != null) Units.temp(d.temp!.day!),
-        if (d.windSpeed != null) '${Units.speed(d.windSpeed!)} wind',
-        if (d.humidity != null) '${d.humidity}% humidity',
+        if (d.windSpeed != null) t.condWind(Units.speed(d.windSpeed!)),
+        if (d.humidity != null) t.condHumidity('${d.humidity}'),
         if (d.pressure != null) '${d.pressure!.toStringAsFixed(0)}\u{00A0}hPa',
         if (d.dewPoint != null)
-          'Dew point ${Units.temp(d.dewPoint!, decimals: 0, withUnit: false)}',
+          t.condDewPoint(Units.temp(d.dewPoint!, decimals: 0, withUnit: false)),
       ],
       features: <WhyFeature>[
         if (d.temp?.day != null)
           WhyFeature(
-            name: 'Temperature',
-            note: 'Warmth is the model\'s strongest signal',
+            name: t.featTemperature,
+            note: t.featTemperatureNote,
             fn: temperatureContribution,
             lo: 0,
             hi: 40,
@@ -549,8 +586,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         if (d.windSpeed != null)
           WhyFeature(
-            name: 'Wind',
-            note: 'Calm air scores best; strong wind grounds queens',
+            name: t.featWind,
+            note: t.featWindNote,
             fn: windContribution,
             lo: 0,
             hi: 20,
@@ -558,8 +595,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         if (d.humidity != null)
           WhyFeature(
-            name: 'Humidity',
-            note: 'Moist air after rain generally helps',
+            name: t.featHumidity,
+            note: t.featHumidityNote,
             fn: humidityContribution,
             lo: 0,
             hi: 100,
@@ -567,8 +604,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         if (d.clouds != null)
           WhyFeature(
-            name: 'Cloud cover',
-            note: 'The model\'s learned response to cloudiness',
+            name: t.featCloud,
+            note: t.featCloudNote,
             fn: cloudinessContribution,
             lo: 0,
             hi: 100,
@@ -576,8 +613,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         if (d.pop != null)
           WhyFeature(
-            name: 'Rain chance',
-            note: 'Today\'s probability of precipitation',
+            name: t.featRain,
+            note: t.featRainNote,
             fn: rainContribution,
             lo: 0,
             hi: 1,
@@ -585,8 +622,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         if (d.pressure != null)
           WhyFeature(
-            name: 'Air pressure',
-            note: 'Pressure rarely moves the forecast much',
+            name: t.featPressure,
+            note: t.featPressureNote,
             fn: pressureContribution,
             lo: 980,
             hi: 1040,
@@ -597,13 +634,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ? sizeSeasonalPercentages(_dailyPercentage[0], _weather!.lat!, DateTime.now().toUtc())
           : const <String, int>{},
       honesty: [
-        'Ant Flight Index: ${bandLabel(_dailyBandAt(0))} - today is better '
-            'than ${_dailyPercentileAt(0).round()}% of days at your latitude '
-            'this month.',
-        'About 1 in ${FlightIndex().oneInN(_dailyScore[0])} days like this '
-            'get a flight reported by users.',
-        'Raw model score: ${_dailyScore[0].toStringAsFixed(2)} (the share of '
-            'the forest voting "flight" - not a probability).',
+        t.honestyBand(
+            bandLabelOf(t, _dailyBandAt(0)), _dailyPercentileAt(0).round()),
+        t.honestyOdds(FlightIndex().oneInN(_dailyScore[0])),
+        t.honestyScore(_dailyScore[0].toStringAsFixed(2)),
       ],
     );
   }
@@ -612,16 +646,16 @@ class _MyHomePageState extends State<MyHomePage> {
   /// sighting, follows up with how many other flights were reported nearby —
   /// the reward that closes the crowd-sourcing loop.
   Future<void> _openReportSheet() async {
-    final ReportResult? result =
-        await showReportSheet(context, locationLabel: _geocoding ?? 'your location');
+    final ReportResult? result = await showReportSheet(context,
+        locationLabel: _geocoding ?? context.l10n.unknownLocation);
     if (result == null || !mounted) return;
 
     if (fixedLocation) {
-      _showSnack('Reports must come from your real, current location.');
+      _showSnack(context.l10n.snackFixedLocation);
       return;
     }
     if (kDebugMode) {
-      _showSnack('Reporting is disabled in debug builds.');
+      _showSnack(context.l10n.snackDebugMode);
       return;
     }
 
@@ -634,8 +668,8 @@ class _MyHomePageState extends State<MyHomePage> {
       _currentWeather,
     );
     _showSnack(result.sawNothing
-        ? 'Thanks — no-flight reports improve the model too.'
-        : 'Thank you! Your sighting helps train the forecast.');
+        ? context.l10n.snackThanksNoFlight
+        : context.l10n.snackThanksSighting);
     if (!result.sawNothing) {
       unawaited(_showNearbyReports());
     }
@@ -650,9 +684,7 @@ class _MyHomePageState extends State<MyHomePage> {
       final List flights =
           await ArangoSingleton().getRecentFlightsNearMe(position, -24 * 60);
       if (!mounted || flights.isEmpty) return;
-      final int n = flights.length;
-      _showSnack(
-          '$n flight${n == 1 ? '' : 's'} reported within 500 km in the last 24 h — see the map!');
+      _showSnack(context.l10n.snackNearbyFlights(flights.length));
     } catch (e) {
       debugPrint('_showNearbyReports: $e');
     }
@@ -677,11 +709,11 @@ class _MyHomePageState extends State<MyHomePage> {
             actions: <Widget>[
               IconButton(
                 icon: const Icon(Icons.map_outlined),
-                tooltip: 'Show map',
+                tooltip: context.l10n.tooltipShowMap,
                 onPressed: _showMap,
               ),
               PopupMenuButton<Choice>(
-                tooltip: 'More options',
+                tooltip: context.l10n.tooltipMoreOptions,
                 onSelected: (Choice c) {
                   if (c.url == '_units') {
                     Units.toggle();
@@ -690,22 +722,24 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                 },
                 itemBuilder: (BuildContext context) {
+                  final AppLocalizations t = context.l10n;
+                  final String unitsTitle =
+                      imperial ? t.menuUseMetric : t.menuUseImperial;
                   final List<PopupMenuEntry<Choice>> items = <PopupMenuEntry<Choice>>[
                     PopupMenuItem<Choice>(
                       value: Choice(
-                        title: imperial ? 'Use °C · m/s' : 'Use °F · mph',
+                        title: unitsTitle,
                         url: '_units',
                         icon: Icons.thermostat,
                       ),
-                      child: _menuRow(
-                          Icons.thermostat, imperial ? 'Use °C · m/s' : 'Use °F · mph'),
+                      child: _menuRow(Icons.thermostat, unitsTitle),
                     ),
                     const PopupMenuDivider(),
                   ];
                   items.addAll(choices.map((Choice choice) {
                     return PopupMenuItem<Choice>(
                       value: choice,
-                      child: _menuRow(choice.icon, choice.title),
+                      child: _menuRow(choice.icon, _choiceTitle(t, choice)),
                     );
                   }));
                   return items;
@@ -724,9 +758,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ? null
               : FloatingActionButton.extended(
                   onPressed: _openReportSheet,
-                  tooltip: 'Report a nuptial flight you saw',
+                  tooltip: context.l10n.tooltipReportFlight,
                   icon: const Icon(AppIcons.wingedAnt, size: 26),
-                  label: const Text('Report flight'),
+                  label: Text(context.l10n.reportFlightButton),
                 ),
         );
       },
@@ -744,9 +778,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _locationChip(ColorScheme scheme) {
+    final AppLocalizations t = context.l10n;
+    final String label = _geocoding == null
+        ? t.locating
+        : _geocoding == 'Unknown Location'
+            ? t.unknownLocation
+            : _geocoding!;
     return Semantics(
       button: true,
-      label: 'Location: ${_geocoding ?? 'locating'}. Tap to choose another place.',
+      label: '$label. ${t.chooseALocation}.',
       excludeSemantics: true,
       child: Material(
         color: scheme.surfaceContainerHigh,
@@ -763,7 +803,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 const SizedBox(width: 6),
                 Flexible(
                   child: Text(
-                    _geocoding ?? 'Locating…',
+                    label,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
                   ),
@@ -784,12 +824,13 @@ class _MyHomePageState extends State<MyHomePage> {
     final List<Hourly> hourly = weather.hourly ?? <Hourly>[];
     final int hourlyCount = min(24, min(hourly.length, _hourlyPercentage.length));
 
+    final AppLocalizations t = context.l10n;
     final String dateLine = hourly.isNotEmpty
-        ? 'Today · ' +
-            longDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+        ? t.todayDate(DateFormat.MMMEd(_localeTag).format(
+            DateTime.fromMillisecondsSinceEpoch(
                 (hourly.first.dt! + weather.timezoneOffset!) * 1000,
-                isUtc: true))
-        : 'Today';
+                isUtc: true)))
+        : t.todayDate('–');
     final String? description = hourly.isNotEmpty && hourly.first.weather?.isNotEmpty == true
         ? toBeginningOfSentenceCase(hourly.first.weather!.first.description)
         : null;
@@ -824,13 +865,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text('Next 24 hours',
+                  Text(t.next24Hours,
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium
                           ?.copyWith(fontWeight: FontWeight.w700)),
                   Text(
-                    'flight confidence by hour',
+                    t.chartCaption,
                     style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant),
                   ),
                 ],
@@ -856,7 +897,7 @@ class _MyHomePageState extends State<MyHomePage> {
               const SizedBox(height: 14),
               WhyChipsRow(drivers: _drivers(), onTap: _openWhySheet),
               const SizedBox(height: 22),
-              Text('Upcoming week',
+              Text(t.upcomingWeek,
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium
@@ -884,7 +925,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return [
       for (int i = 1; i < n; i++)
         WeekDay(
-          day: weekdayFormat.format(DateTime.fromMillisecondsSinceEpoch(
+          day: DateFormat.E(_localeTag).format(DateTime.fromMillisecondsSinceEpoch(
               (daily[i].dt! + offset) * 1000,
               isUtc: true)),
           temp: daily[i].temp?.day != null
@@ -901,6 +942,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildErrorMessage() {
     final ColorScheme scheme = Theme.of(context).colorScheme;
+    final AppLocalizations t = context.l10n;
+    // The two common location failures are thrown as English exception text
+    // deep in the fetcher (no context there); map them to localized copy at
+    // display time. Anything else shows verbatim.
+    final String message = errorMessage ?? '';
+    final String displayMessage = message.startsWith('Failed to get your location')
+        ? t.locationFailedError
+        : message.startsWith('Location permissions are denied')
+            ? t.locationDeniedError
+            : message;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -913,7 +964,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Icon(Icons.cloud_off, size: 44, color: scheme.onSurfaceVariant),
               const SizedBox(height: 14),
               Text(
-                '$errorMessage',
+                displayMessage,
                 style: const TextStyle(fontSize: 17, height: 1.4),
                 textAlign: TextAlign.center,
               ),
@@ -921,13 +972,13 @@ class _MyHomePageState extends State<MyHomePage> {
               FilledButton(
                 onPressed: () => _getLocation(true),
                 style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(48)),
-                child: const Text('Try again'),
+                child: Text(t.tryAgain),
               ),
               const SizedBox(height: 10),
               OutlinedButton(
                 onPressed: _findPlaceName,
                 style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
-                child: const Text('Choose a location'),
+                child: Text(t.chooseALocation),
               ),
             ],
           ),
@@ -945,7 +996,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const CircularProgressIndicator(),
           const SizedBox(height: 16),
           Text(
-            'Fetching your local weather…',
+            context.l10n.fetchingWeather,
             style: TextStyle(fontSize: 14, color: scheme.onSurfaceVariant),
           ),
         ],

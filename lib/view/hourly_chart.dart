@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../controller/flight_index.dart';
+import 'l10n_ext.dart';
 import 'verdict.dart';
-
-final DateFormat _tickFormat = DateFormat('ha');
 
 /// One entry per hour: the model's confidence and the (unix, UTC) timestamp.
 class HourlyPoint {
@@ -35,11 +34,14 @@ class HourlyChart extends StatelessWidget {
   final List<HourlyPoint> points;
   final int timezoneOffsetSeconds;
 
-  String _localHour(int dt) => _tickFormat
-      .format(DateTime.fromMillisecondsSinceEpoch(
-          (dt + timezoneOffsetSeconds) * 1000,
-          isUtc: true))
-      .toLowerCase();
+  // Locale-preferred hour style ("7pm" or "19"), compacted to fit a tick.
+  String _localHour(BuildContext context, int dt) =>
+      DateFormat.j(Localizations.localeOf(context).toString())
+          .format(DateTime.fromMillisecondsSinceEpoch(
+              (dt + timezoneOffsetSeconds) * 1000,
+              isUtc: true))
+          .toLowerCase()
+          .replaceAll(RegExp(r'\s+'), '');
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +51,7 @@ class HourlyChart extends StatelessWidget {
 
     final int peak = shown.map((p) => p.percentage).reduce(max);
     return Semantics(
-      label:
-          'Hourly flight confidence for the next ${shown.length} hours, peaking at $peak percent.',
+      label: '${context.l10n.chartCaption} — $peak%.',
       excludeSemantics: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -86,7 +87,9 @@ class HourlyChart extends StatelessWidget {
                 Expanded(
                   child: i % 6 == 0
                       ? Text(
-                          i == 0 ? 'Now' : _localHour(shown[i].dt),
+                          i == 0
+                              ? context.l10n.nowTick
+                              : _localHour(context, shown[i].dt),
                           maxLines: 1,
                           softWrap: false,
                           overflow: TextOverflow.visible,

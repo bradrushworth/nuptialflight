@@ -123,6 +123,37 @@ orders are documented there, in README.md, and in `.clinerules`.
   notification-permission request, and `Nuptials.ensureLoaded()` are started
   `unawaited` around `runApp()` — do not add `await`s there.
 
+## Internationalisation (post-2.19.0)
+
+- The app ships in **13 languages**, chosen from where confirmed flight
+  reports actually come from (reverse-geocoded from the flights DB):
+  en, tr (Turkey is the #2 non-English reporter at 7%), fil, es, fr, de,
+  pl, cs, el, pt, nl, id, ms. Unsupported device languages fall back to en.
+- Standard Flutter gen_l10n: strings live in **`lib/l10n/app_*.arb`**
+  (`app_en.arb` is the template; `l10n.yaml` configures output). Generated
+  Dart lands in `lib/l10n/app_localizations*.dart` (checked in). After
+  editing ARBs run `flutter gen-l10n` (also runs automatically on build).
+- **Every user-visible string must be an ARB key** — no hardcoded literals
+  in widgets. Use `context.l10n.<key>` (extension in
+  `lib/view/l10n_ext.dart`), which also hosts `bandLabelOf/bandHeadlineOf/
+  bandActionOf` for localized Flight Index band copy. The English copies in
+  `controller/flight_index.dart` are context-free fallbacks (tests,
+  background) — keep them in sync with `app_en.arb`.
+- **Background notifications** (`controller/services.dart`) have no widget
+  context: they use `backgroundL10n()`, which resolves from
+  `PlatformDispatcher.instance.locale` with an English fallback.
+- Dates/hours use locale-aware `DateFormat.MMMEd/E/j(localeTag)` — never
+  hardcoded patterns like `'ha'`. The l10n delegates preload intl date
+  symbols for the active locale.
+- When adding a key: add to `app_en.arb` first (with `@key` placeholder
+  metadata if parameterised), then add a translation to **all 12** other
+  ARBs (gen-l10n falls back to English per-key but emits warnings; keep
+  the set complete). Machine-translated is acceptable; keep it short and
+  plain, and note that Codemagic builds fail only on missing en keys.
+- Widget tests must pass `AppLocalizations.localizationsDelegates` /
+  `supportedLocales` to their `MaterialApp` harness or `context.l10n`
+  throws.
+
 ## Testing
 
 - `flutter test` runs everything. **68 tests are hermetic and must pass.**

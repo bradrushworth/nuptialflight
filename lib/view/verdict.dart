@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../controller/flight_index.dart';
+import 'l10n_ext.dart';
 
 /// Shared verdict thresholds. A day at/above [greenThreshold] is "Likely",
 /// at/above [amberThreshold] "Possible", otherwise "Unlikely". These are the
@@ -91,8 +92,9 @@ class BandPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final VerdictColors c = bandColors(context, band);
+    final String label = bandLabelOf(context.l10n, band);
     return Semantics(
-      label: 'Flight index: ${bandLabel(band)}',
+      label: label,
       excludeSemantics: true,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: compact ? 8 : 10, vertical: 4),
@@ -101,7 +103,7 @@ class BandPill extends StatelessWidget {
           borderRadius: BorderRadius.circular(999),
         ),
         child: Text(
-          bandLabel(band),
+          label,
           style: TextStyle(
             color: c.fg,
             fontSize: compact ? 12 : 13,

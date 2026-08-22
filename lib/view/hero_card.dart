@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../controller/flight_index.dart';
+import 'l10n_ext.dart';
 import 'verdict.dart';
 
 /// The single answer to "should I go out looking?": the Ant Flight Index
@@ -41,11 +42,12 @@ class HeroVerdictCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final VerdictColors c = bandColors(context, band);
     final ColorScheme scheme = Theme.of(context).colorScheme;
+    final AppLocalizations t = context.l10n;
     final bool showOdds = band != FlightBand.noFly;
 
     return Semantics(
-      label: '${bandHeadline(band)}. ${bandAction(band)}.'
-          '${showOdds ? ' About 1 in $oneInN days like this see a reported flight.' : ''}'
+      label: '${bandHeadlineOf(t, band)}. ${bandActionOf(t, band)}.'
+          '${showOdds ? ' ${t.honestyOdds(oneInN)}' : ''}'
           '${bestWindow != null ? ' $bestWindow.' : ''}'
           '${sizeLine != null ? ' $sizeLine.' : ''}',
       excludeSemantics: true,
@@ -93,7 +95,7 @@ class HeroVerdictCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        bandHeadline(band),
+                        bandHeadlineOf(t, band),
                         style:
                             Theme.of(context).textTheme.headlineMedium?.copyWith(
                                   fontWeight: FontWeight.w700,
@@ -103,7 +105,7 @@ class HeroVerdictCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        bandAction(band),
+                        bandActionOf(t, band),
                         style: TextStyle(
                           fontSize: 13.5,
                           fontWeight: FontWeight.w600,
@@ -119,7 +121,7 @@ class HeroVerdictCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        '1 in $oneInN',
+                        t.oneInN(oneInN),
                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                               fontWeight: FontWeight.w700,
                               color: c.fg,
@@ -127,7 +129,7 @@ class HeroVerdictCard extends StatelessWidget {
                             ),
                       ),
                       Text(
-                        'days like this\nsee flights',
+                        t.daysLikeThisSeeFlights,
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           fontSize: 10.5,
