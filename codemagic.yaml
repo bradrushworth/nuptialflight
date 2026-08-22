@@ -6,22 +6,22 @@
 # Until then the Workflow Editor remains the source of truth and this file is
 # documentation + a migration path.
 #
-# Secrets are deliberately NOT in this file. Before switching to YAML, create
-# an environment variable group named `nuptialflight` (Team settings >
-# Environment variables) containing, all marked Secret:
-#   OPENWEATHERMAP_API_KEY               (currently embedded in the editor's post-clone script)
-#   OPENWEATHERMAP_MAP_KEY               (ditto)
-#   MAPTILER_MAP_KEY                     (ditto)
-#   GCLOUD_SERVICE_ACCOUNT_CREDENTIALS   (contents of the Play credentials JSON, api-49017...json)
-#   AWS_ACCESS_KEY_ID                    (S3 deploy user)
-#   AWS_SECRET_ACCESS_KEY                (ditto)
-#   CODEMAGIC_API_TOKEN                  (Codemagic UI > Account settings > Integrations >
-#                                         Codemagic API; powers the build guard below)
-# and upload the Android keystore (keystore.jks, alias `upload`) under
-# Team settings > Code signing identities with the reference name
-# `keystore_reference`. The App Store Connect API key "Codemagic Nuptial
-# Flight" (75423D3XRN) already exists in team settings and is referenced by
-# name below.
+# Secrets are deliberately NOT in this file. They come from environment
+# variable groups (checked in the Codemagic UI on 2026-08-23):
+#   aws_credentials    (team global): AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+#   google_credentials (team global): GCLOUD_SERVICE_ACCOUNT_CREDENTIALS,
+#                                     GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+#   nuptialflight      (app level, Team settings > the app > Environment
+#                       variables): OPENWEATHERMAP_API_KEY,
+#                       OPENWEATHERMAP_MAP_KEY, MAPTILER_MAP_KEY,
+#                       CODEMAGIC_API_TOKEN (Account settings > Integrations >
+#                       Codemagic API; powers the build guard below)
+# The Create assets/.env step fails fast when the OpenWeatherMap keys are
+# missing so a keyless web build can never reach production.
+# Android signing references the team keystore `android_bitbot.jks`
+# (Team settings > Code signing identities > Android keystores). The App
+# Store Connect API key "Codemagic Nuptial Flight" (75423D3XRN) exists in
+# team integrations and is referenced by name below.
 #
 # Parity note: the Workflow Editor also publishes the web build to Codemagic
 # Static Pages (subdomain `nuptialflight.codemagic.app`). Static Pages has no
@@ -36,6 +36,8 @@ workflows:
 
     environment:
       groups:
+        - aws_credentials
+        - google_credentials
         - nuptialflight
       vars:
         JAVA_HOME: /Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
@@ -44,7 +46,7 @@ workflows:
       xcode: latest
       cocoapods: default
       android_signing:
-        - keystore_reference
+        - android_bitbot.jks
       ios_signing:
         distribution_type: app_store
         bundle_identifier: au.com.bitbot.nuptialflight
@@ -139,6 +141,15 @@ workflows:
         script: |
           #!/bin/sh
           set -e
+          # Fail fast rather than build (and deploy!) a keyless app.
+          for var in OPENWEATHERMAP_API_KEY OPENWEATHERMAP_MAP_KEY MAPTILER_MAP_KEY; do
+            eval "val=\$$var"
+            if [ -z "$val" ]; then
+              echo "ERROR: $var is empty. Add it to the app-level 'nuptialflight'"
+              echo "environment variable group (see header of codemagic.yaml)."
+              exit 1
+            fi
+          done
           echo "OPENWEATHERMAP_API_KEY=$OPENWEATHERMAP_API_KEY" >> assets/.env
           echo "OPENWEATHERMAP_MAP_KEY=$OPENWEATHERMAP_MAP_KEY" >> assets/.env
           echo "MAPTILER_MAP_KEY=$MAPTILER_MAP_KEY" >> assets/.env
