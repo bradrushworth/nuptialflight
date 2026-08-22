@@ -3,16 +3,23 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../controller/flight_index.dart';
 import 'verdict.dart';
 
 final DateFormat _tickFormat = DateFormat('ha');
 
 /// One entry per hour: the model's confidence and the (unix, UTC) timestamp.
 class HourlyPoint {
-  const HourlyPoint(this.dt, this.percentage);
+  const HourlyPoint(this.dt, this.percentage, this.band);
 
   final int dt;
+
+  /// Raw model score as 0..100 (drives bar height / intra-day shape).
   final int percentage;
+
+  /// Flight Index band (drives colour; percentile-based, so an unusually
+  /// good hour for the season reads green even at a modest raw score).
+  final FlightBand band;
 }
 
 /// The next-24-hours confidence chart: one bar per hour, ticks every six
@@ -59,7 +66,7 @@ class HourlyChart extends StatelessWidget {
                     child: Container(
                       height: max(3.0, shown[i].percentage * 0.92),
                       decoration: BoxDecoration(
-                        color: _barColor(context, shown[i].percentage),
+                        color: _barColor(context, shown[i].band),
                         borderRadius: const BorderRadius.vertical(
                           top: Radius.circular(4),
                           bottom: Radius.circular(2),
@@ -102,12 +109,11 @@ class HourlyChart extends StatelessWidget {
     );
   }
 
-  Color _barColor(BuildContext context, int percentage) {
-    final Verdict v = verdictFor(percentage);
-    if (v == Verdict.unlikely) {
+  Color _barColor(BuildContext context, FlightBand band) {
+    if (band == FlightBand.noFly || band == FlightBand.quiet) {
       // Low hours stay quiet — a muted neutral rather than alarm red.
       return Theme.of(context).colorScheme.surfaceContainerHighest;
     }
-    return verdictColors(context, v).fg;
+    return bandColors(context, band).fg;
   }
 }

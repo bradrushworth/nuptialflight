@@ -134,6 +134,7 @@ Future<void> showWhySheet(
   required List<String> conditions,
   required List<WhyFeature> features,
   required Map<String, int> sizePercentages,
+  List<String> honesty = const <String>[],
 }) {
   return showModalBottomSheet<void>(
     context: context,
@@ -186,6 +187,34 @@ Future<void> showWhySheet(
                     ),
                 ],
               ),
+              if (honesty.isNotEmpty) ...[
+                const SizedBox(height: 14),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 14, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: scheme.surfaceContainerHigh,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      for (final String line in honesty)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2),
+                          child: Text(
+                            line,
+                            style: TextStyle(
+                              fontSize: 12.5,
+                              height: 1.4,
+                              color: scheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
               const SizedBox(height: 14),
               Text(
                 'Each curve is what the model learned about one condition. '

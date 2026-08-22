@@ -73,6 +73,7 @@ lib/
 assets/
   final_model.json         # daily RF model (sklite JSON, 21 features)
   hour_model.json          # hourly RF model (sklite JSON, 14 features)
+  flight_stats.json        # score percentiles + calibration (see scripts/)
 ```
 
 ## The model contract (do not break this)
@@ -93,6 +94,17 @@ orders are documented there, in README.md, and in `.clinerules`.
   partial-dependence curves derived from the daily model, not hand-tuned
   distributions. They feed the "Why this forecast?" sheet and the map
   overlay tinting; features the model ignores resolve to a neutral 0.5.
+- **Ant Flight Index** (`lib/controller/flight_index.dart` +
+  `assets/flight_stats.json`): raw scores are NOT probabilities (tree-vote
+  fractions, Brier 0.19 if read as one). The UI therefore presents a
+  percentile vs ~219k historical days at the same hemisphere+month, a named
+  band (No-fly/Quiet/Watchful/Promising/Prime; Prime starts at the 90th
+  percentile, roughly the old "green" threshold), and calibrated "1 in N
+  days like this see a reported flight" odds (isotonic fit, cv Brier 0.043).
+  Regenerate the stats asset with `python scripts/flight_stats_pipeline.py`
+  after every model retrain — it scores the live flights DB with the SHIPPED
+  model JSON, so it must run after the new model assets are in place.
+  Notifications fire on Prime days only.
 
 ## UI conventions (post-2.17.0 Material 3 overhaul)
 
@@ -113,7 +125,7 @@ orders are documented there, in README.md, and in `.clinerules`.
 
 ## Testing
 
-- `flutter test` runs everything. **62 tests are hermetic and must pass.**
+- `flutter test` runs everything. **68 tests are hermetic and must pass.**
   Four tests hit live services and fail without real credentials/network:
   `test/arangodb_test.dart` (live ArangoDB) and three "Download Fetch" tests
   in `test/weather_test.dart` (live OWM One Call, a paid subscription).

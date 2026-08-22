@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../controller/flight_index.dart';
 import 'verdict.dart';
 
 /// One row of the upcoming-week list.
@@ -8,18 +9,22 @@ class WeekDay {
     required this.day,
     required this.temp,
     required this.wind,
-    required this.percentage,
+    required this.band,
+    required this.percentile,
   });
 
   final String day;
   final String temp;
   final String wind;
-  final int percentage;
+  final FlightBand band;
+
+  /// Percentile (0..100) vs days at this hemisphere + month; drives the bar.
+  final double percentile;
 }
 
-/// The upcoming week as accessible list rows: day, temp, wind, a small
-/// confidence bar, and a labelled verdict pill (text + colour together, so
-/// colour is never the only encoding). Replaces the old 22px DataTable rows.
+/// The upcoming week as accessible list rows: day, temp, wind, a bar showing
+/// the day's percentile against the season, and a named Flight Index band
+/// (text + colour together, so colour is never the only encoding).
 class WeekList extends StatelessWidget {
   const WeekList({Key? key, required this.days}) : super(key: key);
 
@@ -38,7 +43,7 @@ class WeekList extends StatelessWidget {
         for (final WeekDay d in days)
           Semantics(
             label:
-                '${d.day}: flight ${verdictLabel(verdictFor(d.percentage)).toLowerCase()}, ${d.percentage} percent. ${d.temp}, wind ${d.wind}.',
+                '${d.day}: flight index ${bandLabel(d.band).toLowerCase()}, better than ${d.percentile.round()} percent of days this season. ${d.temp}, wind ${d.wind}.',
             excludeSemantics: true,
             child: Container(
               constraints: const BoxConstraints(minHeight: 48),
@@ -65,17 +70,21 @@ class WeekList extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(999),
                         child: LinearProgressIndicator(
-                          value: d.percentage / 100.0,
+                          value: d.percentile / 100.0,
                           minHeight: 6,
                           backgroundColor: scheme.surfaceContainerHighest,
-                          color: verdictColors(
-                                  context, verdictFor(d.percentage))
-                              .fg,
+                          color: bandColors(context, d.band).fg,
                         ),
                       ),
                     ),
                   ),
-                  VerdictPill(percentage: d.percentage, compact: true),
+                  SizedBox(
+                    width: 88,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: BandPill(band: d.band, compact: true),
+                    ),
+                  ),
                 ],
               ),
             ),

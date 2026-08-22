@@ -11,6 +11,7 @@ import 'package:home_widget/home_widget.dart';
 import '../main.dart';
 import '../responses/onecall_response.dart';
 import 'arangodb.dart';
+import 'flight_index.dart';
 import 'geo.dart';
 import 'nuptials.dart';
 import 'weather_fetcher.dart';
@@ -295,8 +296,8 @@ Future<void> getReportedFlightsNearMe() async {
 }
 
 /// Recomputes today's nuptial-flight percentage at the cached location, pushes it
-/// to the home-screen widget, and — when it clears [greenThreshold] — raises the
-/// "Good weather for a nuptial flight!" notification. Runs from the background
+/// to the home-screen widget, and — on Prime Ant Flight Index days (top ~10%
+/// for the hemisphere+month) — raises the "Prime conditions" notification. Runs from the background
 /// fetch (and from the headless task) to keep the widget/notification fresh.
 Future<void> getServicePercentage() async {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -340,14 +341,19 @@ Future<void> getServicePercentage() async {
     WeatherFetcher weatherFetcher = WeatherFetcher();
     weatherFetcher.setPosition(_lastKnownPosition!);
     await Nuptials.ensureLoaded();
+    await FlightIndex.ensureLoaded();
     int percentage = 0;
+    double score = 0;
+    FlightBand band = FlightBand.quiet;
     await weatherFetcher.fetchWeather().then((OneCallResponse weather) {
-      percentage =
-          (nuptialDailyPercentageModel(weather.lat!, weather.lon!, weather.daily!.elementAt(0),
-                  pop1: weather.daily!.length > 1 ? weather.daily!.elementAt(1).pop : null,
-                  pop2: weather.daily!.length > 2 ? weather.daily!.elementAt(2).pop : null) *
-              100.0)
-              .toInt();
+      final Daily today = weather.daily!.elementAt(0);
+      score = nuptialDailyPercentageModel(weather.lat!, weather.lon!, today,
+          pop1: weather.daily!.length > 1 ? weather.daily!.elementAt(1).pop : null,
+          pop2: weather.daily!.length > 2 ? weather.daily!.elementAt(2).pop : null);
+      percentage = (score * 100.0).toInt();
+      final int month =
+          DateTime.fromMillisecondsSinceEpoch(today.dt! * 1000, isUtc: true).month;
+      band = bandFor(score, FlightIndex().percentile(score, weather.lat!, month));
     });
     debugPrint('getServicePercentage: Percentage for nuptial flights: $percentage');
     updateAppWidget([percentage]);
@@ -360,11 +366,14 @@ Future<void> getServicePercentage() async {
       debugPrint('getServicePercentage: failed to save last_onecall_check: $e');
     }
 
-    if (percentage >= greenThreshold) {
+    // Notify only on Prime days: the top ~10% of days for this
+    // hemisphere+month, per the Ant Flight Index (assets/flight_stats.json).
+    if (band == FlightBand.prime) {
+      final int n = FlightIndex().oneInN(score);
       flutterLocalNotificationsPlugin.show(
         id: notificationIdPercentage,
-        title: 'Good weather for a nuptial flight!',
-        body: 'The confidence for nuptial flight is $percentage% today...',
+        title: 'Prime conditions for nuptial flights!',
+        body: 'A rare day for your season - about 1 in $n days like this see reported flights.',
         notificationDetails: const NotificationDetails(
           android: AndroidNotificationDetails(
             notificationChannelIdPercentage,
