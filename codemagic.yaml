@@ -92,11 +92,16 @@ workflows:
               echo "Build guard: [force build] flag - building."
               exit 0 ;;
           esac
-          BUILDS_JSON=$(curl -s --max-time 30 -H "x-auth-token: $CODEMAGIC_API_TOKEN" \
-            "https://api.codemagic.io/builds?appId=$CM_PROJECT_ID&limit=10")
-          PREV=$(echo "$BUILDS_JSON" | python3 -c '
+          # Workflow-editor builds may only define the legacy FCI_* names.
+          APP_ID="${CM_PROJECT_ID:-${FCI_PROJECT_ID:-61d52f9fd1be809cfdf62648}}"
+          BUILD_ID="${CM_BUILD_ID:-$FCI_BUILD_ID}"
+          RESP=$(curl -s --max-time 30 -w "HTTPCODE:%{http_code}" -H "x-auth-token: $CODEMAGIC_API_TOKEN" \
+            "https://api.codemagic.io/builds?appId=$APP_ID&limit=10")
+          HTTP_CODE=${RESP##*HTTPCODE:}
+          BUILDS_JSON=${RESP%HTTPCODE:*}
+          PREV=$(echo "$BUILDS_JSON" | BUILD_ID="$BUILD_ID" python3 -c '
           import json, sys, os
-          me = os.environ.get("CM_BUILD_ID", "")
+          me = os.environ.get("BUILD_ID", "")
           try:
               builds = json.load(sys.stdin).get("builds", [])
           except Exception:
@@ -105,25 +110,28 @@ workflows:
               if b.get("_id") == me:
                   continue
               s = b.get("status", "")
-              if s in ("finished", "failed"):
+              if s in ("finished", "failed", "timeout"):
                   print(s, (b.get("commit") or {}).get("hash", ""))
                   break
           ')
           PREV_STATUS=$(echo "$PREV" | cut -d" " -f1)
           PREV_COMMIT=$(echo "$PREV" | cut -d" " -f2)
-          if [ "$PREV_STATUS" != "finished" ] || [ -z "$PREV_COMMIT" ]; then
-            echo "Build guard: previous build status '$PREV_STATUS' - building."
-            exit 0
-          fi
-          CUR_VER=$(grep "^version:" pubspec.yaml)
-          PREV_VER=$(git show "$PREV_COMMIT:pubspec.yaml" 2>/dev/null | grep "^version:")
-          if [ -n "$PREV_VER" ] && [ "$CUR_VER" = "$PREV_VER" ]; then
-            echo "Build guard: version unchanged ($CUR_VER) and last build succeeded - cancelling."
-            curl -s -X POST -H "x-auth-token: $CODEMAGIC_API_TOKEN" \
-              "https://api.codemagic.io/builds/$CM_BUILD_ID/cancel"
-            sleep 60
+          if [ "$PREV_STATUS" = "finished" ] && [ -n "$PREV_COMMIT" ]; then
+            CUR_VER=$(grep "^version:" pubspec.yaml)
+            PREV_VER=$(git show "$PREV_COMMIT:pubspec.yaml" 2>/dev/null | grep "^version:")
+            if [ -n "$PREV_VER" ] && [ "$CUR_VER" = "$PREV_VER" ]; then
+              echo "Build guard: version unchanged ($CUR_VER) and last build succeeded - cancelling."
+              curl -s -X POST -H "x-auth-token: $CODEMAGIC_API_TOKEN" \
+                "https://api.codemagic.io/builds/$BUILD_ID/cancel"
+              sleep 60
+            else
+              echo "Build guard: version changed ($PREV_VER -> $CUR_VER) - building."
+            fi
+          elif [ -z "$PREV_STATUS" ]; then
+            echo "Build guard: no completed build found (HTTP $HTTP_CODE, appId $APP_ID, buildId $BUILD_ID) - building."
+            echo "Build guard: body head: $(echo "$BUILDS_JSON" | cut -c1-300)"
           else
-            echo "Build guard: version changed ($PREV_VER -> $CUR_VER) - building."
+            echo "Build guard: previous build status '$PREV_STATUS' - building."
           fi
       # Workflow Editor parity: the post-clone script that creates the
       # gitignored assets/.env the app (and its tests) require to build.
