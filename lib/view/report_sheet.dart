@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_icons.dart';
+import 'l10n_ext.dart';
 
 /// The outcome of the report sheet: a sighting of a given size, an explicit
 /// "I looked and saw nothing", or null when the user simply cancelled.
@@ -29,6 +30,7 @@ Future<ReportResult?> showReportSheet(BuildContext context,
       return StatefulBuilder(
         builder: (context, setSheetState) {
           final ColorScheme scheme = Theme.of(context).colorScheme;
+          final AppLocalizations t = context.l10n;
           return Padding(
             padding: EdgeInsets.fromLTRB(
                 20, 0, 20, 22 + MediaQuery.of(context).viewPadding.bottom),
@@ -37,7 +39,7 @@ Future<ReportResult?> showReportSheet(BuildContext context,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Report a nuptial flight',
+                  t.reportTitle,
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge
@@ -45,8 +47,7 @@ Future<ReportResult?> showReportSheet(BuildContext context,
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Saw winged queens flying near you? Pick the closest size. '
-                  'Real sightings train the forecast for everyone.',
+                  t.reportBlurb,
                   style: TextStyle(
                     fontSize: 13.5,
                     height: 1.45,
@@ -57,24 +58,24 @@ Future<ReportResult?> showReportSheet(BuildContext context,
                 Row(
                   children: [
                     _SizeOption(
-                      label: 'Small',
-                      sublabel: 'about 10 mm',
+                      label: t.reportSmall,
+                      sublabel: t.reportAbout10mm,
                       iconSize: 18,
                       selected: selected == 'small',
                       onTap: () => setSheetState(() => selected = 'small'),
                     ),
                     const SizedBox(width: 10),
                     _SizeOption(
-                      label: 'Medium',
-                      sublabel: 'about 20 mm',
+                      label: t.reportMedium,
+                      sublabel: t.reportAbout20mm,
                       iconSize: 26,
                       selected: selected == 'medium',
                       onTap: () => setSheetState(() => selected = 'medium'),
                     ),
                     const SizedBox(width: 10),
                     _SizeOption(
-                      label: 'Large',
-                      sublabel: 'about 30 mm',
+                      label: t.reportLarge,
+                      sublabel: t.reportAbout30mm,
                       iconSize: 34,
                       selected: selected == 'large',
                       onTap: () => setSheetState(() => selected = 'large'),
@@ -89,7 +90,7 @@ Future<ReportResult?> showReportSheet(BuildContext context,
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Reporting from your current location · $locationLabel',
+                        t.reportingFrom(locationLabel),
                         style: TextStyle(
                             fontSize: 12.5, color: scheme.onSurfaceVariant),
                       ),
@@ -107,7 +108,7 @@ Future<ReportResult?> showReportSheet(BuildContext context,
                     textStyle: const TextStyle(
                         fontSize: 15, fontWeight: FontWeight.w700),
                   ),
-                  child: const Text('Submit sighting'),
+                  child: Text(t.submitSighting),
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -119,7 +120,7 @@ Future<ReportResult?> showReportSheet(BuildContext context,
                         style: OutlinedButton.styleFrom(
                           minimumSize: const Size.fromHeight(46),
                         ),
-                        child: const Text('I looked — no flights'),
+                        child: Text(t.noFlightsButton),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -129,7 +130,7 @@ Future<ReportResult?> showReportSheet(BuildContext context,
                         style: TextButton.styleFrom(
                           minimumSize: const Size.fromHeight(46),
                         ),
-                        child: const Text('Cancel'),
+                        child: Text(t.cancel),
                       ),
                     ),
                   ],

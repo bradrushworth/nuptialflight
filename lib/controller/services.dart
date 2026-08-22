@@ -8,7 +8,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:home_widget/home_widget.dart';
 
-import '../main.dart';
+import '../l10n/app_localizations.dart';
 import '../responses/onecall_response.dart';
 import 'arangodb.dart';
 import 'flight_index.dart';
@@ -16,6 +16,17 @@ import 'geo.dart';
 import 'nuptials.dart';
 import 'weather_fetcher.dart';
 import 'widgets_mobile.dart';
+
+/// Localized strings for the background isolate, which has no widget tree:
+/// resolve from the device locale directly, falling back to English when the
+/// device language is not one we ship.
+AppLocalizations backgroundL10n() {
+  try {
+    return lookupAppLocalizations(PlatformDispatcher.instance.locale);
+  } catch (_) {
+    return lookupAppLocalizations(const Locale('en'));
+  }
+}
 
 // Android notification channel id for "nearby users reported a flight" alerts.
 const notificationChannelIdReport = 'report_flight';
@@ -281,8 +292,9 @@ Future<void> getReportedFlightsNearMe() async {
   if (numFlights > 0) {
     flutterLocalNotificationsPlugin.show(
       id: notificationIdReport,
-      title: 'Current reported local nuptial flight!',
-      body: 'There are $numFlights reported flights in the last ${minutes} minutes with the nearest ${closestDistance} km away...',
+      title: backgroundL10n().notifReportTitle,
+      body: backgroundL10n()
+          .notifReportBody(numFlights, minutes, closestDistance),
       notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
           notificationChannelIdReport,
@@ -372,8 +384,8 @@ Future<void> getServicePercentage() async {
       final int n = FlightIndex().oneInN(score);
       flutterLocalNotificationsPlugin.show(
         id: notificationIdPercentage,
-        title: 'Prime conditions for nuptial flights!',
-        body: 'A rare day for your season - about 1 in $n days like this see reported flights.',
+        title: backgroundL10n().notifPrimeTitle,
+        body: backgroundL10n().notifPrimeBody(n),
         notificationDetails: const NotificationDetails(
           android: AndroidNotificationDetails(
             notificationChannelIdPercentage,

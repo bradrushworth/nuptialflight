@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nuptialflight/controller/flight_index.dart';
 import 'package:nuptialflight/controller/units.dart';
+import 'package:nuptialflight/l10n/app_localizations.dart';
 import 'package:nuptialflight/view/hero_card.dart';
 import 'package:nuptialflight/view/hourly_chart.dart';
 import 'package:nuptialflight/view/report_sheet.dart';
@@ -13,6 +14,8 @@ import 'package:nuptialflight/view/why_panel.dart';
 
 Widget _wrap(Widget child) {
   return MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
     theme: ThemeData(
       colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF3D6B4F)),
       useMaterial3: true,
@@ -166,6 +169,8 @@ void main() {
       _phoneSized(tester);
       ReportResult? result;
       await tester.pumpWidget(MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF3D6B4F)),
           useMaterial3: true,
@@ -206,6 +211,8 @@ void main() {
       _phoneSized(tester);
       ReportResult? result = const ReportResult.sighting('small');
       await tester.pumpWidget(MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF3D6B4F)),
           useMaterial3: true,
