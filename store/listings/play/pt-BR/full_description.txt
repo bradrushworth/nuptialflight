@@ -1,0 +1,28 @@
+Será que voam hoje?
+
+Toda colônia de formigas espera o dia perfeito - e então enche o céu de rainhas aladas no seu voo nupcial. Criadores de formigas esperam o mesmo dia. Este app diz quando ele vem.
+
+O ÍNDICE DE VOO
+Em vez de uma porcentagem sem sentido, cada dia recebe uma nota clara: Sem voo, Calmo, Atento, Promissor ou Excelente - conforme o tempo de hoje se compara a anos de dias históricos na sua latitude e época do ano. Excelente significa os ~10% melhores dias da sua estação: largue tudo e vá para fora.
+
+CHANCES HONESTAS
+"Cerca de 1 em cada 7 dias como este tem um voo relatado." Calibrado com milhares de relatos reais - nunca uma probabilidade inventada.
+
+HORA A HORA
+A confiança de voo das próximas 24 horas, a melhor janela de três horas para procurar e a semana inteira de relance.
+
+POR QUE ESTA PREVISÃO?
+Transparência total: veja exatamente como temperatura, vento, umidade, nuvens, chuva e pressão moveram a nota de hoje - direto do modelo.
+
+MOVIDO POR CRIADORES
+A previsão é um modelo de aprendizado de máquina treinado com mais de 10.000 relatos reais de voos de usuários do mundo todo. Relate um avistamento (ou "Olhei - sem voos") e você a torna mais inteligente para todos.
+
+TAMBÉM VEM COM
+- Notificações só em dias Excelentes
+- Widgets de tela inicial para Android e iPhone
+- Mapa ao vivo de relatos recentes perto de você
+- Qual tamanho de rainha está na estação (pequena / média / grande)
+- Modo escuro, unidades C/F e 13 idiomas
+- Grátis e código aberto. Sem anúncios, sem rastreamento.
+
+Feito por um criador de formigas, para criadores de formigas - e para qualquer um que já se perguntou por que o céu de repente se encheu de formigas voadoras.

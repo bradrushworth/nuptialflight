@@ -1,0 +1,28 @@
+Poletí dnes?
+
+Každá mravenčí kolonie čeká na dokonalý den - a pak naplní oblohu okřídlenými královnami při svatebním letu. Chovatelé mravenců čekají na tentýž den. Tahle aplikace vám řekne, kdy přijde.
+
+INDEX LETŮ MRAVENCŮ
+Místo bezvýznamného procenta dostane každý den jasné hodnocení: Bez letů, Klid, Pozor, Nadějné nebo Vynikající - podle toho, jak si dnešní počasí stojí ve srovnání s lety historických dní na vaší zeměpisné šířce a v tomto ročním období. Vynikající znamená nejlepších ~10 % dní sezóny: nechte všeho a jděte ven.
+
+POCTIVÉ ŠANCE
+"Zhruba v 1 ze 7 takových dní někdo nahlásí let." Kalibrováno na tisících skutečných pozorování - nikdy vymyšlená pravděpodobnost.
+
+HODINU PO HODINĚ
+Důvěra v let na příštích 24 hodin, nejlepší tříhodinové okno na pozorování a celý týden v přehledu.
+
+PROČ TATO PŘEDPOVĚĎ?
+Plná transparentnost: podívejte se přesně, jak teplota, vítr, vlhkost, oblačnost, déšť a tlak ovlivnily dnešní hodnocení - přímo z modelu.
+
+POHÁNĚNO CHOVATELI
+Předpověď je model strojového učení trénovaný na více než 10 000 skutečných hlášení letů od uživatelů z celého světa. Nahlaste pozorování (nebo "Díval jsem se - žádné lety") a uděláte ji chytřejší pro všechny.
+
+A NAVÍC
+- Oznámení jen ve vynikající dny
+- Widgety na plochu pro Android i iPhone
+- Živá mapa nedávných pozorování ve vašem okolí
+- Která velikost královny má sezónu (malá / střední / velká)
+- Tmavý režim, jednotky C/F a 13 jazyků
+- Zdarma a open source. Bez reklam a sledování.
+
+Vytvořeno chovatelem mravenců pro chovatele mravenců - a pro každého, kdo se kdy divil, proč je obloha najednou plná létajících mravenců.

@@ -154,6 +154,20 @@ orders are documented there, in README.md, and in `.clinerules`.
   `supportedLocales` to their `MaterialApp` harness or `context.l10n`
   throws.
 
+## Store listings (post-2.19.1)
+
+- `store/` holds the localized Play + App Store listing texts (all 13
+  languages, char limits asserted) and `store/README.md` with the upload
+  walkthrough. Screenshots are NOT committed (43 MB, regenerable):
+  `scripts/store/*.py` capture the **live web app** per locale with
+  Playwright (geolocation stubbed to a city whose forecast is currently
+  Prime/Promising - check first, marketing shots should show a good day)
+  and compose captioned store frames at exact store resolutions
+  (iPhone 6.7" 1290x2796, iPad 2048x2732, Play 1080x1920, feature
+  graphic 1024x500).
+- After UI or copy changes that alter the home screen, regenerate and
+  re-upload. App Store Connect has no Filipino locale; `fil` is Play-only.
+
 ## Testing
 
 - `flutter test` runs everything. **68 tests are hermetic and must pass.**

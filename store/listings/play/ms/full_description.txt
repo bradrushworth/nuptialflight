@@ -1,0 +1,28 @@
+Adakah mereka terbang hari ini?
+
+Setiap koloni semut menunggu hari yang sempurna - lalu memenuhi langit dengan permaisuri bersayap dalam penerbangan kahwin mereka. Pemelihara semut menunggu hari yang sama. Aplikasi ini memberitahu bila hari itu tiba.
+
+INDEKS PENERBANGAN SEMUT
+Bukan peratusan tanpa makna, setiap hari mendapat penarafan jelas: Tiada penerbangan, Tenang, Berjaga-jaga, Menjanjikan atau Terbaik - berdasarkan perbandingan cuaca hari ini dengan bertahun-tahun data lampau di latitud dan musim anda. Terbaik bermakna ~10% hari terbaik musim anda: tinggalkan semuanya dan keluarlah.
+
+PELUANG YANG JUJUR
+"Kira-kira 1 daripada 7 hari seperti ini ada penerbangan dilaporkan." Ditentukur dengan ribuan laporan sebenar - bukan kebarangkalian rekaan.
+
+JAM DEMI JAM
+Keyakinan penerbangan 24 jam akan datang, tetingkap tiga jam terbaik untuk mencari, dan seminggu dalam satu pandangan.
+
+KENAPA RAMALAN INI?
+Ketelusan penuh: lihat dengan tepat bagaimana suhu, angin, kelembapan, awan, hujan dan tekanan menggerakkan penarafan hari ini - terus daripada model.
+
+DIKUASAKAN PEMELIHARA SEMUT
+Ramalan ini ialah model pembelajaran mesin yang dilatih daripada 10,000+ laporan penerbangan sebenar pengguna seluruh dunia. Laporkan penampakan (atau "Sudah lihat - tiada penerbangan") dan anda menjadikannya lebih pintar untuk semua.
+
+SELAIN ITU
+- Pemberitahuan hanya pada hari Terbaik
+- Widget skrin utama untuk Android dan iPhone
+- Peta langsung laporan terkini berdekatan anda
+- Saiz permaisuri yang bermusim (kecil / sederhana / besar)
+- Mod gelap, unit C/F dan 13 bahasa
+- Percuma dan sumber terbuka. Tiada iklan, tiada penjejakan.
+
+Dibuat oleh pemelihara semut, untuk pemelihara semut - dan untuk sesiapa yang pernah tertanya-tanya kenapa langit tiba-tiba dipenuhi semut terbang.

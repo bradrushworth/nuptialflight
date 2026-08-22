@@ -1,0 +1,28 @@
+Vliegen ze vandaag?
+
+Elke mierenkolonie wacht op de perfecte dag - en vult dan de lucht met gevleugelde koninginnen tijdens hun bruidsvlucht. Mierenhouders wachten op diezelfde dag. Deze app vertelt je wanneer die komt.
+
+DE MIERENVLUCHT-INDEX
+In plaats van een betekenisloos percentage krijgt elke dag een heldere score: Geen vlucht, Rustig, Opletten, Veelbelovend of Uitstekend - op basis van hoe het weer van vandaag zich verhoudt tot jaren aan historische dagen op jouw breedtegraad en in dit seizoen. Uitstekend betekent de beste ~10% van de dagen in jouw seizoen: laat alles vallen en ga naar buiten.
+
+EERLIJKE KANSEN
+"Ongeveer 1 op de 7 dagen zoals deze levert een gemelde vlucht op." Gekalibreerd op duizenden echte waarnemingen - nooit een verzonnen kans.
+
+UUR VOOR UUR
+Het vluchtvertrouwen voor de komende 24 uur, het beste venster van drie uur om te gaan kijken en de hele week in één oogopslag.
+
+WAAROM DEZE VOORSPELLING?
+Volledige transparantie: zie precies hoe temperatuur, wind, luchtvochtigheid, bewolking, regen en luchtdruk de score van vandaag hebben bepaald - rechtstreeks uit het model.
+
+AANGEDREVEN DOOR MIERENHOUDERS
+De voorspelling is een machine-learning-model, getraind op ruim 10.000 echte vluchtmeldingen van gebruikers wereldwijd. Meld een waarneming (of "Gekeken - geen vluchten") en je maakt hem slimmer voor iedereen.
+
+VERDER NOG
+- Meldingen alleen op uitstekende dagen
+- Widgets voor het startscherm van Android en iPhone
+- Live kaart met recente waarnemingen bij jou in de buurt
+- Welke koninginnenmaat in het seizoen is (klein / middel / groot)
+- Donkere modus, C/F-eenheden en 13 talen
+- Gratis en open source. Geen advertenties, geen tracking.
+
+Gemaakt door een mierenhouder, voor mierenhouders - en voor iedereen die zich ooit afvroeg waarom de lucht ineens vol vliegende mieren zit.

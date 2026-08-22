@@ -1,0 +1,28 @@
+Apakah hari ini mereka terbang?
+
+Setiap koloni semut menunggu hari yang sempurna - lalu memenuhi langit dengan ratu bersayap dalam penerbangan kawin mereka. Pemelihara semut menunggu hari yang sama. Aplikasi ini memberi tahu kapan hari itu tiba.
+
+INDEKS PENERBANGAN SEMUT
+Alih-alih persentase tanpa makna, setiap hari mendapat peringkat yang jelas: Tidak terbang, Tenang, Waspada, Menjanjikan, atau Prima - berdasarkan perbandingan cuaca hari ini dengan bertahun-tahun data historis di lintang dan musim Anda. Prima berarti ~10% hari terbaik di musim Anda: tinggalkan semuanya dan keluarlah.
+
+PELUANG YANG JUJUR
+"Sekitar 1 dari 7 hari seperti ini ada penerbangan yang dilaporkan." Dikalibrasi dengan ribuan laporan nyata - bukan probabilitas karangan.
+
+JAM DEMI JAM
+Keyakinan penerbangan 24 jam ke depan, jendela tiga jam terbaik untuk mencari, dan sepekan dalam sekali pandang.
+
+KENAPA PRAKIRAAN INI?
+Transparansi penuh: lihat persis bagaimana suhu, angin, kelembapan, awan, hujan, dan tekanan menggerakkan peringkat hari ini - langsung dari model.
+
+DIGERAKKAN PEMELIHARA SEMUT
+Prakiraan ini adalah model machine learning yang dilatih dari 10.000+ laporan penerbangan nyata pengguna di seluruh dunia. Laporkan penampakan (atau "Sudah melihat - tidak ada") dan Anda membuatnya lebih pintar untuk semua.
+
+SELAIN ITU
+- Notifikasi hanya pada hari Prima
+- Widget layar utama untuk Android dan iPhone
+- Peta langsung laporan terbaru di sekitar Anda
+- Ukuran ratu mana yang sedang musim (kecil / sedang / besar)
+- Mode gelap, satuan C/F, dan 13 bahasa
+- Gratis dan open source. Tanpa iklan, tanpa pelacakan.
+
+Dibuat oleh pemelihara semut, untuk pemelihara semut - dan untuk siapa pun yang pernah bertanya-tanya kenapa langit tiba-tiba penuh semut terbang.

@@ -1,0 +1,28 @@
+Fliegen sie heute?
+
+Jede Ameisenkolonie wartet auf den perfekten Tag - dann füllt sie den Himmel mit geflügelten Königinnen auf ihrem Hochzeitsflug. Ameisenhalter warten auf denselben Tag. Diese App sagt dir, wann er kommt.
+
+DER AMEISENFLUG-INDEX
+Statt einer bedeutungslosen Prozentzahl bekommt jeder Tag eine klare Bewertung: Kein Flug, Ruhig, Wachsam, Vielversprechend oder Erstklassig - je nachdem, wie das heutige Wetter im Vergleich zu Jahren historischer Tage auf deinem Breitengrad und zu dieser Jahreszeit abschneidet. Erstklassig heißt: die besten ~10 % der Tage deiner Saison - alles stehen lassen und raus.
+
+EHRLICHE CHANCEN
+"Etwa an 1 von 7 Tagen wie diesem wird ein Flug gemeldet." Kalibriert an Tausenden echter Sichtungen - nie eine erfundene Wahrscheinlichkeit.
+
+STUNDE FÜR STUNDE
+Die Flugzuversicht der nächsten 24 Stunden, das beste Drei-Stunden-Fenster zum Suchen und die Woche auf einen Blick.
+
+WARUM DIESE VORHERSAGE?
+Volle Transparenz: Sieh genau, wie Temperatur, Wind, Luftfeuchte, Wolken, Regen und Luftdruck die heutige Bewertung beeinflusst haben - direkt aus dem Modell.
+
+VON AMEISENHALTERN ANGETRIEBEN
+Die Vorhersage ist ein Machine-Learning-Modell, trainiert mit über 10.000 echten Flugmeldungen von Nutzern weltweit. Melde eine Sichtung (oder "Nachgesehen - keine Flüge") und mache sie für alle schlauer.
+
+AUSSERDEM
+- Benachrichtigungen nur an erstklassigen Tagen
+- Homescreen-Widgets für Android und iPhone
+- Live-Karte aktueller Sichtungen in deiner Nähe
+- Welche Königinnengröße Saison hat (klein / mittel / groß)
+- Dunkelmodus, C/F-Einheiten und 13 Sprachen
+- Kostenlos und Open Source. Keine Werbung, kein Tracking.
+
+Von einem Ameisenhalter für Ameisenhalter gemacht - und für alle, die sich je gefragt haben, warum der Himmel plötzlich voller fliegender Ameisen ist.

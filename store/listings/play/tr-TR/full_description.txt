@@ -1,0 +1,28 @@
+Bugün uçacaklar mı?
+
+Her karınca kolonisi mükemmel günü bekler - sonra gökyüzü çiftleşme uçuşuna çıkan kanatlı kraliçelerle dolar. Karınca besleyenler de aynı günü bekler. Bu uygulama o günün ne zaman geleceğini söyler.
+
+KARINCA UÇUŞ ENDEKSİ
+Anlamsız bir yüzde yerine her gün net bir derece alır: Uçuş yok, Sakin, Dikkatli, Umut verici veya Mükemmel. Derece, bugünkü havanın enleminizde ve mevsiminizde yıllardır görülen günlerle karşılaştırılmasına dayanır. Mükemmel, sezonunuzun en iyi ~%10'luk günleri demektir: her şeyi bırakıp dışarı çıkın.
+
+DÜRÜST OLASILIKLAR
+"Böyle günlerin yaklaşık 7'sinden 1'inde uçuş bildirilir." Binlerce gerçek gözlemle kalibre edilmiştir - asla uydurma bir olasılık değildir.
+
+SAAT SAAT
+Önümüzdeki 24 saatin uçuş güveni, bakmak için en iyi üç saatlik aralık ve haftanın görünümü.
+
+BU TAHMİN NEDEN?
+Tam şeffaflık: sıcaklık, rüzgar, nem, bulut, yağmur ve basıncın bugünkü dereceyi nasıl etkilediğini doğrudan modelden görün.
+
+KARINCA BESLEYENLERİN GÜCÜYLE
+Tahmin, dünya çapında kullanıcıların 10.000'den fazla gerçek uçuş bildirimiyle eğitilen bir makine öğrenmesi modelidir. Bir gözlem bildirin (veya "Baktım - uçuş yok" deyin), tahmini herkes için daha akıllı yapın.
+
+AYRICA
+- Sadece Mükemmel günlerde bildirim
+- Android ve iPhone ana ekran widget'ları
+- Yakınınızdaki son gözlemlerin canlı haritası
+- Hangi kraliçe boyunun mevsiminde olduğu (küçük / orta / büyük)
+- Karanlık mod, C/F birimleri ve 13 dil
+- Ücretsiz ve açık kaynak. Reklamsız, izlemesiz.
+
+Bir karınca besleyici tarafından, karınca besleyenler için yapıldı - ve gökyüzünün neden aniden uçan karıncalarla dolduğunu merak eden herkes için.

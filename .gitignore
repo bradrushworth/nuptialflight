@@ -60,3 +60,4 @@ android/app/local.properties
 *.db
 .beads-credential-key
 .beads/proxieddb/
+store/raw/

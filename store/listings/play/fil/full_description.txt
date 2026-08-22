@@ -1,0 +1,28 @@
+Lilipad ba sila ngayon?
+
+Naghihintay ang bawat kolonya ng langgam ng perpektong araw - saka pupunuin ang langit ng mga may pakpak na reyna sa kanilang nuptial flight. Ganoon din ang mga nag-aalaga ng langgam. Sasabihin ng app na ito kung kailan darating ang araw na iyon.
+
+ANG ANT FLIGHT INDEX
+Sa halip na walang kwentang porsyento, bawat araw ay may malinaw na rating - Walang lipad, Tahimik, Bantayan, Promising o Prime - batay sa paghahambing ng panahon ngayon sa mga nakaraang taon sa inyong latitude at panahon ng taon. Ang Prime ay nasa nangungunang ~10% ng mga araw sa inyong season: iwanan ang lahat at lumabas.
+
+TAPAT NA TSANSA
+"Humigit-kumulang 1 sa 7 araw na ganito ang may naiulat na lipad." Na-calibrate sa libu-libong totoong ulat - hindi kailanman imbentong probabilidad.
+
+BAWAT ORAS
+Kumpiyansa ng paglipad sa susunod na 24 oras, ang pinakamagandang tatlong-oras na pagkakataon, at ang buong linggo sa isang tingin.
+
+BAKIT GANITO ANG HULA?
+Buong transparency: makikita mo mismo kung paano ginalaw ng temperatura, hangin, halumigmig, ulap, ulan at presyon ang rating ngayon - direkta mula sa model.
+
+PINAPAGANA NG MGA ANT KEEPER
+Ang hula ay isang machine-learning model na sinanay sa 10,000+ totoong ulat ng lipad mula sa mga user sa buong mundo. Mag-ulat ng nakita mo (o "Tumingin ako - walang lipad") at gagawin mo itong mas matalino para sa lahat.
+
+KASAMA RIN
+- Notification tuwing Prime na araw lang
+- Widget sa home screen para sa Android at iPhone
+- Live na mapa ng mga kamakailang ulat malapit sa iyo
+- Kung aling laki ng reyna ang nasa season (maliit / katamtaman / malaki)
+- Dark mode, C/F, at 13 wika
+- Libre at open source. Walang ads, walang tracking.
+
+Gawa ng isang ant keeper, para sa mga ant keeper - at para sa sinumang nagtaka kung bakit biglang puno ng lumilipad na langgam ang langit.

@@ -1,0 +1,28 @@
+Czy dziś polecą?
+
+Każda kolonia mrówek czeka na idealny dzień - a potem wypełnia niebo uskrzydlonymi królowymi w locie godowym. Hodowcy mrówek czekają na ten sam dzień. Ta aplikacja mówi, kiedy nadejdzie.
+
+INDEKS LOTÓW MRÓWEK
+Zamiast bezsensownego procentu każdy dzień dostaje czytelną ocenę: Brak lotów, Spokojnie, Czujnie, Obiecująco albo Znakomicie - na podstawie porównania dzisiejszej pogody z latami historycznych dni na Twojej szerokości geograficznej i o tej porze roku. Znakomicie oznacza najlepsze ~10% dni sezonu: rzuć wszystko i wyjdź na zewnątrz.
+
+UCZCIWE SZANSE
+"Mniej więcej w 1 na 7 takich dni ktoś zgłasza lot." Skalibrowane na tysiącach prawdziwych obserwacji - nigdy wymyślone prawdopodobieństwo.
+
+GODZINA PO GODZINIE
+Pewność lotu na najbliższe 24 godziny, najlepsze trzygodzinne okno na obserwacje i cały tydzień w skrócie.
+
+SKĄD TA PROGNOZA?
+Pełna przejrzystość: zobacz dokładnie, jak temperatura, wiatr, wilgotność, chmury, deszcz i ciśnienie wpłynęły na dzisiejszą ocenę - prosto z modelu.
+
+NAPĘDZANE PRZEZ HODOWCÓW
+Prognoza to model uczenia maszynowego trenowany na ponad 10 000 prawdziwych zgłoszeń lotów od użytkowników z całego świata. Zgłoś obserwację (albo "Sprawdziłem - brak lotów"), a prognoza stanie się mądrzejsza dla wszystkich.
+
+POZA TYM
+- Powiadomienia tylko w znakomite dni
+- Widżety ekranu głównego na Androida i iPhone'a
+- Mapa na żywo z niedawnymi obserwacjami w okolicy
+- Który rozmiar królowej ma sezon (mały / średni / duży)
+- Tryb ciemny, jednostki C/F i 13 języków
+- Za darmo i open source. Bez reklam i śledzenia.
+
+Stworzona przez hodowcę mrówek dla hodowców mrówek - i dla każdego, kto kiedyś zastanawiał się, czemu niebo nagle pełne jest latających mrówek.

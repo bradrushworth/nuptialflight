@@ -1,0 +1,28 @@
+¿Volarán hoy?
+
+Cada colonia de hormigas espera el día perfecto - y entonces llena el cielo de reinas aladas en su vuelo nupcial. Los criadores de hormigas esperan el mismo día. Esta app te dice cuándo llega.
+
+EL ÍNDICE DE VUELO
+En lugar de un porcentaje sin sentido, cada día recibe una valoración clara: Sin vuelo, Tranquilo, Atento, Prometedor u Óptimo, según cómo se compara el tiempo de hoy con años de días históricos en tu latitud y época del año. Óptimo significa el ~10% mejor de los días de tu temporada: déjalo todo y sal.
+
+PROBABILIDADES HONESTAS
+"Aproximadamente 1 de cada 7 días como este registra un vuelo." Calibrado con miles de avistamientos reales - nunca una probabilidad inventada.
+
+HORA A HORA
+La confianza de vuelo de las próximas 24 horas, la mejor franja de tres horas para salir a mirar y la semana de un vistazo.
+
+¿POR QUÉ ESTE PRONÓSTICO?
+Transparencia total: ve exactamente cómo la temperatura, el viento, la humedad, las nubes, la lluvia y la presión movieron la valoración de hoy - directo del modelo.
+
+IMPULSADO POR CRIADORES DE HORMIGAS
+El pronóstico es un modelo de aprendizaje automático entrenado con más de 10.000 informes reales de vuelos de usuarios de todo el mundo. Informa de un avistamiento (o "Miré - sin vuelos") y lo haces más inteligente para todos.
+
+ADEMÁS
+- Notificaciones solo en días Óptimos
+- Widgets de pantalla de inicio para Android y iPhone
+- Mapa en vivo de avistamientos recientes cerca de ti
+- Qué tamaño de reina está en temporada (pequeña / mediana / grande)
+- Modo oscuro, unidades C/F y 13 idiomas
+- Gratis y de código abierto. Sin anuncios ni rastreo.
+
+Hecho por un criador de hormigas, para criadores de hormigas - y para cualquiera que se haya preguntado por qué el cielo se llena de repente de hormigas voladoras.

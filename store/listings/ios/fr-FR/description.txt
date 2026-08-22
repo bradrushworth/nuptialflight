@@ -1,0 +1,28 @@
+Voleront-elles aujourd'hui ?
+
+Chaque colonie de fourmis attend le jour parfait - puis remplit le ciel de reines ailées pour leur vol nuptial. Les éleveurs de fourmis attendent le même jour. Cette appli vous dit quand il arrive.
+
+L'INDICE DE VOL
+Au lieu d'un pourcentage sans signification, chaque jour reçoit une note claire : Aucun vol, Calme, À surveiller, Prometteur ou Idéal, selon la comparaison de la météo du jour avec des années de journées historiques à votre latitude et à cette période de l'année. Idéal signifie le top ~10 % des jours de votre saison : laissez tout et sortez.
+
+DES PROBABILITÉS HONNÊTES
+« Environ 1 jour sur 7 comme celui-ci donne lieu à un vol signalé. » Calibré sur des milliers d'observations réelles - jamais une probabilité inventée.
+
+HEURE PAR HEURE
+La confiance de vol des prochaines 24 heures, le meilleur créneau de trois heures pour aller observer, et la semaine en un coup d'œil.
+
+POURQUOI CETTE PRÉVISION ?
+Transparence totale : voyez exactement comment température, vent, humidité, nuages, pluie et pression ont influencé la note du jour - directement depuis le modèle.
+
+PROPULSÉ PAR LES ÉLEVEURS
+La prévision est un modèle d'apprentissage automatique entraîné sur plus de 10 000 signalements réels de vols d'utilisateurs du monde entier. Signalez une observation (ou « J'ai regardé - aucun vol ») et vous le rendez plus intelligent pour tous.
+
+ET AUSSI
+- Notifications uniquement les jours Idéals
+- Widgets d'écran d'accueil pour Android et iPhone
+- Carte en direct des observations récentes près de vous
+- Quelle taille de reine est de saison (petite / moyenne / grande)
+- Mode sombre, unités C/F et 13 langues
+- Gratuit et open source. Sans pub, sans pistage.
+
+Créé par un éleveur de fourmis, pour les éleveurs de fourmis - et pour quiconque s'est déjà demandé pourquoi le ciel se remplit soudain de fourmis volantes.
