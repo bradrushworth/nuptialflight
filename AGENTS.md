@@ -143,9 +143,10 @@ orders are documented there, in README.md, and in `.clinerules`.
    build failed; otherwise the build self-cancels in seconds. Force a build
    with `[force build]` in the commit message; skip entirely with the
    native `[skip ci]`. Consequence: shipping anything to users REQUIRES a
-   version bump — a code merge without one will not build. NB the skip
-   marker is matched anywhere in the commit message, so never mention the
-   bracketed skip token in prose.
+   version bump — a code merge without one will not build. NB Codemagic
+   matches its skip token loosely, anywhere in the commit message — never
+   put the words "skip" and "ci" next to each other in one, in either
+   order, even in prose.
 
 ## Security notes
 
