@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Night variants of the widget palette: darker grounds, light text. -->
+    <color name="widget_bg_low">#6E312B</color>
+    <color name="widget_bg_mid">#6B5A1E</color>
+    <color name="widget_bg_high">#2E5231</color>
+    <color name="widget_bg_neutral">#2A2C2F</color>
+    <color name="widget_text">#F1F3F4</color>
+    <color name="widget_text_secondary">#C7CACD</color>
+</resources>

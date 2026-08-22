@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="ic_launcher_background">#ffffff</color>
+
+    <!-- Home-screen widget palette. Severity hues are softened from the old
+         pure RED/YELLOW/GREEN so text keeps contrast, with darker variants in
+         values-night. Text colors pair with each background. -->
+    <color name="widget_bg_low">#E5A29A</color>
+    <color name="widget_bg_mid">#EFD98B</color>
+    <color name="widget_bg_high">#A5CF9F</color>
+    <color name="widget_bg_neutral">#E8EAED</color>
+    <color name="widget_text">#1A1C1E</color>
+    <color name="widget_text_secondary">#44474A</color>
 </resources>

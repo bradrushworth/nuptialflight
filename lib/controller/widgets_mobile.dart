@@ -6,6 +6,12 @@ void initialiseWidget() {
   if (Platform.isAndroid) {
     HomeWidget.registerBackgroundCallback(backgroundCallback);
   }
+  if (Platform.isIOS) {
+    // The iOS widget extension (ios/NuptialWidget) reads the percentage from
+    // this shared App Group — must match appGroupId in NuptialWidget.swift
+    // and both entitlements files.
+    HomeWidget.setAppGroupId('group.au.com.bitbot.nuptialflight');
+  }
 }
 
 void widgetInitState(Function function) {
@@ -26,7 +32,7 @@ Future<void> backgroundCallback(Uri? uri) async {
       print("backgroundCallback: _percentage=" + _percentage.toString());
       HomeWidget.saveWidgetData<int>('_percentage', _percentage);
       HomeWidget.updateWidget(
-          name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
+          name: 'AppWidgetProvider', iOSName: 'NuptialWidget');
     });
     //print("backgroundCallback: _percentage=" + _percentage.toString());
   }
@@ -35,11 +41,11 @@ Future<void> backgroundCallback(Uri? uri) async {
 Future<void> updateAppWidget(List<int> percentage) async {
   await HomeWidget.saveWidgetData<int>('_percentage', percentage[0]);
   await HomeWidget.updateWidget(
-      name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
+      name: 'AppWidgetProvider', iOSName: 'NuptialWidget');
 }
 
 Future<void> clearAppWidget() async {
   await HomeWidget.saveWidgetData<int>('_percentage', 0);
   await HomeWidget.updateWidget(
-      name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
+      name: 'AppWidgetProvider', iOSName: 'NuptialWidget');
 }

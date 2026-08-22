@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Widget corner radius: overridden on API 31+ (values-v31) with the
+         system radius so the widget matches every other widget on the shelf. -->
+    <dimen name="widget_corner_radius">16dp</dimen>
+    <dimen name="widget_padding">8dp</dimen>
+</resources>
