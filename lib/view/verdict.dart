@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../controller/flight_index.dart';
+
 /// Shared verdict thresholds. A day at/above [greenThreshold] is "Likely",
 /// at/above [amberThreshold] "Possible", otherwise "Unlikely". These are the
 /// single source of truth — the widget, notifications (services.dart via
@@ -51,6 +53,63 @@ VerdictColors verdictColors(BuildContext context, Verdict v) {
       return dark
           ? const VerdictColors(Color(0xFFE09A92), Color(0xFF3A2523))
           : const VerdictColors(Color(0xFFA04A42), Color(0xFFF6E2DF));
+  }
+}
+
+/// Colours for the five Ant Flight Index bands, tuned per brightness.
+/// No-fly is a neutral grey (nothing to see), quiet a muted red, watchful
+/// amber, promising a yellow-green, prime the full eucalypt green.
+VerdictColors bandColors(BuildContext context, FlightBand band) {
+  final bool dark = Theme.of(context).brightness == Brightness.dark;
+  switch (band) {
+    case FlightBand.noFly:
+      return dark
+          ? const VerdictColors(Color(0xFF9AA69C), Color(0xFF262B27))
+          : const VerdictColors(Color(0xFF55615A), Color(0xFFECEDEA));
+    case FlightBand.quiet:
+      return verdictColors(context, Verdict.unlikely);
+    case FlightBand.watchful:
+      return verdictColors(context, Verdict.possible);
+    case FlightBand.promising:
+      return dark
+          ? const VerdictColors(Color(0xFFAFC97A), Color(0xFF2C331F))
+          : const VerdictColors(Color(0xFF5E7D2E), Color(0xFFE9F0D8));
+    case FlightBand.prime:
+      return verdictColors(context, Verdict.likely);
+  }
+}
+
+/// A labelled Flight Index band pill ("Prime", "Quiet"). Text + colour
+/// together so it stays readable for colour-blind users and screen readers.
+class BandPill extends StatelessWidget {
+  const BandPill({Key? key, required this.band, this.compact = false})
+      : super(key: key);
+
+  final FlightBand band;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) {
+    final VerdictColors c = bandColors(context, band);
+    return Semantics(
+      label: 'Flight index: ${bandLabel(band)}',
+      excludeSemantics: true,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: compact ? 8 : 10, vertical: 4),
+        decoration: BoxDecoration(
+          color: c.bg,
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Text(
+          bandLabel(band),
+          style: TextStyle(
+            color: c.fg,
+            fontSize: compact ? 12 : 13,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
   }
 }
 

@@ -1,30 +1,37 @@
 import 'package:flutter/material.dart';
 
+import '../controller/flight_index.dart';
 import 'verdict.dart';
 
-/// The single answer to "should I go out looking?": today's verdict, the
-/// percentage, and (when known) the best flight window and most likely queen
-/// size. Replaces the old three-tile row + whole-app colour retint — the
-/// verdict colour lives only inside this card.
+/// The single answer to "should I go out looking?": the Ant Flight Index
+/// band (a UV-index-style rating relative to days at this latitude and time
+/// of year), the honest odds ("1 in N days like this see a reported
+/// flight"), and the action to take. Raw model scores are demoted to the
+/// "Why?" sheet — a bare percentage told users nothing.
 class HeroVerdictCard extends StatelessWidget {
   const HeroVerdictCard({
     Key? key,
-    required this.percentage,
+    required this.band,
+    required this.oneInN,
     required this.dateLine,
     required this.conditionLine,
     this.bestWindow,
     this.sizeLine,
   }) : super(key: key);
 
-  final int percentage;
+  final FlightBand band;
+
+  /// Calibrated odds denominator: 1 in [oneInN] days like this get a
+  /// reported flight.
+  final int oneInN;
 
   /// e.g. "Today · Sat 17 Jan"
   final String dateLine;
 
-  /// e.g. "Partly cloudy · 27.2°C"
+  /// e.g. "Partly cloudy · 27°C"
   final String conditionLine;
 
-  /// e.g. "Best window 4pm–7pm" (null when no window clears the bar).
+  /// e.g. "Best window 4pm–7pm" (null when no window stands out).
   final String? bestWindow;
 
   /// e.g. "Likely small species" (null when latitude unknown).
@@ -32,23 +39,13 @@ class HeroVerdictCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Verdict v = verdictFor(percentage);
-    final VerdictColors c = verdictColors(context, v);
-    final String headline = () {
-      switch (v) {
-        case Verdict.likely:
-          return 'Flight likely';
-        case Verdict.possible:
-          return 'Flight possible';
-        case Verdict.unlikely:
-          return 'Flight unlikely';
-      }
-    }();
+    final VerdictColors c = bandColors(context, band);
     final ColorScheme scheme = Theme.of(context).colorScheme;
+    final bool showOdds = band != FlightBand.noFly;
 
     return Semantics(
-      label:
-          'Nuptial flight ${verdictLabel(v).toLowerCase()} today, $percentage percent confidence.'
+      label: '${bandHeadline(band)}. ${bandAction(band)}.'
+          '${showOdds ? ' About 1 in $oneInN days like this see a reported flight.' : ''}'
           '${bestWindow != null ? ' $bestWindow.' : ''}'
           '${sizeLine != null ? ' $sizeLine.' : ''}',
       excludeSemantics: true,
@@ -91,23 +88,56 @@ class HeroVerdictCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Flexible(
-                  child: Text(
-                    headline,
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: scheme.onSurface,
-                          height: 1.05,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        bandHeadline(band),
+                        style:
+                            Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: scheme.onSurface,
+                                  height: 1.05,
+                                ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        bandAction(band),
+                        style: TextStyle(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w600,
+                          color: c.fg,
                         ),
+                      ),
+                    ],
                   ),
                 ),
-                Text(
-                  '$percentage%',
-                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: c.fg,
+                if (showOdds) ...[
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        '1 in $oneInN',
+                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: c.fg,
+                              fontFeatures: const [FontFeature.tabularFigures()],
+                            ),
                       ),
-                ),
+                      Text(
+                        'days like this\nsee flights',
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          fontSize: 10.5,
+                          height: 1.2,
+                          color: c.fg.withValues(alpha: 0.8),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ],
             ),
             if (bestWindow != null || sizeLine != null) ...[
@@ -117,9 +147,9 @@ class HeroVerdictCard extends StatelessWidget {
                 runSpacing: 8,
                 children: [
                   if (bestWindow != null)
-                    _chip(context, Icons.schedule, bestWindow!),
+                    _chip(context, c, Icons.schedule, bestWindow!),
                   if (sizeLine != null)
-                    _chip(context, Icons.bug_report_outlined, sizeLine!),
+                    _chip(context, c, Icons.bug_report_outlined, sizeLine!),
                 ],
               ),
             ],
@@ -129,9 +159,8 @@ class HeroVerdictCard extends StatelessWidget {
     );
   }
 
-  Widget _chip(BuildContext context, IconData icon, String label) {
-    final Verdict v = verdictFor(percentage);
-    final VerdictColors c = verdictColors(context, v);
+  Widget _chip(
+      BuildContext context, VerdictColors c, IconData icon, String label) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       decoration: BoxDecoration(

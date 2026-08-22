@@ -2,6 +2,7 @@
 // a phone-sized viewport so any RenderFlex overflow fails the test.
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nuptialflight/controller/flight_index.dart';
 import 'package:nuptialflight/controller/units.dart';
 import 'package:nuptialflight/view/hero_card.dart';
 import 'package:nuptialflight/view/hourly_chart.dart';
@@ -65,14 +66,15 @@ void main() {
         (tester) async {
       _phoneSized(tester);
       await tester.pumpWidget(_wrap(const HeroVerdictCard(
-        percentage: 64,
+        band: FlightBand.prime,
+        oneInN: 7,
         dateLine: 'Today · Sat 17 Jan',
         conditionLine: 'Partly cloudy · 27°C',
         bestWindow: 'Best window 4pm–7pm',
         sizeLine: 'Likely small species',
       )));
-      expect(find.text('Flight likely'), findsOneWidget);
-      expect(find.text('64%'), findsOneWidget);
+      expect(find.text('Prime conditions'), findsOneWidget);
+      expect(find.text('1 in 7'), findsOneWidget);
       expect(find.text('Best window 4pm–7pm'), findsOneWidget);
       expect(find.text('Likely small species'), findsOneWidget);
     });
@@ -80,12 +82,13 @@ void main() {
     testWidgets('unlikely day hides optional chips', (tester) async {
       _phoneSized(tester);
       await tester.pumpWidget(_wrap(const HeroVerdictCard(
-        percentage: 22,
+        band: FlightBand.noFly,
+        oneInN: 99,
         dateLine: 'Today · Mon 3 Jun',
         conditionLine: 'Light rain · 12°C',
       )));
-      expect(find.text('Flight unlikely'), findsOneWidget);
-      expect(find.text('22%'), findsOneWidget);
+      expect(find.text('No flights today'), findsOneWidget);
+      expect(find.textContaining('1 in'), findsNothing);
       expect(find.textContaining('Best window'), findsNothing);
     });
   });
@@ -96,7 +99,7 @@ void main() {
       final int base = DateTime.utc(2026, 1, 17, 3).millisecondsSinceEpoch ~/ 1000;
       await tester.pumpWidget(_wrap(HourlyChart(
         points: [
-          for (int i = 0; i < 24; i++) HourlyPoint(base + i * 3600, (i * 4) % 100),
+          for (int i = 0; i < 24; i++) HourlyPoint(base + i * 3600, (i * 4) % 100, FlightBand.watchful),
         ],
         timezoneOffsetSeconds: 36000, // UTC+10
       )));
@@ -111,7 +114,7 @@ void main() {
         (tester) async {
       _phoneSized(tester);
       await tester.pumpWidget(_wrap(HourlyChart(
-        points: [for (int i = 0; i < 5; i++) HourlyPoint(1700000000 + i * 3600, 40)],
+        points: [for (int i = 0; i < 5; i++) HourlyPoint(1700000000 + i * 3600, 40, FlightBand.quiet)],
         timezoneOffsetSeconds: 0,
       )));
       expect(find.text('Now'), findsOneWidget);
@@ -123,18 +126,18 @@ void main() {
         (tester) async {
       _phoneSized(tester);
       await tester.pumpWidget(_wrap(const WeekList(days: [
-        WeekDay(day: 'Sun', temp: '29°', wind: '5.1\u{00A0}m/s', percentage: 58),
-        WeekDay(day: 'Mon', temp: '31°', wind: '9.2\u{00A0}m/s', percentage: 44),
-        WeekDay(day: 'Tue', temp: '28°', wind: '4.4\u{00A0}m/s', percentage: 61),
-        WeekDay(day: 'Wed', temp: '20°', wind: '10.0\u{00A0}m/s', percentage: 37),
-        WeekDay(day: 'Thu', temp: '26°', wind: '6.7\u{00A0}m/s', percentage: 52),
-        WeekDay(day: 'Fri', temp: '30°', wind: '3.8\u{00A0}m/s', percentage: 66),
-        WeekDay(day: 'Sat', temp: '32°', wind: '8.5\u{00A0}m/s', percentage: 41),
+        WeekDay(day: 'Sun', temp: '29°', wind: '5.1\u{00A0}m/s', band: FlightBand.promising, percentile: 78),
+        WeekDay(day: 'Mon', temp: '31°', wind: '9.2\u{00A0}m/s', band: FlightBand.quiet, percentile: 22),
+        WeekDay(day: 'Tue', temp: '28°', wind: '4.4\u{00A0}m/s', band: FlightBand.prime, percentile: 93),
+        WeekDay(day: 'Wed', temp: '20°', wind: '10.0\u{00A0}m/s', band: FlightBand.noFly, percentile: 2),
+        WeekDay(day: 'Thu', temp: '26°', wind: '6.7\u{00A0}m/s', band: FlightBand.watchful, percentile: 55),
+        WeekDay(day: 'Fri', temp: '30°', wind: '3.8\u{00A0}m/s', band: FlightBand.prime, percentile: 96),
+        WeekDay(day: 'Sat', temp: '32°', wind: '8.5\u{00A0}m/s', band: FlightBand.quiet, percentile: 30),
       ])));
       expect(find.text('Sun'), findsOneWidget);
-      expect(find.text('Likely 61%'), findsOneWidget);
-      expect(find.text('Possible 58%'), findsOneWidget);
-      expect(find.text('Unlikely 44%'), findsOneWidget);
+      expect(find.text('Prime'), findsNWidgets(2));
+      expect(find.text('Promising'), findsOneWidget);
+      expect(find.text('No-fly'), findsOneWidget);
     });
   });
 

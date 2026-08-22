@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'controller/arangodb.dart';
+import 'controller/flight_index.dart';
 import 'controller/geo.dart';
 import 'controller/nuptials.dart';
 import 'controller/screenshots_mobile.dart'
@@ -34,7 +35,6 @@ import 'view/hero_card.dart';
 import 'view/hourly_chart.dart';
 import 'view/map.dart';
 import 'view/report_sheet.dart';
-import 'view/verdict.dart';
 import 'view/week_list.dart';
 import 'view/why_panel.dart';
 
@@ -66,6 +66,8 @@ Future<void> main() async {
   // Start parsing the forest-model JSON assets without blocking the first
   // frame; _getWeather() awaits Nuptials.ensureLoaded() before scoring.
   unawaited(Nuptials.ensureLoaded());
+  // Start parsing the flight-stats asset (percentiles + calibration).
+  unawaited(FlightIndex.ensureLoaded());
   // Load the metric/imperial display preference.
   unawaited(Units.load());
   // Initialise background services without blocking the first frame.
@@ -134,10 +136,13 @@ class _MyHomePageState extends State<MyHomePage> {
   // Refreshes the location + weather every hour while the app is open.
   Timer? _everyHour;
 
-  // Rolling 48-slot hourly probability list (the API can return fewer entries;
-  // _updateWeather zero-fills the tail so the list length is always safe).
+  // Rolling 48-slot hourly score list, 0..1 (the API can return fewer
+  // entries; _updateWeather zero-fills the tail so the length is always safe).
+  final List<double> _hourlyScore = List<double>.filled(48, 0);
+  // Today + next 7 days daily scores, 0..1 (indices 1..7 feed the week list).
+  final List<double> _dailyScore = List<double>.filled(8, 0);
+  // Convenience int percent views of the scores (chart heights, widget).
   final List<int> _hourlyPercentage = List<int>.filled(48, 0);
-  // Today + next 7 days daily probabilities (indices 1..7 used in the week list).
   final List<int> _dailyPercentage = List<int>.filled(8, 0);
 
   @override
@@ -296,8 +301,9 @@ class _MyHomePageState extends State<MyHomePage> {
           weatherFetcher.fetchNearestWeatherLocation(),
           weatherFetcher.fetchHistoricalWeather(dt),
           weatherFetcher.fetchWeather(),
-          // Ensure the forest models are parsed before _updateWeather scores.
+          // Ensure the forest models and stats are parsed before scoring.
           Nuptials.ensureLoaded(),
+          FlightIndex.ensureLoaded(),
         ])
         .then((List responses) => _updateWeather(responses[0], responses[1], responses[2]))
         .catchError((e) => handleError(e));
@@ -374,23 +380,23 @@ class _MyHomePageState extends State<MyHomePage> {
       // The API can return fewer hourly entries than our rolling window;
       // guard the index and zero-fill the tail instead of crashing.
       final List<Hourly> hourly = weather.hourly ?? <Hourly>[];
-      final int hourlyCount = min(_hourlyPercentage.length, hourly.length);
-      for (int i = 0; i < _hourlyPercentage.length; i++) {
-        _hourlyPercentage[i] = i < hourlyCount
-            ? (nuptialHourlyPercentageModel(weather.lat!, weather.lon!, hourly[i]) * 100.0).toInt()
+      final int hourlyCount = min(_hourlyScore.length, hourly.length);
+      for (int i = 0; i < _hourlyScore.length; i++) {
+        _hourlyScore[i] = i < hourlyCount
+            ? nuptialHourlyPercentageModel(weather.lat!, weather.lon!, hourly[i])
             : 0;
+        _hourlyPercentage[i] = (_hourlyScore[i] * 100.0).toInt();
       }
 
       final List<Daily> daily = weather.daily ?? <Daily>[];
-      final int dailyCount = min(_dailyPercentage.length, daily.length);
-      for (int i = 0; i < _dailyPercentage.length; i++) {
-        _dailyPercentage[i] = i < dailyCount
-            ? (nuptialDailyPercentageModel(weather.lat!, weather.lon!, daily[i],
-                        pop1: i + 1 < daily.length ? daily[i + 1].pop : null,
-                        pop2: i + 2 < daily.length ? daily[i + 2].pop : null) *
-                    100.0)
-                .toInt()
+      final int dailyCount = min(_dailyScore.length, daily.length);
+      for (int i = 0; i < _dailyScore.length; i++) {
+        _dailyScore[i] = i < dailyCount
+            ? nuptialDailyPercentageModel(weather.lat!, weather.lon!, daily[i],
+                pop1: i + 1 < daily.length ? daily[i + 1].pop : null,
+                pop2: i + 2 < daily.length ? daily[i + 2].pop : null)
             : 0;
+        _dailyPercentage[i] = (_dailyScore[i] * 100.0).toInt();
       }
 
       loaded = true;
@@ -409,6 +415,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
     ArangoSingleton().createWeather(version, buildNumber, _weather, _historical, _currentWeather);
   }
+
+  int _monthOfDt(int dt) =>
+      DateTime.fromMillisecondsSinceEpoch(dt * 1000, isUtc: true).month;
+
+  /// Percentile + band for daily slot [i] (0 = today), against days at this
+  /// hemisphere and that day's calendar month.
+  double _dailyPercentileAt(int i) {
+    final List<Daily>? daily = _weather?.daily;
+    if (daily == null || i >= daily.length || _weather?.lat == null) return 0;
+    return FlightIndex()
+        .percentile(_dailyScore[i], _weather!.lat!, _monthOfDt(daily[i].dt!));
+  }
+
+  FlightBand _dailyBandAt(int i) =>
+      bandFor(_dailyScore[i], _dailyPercentileAt(i));
 
   /// The best three-hour flight window in the next 24 hours, computed from the
   /// hourly model scores (replaces the old hardcoded 11am/7pm tiles). Null
@@ -429,7 +450,11 @@ class _MyHomePageState extends State<MyHomePage> {
         bestStart = i;
       }
     }
-    if (bestAvg < amberThreshold) return null;
+    // Only surface a window when it is at least "promising" for the season.
+    final int month = _monthOfDt(hourly[bestStart].dt!);
+    final double pct =
+        FlightIndex().percentile(bestAvg / 100.0, _weather!.lat ?? 0, month);
+    if (pct < 70) return null;
     String fmt(int dt) => timeOfDayFormat
         .format(DateTime.fromMillisecondsSinceEpoch((dt + offset) * 1000, isUtc: true))
         .toLowerCase();
@@ -442,7 +467,12 @@ class _MyHomePageState extends State<MyHomePage> {
   /// now (from the per-size seasonal prior). Null when a flight is unlikely.
   String? _sizeLine() {
     final int pct = _dailyPercentage[0];
-    if (pct < amberThreshold || _weather?.lat == null) return null;
+    final FlightBand band = _dailyBandAt(0);
+    if (band == FlightBand.noFly ||
+        band == FlightBand.quiet ||
+        _weather?.lat == null) {
+      return null;
+    }
     final Map<String, int> sizePct =
         sizeSeasonalPercentages(pct, _weather!.lat!, DateTime.now().toUtc());
     String bestSize = 'small';
@@ -566,6 +596,15 @@ class _MyHomePageState extends State<MyHomePage> {
       sizePercentages: _weather?.lat != null
           ? sizeSeasonalPercentages(_dailyPercentage[0], _weather!.lat!, DateTime.now().toUtc())
           : const <String, int>{},
+      honesty: [
+        'Ant Flight Index: ${bandLabel(_dailyBandAt(0))} - today is better '
+            'than ${_dailyPercentileAt(0).round()}% of days at your latitude '
+            'this month.',
+        'About 1 in ${FlightIndex().oneInN(_dailyScore[0])} days like this '
+            'get a flight reported by users.',
+        'Raw model score: ${_dailyScore[0].toStringAsFixed(2)} (the share of '
+            'the forest voting "flight" - not a probability).',
+      ],
     );
   }
 
@@ -773,7 +812,8 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               HeroVerdictCard(
-                percentage: _dailyPercentage[0],
+                band: _dailyBandAt(0),
+                oneInN: FlightIndex().oneInN(_dailyScore[0]),
                 dateLine: dateLine,
                 conditionLine: conditionLine,
                 bestWindow: _bestWindowLabel(),
@@ -797,9 +837,19 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               const SizedBox(height: 10),
               HourlyChart(
+                // NB hourly bands reuse the daily score distribution: close
+                // enough for colour banding, and keeps one stats table.
                 points: [
                   for (int i = 0; i < hourlyCount; i++)
-                    HourlyPoint(hourly[i].dt!, _hourlyPercentage[i]),
+                    HourlyPoint(
+                      hourly[i].dt!,
+                      _hourlyPercentage[i],
+                      bandFor(
+                        _hourlyScore[i],
+                        FlightIndex().percentile(_hourlyScore[i],
+                            weather.lat ?? 0, _monthOfDt(hourly[i].dt!)),
+                      ),
+                    ),
                 ],
                 timezoneOffsetSeconds: weather.timezoneOffset ?? 0,
               ),
@@ -843,7 +893,8 @@ class _MyHomePageState extends State<MyHomePage> {
           wind: daily[i].windGust != null || daily[i].windSpeed != null
               ? Units.speed(daily[i].windGust ?? daily[i].windSpeed!)
               : '–',
-          percentage: _dailyPercentage[i],
+          band: _dailyBandAt(i),
+          percentile: _dailyPercentileAt(i),
         ),
     ];
   }
