@@ -134,9 +134,16 @@ orders are documented there, in README.md, and in `.clinerules`.
 2. Merge to `master` (repo convention: merge commits, via PR).
 3. Tag `vX.Y.Z` on the merge commit, push the tag, and create a GitHub
    release with user-facing notes (convention started at `v2.17.0`).
-4. **Codemagic** (configured outside the repo) builds the store artefacts
-   and deploys the web app. Deployment can be verified externally:
+4. **Codemagic** (configured outside the repo; mirrored in
+   `codemagic.yaml`) builds the store artefacts and deploys the web app.
+   Deployment can be verified externally:
    `curl https://nuptialflight.app/version.json` reports the live version.
+5. **Build guard:** pushes to `master` only produce a full build when the
+   `pubspec.yaml` version changed since the last successful build, or that
+   build failed; otherwise the build self-cancels in seconds. Force a build
+   with `[force build]` in the commit message; skip entirely with the
+   native `[skip ci]`. Consequence: shipping anything to users REQUIRES a
+   version bump — a code merge without one will not build.
 
 ## Security notes
 
