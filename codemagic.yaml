@@ -184,8 +184,8 @@ workflows:
           EOF
       - name: Build AAB (release)
         script: flutter build appbundle --release
-      - name: Build IPA (release)
-        script: flutter build ipa --release --export-options-plist=/Users/builder/export_options.plist
+      # Web before iOS: a broken Apple signing setup must not block the
+      # production web deploy.
       - name: Build web (release)
         script: |
           #!/bin/sh
@@ -208,6 +208,8 @@ workflows:
               aws s3 cp "build/web/$f" "s3://nuptialflight.app/$f" --cache-control "no-cache"
             fi
           done
+      - name: Build IPA (release)
+        script: flutter build ipa --release --export-options-plist=/Users/builder/export_options.plist
 
     artifacts:
       - build/**/outputs/**/*.aab
