@@ -165,6 +165,23 @@ workflows:
         script: flutter test
       - name: Set up iOS code signing
         script: xcode-project use-profiles
+      # android/app/build.gradle reads android/key.properties, which the old
+      # Workflow Editor wrote automatically. yaml android_signing provides the
+      # CM_KEYSTORE_* variables instead, so recreate the file from them.
+      - name: Create android/key.properties
+        script: |
+          #!/bin/sh
+          set -e
+          if [ -z "$CM_KEYSTORE_PATH" ]; then
+            echo "ERROR: CM_KEYSTORE_PATH is empty - android_signing did not provide a keystore."
+            exit 1
+          fi
+          cat > android/key.properties <<EOF
+          storeFile=$CM_KEYSTORE_PATH
+          storePassword=$CM_KEYSTORE_PASSWORD
+          keyAlias=$CM_KEY_ALIAS
+          keyPassword=$CM_KEY_PASSWORD
+          EOF
       - name: Build AAB (release)
         script: flutter build appbundle --release
       - name: Build IPA (release)
