@@ -21,8 +21,10 @@
 #                       Codemagic API; powers the build guard below)
 # The Create assets/.env step fails fast when the OpenWeatherMap keys are
 # missing so a keyless web build can never reach production.
-# Android signing references the team keystore `android_bitbot.jks`
-# (Team settings > Code signing identities > Android keystores). The App
+# Android signing references the team keystore `nuptialflight_upload`
+# (Team settings > Code signing identities > Android keystores; the app's
+# Play upload key - Google rejected android_bitbot.jks as the wrong key in
+# yaml build #7). The App
 # Store Connect API key "Codemagic Nuptial Flight" (75423D3XRN) exists in
 # team integrations and is referenced by name below.
 #
@@ -49,7 +51,7 @@ workflows:
       xcode: latest
       cocoapods: default
       android_signing:
-        - android_bitbot.jks
+        - nuptialflight_upload
       ios_signing:
         distribution_type: app_store
         bundle_identifier: au.com.bitbot.nuptialflight
