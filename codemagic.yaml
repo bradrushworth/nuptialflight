@@ -237,7 +237,12 @@ workflows:
         submit_as_draft: false
       app_store_connect:
         auth: integration
+        # TestFlight internal testers only (the "App Store Connect Users"
+        # group picks builds up automatically). Deliberately no beta_groups:
+        # naming an external group here would push every master build to
+        # public testers, the iOS equivalent of Play open testing. The only
+        # external group is "Facebook"; promote to it from App Store Connect.
+        # (A non-existent group `nuptialflight` was listed here and silently
+        # did nothing - the real group names are above.)
         submit_to_testflight: true
-        beta_groups:
-          - nuptialflight
         submit_to_app_store: false
