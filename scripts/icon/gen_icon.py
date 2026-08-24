@@ -377,6 +377,44 @@ def mono_layer(art, frac):
     return Image.fromarray(out.astype(np.uint8))
 
 
+def glyph(art, width_px):
+    """Flat white silhouette of the ant for the home-screen widget.
+
+    Tinted at runtime with the band colour, so one asset serves every band
+    and both light and night themes. Wings are forced fully opaque: at
+    ~12dp the translucent wings of the icon would vanish, and the whole
+    point of the glyph is that a winged queen is distinguishable at a
+    glance from a wingless worker.
+    """
+    a = np.asarray(Image.fromarray(np.clip(art, 0, 255).astype(np.uint8)))
+    alpha = a[..., 3].astype(np.float32)
+    alpha = np.clip(alpha * 3.0, 0, 255)          # solidify the wings
+    ys, xs = np.nonzero(alpha > 8)
+    box = (xs.min(), ys.min(), xs.max() + 1, ys.max() + 1)
+    out = np.zeros(a.shape, np.uint8)
+    out[..., 0:3] = 255
+    out[..., 3] = alpha.astype(np.uint8)
+    im = Image.fromarray(out).crop(box)
+    h = max(1, round(width_px * im.size[1] / im.size[0]))
+    return im.resize((width_px, h), Image.LANCZOS)
+
+
+def write_widget_glyphs(repo, worker, queen):
+    """Emit widget_ant_worker / widget_ant_queen at every Android density."""
+    dens = {'mdpi': 1.0, 'hdpi': 1.5, 'xhdpi': 2.0, 'xxhdpi': 3.0, 'xxxhdpi': 4.0}
+    BASE_DP = 40
+    shapes = {}
+    for name, art in (('worker', worker), ('queen', queen)):
+        for d, k in dens.items():
+            g = glyph(art, int(round(BASE_DP * k)))
+            path = os.path.join(repo, 'android', 'app', 'src', 'main', 'res',
+                                'drawable-%s' % d)
+            os.makedirs(path, exist_ok=True)
+            g.save(os.path.join(path, 'widget_ant_%s.png' % name))
+            shapes[name] = g.size
+    return shapes, BASE_DP
+
+
 def reach_pct(im):
     a = np.asarray(im.split()[3])
     ys, xs = np.nonzero(a > 8)
@@ -408,6 +446,14 @@ if __name__ == '__main__':
     bg.convert('RGBA').save(os.path.join(out, 'background.png'))
 
     mono_layer(queen, 0.86).save(os.path.join(out, 'monochrome.png'))
+
+    # Widget glyphs: the same animal, wingless on quiet days and winged when
+    # a flight is likely, so the widget says which one you might actually see.
+    worker = render(winged=False)
+    shapes, base_dp = write_widget_glyphs(repo, worker, queen)
+    for k, v in shapes.items():
+        print('widget glyph %-6s mdpi-equivalent %ddp wide, aspect %.2f'
+              % (k, base_dp, v[0] / v[1]))
 
     print('foreground reach %.1f%% of layer -> %.1f%% of icon (safe <= 66%%)'
           % (reach_pct(fg), reach_pct(fg) * 0.68))

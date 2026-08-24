@@ -16,17 +16,38 @@
         android:padding="@dimen/widget_padding"
         android:background="@drawable/widget_bg_neutral">
 
-        <TextView
-            android:id="@+id/tv_heading"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="@string/widget_heading"
-            android:textColor="@color/widget_text_secondary"
-            android:letterSpacing="0.08"
-            android:textAllCaps="true"
-            android:textSize="10sp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Wingless worker on quiet days, winged queen when a flight is
+                 likely; AppWidgetProvider swaps the drawable and tints it to
+                 the band colour. Decorative: tv_band carries the meaning. -->
+            <ImageView
+                android:id="@+id/iv_ant"
+                android:layout_width="24dp"
+                android:layout_height="12dp"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:src="@drawable/widget_ant_worker"
+                android:importantForAccessibility="no" />
+
+            <TextView
+                android:id="@+id/tv_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/widget_heading"
+                android:textColor="@color/widget_text_secondary"
+                android:letterSpacing="0.08"
+                android:textAllCaps="true"
+                android:textSize="10sp" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_band"

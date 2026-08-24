@@ -1,5 +1,6 @@
-<!-- Compact (1-cell) widget: just the ant and the band word, on the band
-     colour. Chosen via RemoteViews size mapping on Android 12+. -->
+<!-- Compact (1-cell) widget: the ant glyph (worker or winged queen,
+     depending on the band) and the band word, on the band colour.
+     Chosen via RemoteViews size mapping on Android 12+. -->
 <FrameLayout
     android:id="@+id/widget_root"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -15,14 +16,15 @@
         android:padding="4dp"
         android:background="@drawable/widget_bg_neutral">
 
-        <TextView
-            android:id="@+id/tv_ant"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="@string/widget_ant"
-            android:textSize="18sp" />
+        <ImageView
+            android:id="@+id/iv_ant"
+            android:layout_width="32dp"
+            android:layout_height="16dp"
+            android:layout_marginBottom="1dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:src="@drawable/widget_ant_worker"
+            android:importantForAccessibility="no" />
 
         <TextView
             android:id="@+id/tv_band"

@@ -17,14 +17,20 @@ import es.antonborri.home_widget.HomeWidgetProvider
  */
 class AppWidgetProvider : HomeWidgetProvider() {
 
-    private data class Band(val bg: Int, val fg: Int, val fallbackLabel: String)
+    private data class Band(
+        val bg: Int,
+        val fg: Int,
+        val fallbackLabel: String,
+        /** Winged queen once a flight is plausible; wingless worker below. */
+        val winged: Boolean,
+    )
 
     private val bands = mapOf(
-        "noFly" to Band(R.drawable.widget_bg_nofly, R.color.widget_fg_nofly, "No-fly"),
-        "quiet" to Band(R.drawable.widget_bg_quiet, R.color.widget_fg_quiet, "Quiet"),
-        "watchful" to Band(R.drawable.widget_bg_watchful, R.color.widget_fg_watchful, "Watchful"),
-        "promising" to Band(R.drawable.widget_bg_promising, R.color.widget_fg_promising, "Promising"),
-        "prime" to Band(R.drawable.widget_bg_prime, R.color.widget_fg_prime, "Prime"),
+        "noFly" to Band(R.drawable.widget_bg_nofly, R.color.widget_fg_nofly, "No-fly", false),
+        "quiet" to Band(R.drawable.widget_bg_quiet, R.color.widget_fg_quiet, "Quiet", false),
+        "watchful" to Band(R.drawable.widget_bg_watchful, R.color.widget_fg_watchful, "Watchful", false),
+        "promising" to Band(R.drawable.widget_bg_promising, R.color.widget_fg_promising, "Promising", true),
+        "prime" to Band(R.drawable.widget_bg_prime, R.color.widget_fg_prime, "Prime", true),
     )
 
     override fun onUpdate(
@@ -84,6 +90,16 @@ class AppWidgetProvider : HomeWidgetProvider() {
                 band?.bg ?: R.drawable.widget_bg_neutral
             )
             val fg = context.getColor(band?.fg ?: R.color.widget_text)
+
+            // The ant grows wings once a flight is on the cards, so the glyph
+            // itself carries the forecast rather than just decorating it.
+            setImageViewResource(
+                R.id.iv_ant,
+                if (band?.winged == true) R.drawable.widget_ant_queen
+                else R.drawable.widget_ant_worker
+            )
+            setInt(R.id.iv_ant, "setColorFilter", fg)
+
             setTextViewText(R.id.tv_band, label)
             setTextColor(R.id.tv_band, fg)
             if (layout == R.layout.widget_layout) {
@@ -102,7 +118,11 @@ class AppWidgetProvider : HomeWidgetProvider() {
             // Announce the state, not just the colour, to TalkBack users.
             setContentDescription(
                 R.id.widget_root,
-                context.getString(R.string.widget_content_description, label)
+                context.getString(
+                    if (band?.winged == true) R.string.widget_content_description_queen
+                    else R.string.widget_content_description,
+                    label
+                )
             )
         }
     }
