@@ -415,6 +415,39 @@ def write_widget_glyphs(repo, worker, queen):
     return shapes, BASE_DP
 
 
+def tile_icon(art, size_px):
+    """Square monochrome icon for the Quick Settings tile.
+
+    The widget glyph is 2:1; a Quick Settings slot is square and only ~24dp,
+    so the ant is fitted into a square with breathing room rather than
+    letterboxed into a sliver.
+    """
+    a = np.asarray(Image.fromarray(np.clip(art, 0, 255).astype(np.uint8)))
+    alpha = np.clip(a[..., 3].astype(np.float32) * 3.0, 0, 255)
+    ys, xs = np.nonzero(alpha > 8)
+    out = np.zeros(a.shape, np.uint8)
+    out[..., 0:3] = 255
+    out[..., 3] = alpha.astype(np.uint8)
+    im = Image.fromarray(out).crop((xs.min(), ys.min(), xs.max() + 1, ys.max() + 1))
+    inner = int(size_px * 0.88)
+    w = inner
+    h = max(1, round(inner * im.size[1] / im.size[0]))
+    im = im.resize((w, h), Image.LANCZOS)
+    square = Image.new('RGBA', (size_px, size_px), (0, 0, 0, 0))
+    square.alpha_composite(im, ((size_px - w) // 2, (size_px - h) // 2))
+    return square
+
+
+def write_tile_icons(repo, worker, queen):
+    dens = {'mdpi': 24, 'hdpi': 36, 'xhdpi': 48, 'xxhdpi': 72, 'xxxhdpi': 96}
+    for name, art in (('worker', worker), ('queen', queen)):
+        for d, px in dens.items():
+            path = os.path.join(repo, 'android', 'app', 'src', 'main', 'res',
+                                'drawable-%s' % d)
+            os.makedirs(path, exist_ok=True)
+            tile_icon(art, px).save(os.path.join(path, 'ic_qs_ant_%s.png' % name))
+
+
 def reach_pct(im):
     a = np.asarray(im.split()[3])
     ys, xs = np.nonzero(a > 8)
@@ -454,6 +487,10 @@ if __name__ == '__main__':
     for k, v in shapes.items():
         print('widget glyph %-6s mdpi-equivalent %ddp wide, aspect %.2f'
               % (k, base_dp, v[0] / v[1]))
+
+    # Quick Settings tile icons: square, monochrome, tinted by the system.
+    write_tile_icons(repo, worker, queen)
+    print('quick-settings tile icons written (24/36/48/72/96 px)')
 
     print('foreground reach %.1f%% of layer -> %.1f%% of icon (safe <= 66%%)'
           % (reach_pct(fg), reach_pct(fg) * 0.68))

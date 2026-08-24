@@ -3,6 +3,7 @@
     <string name="appwidget_description">Shows today\'s Ant Flight Index at your location.</string>
     <string name="loading">Loading</string>
     <string name="widget_heading">Ant flights</string>
+    <string name="qs_tile_label">Ant flights</string>
     <string name="widget_calculating">…</string>
     <string name="widget_content_description">Ant flight outlook: %1$s. Opens the app.</string>
     <string name="widget_content_description_queen">Ant flight outlook: %1$s. Winged queens are likely. Opens the app.</string>

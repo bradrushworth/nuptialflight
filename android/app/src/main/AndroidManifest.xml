@@ -54,6 +54,20 @@
             </intent-filter>
         </activity>
 
+        <!-- Quick Settings tile: Android has no third-party lock-screen
+             widgets, so this is the glance-without-unlocking surface - pull
+             the shade down on the lock screen and it is there. -->
+        <service
+            android:name=".FlightTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_qs_ant_worker"
+            android:label="@string/qs_tile_label"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
         <receiver
             android:name="AppWidgetProvider"
             android:exported="false">
