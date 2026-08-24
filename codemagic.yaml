@@ -230,7 +230,10 @@ workflows:
           failure: true
       google_play:
         credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
-        track: beta
+        # Internal testing, not open testing: releases reach the internal
+        # tester list only, so a bad build never lands in front of the public
+        # beta audience. Promote to a wider track from the Play Console.
+        track: internal
         submit_as_draft: false
       app_store_connect:
         auth: integration
