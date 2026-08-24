@@ -1,50 +1,62 @@
 {
-  "name": "Ant Nuptial Flight Predictor",
-  "short_name": "Ant Flight",
-  "categories": [
-    "ant",
-    "queen",
-    "nuptial",
-    "flight",
-    "flying",
-    "weather",
-    "climate",
-    "formicarium",
-    "predictor",
-    "predict",
-    "insect",
-    "nature",
-    "outdoors"
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#607D8B",
-  "description": "Predict when queen ants are flying near you!",
-  "orientation": "any",
-  "iarc_rating_id": "1eb7c53e-ae3d-4eaa-b1b0-69099ca94bf5",
-  "prefer_related_applications": false,
-  "related_applications": [
-    {
-      "platform": "play",
-      "url": "https://play.google.com/store/apps/details?id=au.com.bitbot.nuptialflight",
-      "id": "au.com.bitbot.nuptialflight"
-    },
-    {
-      "platform": "itunes",
-      "url": "https://apps.apple.com/us/app/ant-nuptial-flight-predictor/id1603373687"
-    }
-  ],
-  "icons": [
-    {
-      "src": "icons/android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icons/android-chrome-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+    "name": "Ant Nuptial Flight Predictor",
+    "short_name": "Ant Flight",
+    "categories": [
+        "ant",
+        "queen",
+        "nuptial",
+        "flight",
+        "flying",
+        "weather",
+        "climate",
+        "formicarium",
+        "predictor",
+        "predict",
+        "insect",
+        "nature",
+        "outdoors"
+    ],
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#F2EADA",
+    "theme_color": "#F2EADA",
+    "description": "Predict when queen ants are flying near you!",
+    "orientation": "any",
+    "iarc_rating_id": "1eb7c53e-ae3d-4eaa-b1b0-69099ca94bf5",
+    "prefer_related_applications": false,
+    "related_applications": [
+        {
+            "platform": "play",
+            "url": "https://play.google.com/store/apps/details?id=au.com.bitbot.nuptialflight",
+            "id": "au.com.bitbot.nuptialflight"
+        },
+        {
+            "platform": "itunes",
+            "url": "https://apps.apple.com/us/app/ant-nuptial-flight-predictor/id1603373687"
+        }
+    ],
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icons/Icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
 }
