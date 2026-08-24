@@ -22,6 +22,7 @@
         android:name="${applicationName}"
         tools:replace="android:label"
         android:icon="@mipmap/ic_launcher"
+        android:dataExtractionRules="@xml/backup_rules"
         android:label="Ant Flight">
 
         <activity

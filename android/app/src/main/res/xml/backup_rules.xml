@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The home_widget store is a local cache of the last computed outlook, not
+  user content. Letting Android Auto Backup restore it onto a new install put
+  a last_check_date on the device that predated the install by days, which
+  both defeated the first-run guard in getReportedFlightsNearMe and opened a
+  multi-day lookback window - a fresh install was greeted by a "current
+  nuptial flight" push about sightings from two days earlier.
+
+  minSdk is 32, so cloud-backup and device-transfer rules here are the only
+  ones that apply; there is no need for a legacy fullBackupContent file.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" path="HomeWidgetPreferences.xml" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" path="HomeWidgetPreferences.xml" />
+    </device-transfer>
+</data-extraction-rules>

@@ -49,6 +49,33 @@ const notificationIdPercentage = 101;
 bool shouldNotifyReports({required bool firstRun, required int numFlights}) =>
     numFlights > 0 && !firstRun;
 
+/// How far back to look when there is no usable previous check time.
+const defaultReportWindowMinutes = 30;
+
+/// The furthest back a report alert may ever look.
+///
+/// The alert calls itself a *current* flight and asks the user to go outside
+/// and look, so it must only cover sightings that could still be happening.
+/// Three hours is generous for a nuptial flight and still honest.
+const maxReportWindowMinutes = 180;
+
+/// The lookback window for the nearby-report check, in minutes.
+///
+/// This used to be simply "time since the last check", which is unbounded, and
+/// [lastCheck] is not trustworthy: Android Auto Backup restores the stored
+/// timestamp onto a fresh install, so it can predate the install by days. That
+/// produced a 2911-minute window on a brand-new device and an immediate push
+/// about sightings two days old. Clamping here makes the alert's honesty
+/// depend on the report's own age rather than on local bookkeeping.
+int reportWindowMinutes({required DateTime now, required DateTime? lastCheck}) {
+  if (lastCheck == null) return defaultReportWindowMinutes;
+  final elapsed = now.difference(lastCheck).inMinutes;
+  // A clock change, or prefs restored from another device, can leave a
+  // timestamp at or after `now`; that must not mean an empty window.
+  if (elapsed <= 0) return defaultReportWindowMinutes;
+  return elapsed > maxReportWindowMinutes ? maxReportWindowMinutes : elapsed;
+}
+
 // Background fetch runs without a UI context, so we stash the last known position
 // here (geolocator forbids a fresh GPS fix in the background) and reuse it for
 // the proximity and percentage checks.
@@ -255,10 +282,10 @@ Future<void> getReportedFlightsNearMe() async {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  // Work out how many minutes have elapsed since the last check (default/ floor
-  // 30) so we only notify about genuinely *new* nearby reports, then persist this
-  // check time so the next run uses a sliding window.
-  int minutes;
+  // Work out how far back to look for nearby reports, then persist this check
+  // time so the next run uses a sliding window. The window is clamped (see
+  // reportWindowMinutes) so a stale or restored timestamp can never turn this
+  // into a push about days-old sightings.
   DateTime now = DateTime.now();
   String? lastCheckStr;
   try {
@@ -267,30 +294,28 @@ Future<void> getReportedFlightsNearMe() async {
     debugPrint("Failed to get last_check_date: $e");
   }
 
+  DateTime? lastCheck;
+  if (lastCheckStr != null) {
+    try {
+      lastCheck = DateTime.parse(lastCheckStr);
+    } catch (e) {
+      debugPrint("Failed to parse last_check_date '$lastCheckStr': $e");
+    }
+  }
+
   // No stored check means this is the first run after install: seed the
   // sliding window below, but stay silent. A brand-new user should not be
   // greeted by a "flights reported near you" push before they have even
   // opened the app.
   final bool firstRun = lastCheckStr == null;
 
-  if (lastCheckStr == null) {
-    minutes = 30;
-  } else {
-    try {
-      DateTime lastCheck = DateTime.parse(lastCheckStr);
-      minutes = (now.millisecondsSinceEpoch - lastCheck.millisecondsSinceEpoch) ~/ 1000 ~/ 60;
-    } catch (e) {
-      minutes = 30;
-    }
-  }
+  int minutes = reportWindowMinutes(now: now, lastCheck: lastCheck);
 
   try {
     await HomeWidget.saveWidgetData<String>('last_check_date', now.toIso8601String());
   } catch (e) {
     debugPrint("Failed to save last_check_date: $e");
   }
-
-  if (minutes <= 0) minutes = 30;
 
   int numFlights = 0;
   int closestDistance = 0;
