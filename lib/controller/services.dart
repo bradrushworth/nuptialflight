@@ -41,6 +41,14 @@ const notificationChannelIdPercentage = 'percentage';
 // Android notification id for the percentage alert (used to update/replace it).
 const notificationIdPercentage = 101;
 
+/// Whether a "flights reported near you" notification should be raised.
+/// [firstRun] is true when no previous check timestamp was stored, i.e. this
+/// is the first background pass after an install: that pass only seeds the
+/// sliding window, so a new user is never greeted by a push about reports
+/// that predate them.
+bool shouldNotifyReports({required bool firstRun, required int numFlights}) =>
+    numFlights > 0 && !firstRun;
+
 // Background fetch runs without a UI context, so we stash the last known position
 // here (geolocator forbids a fresh GPS fix in the background) and reuse it for
 // the proximity and percentage checks.
@@ -259,6 +267,12 @@ Future<void> getReportedFlightsNearMe() async {
     debugPrint("Failed to get last_check_date: $e");
   }
 
+  // No stored check means this is the first run after install: seed the
+  // sliding window below, but stay silent. A brand-new user should not be
+  // greeted by a "flights reported near you" push before they have even
+  // opened the app.
+  final bool firstRun = lastCheckStr == null;
+
   if (lastCheckStr == null) {
     minutes = 30;
   } else {
@@ -290,7 +304,11 @@ Future<void> getReportedFlightsNearMe() async {
   });
   debugPrint('getRecentFlightsNearMe: Reported local nuptial flights: $numFlights in $minutes mins');
 
-  if (numFlights > 0) {
+  if (numFlights > 0 && firstRun) {
+    debugPrint('getRecentFlightsNearMe: first run since install - '
+        'seeding the window, not notifying');
+  }
+  if (shouldNotifyReports(firstRun: firstRun, numFlights: numFlights)) {
     flutterLocalNotificationsPlugin.show(
       id: notificationIdReport,
       title: backgroundL10n().notifReportTitle,

@@ -227,25 +227,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void _loadData() async {
     await dotenv.load(fileName: 'assets/.env');
 
-    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
-
-    // Requesting notification permission can block the first data fetch, so do
-    // not await it. The permission prompt resolves in parallel with the network
-    // calls that actually fill the first page.
-    unawaited(
-      flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-          ?.requestNotificationsPermission(),
-    );
-
-    // Get location data now and every hour
-    _getLocation(false);
-    _everyHour = Timer.periodic(Duration(hours: 1), (Timer t) {
-      debugPrint('Periodic state refresh...');
-      _getLocation(true);
-    });
-
     // Get platform information and then rebuild the menu
     PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
       setState(() {
@@ -256,15 +237,45 @@ class _MyHomePageState extends State<MyHomePage> {
         createMenu(); // After version and buildNumber is loaded
       });
     });
+
+    // Location first, and the notification prompt strictly after it. Android
+    // only presents one permission dialog at a time: a location request made
+    // while the notification dialog is still up is dropped without ever
+    // calling back, which left a fresh install spinning on "waiting for your
+    // location" until the app was restarted. Asking for notifications second
+    // is also the better sell — by then the forecast is on screen.
+    await _getLocation(false);
+    _everyHour = Timer.periodic(Duration(hours: 1), (Timer t) {
+      debugPrint('Periodic state refresh...');
+      _getLocation(true);
+    });
+
+    await _requestNotificationPermission();
   }
 
-  void _getLocation(bool forceUpdate) {
+  /// Asks for the Android notification permission (no-op elsewhere, and on
+  /// Android < 13). Never rethrows: a refused or unavailable prompt must not
+  /// break the page that has already loaded.
+  Future<void> _requestNotificationPermission() async {
+    try {
+      await FlutterLocalNotificationsPlugin()
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+          ?.requestNotificationsPermission();
+    } catch (e) {
+      debugPrint('Notification permission request failed: $e');
+    }
+  }
+
+  /// Resolves once the location prompt (and the fetch it triggers) has
+  /// settled — errors included, since they are handled inline. Callers await
+  /// it to keep permission dialogs from overlapping.
+  Future<void> _getLocation(bool forceUpdate) {
     setState(() {
       errorMessage = null;
     });
 
     if (fixedLocation) {
-      _getWeather()
+      return _getWeather()
           .then(
             (nothing) =>
                 debugPrint("findLocation(fixed): _dailyPercentage=" + _dailyPercentage.toString()),
@@ -274,7 +285,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // Get a fast passive location first and render the page. Only fall back to
       // an active GPS fix (with a short timeout) if the passive lookup failed,
       // which avoids doing the whole 3-call weather fetch twice on every launch.
-      weatherFetcher.findLocation(false).then((updated) {
+      return weatherFetcher.findLocation(false).then((updated) {
         if (updated || forceUpdate) {
           return _getWeather().then((_) => _pushAppWidget());
         }
