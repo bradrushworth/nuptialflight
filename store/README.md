@@ -43,3 +43,20 @@ location with a Prime/Promising forecast first (edit the lat/lon in the
 geolocation stub). `scripts/store/compose_screenshots.py` renders the captioned
 frames; `scripts/store/gen_listings.py` rewrites the listing texts. Raw
 captures land in `store/raw/` (gitignored).
+
+## App icon
+
+`store/icon/play_icon_512.png` is the Google Play store-listing icon (512x512,
+opaque PNG), generated from `assets/icon/icon.png` which in turn comes from
+`scripts/icon/gen_icon.py`. Regenerate with:
+
+```
+python scripts/icon/gen_icon.py
+python -c "from PIL import Image; Image.open('assets/icon/icon.png').convert('RGB').resize((512,512), Image.LANCZOS).save('store/icon/play_icon_512.png')"
+```
+
+Play's store-listing icon is a single app-wide asset: the per-language
+Graphics pages display it, but changing it on the default listing changes it
+everywhere (the Publishing overview records one "Change app icon" item, not
+one per locale). The iOS App Store icon is not uploaded at all - it is read
+from the app binary, so it ships with the build.
