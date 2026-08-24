@@ -3,15 +3,29 @@ package au.com.bitbot.nuptialflight
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.TypedValue
+import android.os.Build
+import android.util.SizeF
 import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetLaunchIntent
 import es.antonborri.home_widget.HomeWidgetProvider
 
+/**
+ * Home-screen widget for the Ant Flight Index. The Flutter side saves the
+ * band key plus pre-localized band/odds strings; this side only picks
+ * colours (day/night resources) and layouts (compact vs full via size
+ * mapping on Android 12+).
+ */
 class AppWidgetProvider : HomeWidgetProvider() {
 
-    val greenThreshold = 60
-    val amberThreshold = 50
+    private data class Band(val bg: Int, val fg: Int, val fallbackLabel: String)
+
+    private val bands = mapOf(
+        "noFly" to Band(R.drawable.widget_bg_nofly, R.color.widget_fg_nofly, "No-fly"),
+        "quiet" to Band(R.drawable.widget_bg_quiet, R.color.widget_fg_quiet, "Quiet"),
+        "watchful" to Band(R.drawable.widget_bg_watchful, R.color.widget_fg_watchful, "Watchful"),
+        "promising" to Band(R.drawable.widget_bg_promising, R.color.widget_fg_promising, "Promising"),
+        "prime" to Band(R.drawable.widget_bg_prime, R.color.widget_fg_prime, "Prime"),
+    )
 
     override fun onUpdate(
         context: Context,
@@ -20,60 +34,76 @@ class AppWidgetProvider : HomeWidgetProvider() {
         widgetData: SharedPreferences
     ) {
         appWidgetIds.forEach { widgetId ->
-            val views = RemoteViews(context.packageName, R.layout.widget_layout).apply {
-
-                // Open App on Widget Click
-                val pendingIntent = HomeWidgetLaunchIntent.getActivity(
-                    context,
-                    MainActivity::class.java
+            val views = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                RemoteViews(
+                    mapOf(
+                        SizeF(48f, 48f) to buildViews(context, widgetData, R.layout.widget_layout_small),
+                        SizeF(140f, 48f) to buildViews(context, widgetData, R.layout.widget_layout),
+                    )
                 )
-                setOnClickPendingIntent(R.id.widget_root, pendingIntent)
-
-                val percentage = widgetData.getInt("_percentage", 0)
-                var percentageText = getEmojiText(percentage)
-                if (percentage == 0) {
-                    percentageText = context.getString(R.string.widget_calculating)
-                    setTextViewTextSize(R.id.tv_percentage, TypedValue.COMPLEX_UNIT_PT, 5.0f)
-                } else {
-                    setTextViewTextSize(R.id.tv_percentage, TypedValue.COMPLEX_UNIT_PT, 11.0f)
-                }
-                setTextViewTextSize(R.id.tv_heading, TypedValue.COMPLEX_UNIT_PT, 7.0f)
-
-                // Colours come from day/night resources (values/ and values-night/),
-                // so the widget follows the system theme instead of hardcoding pure
-                // RED/YELLOW/GREEN with black text. Severity picks a rounded
-                // background drawable; the corner radius matches the system widget
-                // radius on Android 12+ (values-v31).
-                setTextColor(R.id.tv_heading, context.getColor(R.color.widget_text_secondary))
-                setTextColor(R.id.tv_percentage, context.getColor(R.color.widget_text))
-                setTextViewText(R.id.tv_heading, context.getString(R.string.widget_heading))
-                setTextViewText(R.id.tv_percentage, percentageText)
-                val background = when {
-                    percentage == 0 -> R.drawable.widget_bg_neutral
-                    percentage < amberThreshold -> R.drawable.widget_bg_low
-                    percentage < greenThreshold -> R.drawable.widget_bg_mid
-                    else -> R.drawable.widget_bg_high
-                }
-                setInt(R.id.linear_layout, "setBackgroundResource", background)
-
-                // Announce the state, not just the emoji, to TalkBack users.
-                setContentDescription(
-                    R.id.widget_root,
-                    context.getString(R.string.widget_content_description, percentage)
-                )
+            } else {
+                buildViews(context, widgetData, R.layout.widget_layout)
             }
             appWidgetManager.updateAppWidget(widgetId, views)
         }
     }
 
-    fun getEmojiText(percentage: Int): String {
-        if (percentage < 45) return "👎"
-        if (percentage < 50) return "🤏"
-        if (percentage < 55) return "🤞"
-        if (percentage < 60) return "🐜👌"
-        if (percentage < 65) return "🐜👍"
-        if (percentage < 70) return "🐜💪"
-        return "🐜🫶"
-    }
+    private fun buildViews(
+        context: Context,
+        widgetData: SharedPreferences,
+        layout: Int
+    ): RemoteViews {
+        val percentage = widgetData.getInt("_percentage", 0)
+        // Band key written by 2.20+; fall back to the old percentage
+        // thresholds right after an upgrade so the widget is never blank.
+        val bandKey = widgetData.getString("_band", null).takeUnless { it.isNullOrEmpty() }
+            ?: when {
+                percentage <= 0 -> ""
+                percentage < 50 -> "quiet"
+                percentage < 60 -> "watchful"
+                else -> "prime"
+            }
+        val band = bands[bandKey]
+        val label = widgetData.getString("_band_label", null).takeUnless { it.isNullOrEmpty() }
+            ?: band?.fallbackLabel
+            ?: context.getString(R.string.widget_calculating)
+        val odds = if (band == null) ""
+            else widgetData.getString("_odds", null).orEmpty()
 
+        return RemoteViews(context.packageName, layout).apply {
+            // Open App on Widget Click
+            val pendingIntent = HomeWidgetLaunchIntent.getActivity(
+                context,
+                MainActivity::class.java
+            )
+            setOnClickPendingIntent(R.id.widget_root, pendingIntent)
+
+            setInt(
+                R.id.linear_layout,
+                "setBackgroundResource",
+                band?.bg ?: R.drawable.widget_bg_neutral
+            )
+            val fg = context.getColor(band?.fg ?: R.color.widget_text)
+            setTextViewText(R.id.tv_band, label)
+            setTextColor(R.id.tv_band, fg)
+            if (layout == R.layout.widget_layout) {
+                setTextViewText(R.id.tv_odds, odds)
+                setTextColor(R.id.tv_odds, context.getColor(R.color.widget_text_secondary))
+                setTextColor(R.id.tv_heading, context.getColor(R.color.widget_text_secondary))
+                // Long localized labels (e.g. "Vielversprechend") get a
+                // smaller size so they still fit on one line.
+                setTextViewTextSize(
+                    R.id.tv_band,
+                    android.util.TypedValue.COMPLEX_UNIT_SP,
+                    if (label.length > 10) 17.0f else 22.0f
+                )
+            }
+
+            // Announce the state, not just the colour, to TalkBack users.
+            setContentDescription(
+                R.id.widget_root,
+                context.getString(R.string.widget_content_description, label)
+            )
+        }
+    }
 }

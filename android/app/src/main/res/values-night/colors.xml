@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Night variants of the widget palette: darker grounds, light text. -->
-    <color name="widget_bg_low">#6E312B</color>
-    <color name="widget_bg_mid">#6B5A1E</color>
-    <color name="widget_bg_high">#2E5231</color>
+    <!-- Night variants of the widget band palette: dark grounds, light label
+         colours, mirroring the app's dark-theme bandColors. -->
+    <color name="widget_bg_nofly">#262B27</color>
+    <color name="widget_fg_nofly">#9AA69C</color>
+    <color name="widget_bg_quiet">#3A2523</color>
+    <color name="widget_fg_quiet">#E09A92</color>
+    <color name="widget_bg_watchful">#3A3120</color>
+    <color name="widget_fg_watchful">#DCB573</color>
+    <color name="widget_bg_promising">#2C331F</color>
+    <color name="widget_fg_promising">#AFC97A</color>
+    <color name="widget_bg_prime">#22352A</color>
+    <color name="widget_fg_prime">#7FCE96</color>
     <color name="widget_bg_neutral">#2A2C2F</color>
     <color name="widget_text">#F1F3F4</color>
     <color name="widget_text_secondary">#C7CACD</color>

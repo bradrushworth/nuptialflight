@@ -1,3 +1,6 @@
+<!-- Full widget: heading, Ant Flight Index band, calibrated odds. The band
+     colour arrives via the background drawable + fg text colour set from
+     AppWidgetProvider; text content is pre-localized by the Flutter side. -->
 <FrameLayout
     android:id="@+id/widget_root"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -10,37 +13,44 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_gravity="center"
         android:padding="@dimen/widget_padding"
-        android:layout_margin="0dp"
         android:background="@drawable/widget_bg_neutral">
 
         <TextView
             android:id="@+id/tv_heading"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="1dp"
-            android:paddingTop="2dp"
-            android:layout_margin="0dp"
             android:gravity="center"
-            android:layout_gravity="top"
-            android:text="@string/loading"
+            android:maxLines="1"
+            android:text="@string/widget_heading"
             android:textColor="@color/widget_text_secondary"
-            android:textStyle="bold"
-            android:textSize="12sp" />
+            android:letterSpacing="0.08"
+            android:textAllCaps="true"
+            android:textSize="10sp" />
 
         <TextView
-            android:id="@+id/tv_percentage"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_band"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="1dp"
-            android:paddingTop="2dp"
-            android:layout_margin="0dp"
+            android:layout_marginTop="2dp"
             android:gravity="center"
-            android:layout_gravity="bottom"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
             android:text=""
             android:textColor="@color/widget_text"
-            android:textSize="24sp" />
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/tv_odds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text=""
+            android:textColor="@color/widget_text_secondary"
+            android:textSize="12sp" />
 
     </LinearLayout>
 </FrameLayout>

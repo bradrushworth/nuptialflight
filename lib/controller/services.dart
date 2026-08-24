@@ -10,6 +10,7 @@ import 'package:home_widget/home_widget.dart';
 
 import '../l10n/app_localizations.dart';
 import '../responses/onecall_response.dart';
+import '../view/l10n_ext.dart' show bandLabelOf;
 import 'arangodb.dart';
 import 'flight_index.dart';
 import 'geo.dart';
@@ -368,7 +369,12 @@ Future<void> getServicePercentage() async {
       band = bandFor(score, FlightIndex().percentile(score, weather.lat!, month));
     });
     debugPrint('getServicePercentage: Percentage for nuptial flights: $percentage');
-    updateAppWidget([percentage]);
+    updateAppWidget(
+      percentage,
+      bandKey: band.name,
+      bandLabel: bandLabelOf(backgroundL10n(), band),
+      oddsText: backgroundL10n().oneInN(FlightIndex().oneInN(score)),
+    );
     try {
       await HomeWidget.saveWidgetData<int>(
         'last_onecall_check',

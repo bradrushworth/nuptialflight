@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="appwidget_description">Shows the likelihood of a nuptial flight.</string>
+    <string name="appwidget_description">Shows today\'s Ant Flight Index at your location.</string>
     <string name="loading">Loading</string>
-    <string name="widget_heading">Ant
-Nuptial
-Flight</string>
-    <string name="widget_calculating">Calculating</string>
-    <string name="widget_content_description">Nuptial flight likelihood %1$d percent. Opens the app.</string>
+    <string name="widget_heading">🐜 Ant flights</string>
+    <string name="widget_ant">🐜</string>
+    <string name="widget_calculating">…</string>
+    <string name="widget_content_description">Ant flight outlook: %1$s. Opens the app.</string>
 </resources>

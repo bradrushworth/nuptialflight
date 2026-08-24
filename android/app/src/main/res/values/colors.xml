@@ -2,12 +2,20 @@
 <resources>
     <color name="ic_launcher_background">#ffffff</color>
 
-    <!-- Home-screen widget palette. Severity hues are softened from the old
-         pure RED/YELLOW/GREEN so text keeps contrast, with darker variants in
-         values-night. Text colors pair with each background. -->
-    <color name="widget_bg_low">#E5A29A</color>
-    <color name="widget_bg_mid">#EFD98B</color>
-    <color name="widget_bg_high">#A5CF9F</color>
+    <!-- Home-screen widget palette: the app's Ant Flight Index band colours
+         (lib/view/verdict.dart bandColors), light theme here with darker
+         variants in values-night. Each band pairs a tinted ground (bg) with
+         a strong label colour (fg). -->
+    <color name="widget_bg_nofly">#ECEDEA</color>
+    <color name="widget_fg_nofly">#55615A</color>
+    <color name="widget_bg_quiet">#F6E2DF</color>
+    <color name="widget_fg_quiet">#A04A42</color>
+    <color name="widget_bg_watchful">#F3E5C8</color>
+    <color name="widget_fg_watchful">#8A5B10</color>
+    <color name="widget_bg_promising">#E9F0D8</color>
+    <color name="widget_fg_promising">#5E7D2E</color>
+    <color name="widget_bg_prime">#D7E8DC</color>
+    <color name="widget_fg_prime">#2E7D43</color>
     <color name="widget_bg_neutral">#E8EAED</color>
     <color name="widget_text">#1A1C1E</color>
     <color name="widget_text_secondary">#44474A</color>

@@ -276,14 +276,14 @@ class _MyHomePageState extends State<MyHomePage> {
       // which avoids doing the whole 3-call weather fetch twice on every launch.
       weatherFetcher.findLocation(false).then((updated) {
         if (updated || forceUpdate) {
-          return _getWeather().then((_) => updateAppWidget(_dailyPercentage));
+          return _getWeather().then((_) => _pushAppWidget());
         }
         debugPrint("findLocation(passive): no update _percentage=" + _dailyPercentage.toString());
         // Passive location unavailable (e.g. first launch) - try active GPS.
         return weatherFetcher
             .findLocation(true)
             .then((updated2) => updated2 ? _getWeather() : Future.value())
-            .then((_) => updateAppWidget(_dailyPercentage))
+            .then((_) => _pushAppWidget())
             .then(
               (nothing) =>
                   debugPrint("findLocation(active): _percentage=" + _dailyPercentage.toString()),
@@ -433,6 +433,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   FlightBand _dailyBandAt(int i) =>
       bandFor(_dailyScore[i], _dailyPercentileAt(i));
+
+  /// Sends today's outlook to the home-screen widget: legacy percentage plus
+  /// the localized Ant Flight Index band and odds. Uses the device-locale
+  /// localizations ([backgroundL10n]) so it also matches what the background
+  /// refresh writes.
+  Future<void> _pushAppWidget() {
+    final FlightBand band = _dailyBandAt(0);
+    final AppLocalizations t = backgroundL10n();
+    return updateAppWidget(
+      _dailyPercentage[0],
+      bandKey: band.name,
+      bandLabel: bandLabelOf(t, band),
+      oddsText: t.oneInN(FlightIndex().oneInN(_dailyScore[0])),
+    );
+  }
 
   /// BCP-47 tag of the ambient locale, for intl date formats. The
   /// localizations delegates preload the matching date symbols.

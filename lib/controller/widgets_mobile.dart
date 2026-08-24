@@ -38,14 +38,25 @@ Future<void> backgroundCallback(Uri? uri) async {
   }
 }
 
-Future<void> updateAppWidget(List<int> percentage) async {
-  await HomeWidget.saveWidgetData<int>('_percentage', percentage[0]);
+/// Pushes today's outlook to the home-screen widget. [percentage] keeps the
+/// legacy key the iOS widget reads; the Android widget prefers the Ant Flight
+/// Index fields — [bandKey] is the FlightBand enum name, [bandLabel] and
+/// [oddsText] arrive pre-localized because the RemoteViews side has no access
+/// to the Flutter localizations.
+Future<void> updateAppWidget(
+  int percentage, {
+  String bandKey = '',
+  String bandLabel = '',
+  String oddsText = '',
+}) async {
+  await HomeWidget.saveWidgetData<int>('_percentage', percentage);
+  await HomeWidget.saveWidgetData<String>('_band', bandKey);
+  await HomeWidget.saveWidgetData<String>('_band_label', bandLabel);
+  await HomeWidget.saveWidgetData<String>('_odds', oddsText);
   await HomeWidget.updateWidget(
       name: 'AppWidgetProvider', iOSName: 'NuptialWidget');
 }
 
 Future<void> clearAppWidget() async {
-  await HomeWidget.saveWidgetData<int>('_percentage', 0);
-  await HomeWidget.updateWidget(
-      name: 'AppWidgetProvider', iOSName: 'NuptialWidget');
+  await updateAppWidget(0);
 }
