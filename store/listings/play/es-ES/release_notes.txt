@@ -1,0 +1,9 @@
+Nuevo icono: una reina de hormiga toro australiana, dibujada para esta app.
+
+Widget rehecho: la franja del Índice de Vuelo Nupcial del día, la probabilidad real y una hormiga a la que le salen alas cuando un vuelo es probable.
+
+Nuevo mosaico en Ajustes rápidos – consulta la previsión sin desbloquear.
+
+Corregido: el primer inicio podía quedarse esperando la ubicación.
+
+Corregido: una instalación nueva ya no avisa de un vuelo ya pasado.

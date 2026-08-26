@@ -1,0 +1,9 @@
+Ikon baru: ratu semut Myrmecia Australia, digambar khusus untuk aplikasi ini.
+
+Widget dibangun ulang: pita Indeks Penerbangan Nuptial hari itu, peluang yang jujur, dan semut yang tumbuh sayap saat penerbangan diperkirakan terjadi.
+
+Ubin Pengaturan Cepat baru – lihat prakiraan tanpa membuka kunci.
+
+Diperbaiki: pembukaan pertama bisa tertahan saat menunggu lokasi.
+
+Diperbaiki: instalasi baru tidak lagi memberi tahu penerbangan yang sudah lewat.
