@@ -188,7 +188,11 @@ class ArangoSingleton {
       // lat/lon at the top level so training can filter by location without
       // digging into nested weather (see docs/model_training_findings.md
       // Part 4 #3).
-      if (leadUp != null && _weather != null && _currentWeather != null) {
+      // _weather/_currentWeather are already non-null here (promoted by the
+      // `!.toJson()` dereferences in the flights/current blocks above, which
+      // would have thrown first if either were actually null at runtime), so
+      // only leadUp needs an explicit null guard.
+      if (leadUp != null) {
         try {
           if (!await _ensureCollection('leadup')) return;
           final collection = await _arangoClient!.collection('leadup');
@@ -262,7 +266,11 @@ class ArangoSingleton {
     }
     {
       // New schema (One Call 4.0, lead-up antecedent weather) for ML training.
-      if (leadUp != null && _weather != null && _currentWeather != null) {
+      // _weather/_currentWeather are already non-null here (promoted by the
+      // `!.toJson()` dereferences in the flights/current blocks above, which
+      // would have thrown first if either were actually null at runtime), so
+      // only leadUp needs an explicit null guard.
+      if (leadUp != null) {
         try {
           if (!await _ensureCollection('leadup')) return;
           final collection = await _arangoClient!.collection('leadup');
