@@ -331,9 +331,10 @@ class WeatherFetcher {
     // past (start = today UTC midnight - leadUpDays) and sized so a single
     // page holds the antecedent days AND the 8-day forecast (leadUpDays + 8
     // <= 10 records = the 4.0 page cap). We then split the combined `data`
-    // array at today's UTC midnight:
-    //   - dt < today  -> antecedent / "lead-up" days (training features)
-    //   - dt >= today -> forecast, in order, so daily[0] is still *today*
+    // array at the LOCATION-LOCAL day boundary via splitDaily() (see its doc
+    // comment): records whose local day bucket is before local "today" become
+    // antecedent / "lead-up" days (training features); the rest become the
+    // forecast, in order, so daily[0] is still *local today*.
     // This collects the lead-up weather that docs/model_training_findings.md
     // (Part 4 #3) named as the main accuracy lever - at ZERO extra One Call
     // calls: the daily request the app already makes simply reaches a little
