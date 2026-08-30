@@ -104,7 +104,7 @@ class FlightTileService : TileService() {
         val BANDS = mapOf(
             "noFly" to TileBand("No-fly", false),
             "quiet" to TileBand("Quiet", false),
-            "watchful" to TileBand("Watchful", false),
+            "watchful" to TileBand("Fair", false),
             "promising" to TileBand("Promising", true),
             "prime" to TileBand("Prime", true),
         )
