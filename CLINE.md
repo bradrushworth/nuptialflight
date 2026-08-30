@@ -31,38 +31,67 @@ flutter analyze stays at 0 errors (only pre-existing deprecation info-warnings).
 ## Key source files
 - `lib/main.dart` — app entry (`main()`), `MyHomePage` / `_MyHomePageState`.
   Owns the first-page load flow: `_loadData()` -> `_getLocation()` ->
-  `_getWeather()` -> `_updateWeather()`. Shows a `CircularProgressIndicator`
-  until `loaded == true`.
+  `_getWeather()` -> `_applyWeather()`. Shows a `CircularProgressIndicator`
+  until `loaded == true`. `_getWeather()` fetches current/historical/forecast
+  in parallel, derives the lead-up `OneCallResponse` from `fetchWeather()`'s
+  split-out past slice, and passes everything to `_applyWeather()`, which
+  `setState`s, resolves the place label, and scores every hour/day via
+  `lib/controller/scoring.dart` before recording the report to ArangoDB.
 - `lib/controller/weather_fetcher.dart` — `WeatherFetcher`: location
-  lookup (`findLocation`), and the OpenWeatherMap calls. `fetchWeather()` and
-  `fetchHistoricalWeather()` use **One Call API 4.0** timeline endpoints
-  (`/data/4.0/onecall/timeline/1h` + `/1day`; history via `start` in the past,
-  since 4.0 dropped the old `/timemachine` endpoint). `fetchNearestWeatherLocation()`
-  still uses the separate Current Weather (2.5) API because it supplies the
-  place `name` used for the location label (One Call 4.0 has no `name` field).
-  **Split-and-route (zero extra calls):** `fetchWeather()` anchors its single
-  daily-timeline request `leadUpDays` (= 2) into the past (`start = today − 2`,
-  `cnt = 10` = the 4.0 page cap), so one request holds both the antecedent days
-  *and* the 8-day forecast. It splits the combined `data` array at today's UTC
-  midnight: `dt >= today` → `daily` (so `daily[0]` is still *today*, keeping the
-  legacy `flights.weather.daily` training schema valid), `dt < today` → the
-  transient `leadUpDaily` field. This collects the antecedent ("lead-up")
-  weather the training docs say was never stored (model_training_findings.md
-  Part 4 #3) at **zero** extra One Call calls — the daily request the app
-  already makes simply reaches a couple of days into the past. `_getWeather`
-  derives the `_leadUp` `OneCallResponse` from that split and threads it into
-  `createWeather`/`updateWeather`. Raise `leadUpDays` beyond 2 and the combined
-  window spills past the 10-record page, requiring an extra paginated request.
+  lookup (`findLocation`), and the OpenWeatherMap calls. Uses **One Call API
+  4.0** timeline endpoints (`/data/4.0/onecall/timeline/1h` + `/1day`; history
+  via `start` in the past, since 4.0 dropped the old `/timemachine` endpoint).
+  `fetchNearestWeatherLocation()` still uses the separate Current Weather
+  (2.5) API because it supplies the place `name` used for the location label
+  (One Call 4.0 has no `name` field). Responses are parsed by the kind-aware
+  `OneCallResponse.fromTimelineJson(json, TimelineKind.{hourly,daily})` — no
+  `next`/`prev` key lookups.
+  **`fetchDailyWeather()`** is the single daily-timeline implementation — one
+  paid call — used both by `fetchWeather()` (which composes the hourly leg,
+  `cnt=48`, with `fetchDailyWeather()`) and directly by the background
+  service (`services.dart`), which never needs hourly.
+  **Split-and-route (zero extra calls):** `fetchDailyWeather()` anchors its
+  request `leadUpDays` (= 2) into the past (`start = today − leadUpDays`,
+  `cnt = leadUpDays + 8` = the 4.0 page cap), so one request holds both the
+  antecedent days *and* the 8-day forecast. The pure, unit-tested
+  `WeatherFetcher.splitDaily` then splits the combined `data` array at the
+  LOCATION-LOCAL day boundary (not UTC): records whose local day is before
+  local "today" become the transient `leadUpDaily` field; the rest become
+  `daily`, so `daily[0]` is still local *today* (keeping the legacy
+  `flights.weather.daily` training schema valid). This collects the
+  antecedent ("lead-up") weather the training docs say was never stored
+  (model_training_findings.md Part 4 #3) at **zero** extra One Call calls —
+  the daily request the app already makes simply reaches a couple of days
+  into the past. `_getWeather` derives the `_leadUp` `OneCallResponse` from
+  that split and threads it into `createWeather`/`updateWeather`. Raise
+  `leadUpDays` beyond 2 and the combined window spills past the 10-record
+  page, requiring an extra paginated request.
+- `lib/controller/scoring.dart` — length-safe hourly/daily scoring
+  (`computeHourlyScores`/`computeDailyScores` and the `*Percentages`
+  wrappers `_applyWeather` calls). The forest model runs at most once per
+  slot; percentages are derived from those scores, not recomputed. Missing
+  slots (the 4.0 endpoints can page shorter than the UI's fixed slot counts)
+  zero-fill instead of throwing.
 - `lib/controller/arangodb.dart` — ArangoDB reporting of sightings/weather.
   `createWeather()`/`updateWeather()` still write the legacy `flights` /
-  `historical` / `current` collections, and now **also** write an enriched
-  document to a **new `leadup` collection** (best-effort auto-created): one
-  doc per report carrying `current` + `forecast` + `leadup` weather with
-  `lat`/`lon`/`lead_up_days`/`collected_at` at the top level — the
-  training-ready schema for lead-up-change features (days-since-rain, pressure
-  trend, first warm day after rain).
+  `historical` / `current` collections, and now **also** write to a **new
+  `leadup` collection** (best-effort auto-created) via one shared
+  `_leadUpDoc()` builder used by both the insert and update paths so the
+  schema can't drift. Each leadup doc carries `source: 'app'` (vs
+  `'backfill'` for the Python backfill script), `lat`/`lon`/`lead_up_days`/
+  `collected_at` at the top level, and nested `current`/`forecast`/`leadup`
+  weather — the training-ready schema for lead-up-change features
+  (days-since-rain, pressure trend, first warm day after rain).
+- `scripts/backfill_leadup.py` — normalised Python backfill: re-derives the
+  same lead-up window (`--days`, default 2, matching `leadUpDays`) for
+  existing `flights` docs via the OWM daily timeline, and upserts into the
+  `leadup` collection keyed by the flight's own `_key` (`source: 'backfill'`)
+  so reruns are idempotent. Defaults to `--rps 1` (One Call by Call's
+  ~60/min limit); `--dry-run` fetches without writing.
 - `lib/controller/services.dart` — `initializeService()` (background_fetch
-  config + notification channels), `getServicePercentage()`, `getReportedFlightsNearMe()`.
+  config + notification channels), `getServicePercentage()`,
+  `getReportedFlightsNearMe()`. The background job calls
+  `WeatherFetcher.fetchDailyWeather()` directly (daily-only, one paid call).
 - `lib/controller/nuptials.dart` — prediction math. `Nuptials` loads two
   RandomForest models; `nuptialDailyPercentageModel` / `nuptialHourlyPercentageModel`
   score weather. (The `models/*.dart` `score()` trees are generated — do not hand-edit.)
@@ -85,7 +114,12 @@ non-rendering work. Fixed in commit `6123340`:
 Response caching is implemented in `weather_fetcher.dart` via `_fetchCached`
 (`shared_preferences`, keyed by rounded lat/lon). Per-endpoint TTLs: 30 min
 current/forecast, 24 h reverse geocode, 30 days historical. Repeat launches
-reuse cached responses, cutting paid OWM calls.
+reuse cached responses, cutting paid OWM calls. The daily-forecast
+(`fetchDailyWeather`) cache key is additionally anchored to the UTC day
+(`dt: todayUtcDay`), so it invalidates once per day regardless of TTL; the
+historical cache is namespaced under the `timemachine4` endpoint key (One
+Call 4.0 removed the old `/timemachine` endpoint, so history now comes from
+the hourly timeline instead).
 
 ## Verification
 - `flutter analyze` reports 0 errors. The only findings are pre-existing

@@ -28,13 +28,26 @@ Web: https://nuptialflight.app/
 ## Key source files
 - `lib/main.dart` — app entry (`main()`), `MyHomePage` / `_MyHomePageState`.
   Owns the first-page load flow: `_loadData()` -> `_getLocation()` ->
-  `_getWeather()` -> `_updateWeather()`. Shows a `CircularProgressIndicator`
+  `_getWeather()` -> `_applyWeather()`. Shows a `CircularProgressIndicator`
   until `loaded == true`.
-- `lib/controller/weather_fetcher.dart` — `WeatherFetcher`: location
-  lookup (`findLocation`), and the 3 OpenWeatherMap calls
-  (`fetchNearestWeatherLocation`, `fetchHistoricalWeather`, `fetchWeather`).
+- `lib/controller/weather_fetcher.dart` — `WeatherFetcher`: location lookup
+  (`findLocation`), and the OpenWeatherMap calls, now on **One Call API
+  4.0** timeline endpoints (`fetchNearestWeatherLocation` still uses the
+  separate Current Weather 2.5 API for the place `name`).
+  `fetchDailyWeather()` is the single daily-timeline call (one paid call;
+  the background service uses it directly); `fetchWeather()` composes the
+  hourly leg (`cnt=48`) with `fetchDailyWeather()`. The daily response is
+  split via the pure `WeatherFetcher.splitDaily` at the LOCATION-LOCAL day
+  boundary so `daily[0]` stays local-today and the antecedent ("lead-up")
+  days route to `leadUpDaily` at zero extra calls. Parsing goes through the
+  kind-aware `OneCallResponse.fromTimelineJson(json, TimelineKind)` (no
+  `next`/`prev` lookups). See CLINE.md for the full breakdown.
+- `lib/controller/scoring.dart` — length-safe hourly/daily scoring; the
+  forest model runs at most once per slot.
 - `lib/controller/services.dart` — `initializeService()` (background_fetch
-  config + notification channels), `getServicePercentage()`, `getReportedFlightsNearMe()`.
+  config + notification channels), `getServicePercentage()`,
+  `getReportedFlightsNearMe()`; the background job calls
+  `WeatherFetcher.fetchDailyWeather()` directly.
 - `lib/controller/nuptials.dart` — prediction math. `Nuptials` loads two
   RandomForest models; `nuptialDailyPercentageModel` / `nuptialHourlyPercentageModel`
   score weather via `lib/models/forest_model.dart` over the JSON assets.
@@ -182,8 +195,11 @@ COMMITTED; (b) and (c) are the in-progress "Task queue" below.
 - `historical.weather` = {current, hourly[24] of the flight day only}. hourly[i]
   keys add: visibility; (no rain-amount split, has pop).
 - `current.weather` = single OWM current snapshot.
-- No pre-flight days are stored anywhere => "change/lead-up" features need an
-  external OWM timemachine backfill (future work).
+- Superseded: a new `leadup` collection now carries the antecedent
+  ("lead-up") days alongside `current`/`forecast` weather, written by the
+  app (`source: 'app'`) via split-and-route at zero extra OWM calls, and
+  backfilled for existing `flights` docs by `scripts/backfill_leadup.py`
+  (`source: 'backfill'`, idempotent by `_key`). See CLINE.md.
 
 ## Guardrails
 - Keep first-page load fast: do not re-introduce `await` on

@@ -52,8 +52,14 @@ void main() {
       expect(response.lat, -35.76);
       expect(response.lon, 150.2053);
       anyOf(response.timezoneOffset, 36000, 39600); // 39600 in daylight savings
-      // One Call 4.0's /timeline/1day returns up to 10 daily records.
-      expect(response.daily!.length, greaterThanOrEqualTo(7));
+      // One Call 4.0's /timeline/1day returns up to 10 daily records; after
+      // split-and-route routes the leadUpDays antecedent days into
+      // leadUpDaily, the forecast list is exactly today + 7 days.
+      expect(response.daily!.length, 8); // daily[0] == local today + 7-day forecast
+      final tz = response.timezoneOffset ?? 0;
+      final nowUtc = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
+      expect((response.daily!.first.dt! + tz) ~/ 86400, (nowUtc + tz) ~/ 86400,
+          reason: 'daily[0] must be the location-local today');
       expect(response.daily!.first.uvi, greaterThanOrEqualTo(0));
     });
   });
