@@ -58,14 +58,29 @@ class ArangoSingleton {
       }
     }
 
+    // Endpoint coordinates are public knowledge (docs, DB schema notes) so
+    // they keep defaults; the credential is deliberately NOT hardcoded — it
+    // must come from assets/.env (locally) or the Codemagic secret that the
+    // "Create assets/.env" build step writes. Without it the app still runs;
+    // reporting and nearby-flights simply stay disabled.
     final String url = dotenv.env['ARANGO_URL'] ?? 'https://api.bitbot.com.au:8530';
     final String dbName = dotenv.env['ARANGO_DB_NAME'] ?? 'nuptialFlight';
     final String user = dotenv.env['ARANGO_USER'] ?? 'nuptialflight';
-    final String password = dotenv.env['ARANGO_PASSWORD'] ?? 'fdggdsgdfstg34wfwfwff';
+    final String? password = dotenv.env['ARANGO_PASSWORD'];
+    if (password == null || password.isEmpty) {
+      debugPrint('ArangoSingleton: ARANGO_PASSWORD not set — '
+          'flight reporting and nearby-flight lookups are disabled');
+      return; // _arangoClient stays null; public methods no-op gracefully.
+    }
 
     _arangoClient = Database(url);
     await _arangoClient!.connect(dbName, user, password);
   }
+
+  /// Whether a database connection is configured. False when the build has no
+  /// ARANGO_PASSWORD — every public method below then no-ops instead of
+  /// crashing on a null client.
+  bool get _isEnabled => _arangoClient != null;
 
   Future<void> _ensureConnected() async {
     if (_connectFuture != null) {
@@ -133,6 +148,7 @@ class ArangoSingleton {
       OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather,
       {OneCallResponse? leadUp, required int leadUpDays}) async {
     await _ensureConnected();
+    if (!_isEnabled) return; // no credential shipped — reporting disabled
 
     String? deviceId;
     if (kIsWeb) {
@@ -216,6 +232,7 @@ class ArangoSingleton {
       OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather,
       {OneCallResponse? leadUp, required int leadUpDays}) async {
     await _ensureConnected();
+    if (!_isEnabled) return; // no credential shipped — reporting disabled
 
     String? deviceId;
     if (kIsWeb) {
@@ -294,6 +311,7 @@ class ArangoSingleton {
   /// (location + size + weather description). Used by MapPage to drop markers.
   Future<List> getRecentFlights() async {
     await _ensureConnected();
+    if (!_isEnabled) return []; // no credential shipped — lookups disabled
 
     Aql aql = _arangoClient!.aql();
     String query = """
@@ -332,6 +350,7 @@ RETURN {
     }
 
     await _ensureConnected();
+    if (!_isEnabled) return []; // no credential shipped — lookups disabled
 
     Aql aql = _arangoClient!.aql();
     String query = """

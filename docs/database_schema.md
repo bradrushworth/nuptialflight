@@ -74,9 +74,11 @@ schema:
 - The training user connects with server-side AQL projection
   (`RETURN {field…}`) — ~30x faster than `RETURN f`.
 - Security: the DB has been defaced once before; treat traffic as hostile.
-  Credentials belong in `assets/.env` / environment variables — never in
-  committed code, and the `notebook` user's committed password must be
-  rotated (see the security section in AGENTS.md). Prefer AQL bind
-  variables over string interpolation.
+  Credentials live in `assets/.env` / environment variables only — the app,
+  notebooks, and scripts all read `ARANGO_*` env vars, and the app disables
+  reporting gracefully when no password is shipped. Both DB users' old
+  passwords exist in git history and must be rotated server-side (see the
+  security section in AGENTS.md). Prefer AQL bind variables over string
+  interpolation.
 - The defaced collection is empty; dropping it needs admin credentials
   (both app users get HTTP 403 on drop).

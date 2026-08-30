@@ -272,14 +272,18 @@ since the 2026-07-26 part-4 retrain).
 - `assets/.env` must never be committed. Be aware that anything shipped in
   the client (OWM key, Google key, Arango credentials) is extractable —
   treat those keys as semi-public and never widen their permissions.
-- Known review findings (see git history / PR #9 discussion): hardcoded
-  credential fallbacks in `arangodb.dart`/`main.dart` should be removed once
-  the credentials are rotated; the `notebook` DB user's password committed
-  in `lib/models/*.ipynb` and `scripts/flight_stats_pipeline.py` must be
-  rotated and moved to env vars (data-poisoning risk for retrains); prefer
-  AQL **bind variables** over string interpolation for any new queries; the
-  long-term fix is a thin API in front of ArangoDB. The production DB has
-  been defaced once before — assume hostile traffic.
+- Credentials live ONLY in the environment now (done 2026-08-30): the app
+  reads `ARANGO_PASSWORD` from `assets/.env` (written by the Codemagic
+  "Create assets/.env" step from the `nuptialflight` variable group) and
+  **degrades gracefully — reporting/nearby-flights disabled — when it is
+  absent**; the training notebooks and both `scripts/*.py` read
+  `ARANGO_URL/ARANGO_DB_NAME/ARANGO_USER/ARANGO_PASSWORD` env vars. Never
+  reintroduce hardcoded fallbacks. ⚠️ The old app and `notebook` passwords
+  remain in git history — **rotate both DB users server-side** and treat
+  the historical values as public. Prefer AQL **bind variables** over
+  string interpolation for any new queries; the long-term fix is a thin
+  API in front of ArangoDB. The production DB has been defaced once
+  before — assume hostile traffic.
 - Reports are keyed by an anonymous per-install UUID
   (`controller/install_id.dart`). Do not add device identifiers or other
   fingerprinting.

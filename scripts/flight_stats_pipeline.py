@@ -14,8 +14,18 @@ import os
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # --- 1. fetch (same projection as the training notebook) ---
-client = ArangoClient(hosts='https://api.bitbot.com.au:8530')
-db = client.db('nuptialFlight', username='notebook', password='g54g54gwggsvd')
+# Credentials come from the environment only (see AGENTS.md security notes;
+# the previously committed password must be treated as rotated):
+#   set ARANGO_PASSWORD=...   (required; the training/'notebook' user's)
+#   set ARANGO_USER=notebook  (optional overrides below)
+ARANGO_URL = os.environ.get('ARANGO_URL', 'https://api.bitbot.com.au:8530')
+ARANGO_DB = os.environ.get('ARANGO_DB_NAME', 'nuptialFlight')
+ARANGO_USER = os.environ.get('ARANGO_USER', 'notebook')
+ARANGO_PASSWORD = os.environ.get('ARANGO_PASSWORD')
+if not ARANGO_PASSWORD:
+    sys.exit('ARANGO_PASSWORD env var is required (training DB credential)')
+client = ArangoClient(hosts=ARANGO_URL)
+db = client.db(ARANGO_DB, username=ARANGO_USER, password=ARANGO_PASSWORD)
 query = ("FOR f IN flights "
     "RETURN {tgt: f.flight=='yes', lat: f.weather.lat, lon: f.weather.lon, "
     "dt: f.weather.daily[0].dt, day: f.weather.daily[0].temp.day, "
