@@ -136,9 +136,6 @@ class _MyHomePageState extends State<MyHomePage> {
   OneCallResponse? _weather;
   // `loaded` gates the first-paint spinner; `errorMessage` drives the error screen.
   OneCallResponse? _leadUp;
-  // Must mirror WeatherFetcher.leadUpDays: the daily-timeline page caps at 10
-  // records, so leadUpDays + 8 forecast days (today..+7) fits one response.
-  static const int _leadUpDays = 2;
   bool loaded = false;
   String? errorMessage;
   // Refreshes the location + weather every hour while the app is open.
@@ -461,7 +458,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     ArangoSingleton().createWeather(version, buildNumber, _weather, _historical, _currentWeather,
-        leadUp: _leadUp, leadUpDays: _leadUpDays);
+        leadUp: _leadUp, leadUpDays: WeatherFetcher.leadUpDays);
   }
 
   int _monthOfDt(int dt) =>
@@ -727,7 +724,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _historical,
       _currentWeather,
       leadUp: _leadUp,
-      leadUpDays: _leadUpDays,
+      leadUpDays: WeatherFetcher.leadUpDays,
     );
     _showSnack(result.sawNothing
         ? context.l10n.snackThanksNoFlight
