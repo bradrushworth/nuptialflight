@@ -165,9 +165,12 @@ workflows:
           # fail: the app degrades gracefully by design.
           if [ -n "${ARANGO_PASSWORD:-}" ]; then
             echo "ARANGO_PASSWORD=$ARANGO_PASSWORD" >> assets/.env
-            [ -n "${ARANGO_URL:-}" ] && echo "ARANGO_URL=$ARANGO_URL" >> assets/.env
-            [ -n "${ARANGO_USER:-}" ] && echo "ARANGO_USER=$ARANGO_USER" >> assets/.env
-            [ -n "${ARANGO_DB_NAME:-}" ] && echo "ARANGO_DB_NAME=$ARANGO_DB_NAME" >> assets/.env
+            # NB explicit if-blocks, not `[ ... ] && ...` one-liners: under
+            # `set -e` a false test as a block's final statement fails the
+            # whole step when the optional var is (legitimately) unset.
+            if [ -n "${ARANGO_URL:-}" ]; then echo "ARANGO_URL=$ARANGO_URL" >> assets/.env; fi
+            if [ -n "${ARANGO_USER:-}" ]; then echo "ARANGO_USER=$ARANGO_USER" >> assets/.env; fi
+            if [ -n "${ARANGO_DB_NAME:-}" ]; then echo "ARANGO_DB_NAME=$ARANGO_DB_NAME" >> assets/.env; fi
           else
             echo "WARNING: ARANGO_PASSWORD is not set in the environment group —"
             echo "WARNING: this build will ship with flight reporting DISABLED."
