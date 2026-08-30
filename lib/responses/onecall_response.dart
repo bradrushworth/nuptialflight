@@ -19,6 +19,8 @@ num? _precip(dynamic value) {
   return null;
 }
 
+enum TimelineKind { hourly, daily }
+
 class OneCallResponse {
   num? lat;
   num? lon;
@@ -34,10 +36,6 @@ class OneCallResponse {
   // fetcher so the ML leadup collection gets the past-day slice without an
   // extra One Call API call.
   List<Daily>? leadUpDaily;
-  // One Call 4.0 timeline pagination links (unused by this app, but parsed so
-  // the raw response round-trips faithfully).
-  String? next;
-  String? prev;
 
   OneCallResponse(
       {this.lat,
@@ -48,17 +46,13 @@ class OneCallResponse {
       this.minutely,
       this.hourly,
       this.daily,
-      this.leadUpDaily,
-      this.next,
-      this.prev});
+      this.leadUpDaily});
 
   OneCallResponse.fromJson(Map<String, dynamic> json) {
     lat = json['lat'];
     lon = json['lon'];
     timezone = json['timezone'];
     timezoneOffset = json['timezone_offset'];
-    next = json['next'];
-    prev = json['prev'];
     // One Call API 4.0 wraps every timeline in a flat `data` array. The record
     // type is detected from the shape of `temp`: daily records carry `temp` as
     // an object ({day,min,max,...}) while hourly/current records carry `temp`
@@ -76,6 +70,23 @@ class OneCallResponse {
     }
   }
 
+  /// One Call 4.0 timeline parser where the CALLER states which timeline it
+  /// requested. Empty/missing `data` binds an empty list of that kind, so
+  /// downstream code can distinguish "no records" from "not this kind of
+  /// response". A wrong-shape record fails here, at the parse site.
+  OneCallResponse.fromTimelineJson(Map<String, dynamic> json, TimelineKind kind) {
+    lat = json['lat'];
+    lon = json['lon'];
+    timezone = json['timezone'];
+    timezoneOffset = json['timezone_offset'];
+    final data = (json['data'] as List?) ?? const [];
+    if (kind == TimelineKind.daily) {
+      daily = data.map((v) => Daily.fromJson(v as Map<String, dynamic>)).toList();
+    } else {
+      hourly = data.map((v) => Hourly.fromJson(v as Map<String, dynamic>)).toList();
+    }
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['lat'] = this.lat;
@@ -88,8 +99,6 @@ class OneCallResponse {
     if (this.daily != null) {
       data['daily'] = this.daily!.map((v) => v.toJson()).toList();
     }
-    if (this.next != null) data['next'] = this.next;
-    if (this.prev != null) data['prev'] = this.prev;
     return data;
   }
 }
@@ -272,7 +281,10 @@ class Hourly {
       });
     }
     pop = json['pop'];
-    rain = json['rain'] != null ? new Rain.fromJson(json['rain']) : null;
+    // Rain may be {'1h': n} (4.0-style) or a bare number (3.0-style) - accept
+    // both, mirroring Daily's _precip handling.
+    final rainNum = _precip(json['rain']);
+    rain = rainNum != null ? Rain(d1h: rainNum) : null;
   }
 
   Map<String, dynamic> toJson() {

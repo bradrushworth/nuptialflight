@@ -46,7 +46,6 @@ void main() {
       final r = OneCallResponse.fromJson(jsonDecode(body));
       expect(r.lat, -35.28);
       expect(r.timezoneOffset, 39600);
-      expect(r.next, isNotNull);
       expect(r.hourly, isNotNull);
       expect(r.hourly!.length, 2);
       expect(r.daily, isNull);
@@ -193,6 +192,43 @@ void main() {
       expect(r.daily![1].dt! < today, isTrue);
       expect(r.daily![2].dt! >= today, isTrue);
       expect(r.daily![9].dt! >= today, isTrue);
+    });
+  });
+
+  group('fromTimelineJson hardening', () {
+    test('empty data binds an empty list of the requested kind', () {
+      final json = {'lat': -35.28, 'lon': 149.13, 'timezone_offset': 39600, 'data': []};
+      final d = OneCallResponse.fromTimelineJson(Map<String, dynamic>.from(json), TimelineKind.daily);
+      expect(d.daily, isNotNull);
+      expect(d.daily, isEmpty);
+      expect(d.hourly, isNull);
+      final h = OneCallResponse.fromTimelineJson(Map<String, dynamic>.from(json), TimelineKind.hourly);
+      expect(h.hourly, isNotNull);
+      expect(h.hourly, isEmpty);
+      expect(h.daily, isNull);
+    });
+
+    test('missing data key is treated as empty, not null-both', () {
+      final r = OneCallResponse.fromTimelineJson({'lat': 1.0, 'lon': 2.0}, TimelineKind.daily);
+      expect(r.daily, isEmpty);
+    });
+
+    test('hourly rain as bare number (3.0-style) parses instead of throwing', () {
+      final r = OneCallResponse.fromTimelineJson({
+        'lat': 1.0, 'lon': 2.0,
+        'data': [{'dt': 1700000000, 'temp': 22.5, 'rain': 0.21}]
+      }, TimelineKind.hourly);
+      expect(r.hourly!.first.rain!.d1h, 0.21);
+    });
+
+    test('toJson never emits pagination URLs', () {
+      final r = OneCallResponse.fromJson({
+        'lat': 1.0, 'lon': 2.0,
+        'data': [{'dt': 1700000000, 'temp': 22.5}],
+        'next': 'https://api.openweathermap.org/x?appid=KEY',
+      });
+      expect(r.toJson().containsKey('next'), isFalse);
+      expect(r.toJson().containsKey('prev'), isFalse);
     });
   });
 }
