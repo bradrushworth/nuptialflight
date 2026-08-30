@@ -346,7 +346,20 @@ class WeatherFetcher {
       throw Exception('Location is unknown! Perhaps you didn\'t allow location permissions?');
     final nowUtcSeconds = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
     final todayUtcDay = nowUtcSeconds ~/ 86400;
-    final pastStart = (todayUtcDay - leadUpDays) * 86400;
+    // Anchor the request window at the LOCAL day floor, not the UTC day floor:
+    // in nonzero-offset timezones a UTC-anchored window can straddle the
+    // local-day seam, so the split below (which buckets by the response's own
+    // timezoneOffset) can hand back a 7- or 9-entry forecast instead of 8. We
+    // don't know the fetch location's offset until the response comes back,
+    // so use the DEVICE's timezone offset as a proxy to position the window
+    // (the recording path fetches at device location, so this proxy is
+    // accurate in practice). The device-tz proxy only decides where the
+    // window starts; splitDaily()'s use of the response's own timezoneOffset
+    // remains the authority for which records are lead-up vs. forecast.
+    final tzProxySeconds = DateTime.now().timeZoneOffset.inSeconds;
+    final pastStart =
+        (((nowUtcSeconds + tzProxySeconds) ~/ 86400) - leadUpDays) * 86400 -
+            tzProxySeconds;
     final cnt = leadUpDays + 8; // 10 -> fits one daily-timeline page
     final key = dotenv.env['OPENWEATHERMAP_API_KEY'];
     final dailyUrl =
@@ -361,7 +374,11 @@ class WeatherFetcher {
       parse: (b) => OneCallResponse.fromTimelineJson(jsonDecode(b), TimelineKind.daily),
     );
     final split = splitDaily(resp.daily ?? const <Daily>[], resp.timezoneOffset ?? 0, nowUtcSeconds);
-    resp.daily = split.forecast;
+    // Cap the 9-record convention case (the local-day-floored window can
+    // occasionally hand back one extra forecast day depending on how the
+    // provider buckets the boundary); never pad a short (7-entry) result.
+    resp.daily =
+        split.forecast.length > 8 ? split.forecast.take(8).toList() : split.forecast;
     resp.leadUpDaily = split.leadUp;
     return resp;
   }

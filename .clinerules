@@ -179,8 +179,10 @@ COMMITTED; (b) and (c) are the in-progress "Task queue" below.
    (~1.5 MB JSON each; ~500 KB gzipped). Scripts: `fetch_chunk2.py`/`prep2.py`/
    `ship2.py` (daily), `fetch_hourly_chunk2.py`/`hourly_final2.py` (hourly).
 2. ~~Fix mislabelled rain1/rain2~~ DONE — renamed `popNext1`/`popNext2`
-   (forecast pop) everywhere in nuptials.dart + docs. True antecedent rain still
-   needs an OWM timemachine backfill (future lever, documented in findings doc).
+   (forecast pop) everywhere in nuptials.dart + docs. True antecedent rain
+   (originally noted here as needing a future OWM timemachine backfill) is now
+   superseded by the `leadup` collection + `scripts/backfill_leadup.py` on
+   this branch — see "DB schema notes" below.
 3. ~~Tests + docs + version + deploy~~ DONE — model/hourly/nuptials fixtures +
    gauges recalibrated (48/51 rewritten), parity fixtures rebuilt (max err
    ~8e-15), README/findings/.clinerules updated, version 2.16.0+139.
@@ -193,8 +195,18 @@ COMMITTED; (b) and (c) are the in-progress "Task queue" below.
   moon_phase, moonrise, moonset, pop, pressure, rain, sunrise, sunset, temp
   (day/min/max/night/eve/morn), uvi, weather, wind_deg, wind_gust, wind_speed.
 - `historical.weather` = {current, hourly[24] of the flight day only}. hourly[i]
-  keys add: visibility; (no rain-amount split, has pop).
+  keys add: visibility; (no rain-amount split, has pop). **Pre-One-Call-4.0
+  docs only** — see the migration note below for the current shape.
 - `current.weather` = single OWM current snapshot.
+- As of the One Call 4.0 migration, newly written `historical` collection docs
+  have shape `{lat, lon, timezone, timezone_offset, hourly[~24]}` — there is no
+  `current` or `minutely` field. `fetchHistoricalWeather()` now hits the 4.0
+  hourly timeline endpoint directly (`OneCallResponse.fromTimelineJson(...,
+  TimelineKind.hourly)`), which never populates `current`/`minutely`, and
+  `OneCallResponse.toJson()` only emits a key when the field is non-null, so
+  those keys are simply absent rather than null. This is also a content
+  improvement over the pre-migration 3.0-era docs: the old parser wrote a
+  near-empty document for `historical` under the same code path.
 - Superseded: a new `leadup` collection now carries the antecedent
   ("lead-up") days alongside `current`/`forecast` weather, written by the
   app (`source: 'app'`) via split-and-route at zero extra OWM calls, and

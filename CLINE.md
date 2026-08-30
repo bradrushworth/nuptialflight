@@ -82,6 +82,14 @@ flutter analyze stays at 0 errors (only pre-existing deprecation info-warnings).
   `collected_at` at the top level, and nested `current`/`forecast`/`leadup`
   weather — the training-ready schema for lead-up-change features
   (days-since-rain, pressure trend, first warm day after rain).
+  Note on the legacy `historical` collection this file also still writes to:
+  as of the One Call 4.0 migration, newly written `historical` docs have shape
+  `{lat, lon, timezone, timezone_offset, hourly[~24]}` — no `current` or
+  `minutely` field, since `fetchHistoricalWeather()` now pulls straight from
+  the 4.0 hourly timeline endpoint (which has no current/minutely block) via
+  `OneCallResponse.fromTimelineJson(..., TimelineKind.hourly)`. This is also a
+  content improvement: pre-migration, the old 3.0-era parser wrote a
+  near-empty `historical` doc through this same code path.
 - `scripts/backfill_leadup.py` — normalised Python backfill: re-derives the
   same lead-up window (`--days`, default 2, matching `leadUpDays`) for
   existing `flights` docs via the OWM daily timeline, and upserts into the

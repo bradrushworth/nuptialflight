@@ -224,9 +224,8 @@ void _onBackgroundFetch(String taskId) async {
   // This is the fetch-event callback.
   print("[BackgroundFetch] Event received: $taskId");
 
-  await _ensureInitialized();
-
   try {
+    await _ensureInitialized();
     if (taskId == "flutter_background_fetch" || taskId == "com.transistorsoft.customtask") {
       await _updatePosition();
       await getReportedFlightsNearMe();
@@ -263,9 +262,8 @@ void backgroundFetchHeadlessTask(HeadlessEvent task) async {
   }
   print('[BackgroundFetch] Headless event received: $taskId');
 
-  await _ensureInitialized();
-
   try {
+    await _ensureInitialized();
     await _updatePosition();
     await getReportedFlightsNearMe();
     await getServicePercentage();
