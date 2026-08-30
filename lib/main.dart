@@ -473,8 +473,7 @@ class _MyHomePageState extends State<MyHomePage> {
         .percentile(_dailyScore[i], _weather!.lat!, _monthOfDt(daily[i].dt!));
   }
 
-  FlightBand _dailyBandAt(int i) =>
-      bandFor(_dailyScore[i], _dailyPercentileAt(i));
+  FlightBand _dailyBandAt(int i) => bandFor(_dailyScore[i]);
 
   /// Sends today's outlook to the home-screen widget: legacy percentage plus
   /// the localized Ant Flight Index band and odds. Uses the device-locale
@@ -937,18 +936,16 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               const SizedBox(height: 10),
               HourlyChart(
-                // NB hourly bands reuse the daily score distribution: close
-                // enough for colour banding, and keeps one stats table.
+                // NB hourly bands reuse the daily calibration table (close
+                // enough for colour banding, one stats table) and are CAPPED
+                // at the day's own band: bars show intra-day timing, but an
+                // hour can never out-promise the day it belongs to.
                 points: [
                   for (int i = 0; i < hourlyCount; i++)
                     HourlyPoint(
                       hourly[i].dt!,
                       _hourlyPercentage[i],
-                      bandFor(
-                        _hourlyScore[i],
-                        FlightIndex().percentile(_hourlyScore[i],
-                            weather.lat ?? 0, _monthOfDt(hourly[i].dt!)),
-                      ),
+                      minBand(bandFor(_hourlyScore[i]), _dailyBandAt(0)),
                     ),
                 ],
                 timezoneOffsetSeconds: weather.timezoneOffset ?? 0,

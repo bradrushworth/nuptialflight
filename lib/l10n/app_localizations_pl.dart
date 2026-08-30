@@ -95,7 +95,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get bandQuiet => 'Spokojnie';
 
   @override
-  String get bandWatchful => 'Czujnie';
+  String get bandWatchful => 'Przeciętny';
 
   @override
   String get bandPromising => 'Obiecująco';
@@ -110,7 +110,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get headlineQuiet => 'Spokojny dzień';
 
   @override
-  String get headlineWatchful => 'Warto obserwować';
+  String get headlineWatchful => 'Nieco lepiej niż przeciętnie';
 
   @override
   String get headlinePromising => 'Obiecujący dzień';

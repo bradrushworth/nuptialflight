@@ -95,7 +95,7 @@ class AppLocalizationsFil extends AppLocalizations {
   String get bandQuiet => 'Tahimik';
 
   @override
-  String get bandWatchful => 'Bantayan';
+  String get bandWatchful => 'Katamtaman';
 
   @override
   String get bandPromising => 'Promising';
@@ -110,7 +110,7 @@ class AppLocalizationsFil extends AppLocalizations {
   String get headlineQuiet => 'Tahimik na araw';
 
   @override
-  String get headlineWatchful => 'Dapat bantayan';
+  String get headlineWatchful => 'Bahagyang mas mataas sa karaniwan';
 
   @override
   String get headlinePromising => 'Promising na araw';

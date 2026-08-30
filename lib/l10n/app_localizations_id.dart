@@ -96,7 +96,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get bandQuiet => 'Tenang';
 
   @override
-  String get bandWatchful => 'Waspada';
+  String get bandWatchful => 'Cukup';
 
   @override
   String get bandPromising => 'Menjanjikan';
@@ -111,7 +111,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get headlineQuiet => 'Hari yang tenang';
 
   @override
-  String get headlineWatchful => 'Patut diperhatikan';
+  String get headlineWatchful => 'Sedikit di atas rata-rata';
 
   @override
   String get headlinePromising => 'Hari yang menjanjikan';

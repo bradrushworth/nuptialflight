@@ -95,7 +95,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get bandQuiet => 'Klid';
 
   @override
-  String get bandWatchful => 'Pozor';
+  String get bandWatchful => 'Průměrný';
 
   @override
   String get bandPromising => 'Nadějné';
@@ -110,7 +110,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get headlineQuiet => 'Klidný den';
 
   @override
-  String get headlineWatchful => 'Stojí za sledování';
+  String get headlineWatchful => 'Mírně nad průměrem';
 
   @override
   String get headlinePromising => 'Nadějný den';

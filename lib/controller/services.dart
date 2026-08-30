@@ -419,9 +419,7 @@ Future<void> getServicePercentage() async {
         pop1: daily.length > 1 ? daily.elementAt(1).pop : null,
         pop2: daily.length > 2 ? daily.elementAt(2).pop : null);
     percentage = (score * 100.0).toInt();
-    final int month =
-        DateTime.fromMillisecondsSinceEpoch(today.dt! * 1000, isUtc: true).month;
-    band = bandFor(score, FlightIndex().percentile(score, weather.lat!, month));
+    band = bandFor(score);
     debugPrint('getServicePercentage: Percentage for nuptial flights: $percentage');
     updateAppWidget(
       percentage,

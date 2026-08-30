@@ -40,6 +40,11 @@ class FlightIndex {
 
   bool get isLoaded => _stats != null;
 
+  /// The all-days positive rate from the stats build (P(reported flight) on
+  /// a random historical day) — the anchor the band ladder is measured
+  /// against.
+  double get baseRate => (_stats!['base_rate'] as num).toDouble();
+
   /// Percentile (0..100) of [score] among historical days in the same
   /// hemisphere and [month] (1..12). Linear interpolation between the stored
   /// quantile steps.
@@ -99,21 +104,43 @@ class FlightIndex {
   }
 }
 
-/// The five bands of the Ant Flight Index, defined by percentile against
-/// days at the same hemisphere + month (plus the model's hard weather
-/// cutoffs for [noFly]). Band boundaries chosen from the 2026-08 stats run:
-/// the old "green" threshold (score 0.60) sat at the 92.6th percentile
-/// overall, so [prime] ~ the old green and [promising] ~ the old amber.
+/// The five bands of the Ant Flight Index, anchored to CALIBRATED odds
+/// (multiples of the all-days base rate) rather than seasonal rank.
+///
+/// Rationale (2026-08 recalibration): the previous percentile-only bands put
+/// the 40th-70th percentile in "watchful" — but per the calibration table
+/// those days run ~1-in-41 to ~1-in-19 odds, i.e. mostly BELOW the ~1-in-21
+/// base rate. Calling a below-average day "worth watching" (with an amber
+/// pill and green-leaning chart) overpromised. Now a day only escapes
+/// [quiet] when its calibrated probability beats the base rate, and:
+///
+///   quiet      p <  1x base rate   (at or below an average day)
+///   watchful   p >= 1x base rate   ("Fair" - modestly better than average)
+///   promising  p >= 2x base rate   (~1-in-11 or better on 2026-08 stats)
+///   prime      p >= 4x base rate   (~1-in-5 or better - genuinely rare)
+///
+/// [noFly] still comes from the model's hard weather cutoffs. On the
+/// 2026-08 stats these thresholds sit near raw scores 0.48 / 0.52 / 0.70,
+/// but the mapping is computed from the shipped calibration table so it
+/// tracks every retrain automatically.
 enum FlightBand { noFly, quiet, watchful, promising, prime }
 
-FlightBand bandFor(double score, double percentile) {
+FlightBand bandFor(double score) {
   // The runtime scoring floors impossible weather (cold/gale) to 0.01.
   if (score <= 0.011) return FlightBand.noFly;
-  if (percentile < 40) return FlightBand.quiet;
-  if (percentile < 70) return FlightBand.watchful;
-  if (percentile < 90) return FlightBand.promising;
+  final FlightIndex fi = FlightIndex();
+  final double p = fi.calibratedProbability(score);
+  final double base = fi.baseRate;
+  if (p < base) return FlightBand.quiet;
+  if (p < 2 * base) return FlightBand.watchful;
+  if (p < 4 * base) return FlightBand.promising;
   return FlightBand.prime;
 }
+
+/// The lower (least promising) of two bands — used to cap an hour's band at
+/// its day's band, so intra-day bars can't out-promise the day they sit in.
+FlightBand minBand(FlightBand a, FlightBand b) =>
+    a.index <= b.index ? a : b;
 
 String bandLabel(FlightBand band) {
   switch (band) {
@@ -122,7 +149,7 @@ String bandLabel(FlightBand band) {
     case FlightBand.quiet:
       return 'Quiet';
     case FlightBand.watchful:
-      return 'Watchful';
+      return 'Fair';
     case FlightBand.promising:
       return 'Promising';
     case FlightBand.prime:
@@ -138,7 +165,7 @@ String bandHeadline(FlightBand band) {
     case FlightBand.quiet:
       return 'Quiet day';
     case FlightBand.watchful:
-      return 'Worth watching';
+      return 'Slightly better than average';
     case FlightBand.promising:
       return 'Promising day';
     case FlightBand.prime:
