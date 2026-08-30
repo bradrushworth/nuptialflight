@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as developer;
 
-import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
+import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb, visibleForTesting;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_google_maps_webservices/places.dart';
@@ -199,6 +199,15 @@ class WeatherFetcher {
     return key;
   }
 
+  @visibleForTesting
+  String cacheKeyFor(String endpoint, {int? dt}) => _cacheKey(endpoint, dt: dt);
+
+  @visibleForTesting
+  void setTestPosition(double lat, double lon) {
+    _lat = lat;
+    _lon = lon;
+  }
+
   Future<T> _fetchCached<T>({
     required String url,
     required String endpoint,
@@ -341,7 +350,8 @@ class WeatherFetcher {
     // into the past. The legacy `flights.weather.daily` schema is unchanged
     // (daily[0] == today), so years of stored training history stay valid.
     final nowUtcSeconds = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
-    final pastStart = ((nowUtcSeconds ~/ 86400) - leadUpDays) * 86400;
+    final todayUtcDay = nowUtcSeconds ~/ 86400;
+    final pastStart = (todayUtcDay - leadUpDays) * 86400;
     final cnt = leadUpDays + 8; // 10 -> fits one daily-timeline page
 
     final key = dotenv.env['OPENWEATHERMAP_API_KEY'];
@@ -358,14 +368,15 @@ class WeatherFetcher {
         endpoint: 'onecall_hourly',
         ttl: _ttlForecast,
         errorPrefix: 'Failed to download hourly weather',
-        parse: (b) => OneCallResponse.fromJson(jsonDecode(b)),
+        parse: (b) => OneCallResponse.fromTimelineJson(jsonDecode(b), TimelineKind.hourly),
       ),
       _fetchCached<OneCallResponse>(
         url: dailyUrl,
         endpoint: 'onecall_daily',
         ttl: _ttlForecast,
+        dt: todayUtcDay,
         errorPrefix: 'Failed to download daily weather',
-        parse: (b) => OneCallResponse.fromJson(jsonDecode(b)),
+        parse: (b) => OneCallResponse.fromTimelineJson(jsonDecode(b), TimelineKind.daily),
       ),
     ]);
     // Merge: keep the hourly list and attach the (split) daily list.
@@ -393,11 +404,11 @@ class WeatherFetcher {
 
     return _fetchCached<OneCallResponse>(
       url: url,
-      endpoint: 'timemachine',
+      endpoint: 'timemachine4',
       ttl: _ttlHistorical,
       dt: dt,
       errorPrefix: 'Failed to download historical weather',
-      parse: (b) => OneCallResponse.fromJson(jsonDecode(b)),
+      parse: (b) => OneCallResponse.fromTimelineJson(jsonDecode(b), TimelineKind.hourly),
     );
   }
 }
