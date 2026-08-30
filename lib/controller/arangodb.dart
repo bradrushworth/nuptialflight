@@ -65,7 +65,7 @@ class ArangoSingleton {
     // reporting and nearby-flights simply stay disabled.
     final String url = dotenv.env['ARANGO_URL'] ?? 'https://api.bitbot.com.au:8530';
     final String dbName = dotenv.env['ARANGO_DB_NAME'] ?? 'nuptialFlight';
-    final String user = dotenv.env['ARANGO_USER'] ?? 'nuptialflight';
+    final String user = dotenv.env['ARANGO_USER'] ?? 'nuptialflight_app';
     final String? password = dotenv.env['ARANGO_PASSWORD'];
     if (password == null || password.isEmpty) {
       debugPrint('ArangoSingleton: ARANGO_PASSWORD not set — '

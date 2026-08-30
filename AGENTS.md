@@ -280,12 +280,18 @@ contract with `lib/controller/leadup_features.dart` AND
   **degrades gracefully — reporting/nearby-flights disabled — when it is
   absent**; the training notebooks and both `scripts/*.py` read
   `ARANGO_URL/ARANGO_DB_NAME/ARANGO_USER/ARANGO_PASSWORD` env vars. Never
-  reintroduce hardcoded fallbacks. ⚠️ The old app and `notebook` passwords
-  remain in git history — **rotate both DB users server-side** and treat
-  the historical values as public. Prefer AQL **bind variables** over
-  string interpolation for any new queries; the long-term fix is a thin
-  API in front of ArangoDB. The production DB has been defaced once
-  before — assume hostile traffic.
+  reintroduce hardcoded fallbacks.
+- **Staged credential rotation (2026-08-30):** new builds connect as the DB
+  user **`nuptialflight_app`** (rw on flights/historical/current/leadup, no
+  admin rights — the in-code default user). The legacy `nuptialflight` user
+  stays active only because its old password is compiled into field installs
+  as a fallback; disable it once the installed base has upgraded (revisit
+  ~2026-12). The `notebook` user was rotated the same day. The historical
+  passwords remain in git history — treat them as public. Prefer AQL
+  **bind variables** over string interpolation for any new queries; the
+  long-term fix is a thin API in front of ArangoDB. The production DB has
+  been defaced once before (planted collection removed 2026-08-30) —
+  assume hostile traffic.
 - Reports are keyed by an anonymous per-install UUID
   (`controller/install_id.dart`). Do not add device identifiers or other
   fingerprinting.

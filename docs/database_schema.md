@@ -73,12 +73,15 @@ schema:
 
 - The training user connects with server-side AQL projection
   (`RETURN {field…}`) — ~30x faster than `RETURN f`.
-- Security: the DB has been defaced once before; treat traffic as hostile.
-  Credentials live in `assets/.env` / environment variables only — the app,
-  notebooks, and scripts all read `ARANGO_*` env vars, and the app disables
-  reporting gracefully when no password is shipped. Both DB users' old
-  passwords exist in git history and must be rotated server-side (see the
-  security section in AGENTS.md). Prefer AQL bind variables over string
-  interpolation.
+- Security: the DB has been defaced once before (planted collection removed
+  2026-08-30); treat traffic as hostile. Credentials live in `assets/.env`
+  / environment variables only — the app, notebooks, and scripts all read
+  `ARANGO_*` env vars, and the app disables reporting gracefully when no
+  password is shipped. Users after the 2026-08-30 staged rotation:
+  **`nuptialflight_app`** (new builds + scripts; rw on the four collections,
+  no admin), legacy `nuptialflight` (kept alive only for pre-rotation field
+  installs — disable once the fleet upgrades), and `notebook` (training;
+  rotated). Old passwords exist in git history — treat as public. Prefer
+  AQL bind variables over string interpolation.
 - The defaced collection is empty; dropping it needs admin credentials
   (both app users get HTTP 403 on drop).

@@ -59,7 +59,7 @@ HOURLY_BASE = ['lat', 'lon', 'hemisphere', 'sin_doy', 'cos_doy', 'hour',
 def connect():
     url = os.environ.get('ARANGO_URL', 'https://api.bitbot.com.au:8530')
     dbname = os.environ.get('ARANGO_DB_NAME', 'nuptialFlight')
-    user = os.environ.get('ARANGO_USER', 'nuptialflight')
+    user = os.environ.get('ARANGO_USER', 'nuptialflight_app')
     password = os.environ.get('ARANGO_PASSWORD')
     if not password:
         sys.exit('ARANGO_PASSWORD env var is required')

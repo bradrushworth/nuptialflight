@@ -73,7 +73,7 @@ def env(name, default=None):
 def connect_arango():
     url = env("ARANGO_URL", "https://api.bitbot.com.au:8530")
     db_name = env("ARANGO_DB_NAME", "nuptialFlight")
-    user = env("ARANGO_USER", "nuptialflight")
+    user = env("ARANGO_USER", "nuptialflight_app")
     password = env("ARANGO_PASSWORD", "")
     if not password:
         sys.exit("ARANGO_PASSWORD env var is required")
