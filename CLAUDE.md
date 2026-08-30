@@ -60,18 +60,38 @@ This protocol applies when ending a Beads implementation workflow. It is subordi
 
 ## Build & Test
 
-_Add your build and test commands here_
-
 ```bash
-# Example:
-# npm install
-# npm test
+flutter pub get
+flutter analyze   # must stay at 0 errors
+flutter test      # ~93 hermetic tests must pass; 7 live-API tests need real
+                  # credentials in assets/.env (see AGENTS.md "Testing")
 ```
+
+`assets/.env` (gitignored) is required even for analyze/tests — a placeholder
+template is in AGENTS.md. Avoid `flutter pub upgrade` (can hang on git deps);
+use `flutter pub get`.
 
 ## Architecture Overview
 
-_Add a brief overview of your project architecture_
+**Read [AGENTS.md](AGENTS.md) — it is the canonical agent context for this
+repo** (architecture, One Call 4.0 weather pipeline + paid-call budget, model
+contract, i18n, release process, security). Deeper references live in
+`docs/` (`database_schema.md`, `model_training_findings.md`,
+`map_shading.md`).
+
+One-paragraph orientation: a Flutter app (Android/iOS/Web) that predicts ant
+nuptial flights from OpenWeatherMap weather, scored on-device by two bundled
+RandomForest models (sklite JSON walked by `lib/models/forest_model.dart`).
+User sighting reports + weather go to ArangoDB and become the next retrain's
+training data; the new `leadup` collection captures the antecedent weather
+before each report.
 
 ## Conventions & Patterns
 
-_Add your project-specific conventions here_
+- Model feature ORDER is a contract (`lib/controller/nuptials.dart` <->
+  training notebooks) — change both plus the model tests together.
+- Never hand-edit `assets/*_model.json`; regenerate from the notebooks.
+- Legacy `flights`/`historical`/`current` DB schemas are frozen.
+- Every user-visible string is an ARB key (13 locales); no hardcoded copy.
+- Never log URLs containing `appid=`; never commit credentials.
+- Keep first-frame startup non-blocking (no new awaits around `runApp()`).

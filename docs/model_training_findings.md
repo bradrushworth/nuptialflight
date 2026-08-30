@@ -89,7 +89,8 @@ Neither candidate has been shipped; `lib/models/final_model.dart` and
   bro…"). Rotate the `notebook` DB user's password and audit for
   unauthorised changes.
 - Working artifacts (data cache, models, exports, holdout, scripts) live in
-  `%TEMP%` — see `.clinerules` "Resumable work" for the inventory.
+  `%TEMP%` — see the "Reproducibility artifacts" appendix at the end of this
+  file for the inventory.
 
 ## SHIPPED (2026-07-26, later the same day)
 
@@ -175,3 +176,24 @@ Parity: `test/production_model_parity_test.dart` max |err| ~8e-15 (daily) /
 `hourly_final2.py` (hourly). Day-quality fixtures + gauges recalibrated;
 all model/nuptials/hourly/size/parity tests pass; `flutter analyze` = 4
 pre-existing infos only.
+## Appendix — Reproducibility artifacts (`%TEMP%`)
+
+Working artifacts may be wiped between sessions. Deterministic re-create
+(random_state=42):
+
+- Daily: `fetch_chunk.py` (resumable projected AQL) -> `prep.py` -> `df.pkl`
+  (212,504 rows) -> `ship_train.py` -> `ship_model.pkl/.json` +
+  `ship_expected.json` (200-row float32 parity fixture) + `features.json`.
+  Part-4 (21-feature) variants: `fetch_chunk2.py` -> `prep2.py` -> `ship2.py`
+  (`df2.pkl`, `features2.json`, `ship_model2.*`, `ship_expected2.json`).
+- Hourly: `fetch_hourly_chunk.py` (loop until 0) -> `hourly_train.py` ->
+  `hourly_df.pkl` -> `hourly_ship.py` -> `ship_hour_model.pkl/.json` +
+  `ship_hour_expected.json` + `hourly_features.json`; part-4 variants
+  `fetch_hourly_chunk2.py` -> `hourly_final2.py`.
+- Analysis: `pd_sweep.py` (per-feature partial-dependence optima used for
+  the gauges, test fixtures, AND the map shading — see
+  `docs/map_shading.md`), `recal.py`/`recal2.py`/`refix.py` (recalibrate
+  test expectations), `calc_expect.py`.
+- The parity tests self-skip when `%TEMP%/ship_expected.json` /
+  `ship_hour_expected.json` are absent (CI-safe). Copy those two files back
+  into `%TEMP%` before running them.

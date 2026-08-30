@@ -60,10 +60,15 @@ time to get outside and look for ants in your local area!
    - fast passive `getLastKnownPosition()`, falling back to an active GPS fix only
      when no cached position exists;
    - or a location chosen via the Google Places picker.
-3. `WeatherFetcher` calls OpenWeatherMap for that position:
-   - nearest weather station,
-   - historical (past-day) weather,
-   - current forecast.
+3. `WeatherFetcher` calls OpenWeatherMap for that position (One Call
+   API 4.0 timeline endpoints, plus the 2.5 current-weather API for the
+   place name):
+   - the 48-hour hourly forecast,
+   - the daily forecast — one request that also reaches 2 days into the
+     past, so the antecedent ("lead-up") weather is collected for model
+     training at no extra API cost (`daily[0]` always remains the local
+     today),
+   - the flight day's own hourly history.
 4. `Nuptials` scores the weather with two Random-Forest models
    (`nuptialDailyPercentageModel`, `nuptialHourlyPercentageModel`) to produce
    the daily and hourly flight percentages.
@@ -103,29 +108,30 @@ training notebooks (`lib/models/*.ipynb`). The call sites in
 
 | Model | Asset | Inputs (in order) |
 | --- | --- | --- |
-| Daily | `assets/final_model.json` (15) | `lat`, `lon`, `hemisphere`, `sin_doy`, `cos_doy`, `temp`, `wind`, `rain`, `humid`, `cloud`, `press`, `dewPoint`, `dew_dep`, `rain1`, `rain2` |
-| Hourly | `assets/hour_model.json` (12) | `lat`, `lon`, `hemisphere`, `sin_doy`, `cos_doy`, `hour`, `temp`, `wind`, `humid`, `press`, `dewPoint`, `dew_dep` |
+| Daily | `assets/final_model.json` (21) | `lat`, `lon`, `hemisphere`, `sin_doy`, `cos_doy`, `temp(day)`, `wind`, `rain(pop)`, `humid`, `cloud`, `press`, `dewPoint`, `dew_dep`, `popNext1`, `popNext2`, `uvi`, `windGust`, `rainMm`, `daylength`, `moonSin`, `moonCos` |
+| Hourly | `assets/hour_model.json` (14) | `lat`, `lon`, `hemisphere`, `sin_doy`, `cos_doy`, `hour`, `temp`, `wind`, `humid`, `press`, `dewPoint`, `dew_dep`, `uvi`, `windGust` |
 
-The hourly model is trained **without** rain and cloud (as in earlier
-versions) and adds the UTC `hour`. If you retrain a model
-with a different feature set/order, update the call site in `nuptials.dart` and
+The hourly model is trained **without** rain and cloud and adds the UTC
+`hour`; `popNext1`/`popNext2` are the *forecast* precipitation probability
+for the next two days, not antecedent rain. If you retrain a model with a
+different feature set/order, update the call site in `nuptials.dart` and
 the model tests (`test/nuptials_test.dart`, `test/hourly_test.dart`,
 `test/model_test.dart`) to match.
 
 ### Model retraining findings (2026-07-26)
 A retraining effort against the live flights DB (212k rows, ~4.8% positives)
-found that the production training config's `ccp_alpha=0.0008` prunes every
-tree to a single leaf under that class imbalance (AUC 0.500 - the model
-predicts the base rate). An improved config (150 trees, depth 14,
-`class_weight='balanced_subsample'`, no `ccp_alpha`, plus cyclical
-day-of-year, hemisphere, dew-point depression and antecedent-rain features)
-lifts AUC to 0.663 and average precision from 0.048 to 0.110, verified by a
-Dart/Python parity test (`test/improved_model_parity_test.dart`, max error
-~1e-14). A compact variant (24 trees, `max_leaf_nodes=128`; daily AUC 0.643,
-hourly AUC 0.668) **is now shipped** as the bundled JSON assets, scored by
-`lib/models/forest_model.dart`. Full details and limitations (m2cgen cannot
-export calibrated models) are in
+found that the old production training config's `ccp_alpha=0.0008` pruned
+every tree to a single leaf under that class imbalance (AUC 0.500 — the
+model predicted the base rate). The **currently shipped** models (48 trees,
+256 leaf nodes, `class_weight='balanced_subsample'`) use 21 daily / 14
+hourly features (daily AUC 0.654, hourly AUC 0.670) and are scored by the
+JSON tree-walker `lib/models/forest_model.dart`. The app also now records
+the antecedent ("lead-up") weather before each report into a dedicated
+database collection — the named next accuracy lever — so future retrains
+can use features like days-since-rain and pressure trend
+(`docs/database_schema.md`). Full history, metrics, and limitations are in
 [`docs/model_training_findings.md`](docs/model_training_findings.md).
+
 ---
 
 ## Getting Started
@@ -184,10 +190,9 @@ flutter pub upgrade --major-versions   # conservative major bumps
 # or
 flutter pub upgrade                     # latest within constraints
 ```
-After upgrading, verify with `flutter analyze` (the project currently has **0
-errors**; only a few pre-existing `deprecated_member_use` info-hints remain in
-`lib/controller/screenshots_other.dart`, `lib/controller/widgets_mobile.dart`,
-and `lib/utils.dart`).
+After upgrading, verify with `flutter analyze` (the project currently has
+**0 errors**; a couple of pre-existing `deprecated_member_use` info-hints
+are known and out of scope).
 
 ---
 
@@ -202,7 +207,7 @@ fast, the startup path avoids blocking work:
   fired with `unawaited(...)` so the location/weather network calls start immediately.
 * `_getLocation()` does a fast passive `getLastKnownPosition()` first and only
   falls back to an active GPS fix when no cached position exists. This avoids
-  fetching the 3 OpenWeatherMap endpoints twice on every launch.
+  fetching the OpenWeatherMap endpoints twice on every launch.
 * The active GPS fix uses a 10-second `timeLimit` (was 30s) so a first launch
   with no cached position cannot hang for half a minute.
 
@@ -218,27 +223,35 @@ paid OWM API calls.
 
 ```
 lib/
-  main.dart                 # App entry, MyHomePage UI, load/weather flow
-  utils.dart                # Shared helpers
+  main.dart                # App entry, MyHomePage UI, load/weather flow
+  utils.dart               # Shared helpers
   controller/
-    weather_fetcher.dart   # OpenWeatherMap calls + location lookup
+    weather_fetcher.dart   # OpenWeatherMap One Call 4.0 calls + location +
+                           #   lead-up split + response cache
+    scoring.dart           # Length-safe model scoring helpers
     nuptials.dart          # Random-Forest scoring of weather -> percentages
-    services.dart           # Background-fetch + notifications + widget updates
+    flight_index.dart      # Ant Flight Index (percentiles, bands, odds)
+    services.dart          # Background-fetch + notifications + widget updates
     arangodb.dart          # ArangoDB singleton: reports & nearby flights
-    screenshots_*.dart    # Screenshot/device-preview plumbing (mobile vs web)
+    screenshots_*.dart     # Screenshot/device-preview plumbing (mobile vs web)
     widgets_*.dart         # Platform widget glue (mobile vs web)
   models/
     forest_model.dart      # RandomForest predict_proba walker (reads JSON assets)
-    *.ipynb               # Training notebooks (Random Forest)
-  responses/              # JSON response model classes (OWM, geocoding)
-  view/
-    map.dart               # Standalone interactive map page
+    *.ipynb                # Training notebooks (Random Forest)
+  responses/               # JSON response model classes (OWM, geocoding)
+  view/                    # Home-screen cards, charts, report sheet, map page
 assets/
-  .env                    # API keys (not committed)
-  final_model.json        # Bundled daily model (sklite JSON, 24-tree RF)
-  hour_model.json         # Bundled hourly model (sklite JSON, 24-tree RF)
-test/                     # Unit/widget tests (flutter test)
+  .env                     # API keys (not committed)
+  final_model.json         # Bundled daily model (sklite JSON, 48-tree RF)
+  hour_model.json          # Bundled hourly model (sklite JSON, 48-tree RF)
+  flight_stats.json        # Score percentiles + calibration table
+scripts/                   # flight_stats_pipeline.py, backfill_leadup.py, store/
+docs/                      # Training findings, DB schema, map shading notes
+test/                      # Unit/widget tests (flutter test)
 ```
+
+Contributing with an AI coding agent (or just want the deep context)?
+Start with [AGENTS.md](AGENTS.md).
 
 ---
 
