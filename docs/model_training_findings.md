@@ -197,3 +197,54 @@ Working artifacts may be wiped between sessions. Deterministic re-create
 - The parity tests self-skip when `%TEMP%/ship_expected.json` /
   `ship_hour_expected.json` are absent (CI-safe). Copy those two files back
   into `%TEMP%` before running them.
+
+## Part 5 — lead-up features + solar hour + honest evaluation (2026-08-30, v2.27.0+157)
+
+Shipped after the PR #35 review cycle. Three changes landed together:
+
+### 1. Honest evaluation protocol (the re-baseline)
+`scripts/train_leadup_experiment.py` replaces random `train_test_split` with
+**GroupKFold(5) by install** + per (install, location, day) **dedup**
+(222,757 -> 139,193 rows; positive rate 4.8% -> 6.9%) + a temporal holdout
+(>= 2025-09). Under this protocol the part-4 models re-baseline at **daily
+AUC 0.627** and **hourly 0.640** — the previously reported 0.654/0.670 were
+inflated by near-duplicate rows straddling the random split.
+
+### 2. Lead-up (antecedent weather) features — the "main accuracy lever"
+7 features appended to both models: `prev1_rain, prev2_rain, dpress1,
+dtemp1, days_since_rain (censored at 2), warm_dry_after_rain, has_prev1`
+(contract: `lib/controller/leadup_features.dart` <->
+`train_leadup_experiment.py::add_leadup`). Training derives them UNIFORMLY
+for positives and negatives via a flights self-join (same install — else
+same ~11 km cell — on day-1/day-2; coverage 59.8%); the positives-only
+backfilled `leadup` collection is used only to VALIDATE the derivation
+(993 overlaps: pressure MAE 1.17 hPa, rain MAE 2.44 mm). At runtime the
+features come from the split-and-route `leadUpDaily` slice at zero extra
+API calls; forecast days use the forecast days before them.
+
+### 3. Local solar hour (hourly model)
+UTC `hour` replaced by cyclical `solar_sin/solar_cos` where
+solar = (utc_hour + lon/15) mod 24.
+
+### Results (grouped 5-fold CV, temporal holdout in parentheses)
+| Model | AUC | AP |
+|---|---|---|
+| daily 21f re-baseline | 0.627 ±0.008 (0.622) | 0.129 (0.082) |
+| **daily 28f shipped** | **0.660 ±0.015 (0.639)** | **0.147 (0.097)** |
+| hourly 14f re-baseline | 0.640 ±0.009 (0.651) | 0.132 (0.092) |
+| hourly +solar only | 0.645 ±0.008 (0.658) | 0.135 (0.093) |
+| **hourly 22f shipped** | **0.671 ±0.012 (0.666)** | **0.149 (0.102)** |
+
+### Shipping notes
+- Assets exported by `scripts/export_leadup_models.py` (hand-rolled
+  sklite-format JSON; RF 48x256 as before; ~1.59 MB each). Parity fixtures
+  (`%TEMP%/ship_expected.json`, `ship_hour_expected.json`) verified by
+  `test/production_model_parity_test.dart`.
+- `flight_stats.json` regenerated with the 28-feature scores (quantiles +
+  isotonic recalibrated); band anchors in `test/flight_index_test.dart`
+  re-pinned.
+- Gauge/day-quality fixtures recalibrated; ordering preserved
+  (Perfect .61 > Great .59 > Ordinary .49 > Bad .44 > Worst .01).
+- The `leadup` DB collection backfill (positives-only, idempotent) feeds
+  FUTURE retrains with real API antecedents; ~4.1k/10.1k rows done at time
+  of shipping (paused at the OWM daily call cap; rerun resumes free).

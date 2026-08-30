@@ -26,54 +26,24 @@ if not ARANGO_PASSWORD:
     sys.exit('ARANGO_PASSWORD env var is required (training DB credential)')
 client = ArangoClient(hosts=ARANGO_URL)
 db = client.db(ARANGO_DB, username=ARANGO_USER, password=ARANGO_PASSWORD)
-query = ("FOR f IN flights "
-    "RETURN {tgt: f.flight=='yes', lat: f.weather.lat, lon: f.weather.lon, "
-    "dt: f.weather.daily[0].dt, day: f.weather.daily[0].temp.day, "
-    "windSpeed: f.weather.daily[0].wind_speed, windGust: f.weather.daily[0].wind_gust, "
-    "rain0: f.weather.daily[0].pop, rainmm: f.weather.daily[0].rain, "
-    "humid: f.weather.daily[0].humidity, cloud: f.weather.daily[0].clouds, "
-    "press: f.weather.daily[0].pressure, dewPoint: f.weather.daily[0].dew_point, "
-    "uvi: f.weather.daily[0].uvi, moon: f.weather.daily[0].moon_phase, "
-    "sunrise: f.weather.daily[0].sunrise, sunset: f.weather.daily[0].sunset, "
-    "popNext1: f.weather.daily[1].pop, popNext2: f.weather.daily[2].pop}")
+# Feature engineering is shared verbatim with the training pipeline (2026-08-30
+# retrain: 21 base features + 7 derived lead-up features) so the stats reflect
+# exactly what the shipped 28-feature model sees.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import train_leadup_experiment as tle  # noqa: E402
+
 print('fetching...', flush=True)
-rows = list(db.aql.execute(query, batch_size=10000))
-df = pd.DataFrame(rows)
-print(len(df), 'rows fetched', flush=True)
-
-# --- 2. features exactly as nuptials.dart ---
-df = df.dropna(subset=['lat', 'lon', 'dt', 'day', 'windSpeed', 'rain0', 'humid',
-                       'cloud', 'press', 'dewPoint']).copy()
-df['target'] = df.pop('tgt').astype(int)
-dts = pd.to_datetime(df['dt'], unit='s', utc=True)
-df['month'] = dts.dt.month
-doy = dts.dt.dayofyear.to_numpy()
-
-lat = df['lat'].to_numpy(float); lon = df['lon'].to_numpy(float)
+df = tle.engineer(tle.fetch(db))
+df, _cov = tle.add_leadup(df)
+# NB deliberately NOT deduped: percentiles are "vs historical days as
+# recorded", matching the app's original stats semantics.
+df['month'] = pd.to_datetime(df['dt'], unit='s', utc=True).dt.month
 temp = df['day'].to_numpy(float)
 wind = df['windSpeed'].to_numpy(float)
-gust = df['windGust'].fillna(df['windSpeed']).to_numpy(float)
-rain0 = df['rain0'].to_numpy(float)
-humid = df['humid'].to_numpy(float)
-cloud = df['cloud'].to_numpy(float)
-press = df['press'].to_numpy(float)
-dew = df['dewPoint'].to_numpy(float)
-uvi = df['uvi'].fillna(0.0).to_numpy(float)
-rainmm = df['rainmm'].fillna(0.0).to_numpy(float)
-pop1 = df['popNext1'].fillna(0.0).to_numpy(float)
-pop2 = df['popNext2'].fillna(0.0).to_numpy(float)
-moon = df['moon'].fillna(0.5).to_numpy(float)
-sunrise = df['sunrise'].to_numpy(); sunset = df['sunset'].to_numpy()
-daylength = np.where(pd.notna(df['sunrise']) & pd.notna(df['sunset']),
-                     np.clip((sunset - sunrise) / 3600.0, 0.0, 24.0), 12.0)
-hemi = (lat > 0).astype(float)
-sin_doy = np.sin(2 * np.pi * doy / 365.25); cos_doy = np.cos(2 * np.pi * doy / 365.25)
-dew_dep = temp - dew
-moon_sin = np.sin(2 * np.pi * moon); moon_cos = np.cos(2 * np.pi * moon)
+gust = df['windGust'].to_numpy(float)
+hemi = df['hemisphere'].to_numpy(float)
 
-X = np.column_stack([lat, lon, hemi, sin_doy, cos_doy, temp, wind, rain0, humid,
-                     cloud, press, dew, dew_dep, pop1, pop2, uvi, gust, rainmm,
-                     daylength, moon_sin, moon_cos])
+X = df[tle.DAILY_BASE + tle.LEADUP_FEATS].astype(float).to_numpy()
 
 # --- 3. score with the shipped forest (vectorised tree walk) ---
 model = json.load(open(f"{REPO}/assets/final_model.json"))
@@ -153,7 +123,7 @@ print('old thresholds: score .50 -> percentile',
       ', score .60 -> percentile', round(float((overall < 0.60).mean()) * 100, 1))
 
 out = {
-    'generated': '2026-08-22',
+    'generated': '2026-08-30',
     'rows': int(len(df)),
     'base_rate': round(float(df['target'].mean()), 5),
     'quantile_steps': [round(float(q), 2) for q in qs],

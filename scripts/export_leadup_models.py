@@ -6,7 +6,7 @@ writes to %TEMP% (NOT assets/ — shipping is a separate decision):
 
   final_model_leadup.json / hour_model_leadup.json   sklite-format forests
       (the exact key set lib/models/forest_model.dart walks)
-  ship_leadup_expected.json / ship_hour_leadup_expected.json
+  ship_expected.json / ship_hour_expected.json
       200-row float32 parity fixtures (predict_proba on held-back rows)
   leadup_features_daily.json / leadup_features_hourly.json
       ordered feature-name manifests (the future nuptials.dart contract)
@@ -79,7 +79,7 @@ def main():
 
     daily_feats = tle.DAILY_BASE + tle.LEADUP_FEATS
     train_export(df, daily_feats, 'final_model_leadup.json',
-                 'ship_leadup_expected.json', 'leadup_features_daily.json',
+                 'ship_expected.json', 'leadup_features_daily.json',
                  'daily B (28f)')
 
     dh = df.dropna(subset=['temp', 'h_windSpeed', 'h_humid', 'h_press',
@@ -87,7 +87,7 @@ def main():
     hourly_feats = ([f for f in tle.HOURLY_BASE if f != 'hour']
                     + ['solar_sin', 'solar_cos'] + tle.LEADUP_FEATS)
     train_export(dh, hourly_feats, 'hour_model_leadup.json',
-                 'ship_hour_leadup_expected.json', 'leadup_features_hourly.json',
+                 'ship_hour_expected.json', 'leadup_features_hourly.json',
                  'hourly HC (22f)')
 
 

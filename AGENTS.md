@@ -139,8 +139,10 @@ paid call to a hot path without updating this table.
 The two forests expect features in a **fixed order** that must match the
 training notebooks. The only call sites are `nuptialDailyPercentageModel` and
 `nuptialHourlyPercentageModel` in `lib/controller/nuptials.dart` — the exact
-orders are documented there and in README.md (daily 21 features, hourly 14,
-since the 2026-07-26 part-4 retrain).
+orders are documented there and in README.md (daily 28 features, hourly 22,
+since the 2026-08-30 lead-up retrain; the 7 appended lead-up features are a
+contract with `lib/controller/leadup_features.dart` AND
+`scripts/train_leadup_experiment.py`).
 
 - Never hand-edit `assets/*_model.json` or restructure
   `lib/models/forest_model.dart` maths; regenerate the JSON from the

@@ -371,6 +371,7 @@ class WeatherFetcher {
       dt: todayUtcDay,
       ttl: _ttlForecast,
       errorPrefix: 'Failed to download daily weather',
+      rateLimitMessage: 'The app has exceeded global usage limited. Please try again later!',
       parse: (b) => OneCallResponse.fromTimelineJson(jsonDecode(b), TimelineKind.daily),
     );
     final split = splitDaily(resp.daily ?? const <Daily>[], resp.timezoneOffset ?? 0, nowUtcSeconds);
@@ -404,6 +405,7 @@ class WeatherFetcher {
         endpoint: 'onecall_hourly',
         ttl: _ttlForecast,
         errorPrefix: 'Failed to download hourly weather',
+        rateLimitMessage: 'The app has exceeded global usage limited. Please try again later!',
         parse: (b) => OneCallResponse.fromTimelineJson(jsonDecode(b), TimelineKind.hourly),
       ),
       fetchDailyWeather(),

@@ -115,10 +115,11 @@ void main() {
       final double oneIn35Score = 0.42; // calibrates to ~1-in-41..35 odds
       expect(FlightIndex().calibratedProbability(oneIn35Score), lessThan(base));
       expect(bandFor(oneIn35Score), FlightBand.quiet);
-      // And the ladder still opens up for genuinely good days.
-      expect(bandFor(0.50), FlightBand.watchful); // ~1.5x base
-      expect(bandFor(0.60), FlightBand.promising); // ~2.9x base
-      expect(bandFor(0.75), FlightBand.prime); // >4x base (~1-in-5+)
+      // And the ladder still opens up for genuinely good days (anchors
+      // re-pinned for the 2026-08-30 28-feature stats build).
+      expect(bandFor(0.50), FlightBand.watchful); // ~1.4x base
+      expect(bandFor(0.60), FlightBand.promising); // ~3.0x base
+      expect(bandFor(0.80), FlightBand.prime); // >4x base (~1-in-5+)
     });
   });
 }

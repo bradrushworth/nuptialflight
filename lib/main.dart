@@ -425,20 +425,28 @@ class _MyHomePageState extends State<MyHomePage> {
       // functions guard every index and zero-fill the tail instead of
       // crashing (#19/#21). The model runs exactly once per slot; the
       // percentage lists are derived from the scores, not recomputed.
+      // Lead-up slice from split-and-route: each scored day's antecedent
+      // features come from the two days before it (real past days for
+      // daily[0], forecast days for later ones) - see scoring.dart.
+      final List<Daily> leadUpDaily = weather.leadUpDaily ?? <Daily>[];
       final List<Hourly> hourly = weather.hourly ?? <Hourly>[];
+      final List<Daily> daily = weather.daily ?? <Daily>[];
       _hourlyScore.setAll(
           0,
           computeHourlyScores(
-              weather.lat!, weather.lon!, hourly, _hourlyScore.length));
+              weather.lat!, weather.lon!, hourly, _hourlyScore.length,
+              daily: daily,
+              leadUpDaily: leadUpDaily,
+              tzOffsetSeconds: weather.timezoneOffset ?? 0));
       for (int i = 0; i < _hourlyPercentage.length; i++) {
         _hourlyPercentage[i] = (_hourlyScore[i] * 100.0).toInt();
       }
 
-      final List<Daily> daily = weather.daily ?? <Daily>[];
       _dailyScore.setAll(
           0,
           computeDailyScores(
-              weather.lat!, weather.lon!, daily, _dailyScore.length));
+              weather.lat!, weather.lon!, daily, _dailyScore.length,
+              leadUpDaily: leadUpDaily));
       for (int i = 0; i < _dailyPercentage.length; i++) {
         _dailyPercentage[i] = (_dailyScore[i] * 100.0).toInt();
       }

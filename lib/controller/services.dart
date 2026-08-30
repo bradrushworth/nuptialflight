@@ -15,6 +15,7 @@ import 'arangodb.dart';
 import 'flight_index.dart';
 import 'geo.dart';
 import 'nuptials.dart';
+import 'scoring.dart';
 import 'weather_fetcher.dart';
 import 'widgets_mobile.dart';
 
@@ -414,10 +415,10 @@ Future<void> getServicePercentage() async {
       debugPrint('getServicePercentage: empty daily forecast - skipping refresh');
       return;
     }
-    final Daily today = daily.first;
-    score = nuptialDailyPercentageModel(weather.lat!, weather.lon!, today,
-        pop1: daily.length > 1 ? daily.elementAt(1).pop : null,
-        pop2: daily.length > 2 ? daily.elementAt(2).pop : null);
+    // One shared scoring path with the app UI (incl. lead-up features from
+    // the split's past slice) - see scoring.dart.
+    score = computeDailyScores(weather.lat!, weather.lon!, daily, 1,
+        leadUpDaily: weather.leadUpDaily ?? const <Daily>[]).first;
     percentage = (score * 100.0).toInt();
     band = bandFor(score);
     debugPrint('getServicePercentage: Percentage for nuptial flights: $percentage');

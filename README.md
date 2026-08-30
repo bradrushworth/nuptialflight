@@ -108,15 +108,20 @@ training notebooks (`lib/models/*.ipynb`). The call sites in
 
 | Model | Asset | Inputs (in order) |
 | --- | --- | --- |
-| Daily | `assets/final_model.json` (21) | `lat`, `lon`, `hemisphere`, `sin_doy`, `cos_doy`, `temp(day)`, `wind`, `rain(pop)`, `humid`, `cloud`, `press`, `dewPoint`, `dew_dep`, `popNext1`, `popNext2`, `uvi`, `windGust`, `rainMm`, `daylength`, `moonSin`, `moonCos` |
-| Hourly | `assets/hour_model.json` (14) | `lat`, `lon`, `hemisphere`, `sin_doy`, `cos_doy`, `hour`, `temp`, `wind`, `humid`, `press`, `dewPoint`, `dew_dep`, `uvi`, `windGust` |
+| Daily | `assets/final_model.json` (28) | `lat`, `lon`, `hemisphere`, `sin_doy`, `cos_doy`, `temp(day)`, `wind`, `rain(pop)`, `humid`, `cloud`, `press`, `dewPoint`, `dew_dep`, `popNext1`, `popNext2`, `uvi`, `windGust`, `rainMm`, `daylength`, `moonSin`, `moonCos`, + 7 lead-up features |
+| Hourly | `assets/hour_model.json` (22) | `lat`, `lon`, `hemisphere`, `sin_doy`, `cos_doy`, `temp`, `wind`, `humid`, `press`, `dewPoint`, `dew_dep`, `uvi`, `windGust`, `solar_sin`, `solar_cos`, + 7 lead-up features |
 
-The hourly model is trained **without** rain and cloud and adds the UTC
-`hour`; `popNext1`/`popNext2` are the *forecast* precipitation probability
-for the next two days, not antecedent rain. If you retrain a model with a
-different feature set/order, update the call site in `nuptials.dart` and
-the model tests (`test/nuptials_test.dart`, `test/hourly_test.dart`,
-`test/model_test.dart`) to match.
+The 7 lead-up features (`lib/controller/leadup_features.dart`) describe the
+two days *before* the scored day — previous-day rain amounts, 24 h pressure
+and temperature change, days-since-rain, a warm-dry-after-rain flag, and a
+coverage flag — computed at runtime from the same weather request that
+serves the forecast. The hourly model uses the cyclical **local solar
+hour** rather than UTC. The hourly model is still trained without rain and
+cloud; `popNext1`/`popNext2` are *forecast* precipitation probability, not
+antecedent rain. If you retrain a model with a different feature set/order,
+update the call site in `nuptials.dart` and the model tests
+(`test/nuptials_test.dart`, `test/hourly_test.dart`, `test/model_test.dart`)
+to match.
 
 ### Model retraining findings (2026-07-26)
 A retraining effort against the live flights DB (212k rows, ~4.8% positives)

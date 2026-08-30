@@ -31,14 +31,14 @@ void main() {
     double lat = -35.2;
     double lon = 149.1;
 
-    test('Temperature', () => expect(temperatureContribution(daily.temp!.max!), closeTo(0.95, 0.01)));
-    test('Humidity', () => expect(humidityContribution(daily.humidity!), closeTo(0.74, 0.01)));
+    test('Temperature', () => expect(temperatureContribution(daily.temp!.max!), closeTo(0.93, 0.01)));
+    test('Humidity', () => expect(humidityContribution(daily.humidity!), closeTo(0.88, 0.01)));
     test('Wind', () => expect(windContribution(daily.windSpeed!), closeTo(1.00, 0.01)));
-    test('Rain', () => expect(rainContribution(daily.pop!), closeTo(0.18, 0.01)));
-    test('Cloud Coverage', () => expect(cloudinessContribution(daily.clouds!), closeTo(0.36, 0.01)));
+    test('Rain', () => expect(rainContribution(daily.pop!), closeTo(0.34, 0.01)));
+    test('Cloud Coverage', () => expect(cloudinessContribution(daily.clouds!), closeTo(0.59, 0.01)));
     test('Pressure', () => expect(pressureContribution(daily.pressure!), closeTo(1.00, 0.01)));
-    test('Total', () => expect(nuptialDailyPercentage(daily), closeTo(0.74, 0.01)));
-    test('Model', () => expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.52, 0.02)));
+    test('Total', () => expect(nuptialDailyPercentage(daily), closeTo(0.83, 0.01)));
+    test('Model', () => expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.61, 0.02)));
   });
 
   group('Worst day', () {
@@ -56,13 +56,13 @@ void main() {
     double lat = -35.2;
     double lon = 149.1;
 
-    test('Temperature', () => expect(temperatureContribution(daily.temp!.max!), closeTo(0.07, 0.01)));
-    test('Humidity', () => expect(humidityContribution(daily.humidity!), closeTo(0.97, 0.01)));
-    test('Wind', () => expect(windContribution(daily.windSpeed!), closeTo(0.07, 0.01)));
-    test('Rain', () => expect(rainContribution(daily.pop!), closeTo(0.00, 0.01)));
-    test('Cloud Coverage', () => expect(cloudinessContribution(daily.clouds!), closeTo(0.19, 0.01)));
-    test('Pressure', () => expect(pressureContribution(daily.pressure!), closeTo(0.23, 0.01)));
-    test('Total', () => expect(nuptialDailyPercentage(daily), closeTo(0.39, 0.01)));
+    test('Temperature', () => expect(temperatureContribution(daily.temp!.max!), closeTo(0.02, 0.01)));
+    test('Humidity', () => expect(humidityContribution(daily.humidity!), closeTo(0.25, 0.01)));
+    test('Wind', () => expect(windContribution(daily.windSpeed!), closeTo(0.09, 0.01)));
+    test('Rain', () => expect(rainContribution(daily.pop!), closeTo(0.85, 0.01)));
+    test('Cloud Coverage', () => expect(cloudinessContribution(daily.clouds!), closeTo(0.95, 0.01)));
+    test('Pressure', () => expect(pressureContribution(daily.pressure!), closeTo(0.50, 0.01)));
+    test('Total', () => expect(nuptialDailyPercentage(daily), closeTo(0.36, 0.01)));
     test('Model', () => expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.01, 0.01)));
   });
 
@@ -81,14 +81,14 @@ void main() {
     double lat = -35.2;
     double lon = 149.1;
 
-    test('Temperature', () => expect(temperatureContribution(daily.temp!.max!), closeTo(1.00, 0.01)));
-    test('Humidity', () => expect(humidityContribution(daily.humidity!), closeTo(0.62, 0.01)));
-    test('Wind', () => expect(windContribution(daily.windSpeed!), closeTo(1.00, 0.01)));
-    test('Rain', () => expect(rainContribution(daily.pop!), closeTo(0.42, 0.01)));
-    test('Cloud Coverage', () => expect(cloudinessContribution(daily.clouds!), closeTo(0.34, 0.01)));
-    test('Pressure', () => expect(pressureContribution(daily.pressure!), closeTo(0.78, 0.01)));
-    test('Total', () => expect(nuptialDailyPercentage(daily), closeTo(0.71, 0.01)));
-    test('Model', () => expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.53, 0.02)));
+    test('Temperature', () => expect(temperatureContribution(daily.temp!.max!), closeTo(0.84, 0.01)));
+    test('Humidity', () => expect(humidityContribution(daily.humidity!), closeTo(0.88, 0.01)));
+    test('Wind', () => expect(windContribution(daily.windSpeed!), closeTo(0.96, 0.01)));
+    test('Rain', () => expect(rainContribution(daily.pop!), closeTo(0.00, 0.01)));
+    test('Cloud Coverage', () => expect(cloudinessContribution(daily.clouds!), closeTo(0.51, 0.01)));
+    test('Pressure', () => expect(pressureContribution(daily.pressure!), closeTo(0.43, 0.01)));
+    test('Total', () => expect(nuptialDailyPercentage(daily), closeTo(0.70, 0.01)));
+    test('Model', () => expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.59, 0.02)));
   });
 
   group('Ordinary day', () {
@@ -106,13 +106,13 @@ void main() {
     double lat = -35.2;
     double lon = 149.1;
 
-    test('Temperature', () => expect(temperatureContribution(daily.temp!.max!), closeTo(0.43, 0.01)));
-    test('Humidity', () => expect(humidityContribution(daily.humidity!), closeTo(0.32, 0.01)));
-    test('Wind', () => expect(windContribution(daily.windSpeed!), closeTo(0.38, 0.01)));
-    test('Rain', () => expect(rainContribution(daily.pop!), closeTo(0.79, 0.01)));
-    test('Cloud Coverage', () => expect(cloudinessContribution(daily.clouds!), closeTo(0.12, 0.01)));
-    test('Pressure', () => expect(pressureContribution(daily.pressure!), closeTo(0.53, 0.01)));
-    test('Total', () => expect(nuptialDailyPercentage(daily), closeTo(0.40, 0.01)));
+    test('Temperature', () => expect(temperatureContribution(daily.temp!.max!), closeTo(0.46, 0.01)));
+    test('Humidity', () => expect(humidityContribution(daily.humidity!), closeTo(0.56, 0.01)));
+    test('Wind', () => expect(windContribution(daily.windSpeed!), closeTo(0.40, 0.01)));
+    test('Rain', () => expect(rainContribution(daily.pop!), closeTo(0.20, 0.01)));
+    test('Cloud Coverage', () => expect(cloudinessContribution(daily.clouds!), closeTo(0.35, 0.01)));
+    test('Pressure', () => expect(pressureContribution(daily.pressure!), closeTo(0.37, 0.01)));
+    test('Total', () => expect(nuptialDailyPercentage(daily), closeTo(0.43, 0.01)));
     test('Model', () => expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.49, 0.02)));
   });
 
@@ -132,13 +132,13 @@ void main() {
     double lon = 149.1;
 
     test('Temperature', () => expect(temperatureContribution(daily.temp!.max!), closeTo(0.04, 0.01)));
-    test('Humidity', () => expect(humidityContribution(daily.humidity!), closeTo(0.00, 0.01)));
-    test('Wind', () => expect(windContribution(daily.windSpeed!), closeTo(0.04, 0.01)));
-    test('Rain', () => expect(rainContribution(daily.pop!), closeTo(0.90, 0.01)));
-    test('Cloud Coverage', () => expect(cloudinessContribution(daily.clouds!), closeTo(0.16, 0.01)));
-    test('Pressure', () => expect(pressureContribution(daily.pressure!), closeTo(0.08, 0.01)));
-    test('Total', () => expect(nuptialDailyPercentage(daily), closeTo(0.14, 0.01)));
-    test('Model', () => expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.31, 0.02)));
+    test('Humidity', () => expect(humidityContribution(daily.humidity!), closeTo(0.17, 0.01)));
+    test('Wind', () => expect(windContribution(daily.windSpeed!), closeTo(0.09, 0.01)));
+    test('Rain', () => expect(rainContribution(daily.pop!), closeTo(0.97, 0.01)));
+    test('Cloud Coverage', () => expect(cloudinessContribution(daily.clouds!), closeTo(0.97, 0.01)));
+    test('Pressure', () => expect(pressureContribution(daily.pressure!), closeTo(0.43, 0.01)));
+    test('Total', () => expect(nuptialDailyPercentage(daily), closeTo(0.34, 0.01)));
+    test('Model', () => expect(nuptialDailyPercentageModel(lat, lon, daily), closeTo(0.44, 0.02)));
   });
 
   group('Hourly Model', () {
@@ -159,7 +159,7 @@ void main() {
       // Guards the call-site wiring: hour_model expects 14 features
       // [lat, lon, hemisphere, sin_doy, cos_doy, hour, temp, wind, humid,
       //  press, dewPoint, dew_dep, uvi, windGust] (no rain/cloud/visibility).
-      expect(nuptialHourlyPercentageModel(lat, lon, hourly), closeTo(0.35, 0.02));
+      expect(nuptialHourlyPercentageModel(lat, lon, hourly), closeTo(0.43, 0.02));
     });
   });
 }

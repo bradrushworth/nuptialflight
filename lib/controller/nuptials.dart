@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:nuptialflight/controller/leadup_features.dart';
 import 'package:nuptialflight/models/forest_model.dart';
 import 'package:nuptialflight/responses/onecall_response.dart';
 
@@ -172,7 +173,8 @@ double nuptialDailyPercentage(Daily daily, {bool nocturnal = false}) {
   return nuptialCalculator(values);
 }
 
-double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
+double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly,
+    {LeadUpFeatures? leadUp}) {
   double temp = hourly.temp!.toDouble();
   double wind = hourly.windSpeed!.toDouble();
   double gust = hourly.windGust?.toDouble() ?? hourly.windSpeed!.toDouble();
@@ -190,6 +192,11 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
   double cosDoy = cos(2 * pi * dayOfYear / 365.25);
   // Dew-point depression: how far the air is from saturation.
   double dewDep = temp - dewPoint;
+  // Cyclical LOCAL SOLAR hour (2026-08-30 retrain): flights follow the sun,
+  // not UTC. lon/15 converts degrees to hours; double-mod guards negatives.
+  double solar = (((hour + lon / 15.0) % 24) + 24) % 24;
+  double solarSin = sin(2 * pi * solar / 24);
+  double solarCos = cos(2 * pi * solar / 24);
 
   if (temp < 5) return 0.01;
   if (wind > 15) return 0.01;
@@ -199,17 +206,17 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
       0.99,
       max(
           0.01,
-          // hour_model (retrained 2026-07-26 part 4) expects these 14 features
-          // in this exact order - keep in sync with the training pipeline
-          // (see docs/model_training_findings.md). No rain/cloud, as before;
-          // now adds uvi + windGust (visibility was dropped as noise).
+          // hour_model (retrained 2026-08-30) expects these 22 features in
+          // this exact order - keep in sync with the training pipeline
+          // (scripts/train_leadup_experiment.py HOURLY_BASE minus `hour`,
+          // plus solar_sin/solar_cos, plus the 7 LeadUpFeatures). No
+          // rain/cloud, as before. See docs/model_training_findings.md.
           Nuptials().hourly.scorePositive([
             lat.toDouble(),
             lon.toDouble(),
             hemisphere,
             sinDoy,
             cosDoy,
-            hour.toDouble(),
             temp,
             wind,
             humid,
@@ -218,10 +225,13 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly) {
             dewDep,
             uvi,
             gust,
+            solarSin,
+            solarCos,
+            ...(leadUp ?? LeadUpFeatures.none).vector,
           ])));
 }
 double nuptialDailyPercentageModel(num lat, num lon, Daily daily,
-    {bool nocturnal = false, num? pop1, num? pop2}) {
+    {bool nocturnal = false, num? pop1, num? pop2, LeadUpFeatures? leadUp}) {
   double temp = daily.temp!.day!.toDouble();
   double wind = daily.windSpeed!.toDouble();
   double gust = daily.windGust?.toDouble() ?? daily.windSpeed!.toDouble();
@@ -263,11 +273,11 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily,
       0.99,
       max(
           0.01,
-          // final_model.json (retrained 2026-07-26 part 4) expects these 21
+          // final_model.json (retrained 2026-08-30) expects these 28
           // features in this exact order - keep in sync with the training
-          // pipeline (see docs/model_training_findings.md). The first 15 are
-          // unchanged; appended: uvi, windGust, rainMm, daylength, moonSin,
-          // moonCos.
+          // pipeline (scripts/train_leadup_experiment.py DAILY_BASE +
+          // LEADUP_FEATS; see docs/model_training_findings.md). The first 21
+          // keep the part-4 order; the 7 LeadUpFeatures are appended.
           Nuptials().daily.scorePositive([
             lat.toDouble(),
             lon.toDouble(),
@@ -290,6 +300,7 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily,
             daylength,
             moonSin,
             moonCos,
+            ...(leadUp ?? LeadUpFeatures.none).vector,
           ])));
 }
 
@@ -330,7 +341,7 @@ double nuptialCalculator(List<Map<String, num>> values) {
 
 /// Representative baseline contexts used to marginalise the non-target
 /// features when computing a partial-dependence curve. Each entry is a full
-/// 21-element daily-model input vector:
+/// 28-element daily-model input vector:
 /// [lat, lon, hemisphere, sin_doy, cos_doy, temp, wind, rain0(pop), humid,
 ///  cloud, press, dewPoint, dew_dep, popNext1, popNext2, uvi, windGust, rainMm,
 ///  daylength, moonSin, moonCos].
@@ -385,6 +396,15 @@ List<List<double>> _buildPdContexts() {
         13.0, // 18 daylength (hours; flight-season typical)
         0.0, // 19 moonSin (new moon baseline)
         1.0, // 20 moonCos
+        // Lead-up baselines (2026-08-30 retrain): a covered, dry, stable
+        // antecedent window - the modal serve-time state.
+        0.0, // 21 prev1_rain
+        0.0, // 22 prev2_rain
+        0.0, // 23 dpress1
+        0.0, // 24 dtemp1
+        2.0, // 25 days_since_rain (censored "no recent rain")
+        0.0, // 26 warm_dry_after_rain
+        1.0, // 27 has_prev1 (serve time always has the split's past days)
       ]);
     }
   }
