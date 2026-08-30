@@ -39,4 +39,27 @@ void main() {
     expect(computeHourlyPercentages(0, 0, [], 48), everyElement(0));
     expect(computeDailyPercentages(0, 0, [], 8), everyElement(0));
   });
+
+  test('hourly scores: 10 records into 48 slots -> zero-filled tail, no throw', () {
+    final out = computeHourlyScores(-35.0, 149.0, List.generate(10, (_) => h()), 48);
+    expect(out.length, 48);
+    expect(out[9], greaterThan(0));
+    expect(out.sublist(10), everyElement(0));
+  });
+
+  test('percentage wrapper equals (score*100).toInt() slotwise', () {
+    final hourlyList = List.generate(10, (_) => h());
+    final scores = computeHourlyScores(-35.0, 149.0, hourlyList, 48);
+    final percentages = computeHourlyPercentages(-35.0, 149.0, hourlyList, 48);
+    for (var i = 0; i < 48; i++) {
+      expect(percentages[i], (scores[i] * 100.0).toInt());
+    }
+
+    final dailyList = List.generate(7, (_) => d());
+    final dailyScores = computeDailyScores(-35.0, 149.0, dailyList, 8);
+    final dailyPercentages = computeDailyPercentages(-35.0, 149.0, dailyList, 8);
+    for (var i = 0; i < 8; i++) {
+      expect(dailyPercentages[i], (dailyScores[i] * 100.0).toInt());
+    }
+  });
 }

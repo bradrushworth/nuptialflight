@@ -424,33 +424,27 @@ class _MyHomePageState extends State<MyHomePage> {
       debugPrint('_updateWeather: geocoding=$_geocoding');
 
       // The API can return fewer hourly/daily entries than our rolling
-      // windows (4.0 timeline endpoints page their responses); guard every
-      // index and zero-fill the tail instead of crashing (#19/#21).
+      // windows (4.0 timeline endpoints page their responses); the score
+      // functions guard every index and zero-fill the tail instead of
+      // crashing (#19/#21). The model runs exactly once per slot; the
+      // percentage lists are derived from the scores, not recomputed.
       final List<Hourly> hourly = weather.hourly ?? <Hourly>[];
-      final int hourlyCount = min(_hourlyScore.length, hourly.length);
-      for (int i = 0; i < _hourlyScore.length; i++) {
-        _hourlyScore[i] = i < hourlyCount
-            ? nuptialHourlyPercentageModel(weather.lat!, weather.lon!, hourly[i])
-            : 0;
-      }
-      _hourlyPercentage.setAll(
+      _hourlyScore.setAll(
           0,
-          computeHourlyPercentages(
-              weather.lat!, weather.lon!, hourly, _hourlyPercentage.length));
+          computeHourlyScores(
+              weather.lat!, weather.lon!, hourly, _hourlyScore.length));
+      for (int i = 0; i < _hourlyPercentage.length; i++) {
+        _hourlyPercentage[i] = (_hourlyScore[i] * 100.0).toInt();
+      }
 
       final List<Daily> daily = weather.daily ?? <Daily>[];
-      final int dailyCount = min(_dailyScore.length, daily.length);
-      for (int i = 0; i < _dailyScore.length; i++) {
-        _dailyScore[i] = i < dailyCount
-            ? nuptialDailyPercentageModel(weather.lat!, weather.lon!, daily[i],
-                pop1: i + 1 < daily.length ? daily[i + 1].pop : null,
-                pop2: i + 2 < daily.length ? daily[i + 2].pop : null)
-            : 0;
-      }
-      _dailyPercentage.setAll(
+      _dailyScore.setAll(
           0,
-          computeDailyPercentages(
-              weather.lat!, weather.lon!, daily, _dailyPercentage.length));
+          computeDailyScores(
+              weather.lat!, weather.lon!, daily, _dailyScore.length));
+      for (int i = 0; i < _dailyPercentage.length; i++) {
+        _dailyPercentage[i] = (_dailyScore[i] * 100.0).toInt();
+      }
 
       loaded = true;
     });
