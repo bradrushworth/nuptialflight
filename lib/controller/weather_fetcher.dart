@@ -356,7 +356,7 @@ class WeatherFetcher {
 
     final key = dotenv.env['OPENWEATHERMAP_API_KEY'];
     final hourlyUrl =
-        'https://api.openweathermap.org/data/4.0/onecall/timeline/1h?lat=$_lat&lon=$_lon&appid=$key&units=metric';
+        'https://api.openweathermap.org/data/4.0/onecall/timeline/1h?lat=$_lat&lon=$_lon&appid=$key&units=metric&cnt=48';
     final dailyUrl =
         'https://api.openweathermap.org/data/4.0/onecall/timeline/1day?lat=$_lat&lon=$_lon&appid=$key&units=metric&start=$pastStart&cnt=$cnt';
     print("hourlyUrl=$hourlyUrl");

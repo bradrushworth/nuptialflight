@@ -18,6 +18,7 @@ import 'controller/arangodb.dart';
 import 'controller/flight_index.dart';
 import 'controller/geo.dart';
 import 'controller/nuptials.dart';
+import 'controller/scoring.dart';
 import 'controller/screenshots_mobile.dart'
     if (dart.library.io) 'controller/screenshots_mobile.dart'
     if (dart.library.js) 'controller/screenshots_other.dart';
@@ -422,16 +423,20 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       debugPrint('_updateWeather: geocoding=$_geocoding');
 
-      // The API can return fewer hourly entries than our rolling window;
-      // guard the index and zero-fill the tail instead of crashing.
+      // The API can return fewer hourly/daily entries than our rolling
+      // windows (4.0 timeline endpoints page their responses); guard every
+      // index and zero-fill the tail instead of crashing (#19/#21).
       final List<Hourly> hourly = weather.hourly ?? <Hourly>[];
       final int hourlyCount = min(_hourlyScore.length, hourly.length);
       for (int i = 0; i < _hourlyScore.length; i++) {
         _hourlyScore[i] = i < hourlyCount
             ? nuptialHourlyPercentageModel(weather.lat!, weather.lon!, hourly[i])
             : 0;
-        _hourlyPercentage[i] = (_hourlyScore[i] * 100.0).toInt();
       }
+      _hourlyPercentage.setAll(
+          0,
+          computeHourlyPercentages(
+              weather.lat!, weather.lon!, hourly, _hourlyPercentage.length));
 
       final List<Daily> daily = weather.daily ?? <Daily>[];
       final int dailyCount = min(_dailyScore.length, daily.length);
@@ -441,8 +446,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 pop1: i + 1 < daily.length ? daily[i + 1].pop : null,
                 pop2: i + 2 < daily.length ? daily[i + 2].pop : null)
             : 0;
-        _dailyPercentage[i] = (_dailyScore[i] * 100.0).toInt();
       }
+      _dailyPercentage.setAll(
+          0,
+          computeDailyPercentages(
+              weather.lat!, weather.lon!, daily, _dailyPercentage.length));
 
       loaded = true;
     });
