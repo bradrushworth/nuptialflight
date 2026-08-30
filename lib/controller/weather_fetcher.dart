@@ -14,6 +14,12 @@ import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:nuptialflight/responses/weather_response.dart';
 
+class DailySplit {
+  final List<Daily> forecast;
+  final List<Daily> leadUp;
+  DailySplit(this.forecast, this.leadUp);
+}
+
 class WeatherFetcher {
   late bool _mockLocation;
   // True only when mock mode was auto-enabled for a debug web launch (as opposed
@@ -292,6 +298,24 @@ class WeatherFetcher {
   /// requiring an extra paginated request.
   static const int leadUpDays = 2;
 
+  /// Splits a combined daily-timeline page at the LOCATION-LOCAL "today":
+  /// a record belongs to leadUp iff its local day bucket is before now's
+  /// local day bucket. One boundary definition; no UTC/local mixing (#20).
+  static DailySplit splitDaily(List<Daily> all, int tzOffsetSeconds, int nowUtcSeconds) {
+    final today = (nowUtcSeconds + tzOffsetSeconds) ~/ 86400;
+    final forecast = <Daily>[];
+    final leadUp = <Daily>[];
+    for (final d in all) {
+      final dt = d.dt;
+      if (dt != null && (dt + tzOffsetSeconds) ~/ 86400 < today) {
+        leadUp.add(d);
+      } else {
+        forecast.add(d);
+      }
+    }
+    return DailySplit(forecast, leadUp);
+  }
+
   Future<OneCallResponse> fetchWeather() async {
     if (_lat == null || _lon == null)
       throw Exception('Location is unknown! Perhaps you didn\'t allow location permissions?');
@@ -315,11 +339,8 @@ class WeatherFetcher {
     // calls: the daily request the app already makes simply reaches a little
     // into the past. The legacy `flights.weather.daily` schema is unchanged
     // (daily[0] == today), so years of stored training history stay valid.
-    final now = DateTime.now().toUtc();
-    final todayMidnight = DateTime.utc(now.year, now.month, now.day);
-    final todayStart = todayMidnight.millisecondsSinceEpoch ~/ 1000;
-    final pastStart =
-        todayMidnight.subtract(const Duration(days: leadUpDays)).millisecondsSinceEpoch ~/ 1000;
+    final nowUtcSeconds = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
+    final pastStart = ((nowUtcSeconds ~/ 86400) - leadUpDays) * 86400;
     final cnt = leadUpDays + 8; // 10 -> fits one daily-timeline page
 
     final key = dotenv.env['OPENWEATHERMAP_API_KEY'];
@@ -348,26 +369,10 @@ class WeatherFetcher {
     ]);
     // Merge: keep the hourly list and attach the (split) daily list.
     final merged = results[0];
-    final allDaily = results[1].daily ?? const <Daily>[];
-    final forecast = <Daily>[];
-    final leadUp = <Daily>[];
-    for (final d in allDaily) {
-      // Daily records are anchored at local midnight; compare by day bucket
-      // using the response timezone so the split lands on the report day the
-      // user actually experienced (not a raw UTC seam).
-      final dayStart = (d.dt ?? 0) + (results[1].timezoneOffset ?? 0);
-      final localMidnight = DateTime.fromMillisecondsSinceEpoch(dayStart * 1000, isUtc: true);
-      final localToday = localMidnight.year == todayMidnight.year &&
-          localMidnight.month == todayMidnight.month &&
-          localMidnight.day == todayMidnight.day;
-      if (localToday || d.dt == null || (d.dt! >= todayStart)) {
-        forecast.add(d);
-      } else {
-        leadUp.add(d);
-      }
-    }
-    merged.daily = forecast;
-    merged.leadUpDaily = leadUp;
+    final split = splitDaily(results[1].daily ?? const <Daily>[],
+        results[1].timezoneOffset ?? 0, nowUtcSeconds);
+    merged.daily = split.forecast;
+    merged.leadUpDaily = split.leadUp;
     return merged;
   }
 
