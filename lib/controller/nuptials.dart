@@ -174,6 +174,18 @@ double nuptialDailyPercentage(Daily daily, {bool nocturnal = false}) {
   return nuptialCalculator(values);
 }
 
+/// Magnus-Tetens approximation of dew point (°C) from air temperature (°C)
+/// and relative humidity (%). Used when the provider omits `dew_point`
+/// outright (the live One Call 4.0 `/timeline/1day` endpoint never sends it)
+/// so scoring gets a physically plausible value instead of a flat 0.0, which
+/// would otherwise blow out `dew_dep` (temp - dewPoint) on every scored day.
+double estimateDewPoint(double tempC, double humidityPct) {
+  const a = 17.27, b = 237.7;
+  final rh = humidityPct.clamp(1.0, 100.0);
+  final alpha = (a * tempC) / (b + tempC) + log(rh / 100.0);
+  return (b * alpha) / (a - alpha);
+}
+
 double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly,
     {LeadUpFeatures? leadUp}) {
   double temp = hourly.temp!.toDouble();
@@ -181,7 +193,10 @@ double nuptialHourlyPercentageModel(num lat, num lon, Hourly hourly,
   double gust = hourly.windGust?.toDouble() ?? hourly.windSpeed!.toDouble();
   double humid = hourly.humidity!.toDouble();
   double press = hourly.pressure!.toDouble();
-  double dewPoint = hourly.dewPoint!.toDouble();
+  // The live API has always included `dew_point` on hourly records in
+  // practice, but estimate from temp/humidity rather than crash if a record
+  // ever omits it.
+  double dewPoint = hourly.dewPoint?.toDouble() ?? estimateDewPoint(temp, humid);
   double uvi = hourly.uvi?.toDouble() ?? 0.0;
   double hemisphere = lat > 0 ? 1.0 : 0.0;
   int dayOfYear = int.parse(dayOfYearFormat
@@ -242,7 +257,12 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily,
   double humid = daily.humidity!.toDouble();
   double cloud = daily.clouds!.toDouble();
   double press = daily.pressure!.toDouble();
-  double dewPoint = daily.dewPoint!.toDouble();
+  // The live 4.0 /timeline/1day endpoint never sends `dew_point` at all
+  // (confirmed live 2026-09-01, across today and the full forecast) - unlike
+  // `pop`, which is only missing on today/past. A flat 0.0 default would
+  // therefore corrupt every scored day, not just today, so estimate it from
+  // temp/humidity instead of guessing.
+  double dewPoint = daily.dewPoint?.toDouble() ?? estimateDewPoint(temp, humid);
   double uvi = daily.uvi?.toDouble() ?? 0.0;
   double rainMm = daily.rain?.toDouble() ?? 0.0;
   double hemisphere = lat > 0 ? 1.0 : 0.0;
