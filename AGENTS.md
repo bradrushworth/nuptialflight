@@ -1,9 +1,14 @@
 # AGENTS.md — Ant Nuptial Flight Predictor
 
-Guidance for AI coding agents working in this repo. Human-facing docs live in
-[README.md](README.md); deep model/training history lives in
-[.clinerules](.clinerules) and
-[docs/model_training_findings.md](docs/model_training_findings.md).
+Guidance for AI coding agents working in this repo — the canonical project
+context. Human-facing docs live in [README.md](README.md). Deeper references:
+
+- [docs/model_training_findings.md](docs/model_training_findings.md) — model &
+  training history, metrics, reproducibility artifacts
+- [docs/database_schema.md](docs/database_schema.md) — ArangoDB collections
+  (`flights` / `leadup` / `historical` / `current`)
+- [docs/map_shading.md](docs/map_shading.md) — map overlay colour-matrix rationale
+- [.clinerules](.clinerules) — Cline-specific tooling quirks (thin pointer here)
 
 ## What this is
 
@@ -51,10 +56,15 @@ lib/
   main.dart                # entry, MyHomePage state + load flow, overflow menu
   utils.dart               # launchURL helper
   controller/
-    weather_fetcher.dart   # location + 3 OpenWeatherMap calls, response cache
-    nuptials.dart          # model scoring, PD-curve gauges, size seasonal prior
+    weather_fetcher.dart   # location + OpenWeatherMap One Call 4.0 calls,
+                           #   splitDaily (lead-up routing), response cache
+    scoring.dart           # length-safe hourly/daily model scoring (once/slot)
+    nuptials.dart          # model scoring entry points, PD-curve gauges,
+                           #   size seasonal prior
+    flight_index.dart      # Ant Flight Index (percentiles, bands, odds)
     services.dart          # background fetch, notifications, widget updates
-    arangodb.dart          # ArangoDB singleton (reports, nearby flights)
+    arangodb.dart          # ArangoDB singleton (reports, nearby flights,
+                           #   leadup collection writes)
     units.dart             # metric/imperial display preference
     geo.dart               # syntheticPosition() helper
     install_id.dart        # anonymous per-install UUID
@@ -74,14 +84,65 @@ assets/
   final_model.json         # daily RF model (sklite JSON, 21 features)
   hour_model.json          # hourly RF model (sklite JSON, 14 features)
   flight_stats.json        # score percentiles + calibration (see scripts/)
+scripts/
+  flight_stats_pipeline.py # regenerates flight_stats.json after a retrain
+  backfill_leadup.py       # one-time leadup-collection backfill (paid OWM
+                           #   calls; idempotent; default 1 rps; --dry-run)
 ```
+
+## Weather data pipeline (One Call 4.0)
+
+`WeatherFetcher` makes four OpenWeatherMap requests per fresh foreground load
+(see the call budget below for caching/costs):
+
+1. **Current Weather 2.5** (`fetchNearestWeatherLocation`) — kept because it
+   supplies the place `name` for the location label (4.0 has none).
+2. **Hourly timeline** `/data/4.0/onecall/timeline/1h?cnt=48` — the 48-hour
+   forecast leg of `fetchWeather()`.
+3. **Daily timeline** via **`fetchDailyWeather()`** — the SINGLE
+   daily-request implementation (the background service calls it directly).
+   Split-and-route: the request is anchored `leadUpDays` (= 2) local days
+   into the past with `cnt = leadUpDays + 8` (the 4.0 page cap), so one paid
+   call holds the antecedent days AND the 8-day forecast. The pure,
+   unit-tested `WeatherFetcher.splitDaily` splits at the **location-local**
+   day boundary: past days become the transient `leadUpDaily` field (ML
+   training data — see `docs/database_schema.md`), the rest become `daily`,
+   so `daily[0]` is always local *today*.
+4. **Historical hourly timeline** (`fetchHistoricalWeather`, cached 30 days
+   per day+location) — feeds the `historical` collection upload.
+
+Parsing is kind-aware (`OneCallResponse.fromTimelineJson(json, TimelineKind)`)
+so empty pages yield empty lists, never null-both; pagination URLs
+(`next`/`prev`) are deliberately not modelled — they embed the API key.
+Scoring runs through `lib/controller/scoring.dart`: the forest model executes
+at most once per slot and short pages zero-fill instead of throwing.
+
+## OpenWeatherMap call budget (paid — One Call by Call)
+
+Only the One Call timeline requests are billed; the 2.5 current-weather and
+geocoding calls are free-tier. Per cache-miss:
+
+| Path | 3.0 era | 4.0 (current) | Notes |
+|---|---|---|---|
+| Foreground forecast | 1 (`/onecall`) | **2** (1h + 1day) | 4.0 splits the endpoints; inherent to the migration |
+| Historical | ~1/day (`/timemachine`) | ~1/day (1h timeline) | 30-day cache, keyed per day+location |
+| Background refresh | 1 | **1** (`fetchDailyWeather`) | hourly leg deliberately not fetched |
+| Lead-up collection | — | **0** | piggybacks the daily call |
+| Backfill script | — | 1/row, one-time | operator-run, throttled 1 rps |
+
+Caching (30-min TTL, keys include rounded lat/lon; the daily key is also
+day-anchored) bounds all of the above. When touching this area, never add a
+paid call to a hot path without updating this table.
 
 ## The model contract (do not break this)
 
 The two forests expect features in a **fixed order** that must match the
 training notebooks. The only call sites are `nuptialDailyPercentageModel` and
 `nuptialHourlyPercentageModel` in `lib/controller/nuptials.dart` — the exact
-orders are documented there, in README.md, and in `.clinerules`.
+orders are documented there and in README.md (daily 28 features, hourly 22,
+since the 2026-08-30 lead-up retrain; the 7 appended lead-up features are a
+contract with `lib/controller/leadup_features.dart` AND
+`scripts/train_leadup_experiment.py`).
 
 - Never hand-edit `assets/*_model.json` or restructure
   `lib/models/forest_model.dart` maths; regenerate the JSON from the
@@ -170,11 +231,14 @@ orders are documented there, in README.md, and in `.clinerules`.
 
 ## Testing
 
-- `flutter test` runs everything. **68 tests are hermetic and must pass.**
-  Four tests hit live services and fail without real credentials/network:
-  `test/arangodb_test.dart` (live ArangoDB) and three "Download Fetch" tests
-  in `test/weather_test.dart` (live OWM One Call, a paid subscription).
-  Don't chase those failures when running with a placeholder `.env`.
+- `flutter test` runs everything. **The ~93 hermetic tests must pass**
+  (includes the parser/split/scoring/cache-key suites added with the One
+  Call 4.0 migration; `scripts/test_backfill_leadup.py` covers the backfill
+  script via `python -m unittest`). Seven tests hit live services and fail
+  without real credentials/network: `test/arangodb_test.dart` (live
+  ArangoDB), the "Download Fetch" group in `test/weather_test.dart` (live
+  OWM One Call, a paid subscription), and the widget smoke test (needs a
+  populated `.env`). Don't chase those failures with a placeholder `.env`.
 - The two parity tests self-skip unless `%TEMP%/ship_expected.json` /
   `ship_hour_expected.json` fixtures exist (regenerated by the notebook
   pipeline).
@@ -210,11 +274,23 @@ orders are documented there, in README.md, and in `.clinerules`.
 - `assets/.env` must never be committed. Be aware that anything shipped in
   the client (OWM key, Google key, Arango credentials) is extractable —
   treat those keys as semi-public and never widen their permissions.
-- Known review findings (see git history / PR #9 discussion): hardcoded
-  credential fallbacks in `arangodb.dart`/`main.dart` should be removed once
-  the credentials are rotated; prefer AQL **bind variables** over string
-  interpolation for any new queries; the long-term fix is a thin API in
-  front of ArangoDB. The production DB has been defaced once before —
+- Credentials live ONLY in the environment now (done 2026-08-30): the app
+  reads `ARANGO_PASSWORD` from `assets/.env` (written by the Codemagic
+  "Create assets/.env" step from the `nuptialflight` variable group) and
+  **degrades gracefully — reporting/nearby-flights disabled — when it is
+  absent**; the training notebooks and both `scripts/*.py` read
+  `ARANGO_URL/ARANGO_DB_NAME/ARANGO_USER/ARANGO_PASSWORD` env vars. Never
+  reintroduce hardcoded fallbacks.
+- **Staged credential rotation (2026-08-30):** new builds connect as the DB
+  user **`nuptialflight_app`** (rw on flights/historical/current/leadup, no
+  admin rights — the in-code default user). The legacy `nuptialflight` user
+  stays active only because its old password is compiled into field installs
+  as a fallback; disable it once the installed base has upgraded (revisit
+  ~2026-12). The `notebook` user was rotated the same day. The historical
+  passwords remain in git history — treat them as public. Prefer AQL
+  **bind variables** over string interpolation for any new queries; the
+  long-term fix is a thin API in front of ArangoDB. The production DB has
+  been defaced once before (planted collection removed 2026-08-30) —
   assume hostile traffic.
 - Reports are keyed by an anonymous per-install UUID
   (`controller/install_id.dart`). Do not add device identifiers or other

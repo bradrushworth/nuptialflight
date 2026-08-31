@@ -18,6 +18,7 @@ import 'controller/arangodb.dart';
 import 'controller/flight_index.dart';
 import 'controller/geo.dart';
 import 'controller/nuptials.dart';
+import 'controller/scoring.dart';
 import 'controller/screenshots_mobile.dart'
     if (dart.library.io) 'controller/screenshots_mobile.dart'
     if (dart.library.js) 'controller/screenshots_other.dart';
@@ -134,6 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
   OneCallResponse? _historical;
   OneCallResponse? _weather;
   // `loaded` gates the first-paint spinner; `errorMessage` drives the error screen.
+  OneCallResponse? _leadUp;
   bool loaded = false;
   String? errorMessage;
   // Refreshes the location + weather every hour while the app is open.
@@ -304,23 +306,50 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   /// Fetches the three weather payloads in parallel, waits for the forest models
-  /// to be ready, then scores them via [_updateWeather]. Safe to call once the
+  /// to be ready, then scores them via [_applyWeather]. Safe to call once the
   /// location is known.
-  Future<void> _getWeather() {
+  Future<void> _getWeather() async {
     DateTime now = new DateTime.now().toUtc();
     DateTime today = new DateTime.utc(now.year, now.month, now.day);
     int dt = today.millisecondsSinceEpoch ~/ 1000;
 
-    return Future.wait([
-          weatherFetcher.fetchNearestWeatherLocation(),
-          weatherFetcher.fetchHistoricalWeather(dt),
-          weatherFetcher.fetchWeather(),
-          // Ensure the forest models and stats are parsed before scoring.
-          Nuptials.ensureLoaded(),
-          FlightIndex.ensureLoaded(),
-        ])
-        .then((List responses) => _updateWeather(responses[0], responses[1], responses[2]))
-        .catchError((e) => handleError(e));
+    try {
+      // Fetch current + historical + forecast in parallel. The forecast call
+      // (fetchWeather) now also returns the antecedent ("lead-up") daily days
+      // for the days *before* today via split-and-route - anchored a couple of
+      // days into the past on the same daily-timeline request, then split at
+      // today's midnight. That lead-up data is what the ML training pipeline
+      // needs for lead-up-change features (days-since-rain, pressure trend,
+      // first warm day after rain) - see docs/model_training_findings.md
+      // (Part 4, #3) - collected at ZERO extra One Call calls.
+      final List<dynamic> responses = await Future.wait([
+        weatherFetcher.fetchNearestWeatherLocation(),
+        weatherFetcher.fetchHistoricalWeather(dt),
+        weatherFetcher.fetchWeather(),
+        // Ensure the forest models and stats are parsed before scoring.
+        Nuptials.ensureLoaded(),
+        FlightIndex.ensureLoaded(),
+      ]);
+      final weather = responses[2] as OneCallResponse;
+      // Derive the lead-up OneCallResponse from the forecast's split-out past
+      // slice so createWeather/updateWeather keep their existing signature
+      // (leadUp: OneCallResponse?). Null/empty -> no leadup doc is written.
+      _leadUp = (weather.leadUpDaily != null && weather.leadUpDaily!.isNotEmpty)
+          ? OneCallResponse(
+              lat: weather.lat,
+              lon: weather.lon,
+              timezone: weather.timezone,
+              timezoneOffset: weather.timezoneOffset,
+              daily: weather.leadUpDaily)
+          : null;
+      _applyWeather(
+        responses[0] as CurrentWeatherResponse,
+        responses[1] as OneCallResponse,
+        weather,
+      );
+    } catch (e) {
+      handleError(e);
+    }
   }
 
   void _findPlaceName() {
@@ -373,7 +402,7 @@ class _MyHomePageState extends State<MyHomePage> {
   /// Consumes the three fetched payloads, resolves the place label, scores
   /// every hour/day through the forest models, and finally records the weather
   /// to the backend. Runs inside setState so the UI updates in one pass.
-  void _updateWeather(
+  void _applyWeather(
     CurrentWeatherResponse current,
     OneCallResponse historical,
     OneCallResponse weather,
@@ -391,25 +420,34 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       debugPrint('_updateWeather: geocoding=$_geocoding');
 
-      // The API can return fewer hourly entries than our rolling window;
-      // guard the index and zero-fill the tail instead of crashing.
+      // The API can return fewer hourly/daily entries than our rolling
+      // windows (4.0 timeline endpoints page their responses); the score
+      // functions guard every index and zero-fill the tail instead of
+      // crashing (#19/#21). The model runs exactly once per slot; the
+      // percentage lists are derived from the scores, not recomputed.
+      // Lead-up slice from split-and-route: each scored day's antecedent
+      // features come from the two days before it (real past days for
+      // daily[0], forecast days for later ones) - see scoring.dart.
+      final List<Daily> leadUpDaily = weather.leadUpDaily ?? <Daily>[];
       final List<Hourly> hourly = weather.hourly ?? <Hourly>[];
-      final int hourlyCount = min(_hourlyScore.length, hourly.length);
-      for (int i = 0; i < _hourlyScore.length; i++) {
-        _hourlyScore[i] = i < hourlyCount
-            ? nuptialHourlyPercentageModel(weather.lat!, weather.lon!, hourly[i])
-            : 0;
+      final List<Daily> daily = weather.daily ?? <Daily>[];
+      _hourlyScore.setAll(
+          0,
+          computeHourlyScores(
+              weather.lat!, weather.lon!, hourly, _hourlyScore.length,
+              daily: daily,
+              leadUpDaily: leadUpDaily,
+              tzOffsetSeconds: weather.timezoneOffset ?? 0));
+      for (int i = 0; i < _hourlyPercentage.length; i++) {
         _hourlyPercentage[i] = (_hourlyScore[i] * 100.0).toInt();
       }
 
-      final List<Daily> daily = weather.daily ?? <Daily>[];
-      final int dailyCount = min(_dailyScore.length, daily.length);
-      for (int i = 0; i < _dailyScore.length; i++) {
-        _dailyScore[i] = i < dailyCount
-            ? nuptialDailyPercentageModel(weather.lat!, weather.lon!, daily[i],
-                pop1: i + 1 < daily.length ? daily[i + 1].pop : null,
-                pop2: i + 2 < daily.length ? daily[i + 2].pop : null)
-            : 0;
+      _dailyScore.setAll(
+          0,
+          computeDailyScores(
+              weather.lat!, weather.lon!, daily, _dailyScore.length,
+              leadUpDaily: leadUpDaily));
+      for (int i = 0; i < _dailyPercentage.length; i++) {
         _dailyPercentage[i] = (_dailyScore[i] * 100.0).toInt();
       }
 
@@ -427,7 +465,8 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    ArangoSingleton().createWeather(version, buildNumber, _weather, _historical, _currentWeather);
+    ArangoSingleton().createWeather(version, buildNumber, _weather, _historical, _currentWeather,
+        leadUp: _leadUp, leadUpDays: WeatherFetcher.leadUpDays);
   }
 
   int _monthOfDt(int dt) =>
@@ -442,8 +481,7 @@ class _MyHomePageState extends State<MyHomePage> {
         .percentile(_dailyScore[i], _weather!.lat!, _monthOfDt(daily[i].dt!));
   }
 
-  FlightBand _dailyBandAt(int i) =>
-      bandFor(_dailyScore[i], _dailyPercentileAt(i));
+  FlightBand _dailyBandAt(int i) => bandFor(_dailyScore[i]);
 
   /// Sends today's outlook to the home-screen widget: legacy percentage plus
   /// the localized Ant Flight Index band and odds. Uses the device-locale
@@ -692,6 +730,8 @@ class _MyHomePageState extends State<MyHomePage> {
       _weather,
       _historical,
       _currentWeather,
+      leadUp: _leadUp,
+      leadUpDays: WeatherFetcher.leadUpDays,
     );
     _showSnack(result.sawNothing
         ? context.l10n.snackThanksNoFlight
@@ -904,18 +944,16 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               const SizedBox(height: 10),
               HourlyChart(
-                // NB hourly bands reuse the daily score distribution: close
-                // enough for colour banding, and keeps one stats table.
+                // NB hourly bands reuse the daily calibration table (close
+                // enough for colour banding, one stats table) and are CAPPED
+                // at the day's own band: bars show intra-day timing, but an
+                // hour can never out-promise the day it belongs to.
                 points: [
                   for (int i = 0; i < hourlyCount; i++)
                     HourlyPoint(
                       hourly[i].dt!,
                       _hourlyPercentage[i],
-                      bandFor(
-                        _hourlyScore[i],
-                        FlightIndex().percentile(_hourlyScore[i],
-                            weather.lat ?? 0, _monthOfDt(hourly[i].dt!)),
-                      ),
+                      minBand(bandFor(_hourlyScore[i]), _dailyBandAt(0)),
                     ),
                 ],
                 timezoneOffsetSeconds: weather.timezoneOffset ?? 0,

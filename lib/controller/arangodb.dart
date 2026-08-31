@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'dart:io';
 
 import 'package:darango/darango.dart';
@@ -34,6 +35,10 @@ class ArangoSingleton {
   var _weatherCurrentKey;
   var _weatherHistoricalKey;
   var _weatherFlightsKey;
+  var _weatherLeadUpKey;
+  // Collections we've already attempted to create this session (best-effort,
+  // once each) so the new ML-training table exists before we write to it.
+  final Set<String> _ensuredCollections = <String>{};
 
   factory ArangoSingleton() {
     return _singleton;
@@ -53,20 +58,85 @@ class ArangoSingleton {
       }
     }
 
+    // Endpoint coordinates are public knowledge (docs, DB schema notes) so
+    // they keep defaults; the credential is deliberately NOT hardcoded — it
+    // must come from assets/.env (locally) or the Codemagic secret that the
+    // "Create assets/.env" build step writes. Without it the app still runs;
+    // reporting and nearby-flights simply stay disabled.
     final String url = dotenv.env['ARANGO_URL'] ?? 'https://api.bitbot.com.au:8530';
     final String dbName = dotenv.env['ARANGO_DB_NAME'] ?? 'nuptialFlight';
-    final String user = dotenv.env['ARANGO_USER'] ?? 'nuptialflight';
-    final String password = dotenv.env['ARANGO_PASSWORD'] ?? 'fdggdsgdfstg34wfwfwff';
+    final String user = dotenv.env['ARANGO_USER'] ?? 'nuptialflight_app';
+    final String? password = dotenv.env['ARANGO_PASSWORD'];
+    if (password == null || password.isEmpty) {
+      debugPrint('ArangoSingleton: ARANGO_PASSWORD not set — '
+          'flight reporting and nearby-flight lookups are disabled');
+      return; // _arangoClient stays null; public methods no-op gracefully.
+    }
 
     _arangoClient = Database(url);
     await _arangoClient!.connect(dbName, user, password);
   }
+
+  /// Whether a database connection is configured. False when the build has no
+  /// ARANGO_PASSWORD — every public method below then no-ops instead of
+  /// crashing on a null client.
+  bool get _isEnabled => _arangoClient != null;
 
   Future<void> _ensureConnected() async {
     if (_connectFuture != null) {
       await _connectFuture;
     }
   }
+
+  /// Best-effort creation of a collection (e.g. the ML-training `leadup` table)
+  /// so the app can upload to a fresh table without manual DB provisioning.
+  /// Tolerates an already-existing collection; returns whether the collection
+  /// is verifiably present afterwards, and only caches the name once that is
+  /// confirmed (#24) so a failed create doesn't get remembered as "ensured".
+  Future<bool> _ensureCollection(String name) async {
+    if (_ensuredCollections.contains(name)) return true;
+    try {
+      await _arangoClient!.createCollection({'name': name});
+    } catch (_) {
+      // darango generally swallows failures itself; the existence check below
+      // is the real success signal either way.
+    }
+    final exists = await _arangoClient!.collection(name) != null;
+    if (exists) _ensuredCollections.add(name); // only cache success (#24)
+    return exists;
+  }
+
+  /// Builds the enriched ML-training document for the `leadup` collection,
+  /// shared by [createWeather] and [updateWeather] so the schema can't drift
+  /// between the insert and update paths.
+  Map<String, dynamic> _leadUpDoc(
+          String flight,
+          String? size,
+          String? version,
+          String? buildNumber,
+          String? deviceId,
+          String? installId,
+          OneCallResponse weather,
+          CurrentWeatherResponse current,
+          OneCallResponse leadUp,
+          int leadUpDays) =>
+      {
+        'flight': flight,
+        if (size != null) 'size': size,
+        'version': '$version+$buildNumber',
+        'device_id': deviceId,
+        'install_id': installId,
+        'source': 'app',
+        'lat': weather.lat,
+        'lon': weather.lon,
+        'lead_up_days': leadUpDays,
+        'collected_at': DateTime.now().toUtc().millisecondsSinceEpoch,
+        'weather': {
+          'current': current.toJson(),
+          'forecast': weather.toJson(),
+          'leadup': leadUp.toJson(),
+        },
+      };
 
   /// Persists a fresh weather snapshot as three linked documents (see the class
   /// doc): `flights` (the 8-day forecast), `historical` (24h history) and
@@ -75,8 +145,10 @@ class ArangoSingleton {
   /// report confirmed. Called passively on every first-page load (unless in
   /// debug mode or a fixed/manual location, see main._recordWeather).
   void createWeather(String? version, String? buildNumber, OneCallResponse? _weather,
-      OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather) async {
+      OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather,
+      {OneCallResponse? leadUp, required int leadUpDays}) async {
     await _ensureConnected();
+    if (!_isEnabled) return; // no credential shipped — reporting disabled
 
     String? deviceId;
     if (kIsWeb) {
@@ -125,6 +197,30 @@ class ArangoSingleton {
       });
       _weatherCurrentKey = createResult.key;
     }
+    {
+      // New schema (One Call 4.0, lead-up antecedent weather) for ML training.
+      // Stores the full weather context - current + forecast + the N days of
+      // daily weather *before* the report - in one enriched document with
+      // lat/lon at the top level so training can filter by location without
+      // digging into nested weather (see docs/model_training_findings.md
+      // Part 4 #3).
+      // _weather/_currentWeather are already non-null here (promoted by the
+      // `!.toJson()` dereferences in the flights/current blocks above, which
+      // would have thrown first if either were actually null at runtime), so
+      // only leadUp needs an explicit null guard.
+      if (leadUp != null) {
+        try {
+          if (!await _ensureCollection('leadup')) return;
+          final collection = await _arangoClient!.collection('leadup');
+          final createResult = await collection!.document().add(_leadUpDoc(
+              'unknown', null, version, buildNumber, deviceId, installId,
+              _weather, _currentWeather, leadUp, leadUpDays));
+          _weatherLeadUpKey = createResult.key;
+        } catch (e) {
+          developer.log('leadup create failed: $e', name: 'ArangoSingleton');
+        }
+      }
+    }
   }
 
   /// Marks the three documents previously created by [createWeather] as a
@@ -133,8 +229,10 @@ class ArangoSingleton {
   /// ('small'/'medium'/'large') is tagged on each. Called when the user taps a
   /// report button on the home page (see main._sawNuptialFlight).
   void updateWeather(String? version, String? buildNumber, String? size, OneCallResponse? _weather,
-      OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather) async {
+      OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather,
+      {OneCallResponse? leadUp, required int leadUpDays}) async {
     await _ensureConnected();
+    if (!_isEnabled) return; // no credential shipped — reporting disabled
 
     String? deviceId;
     if (kIsWeb) {
@@ -183,6 +281,29 @@ class ArangoSingleton {
         'weather': _currentWeather!.toJson()
       });
     }
+    {
+      // New schema (One Call 4.0, lead-up antecedent weather) for ML training.
+      // _weather/_currentWeather are already non-null here (promoted by the
+      // `!.toJson()` dereferences in the flights/current blocks above, which
+      // would have thrown first if either were actually null at runtime), so
+      // only leadUp needs an explicit null guard.
+      if (leadUp != null) {
+        try {
+          if (!await _ensureCollection('leadup')) return;
+          final collection = await _arangoClient!.collection('leadup');
+          final doc = _leadUpDoc(size == null ? 'unknown' : 'yes', size, version,
+              buildNumber, deviceId, installId, _weather, _currentWeather, leadUp, leadUpDays);
+          if (_weatherLeadUpKey == null) {
+            final createResult = await collection!.document().add(doc);
+            _weatherLeadUpKey = createResult.key;
+          } else {
+            await collection!.document(document_handle: _weatherLeadUpKey).update(doc);
+          }
+        } catch (e) {
+          developer.log('leadup update failed: $e', name: 'ArangoSingleton');
+        }
+      }
+    }
   }
 
   /// Returns all confirmed flight reports (`flight == 'yes'`) from the last 48
@@ -190,6 +311,7 @@ class ArangoSingleton {
   /// (location + size + weather description). Used by MapPage to drop markers.
   Future<List> getRecentFlights() async {
     await _ensureConnected();
+    if (!_isEnabled) return []; // no credential shipped — lookups disabled
 
     Aql aql = _arangoClient!.aql();
     String query = """
@@ -228,6 +350,7 @@ RETURN {
     }
 
     await _ensureConnected();
+    if (!_isEnabled) return []; // no credential shipped — lookups disabled
 
     Aql aql = _arangoClient!.aql();
     String query = """

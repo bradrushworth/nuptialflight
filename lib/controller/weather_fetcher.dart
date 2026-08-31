@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as developer;
 
-import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
+import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb, visibleForTesting;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_google_maps_webservices/places.dart';
@@ -13,6 +13,12 @@ import 'package:nuptialflight/responses/onecall_response.dart';
 import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:nuptialflight/responses/weather_response.dart';
+
+class DailySplit {
+  final List<Daily> forecast;
+  final List<Daily> leadUp;
+  DailySplit(this.forecast, this.leadUp);
+}
 
 class WeatherFetcher {
   late bool _mockLocation;
@@ -193,6 +199,15 @@ class WeatherFetcher {
     return key;
   }
 
+  @visibleForTesting
+  String cacheKeyFor(String endpoint, {int? dt}) => _cacheKey(endpoint, dt: dt);
+
+  @visibleForTesting
+  void setTestPosition(double lat, double lon) {
+    _lat = lat;
+    _lon = lon;
+  }
+
   Future<T> _fetchCached<T>({
     required String url,
     required String endpoint,
@@ -284,22 +299,123 @@ class WeatherFetcher {
     );
   }
 
+  /// Number of antecedent ("lead-up") days to collect alongside the forecast.
+  /// The daily-timeline endpoint caps a single page at 10 records, so this is
+  /// sized so leadUpDays + 8 forecast days (today..+7) fits one response ->
+  /// one paid call -> zero *extra* One Call calls versus the pre-lead-up path.
+  /// Raise beyond 2 and the combined window spills past the 10-record page,
+  /// requiring an extra paginated request.
+  static const int leadUpDays = 2;
+
+  /// Splits a combined daily-timeline page at the LOCATION-LOCAL "today":
+  /// a record belongs to leadUp iff its local day bucket is before now's
+  /// local day bucket. One boundary definition; no UTC/local mixing (#20).
+  static DailySplit splitDaily(List<Daily> all, int tzOffsetSeconds, int nowUtcSeconds) {
+    final today = (nowUtcSeconds + tzOffsetSeconds) ~/ 86400;
+    final forecast = <Daily>[];
+    final leadUp = <Daily>[];
+    for (final d in all) {
+      final dt = d.dt;
+      if (dt != null && (dt + tzOffsetSeconds) ~/ 86400 < today) {
+        leadUp.add(d);
+      } else {
+        forecast.add(d);
+      }
+    }
+    return DailySplit(forecast, leadUp);
+  }
+
+  /// Daily forecast + lead-up only - ONE paid call. Used by the background
+  /// service (which never reads hourly, #33) and composed by fetchWeather().
+  ///
+  /// Split-and-route: the daily timeline is anchored `leadUpDays` into the
+  /// past (start = today UTC midnight - leadUpDays) and sized so a single
+  /// page holds the antecedent days AND the 8-day forecast (leadUpDays + 8
+  /// <= 10 records = the 4.0 page cap). We then split the combined `data`
+  /// array at the LOCATION-LOCAL day boundary via splitDaily() (see its doc
+  /// comment): records whose local day bucket is before local "today" become
+  /// antecedent / "lead-up" days (training features); the rest become the
+  /// forecast, in order, so daily[0] is still *local today*.
+  /// This collects the lead-up weather that docs/model_training_findings.md
+  /// (Part 4 #3) named as the main accuracy lever - at ZERO extra One Call
+  /// calls: the daily request the app already makes simply reaches a little
+  /// into the past. The legacy `flights.weather.daily` schema is unchanged
+  /// (daily[0] == today), so years of stored training history stay valid.
+  Future<OneCallResponse> fetchDailyWeather() async {
+    if (_lat == null || _lon == null)
+      throw Exception('Location is unknown! Perhaps you didn\'t allow location permissions?');
+    final nowUtcSeconds = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
+    final todayUtcDay = nowUtcSeconds ~/ 86400;
+    // Anchor the request window at the LOCAL day floor, not the UTC day floor:
+    // in nonzero-offset timezones a UTC-anchored window can straddle the
+    // local-day seam, so the split below (which buckets by the response's own
+    // timezoneOffset) can hand back a 7- or 9-entry forecast instead of 8. We
+    // don't know the fetch location's offset until the response comes back,
+    // so use the DEVICE's timezone offset as a proxy to position the window
+    // (the recording path fetches at device location, so this proxy is
+    // accurate in practice). The device-tz proxy only decides where the
+    // window starts; splitDaily()'s use of the response's own timezoneOffset
+    // remains the authority for which records are lead-up vs. forecast.
+    final tzProxySeconds = DateTime.now().timeZoneOffset.inSeconds;
+    final pastStart =
+        (((nowUtcSeconds + tzProxySeconds) ~/ 86400) - leadUpDays) * 86400 -
+            tzProxySeconds;
+    final cnt = leadUpDays + 8; // 10 -> fits one daily-timeline page
+    final key = dotenv.env['OPENWEATHERMAP_API_KEY'];
+    final dailyUrl =
+        'https://api.openweathermap.org/data/4.0/onecall/timeline/1day?lat=$_lat&lon=$_lon&appid=$key&units=metric&start=$pastStart&cnt=$cnt';
+    print("dailyUrl=$dailyUrl");
+    final resp = await _fetchCached<OneCallResponse>(
+      url: dailyUrl,
+      endpoint: 'onecall_daily',
+      dt: todayUtcDay,
+      ttl: _ttlForecast,
+      errorPrefix: 'Failed to download daily weather',
+      rateLimitMessage: 'The app has exceeded global usage limited. Please try again later!',
+      parse: (b) => OneCallResponse.fromTimelineJson(jsonDecode(b), TimelineKind.daily),
+    );
+    final split = splitDaily(resp.daily ?? const <Daily>[], resp.timezoneOffset ?? 0, nowUtcSeconds);
+    // Cap the 9-record convention case (the local-day-floored window can
+    // occasionally hand back one extra forecast day depending on how the
+    // provider buckets the boundary); never pad a short (7-entry) result.
+    resp.daily =
+        split.forecast.length > 8 ? split.forecast.take(8).toList() : split.forecast;
+    resp.leadUpDaily = split.leadUp;
+    return resp;
+  }
+
   Future<OneCallResponse> fetchWeather() async {
     if (_lat == null || _lon == null)
       throw Exception('Location is unknown! Perhaps you didn\'t allow location permissions?');
 
-    String url =
-        'https://api.openweathermap.org/data/3.0/onecall?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&exclude=minutely,current';
-    print("url=$url");
+    // One Call API 4.0 splits the forecast across two timeline endpoints:
+    //   - hourly -> /data/4.0/onecall/timeline/1h
+    //   - daily  -> /data/4.0/onecall/timeline/1day
+    // Each returns a flat `data` array that OneCallResponse parses into the
+    // matching list; we fetch both and merge them into a single response so
+    // the rest of the app keeps working unchanged. The daily leg (plus the
+    // lead-up split) lives in fetchDailyWeather() - see its doc comment.
+    final hourlyUrl =
+        'https://api.openweathermap.org/data/4.0/onecall/timeline/1h?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&cnt=48';
+    print("hourlyUrl=$hourlyUrl");
 
-    return _fetchCached<OneCallResponse>(
-      url: url,
-      endpoint: 'onecall',
-      ttl: _ttlForecast,
-      errorPrefix: 'Failed to download weather',
-      rateLimitMessage: 'The app has exceeded global usage limited. Please try again later!',
-      parse: (b) => OneCallResponse.fromJson(jsonDecode(b)),
-    );
+    final results = await Future.wait([
+      _fetchCached<OneCallResponse>(
+        url: hourlyUrl,
+        endpoint: 'onecall_hourly',
+        ttl: _ttlForecast,
+        errorPrefix: 'Failed to download hourly weather',
+        rateLimitMessage: 'The app has exceeded global usage limited. Please try again later!',
+        parse: (b) => OneCallResponse.fromTimelineJson(jsonDecode(b), TimelineKind.hourly),
+      ),
+      fetchDailyWeather(),
+    ]);
+    // Merge: keep the hourly list and attach the (split) daily list.
+    final merged = results[0];
+    final dailyResp = results[1];
+    merged.daily = dailyResp.daily;
+    merged.leadUpDaily = dailyResp.leadUpDaily;
+    return merged;
   }
 
   Future<OneCallResponse> fetchHistoricalWeather(int dt) async {
@@ -307,17 +423,22 @@ class WeatherFetcher {
       throw Exception(
           'Location is unknown! Perhaps you didn\'t allow location permissions?');
 
-    String url =
-        'https://api.openweathermap.org/data/3.0/onecall/timemachine?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&dt=$dt';
+    // One Call API 4.0 removed the dedicated /timemachine endpoint. Historical
+    // data is now served by the same hourly timeline: anchor `start` at the
+    // requested timestamp (today's UTC midnight) and pull enough hourly steps
+    // to cover the diurnal (11AM) / nocturnal (7PM) lookups done in main.dart.
+    final key = dotenv.env['OPENWEATHERMAP_API_KEY'];
+    final url =
+        'https://api.openweathermap.org/data/4.0/onecall/timeline/1h?lat=$_lat&lon=$_lon&appid=$key&units=metric&start=$dt&cnt=24';
     print("url=$url");
 
     return _fetchCached<OneCallResponse>(
       url: url,
-      endpoint: 'timemachine',
+      endpoint: 'timemachine4',
       ttl: _ttlHistorical,
       dt: dt,
       errorPrefix: 'Failed to download historical weather',
-      parse: (b) => OneCallResponse.fromJson(jsonDecode(b)),
+      parse: (b) => OneCallResponse.fromTimelineJson(jsonDecode(b), TimelineKind.hourly),
     );
   }
 }

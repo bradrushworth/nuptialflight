@@ -1,273 +1,36 @@
 # Cline Rules — Ant Nuptial Flight Predictor
 
-Project context and guardrails for Cline (AI coding agent) sessions.
+**The canonical project context for AI agents lives in [AGENTS.md](AGENTS.md).**
+Read it first — architecture, commands, model contract, testing, release
+process, security. This file holds only Cline-specific tooling quirks and a
+digest of the hard guardrails. Deeper references:
 
-## What this is
-A Flutter app (Android / iOS / Web) that downloads weather at the user's
-location and predicts the likelihood that queen ants are on a nuptial
-flight today and for the next week. Also has an Android home-screen
-widget and background-fetch notifications.
+- `docs/database_schema.md` — ArangoDB collections (flights/leadup/historical/current)
+- `docs/model_training_findings.md` — model/training history + reproducibility artifacts
+- `docs/map_shading.md` — why the map overlay colour matrices look the way they do
 
-Repo: https://github.com/bradrushworth/nuptialflight
-Web: https://nuptialflight.app/
+## Cline tooling quirks (Windows)
 
-## Build / tooling notes (IMPORTANT — read before running commands)
 - Flutter SDK lives at `C:/Users/Brad/flutter` (NOT the pub cache).
-- The agent's *primary working directory* is often a pub-cache `android`
-  folder. ALWAYS target the real project
-  `C:/Users/Brad/StudioProjects/nuptialflight` for git/flutter.
-- `git` must be invoked as
-  `git -C "C:/Users/Brad/StudioProjects/nuptialflight" ...`
-  because the shell CWD is not the project.
-- `flutter analyze` on the whole project takes ~2 min the first time
-  (resolves packages). Run it from the project ROOT, not a sub-path,
-  otherwise it resolves paths against the wrong CWD and errors with
-  "You provided the path '...' however it does not exist on disk".
-- Requires `assets/.env` with `OPENWEATHERMAP_API_KEY=<key>`.
+- Cline's *primary working directory* is often a pub-cache `android` folder.
+  ALWAYS target the real project
+  (`C:/Users/Brad/StudioProjects/nuptialflight`): invoke git as
+  `git -C "C:/Users/Brad/StudioProjects/nuptialflight" ...`.
+- Run `flutter analyze` from the project ROOT (first run takes ~2 min);
+  from a sub-path it errors with "You provided the path '...' however it
+  does not exist on disk".
+- `flutter pub upgrade` can HANG for many minutes on the git dependencies —
+  kill `dart.exe` and use `flutter pub get` instead unless an upgrade was
+  explicitly requested.
 
-## Key source files
-- `lib/main.dart` — app entry (`main()`), `MyHomePage` / `_MyHomePageState`.
-  Owns the first-page load flow: `_loadData()` -> `_getLocation()` ->
-  `_getWeather()` -> `_updateWeather()`. Shows a `CircularProgressIndicator`
-  until `loaded == true`.
-- `lib/controller/weather_fetcher.dart` — `WeatherFetcher`: location
-  lookup (`findLocation`), and the 3 OpenWeatherMap calls
-  (`fetchNearestWeatherLocation`, `fetchHistoricalWeather`, `fetchWeather`).
-- `lib/controller/services.dart` — `initializeService()` (background_fetch
-  config + notification channels), `getServicePercentage()`, `getReportedFlightsNearMe()`.
-- `lib/controller/nuptials.dart` — prediction math. `Nuptials` loads two
-  RandomForest models; `nuptialDailyPercentageModel` / `nuptialHourlyPercentageModel`
-  score weather via `lib/models/forest_model.dart` over the JSON assets.
-- `lib/controller/arangodb.dart` — ArangoDB reporting of sightings/weather.
-  Each report doc carries an anonymous install_id (random UUID, generated
-  once per install + persisted in shared_preferences via
-  lib/controller/install_id.dart) alongside the older device_id, so
-  bursty/abusive reports can be grouped + de-duplicated without device/user
-  tracking. uuid is now a direct dependency.
-- `lib/view/map.dart` — map page. Weather overlays (clouds/wind/temp) are
-  recoloured by `ColorFilter.matrix` to show nuptial-flight SUITABILITY:
-  BLUE-GREEN/teal = favourable, RED = unfavourable, tinted per the model's PD
-  distribution (see the map-shading note under Verification).
-- `lib/responses/*.dart` — OWM response models.
+## Hard guardrails (digest — details in AGENTS.md)
 
-## Models & feature wiring (IMPORTANT)
-The two RandomForest models ship as **sklite JSON assets**
-(`assets/final_model.json`, `assets/hour_model.json`) and are scored at runtime
-by the hand-written pure-Dart tree-walker `lib/models/forest_model.dart`
-(`ForestModel.fromJsonString(...)` -> `scorePositive(List<double>)`, which
-computes sklearn-style `predict_proba` = mean of the per-tree normalised leaf
-values). The old m2cgen-generated `lib/models/final_model.dart` /
-`hour_model.dart` score trees were DELETED (2026-07-26) and `sklite` was
-removed from `pubspec.yaml`. Do not hand-edit the JSON assets — regenerate
-them from the training notebooks `lib/models/*.ipynb`.
-
-`Nuptials.ensureLoaded()` parses both JSON assets once (via `rootBundle`);
-it is kicked off after `runApp()` and awaited in the `_getWeather()` pipeline
-before any scoring. Tests inject models with `Nuptials.loadFromStrings(...)`
-(File IO, no rootBundle).
-
-Each model expects features in a FIXED order that MUST match the training
-notebook. The call sites in `lib/controller/nuptials.dart` must pass exactly:
-
-- **Daily model** (`assets/final_model.json`, 21 inputs since 2026-07-26 part 4):
-  `[lat, lon, hemisphere, sin_doy, cos_doy, temp(day), wind, rain(pop), humid,
-  cloud, press, dewPoint, dew_dep, popNext1, popNext2, uvi, windGust, rainMm,
-  daylength, moonSin, moonCos]`. The first 15 keep their old order; the 6 new
-  fields are appended. NB `popNext1/popNext2` = FORECAST pop for the next two
-  days (daily[i+1]/[i+2].pop), NOT antecedent rain (renamed from rain1/rain2).
-- **Hourly model** (`assets/hour_model.json`, 14 inputs since 2026-07-26 part 4 —
-  still NO rain, NO cloud, NO visibility): `[lat, lon, hemisphere, sin_doy,
-  cos_doy, hour, temp, wind, humid, press, dewPoint, dew_dep, uvi, windGust]`
-  (`hour` = UTC 0-23).
-
-If a model is retrained with a different feature set/order, update BOTH the
-call site in `nuptials.dart` AND the expectations in `test/nuptials_test.dart`,
-`test/hourly_test.dart`, `test/model_test.dart`,
-`test/production_model_parity_test.dart`.
-
-The per-attribute "suitability" gauges (`temperatureContribution`,
-`humidityContribution`, `windContribution`, `rainContribution`,
-`cloudinessContribution`, `pressureContribution`, `uviContribution`) in
-`nuptials.dart` are NOT hand-tuned distributions — they are derived from
-the daily model (`assets/final_model.json` via `forest_model.dart`) via
-per-feature partial-dependence curves (the model's
-average flight probability as one feature varies, others held at
-representative flight-season baseline contexts), normalised to [0,1].
-Features the model barely uses (rain, pressure) resolve to a neutral 0.5.
-`uviContribution` has no direct model input (UVI is not a feature in either
-model) and delegates to the cloudiness curve via an inverse UVI→cloud map.
-
-## First-load performance (work done 2026-07-18, commit `6123340`)
-The first page was slow because the startup path blocked on serialised,
-non-rendering work. Fixed:
-1. `initializeService()` moved to *after* `runApp()` via `unawaited(...)`
-   so background-fetch config no longer delays the first frame.
-2. Notification-permission request in `_loadData()` is no longer `await`ed
-   (wrapped in `unawaited(...)`) — location/weather calls start immediately.
-3. `_getLocation()` now does a fast passive `getLastKnownPosition()` first
-   and only falls back to an active GPS fix when none exists, avoiding the
-   previous double full weather fetch on every launch. Also fixes the
-   first-launch case (no cached position) which used to throw.
-4. Active-GPS `timeLimit` reduced 30s -> 10s (`weather_fetcher.dart`).
-
-Response caching is implemented in `weather_fetcher.dart` via `_fetchCached`
-(`shared_preferences`, keyed by rounded lat/lon). Per-endpoint TTLs: 30 min
-current/forecast, 24 h reverse geocode, 30 days historical. Repeat launches
-reuse cached responses, cutting paid OWM calls.
-
-## Verification
-- `flutter analyze` reports 0 errors. The only findings are pre-existing
-  `deprecated_member_use` info-warnings in `screenshots_other.dart`,
-  `widgets_mobile.dart`, `utils.dart` (use of `dart:html`,
-  `registerBackgroundCallback`, `canLaunch`/`launch`). Do not "fix" these
-  by upgrading packages unless asked — they are out of scope and risk
-  breaking the build.
-- Current app version: **2.16.1+140** (anonymous install_id on reports; likelihood line moved to main screen under date/weather; grid/overflow polish). Previous: 2.16.0+139 (unused-field retrain: daily 21 feats
-  AUC 0.654, hourly 14 feats AUC 0.670; per-size seasonal prior UX; rain1/rain2
-  renamed popNext1/popNext2). Previous 2.15.1+138 = suitability-based map
-  weather-overlay shading; 2.15.0+137 = JSON-only forest runtime. `flutter
-  analyze` stays at 0 errors.
-- (2026-07-26) Models retrained + moved to a JSON-only runtime
-  (`lib/models/forest_model.dart` over the sklite JSON assets); daily is now
-  15 features, hourly 12. Per-attribute suitability gauges and the map
-  weather-overlay shading are both derived from the daily model's per-feature
-  partial-dependence curves. `flutter analyze` stays at 0 errors; all
-  nuptials/model/hourly/parity tests pass.
-
-## Per-size seasonal prior — SHIPPED (2026-07-26, part 4)
-User asked to (a) add a size/species UX feature, (b) retrain both models with
-the unused DB fields, (c) fix the mislabelled rain1/rain2. Part (a) is DONE and
-COMMITTED; (b) and (c) are the in-progress "Task queue" below.
-
-### DONE + committed (size UX)
-- `lib/controller/nuptials.dart`: added `_sizeSeasonalN`/`_sizeSeasonalS`
-  (per-hemisphere small/medium/large monthly weight tables, 3-month smoothed,
-  peak-normalised to 1.0), plus `sizeSeasonalMultiplier(size, lat, dateUtc)` and
-  `sizeSeasonalPercentages(basePercentage, lat, dateUtc)`.
-- Data source: AQL COLLECT of `flights` positives by (hemisphere, size, month)
-  — 10,125 sized positives (small 5,036 / medium 2,930 / large 2,159; 2 null).
-  Finding: size classes overlap heavily on *weather* (temp/wind/humid nearly
-  identical) but differ in *seasonal timing* (NH: small peaks Jul, medium
-  Jun-Jul, large earlier May-Jun; SH offset ~6 months) — so a seasonal PRIOR,
-  not 3 separate weather forests, is the right design.
-- `lib/main.dart`: main screen now shows a likelihood line under the date/weather
-  text (_flightLikelihoodText() in _buildTodayWeather): 'unlikely' below
-  amberThreshold, 'possible'/'likely' above, plus the most-likely size class
-  from sizeSeasonalPercentages(). (Per-size % labels REMOVED from the
-  report-dialog buttons 2026-07-26 part 5 - buttons are plain Small/Medium/
-  Large again.)
-- `test/size_seasonal_test.dart` NEW (6 tests, all pass). README updated.
-
-### Task queue (part 4) — DONE + shipped (v2.16.0+139)
-1. ~~Retrain BOTH models with unused DB fields~~ DONE. Daily 15->21 feats
-   (+uvi, windGust, rainMm, daylength, moonSin, moonCos): AUC 0.643->0.654,
-   AP 0.087->0.097. Hourly 12->14 feats (+uvi, windGust; visibility DROPPED as
-   noise): AUC 0.668->0.670, AP 0.093->0.097. Grown to 48 trees / 256 leaves
-   (~1.5 MB JSON each; ~500 KB gzipped). Scripts: `fetch_chunk2.py`/`prep2.py`/
-   `ship2.py` (daily), `fetch_hourly_chunk2.py`/`hourly_final2.py` (hourly).
-2. ~~Fix mislabelled rain1/rain2~~ DONE — renamed `popNext1`/`popNext2`
-   (forecast pop) everywhere in nuptials.dart + docs. True antecedent rain still
-   needs an OWM timemachine backfill (future lever, documented in findings doc).
-3. ~~Tests + docs + version + deploy~~ DONE — model/hourly/nuptials fixtures +
-   gauges recalibrated (48/51 rewritten), parity fixtures rebuilt (max err
-   ~8e-15), README/findings/.clinerules updated, version 2.16.0+139.
-   Notebooks updated to the 21/14-feature pipeline (commit eb588fd) -
-   part 4 is fully COMPLETE.
-
-### DB schema notes (verified 2026-07-26)
-- `flights.weather` = {lat, lon, timezone, daily[8]} (today + 7-day forecast; NO
-  past days). daily[i] keys: clouds, dew_point, dt, feels_like, humidity,
-  moon_phase, moonrise, moonset, pop, pressure, rain, sunrise, sunset, temp
-  (day/min/max/night/eve/morn), uvi, weather, wind_deg, wind_gust, wind_speed.
-- `historical.weather` = {current, hourly[24] of the flight day only}. hourly[i]
-  keys add: visibility; (no rain-amount split, has pop).
-- `current.weather` = single OWM current snapshot.
-- No pre-flight days are stored anywhere => "change/lead-up" features need an
-  external OWM timemachine backfill (future work).
-
-## Guardrails
-- Keep first-page load fast: do not re-introduce `await` on
-  `initializeService()` or the notification permission before `runApp()`.
-- Do not hand-edit the sklite JSON model assets (`assets/*_model.json`) or
-  the `lib/models/forest_model.dart` walker by hand; regenerate JSON from the
-  notebooks. (The old generated `models/*.dart` score trees are gone.)
-- Prefer `git -C` and verify with `flutter analyze` before claiming done.
-- `flutter pub upgrade` has been observed to HANG for many minutes
-  (stuck resolving git deps). If it does not finish quickly, kill the
-  `dart.exe` processes and use `flutter pub get` instead to reconcile
-  `pubspec.lock`. Note: `flutter pub get` may print a non-fatal
-  Windows error about deleting `windows/flutter/ephemeral/.plugin_symlinks`
-  — that is a desktop-build dir permission quirk and is safe to ignore.
-- README.md was expanded (2026-07-18) with features, data flow,
-  setup/.env template, and project structure — keep it in sync if you
-  add user-facing features or change required API keys.
-- Keep the model call-site feature orders in `nuptials.dart` in sync with the
-  training notebooks/pipeline. As of the 2026-07-26 retrain the daily model
-  uses 15 features and the hourly model uses 12 (both add hemisphere +
-  cyclical sin/cos day-of-year + dew-point depression; hourly still has no
-  rain/cloud). A mismatched order silently produces wrong predictions.
-
-## Model retrain + JSON runtime — SHIPPED & COMMITTED (2026-07-26)
-All of the retrain/runtime/notebook/test work below is DONE and committed
-(`598cc8a` Release 2.15.0+137; findings/parity groundwork in `6239f04`).
-Working tree is clean except ongoing map-shading tweaks.
-
-### What shipped
-- **Daily model** RF(24 trees, max_features=sqrt, max_leaf_nodes=128,
-  min_samples_leaf=5, class_weight=balanced_subsample, random_state=42),
-  15 features -> **AUC 0.643, AP 0.087** (old prod config was degenerate at
-  AUC 0.500 because ccp_alpha=0.0008 pruned every tree to one leaf).
-- **Hourly model** same recipe on 207,101 rows -> **AUC 0.668, AP 0.093**,
-  12 features (no rain/cloud).
-- **JSON-only runtime**: `lib/models/forest_model.dart` walks the sklite JSON
-  assets; generated `*_model.dart` deleted; `sklite` dep removed. Parity vs
-  Python predict_proba ~2e-14 (daily) / ~1e-14 (hourly) in
-  `test/production_model_parity_test.dart`.
-- Notebooks rewritten to the new pipeline; README + docs/model_training_
-  findings.md updated (with a SHIPPED addendum); version 2.15.0+137.
-- Tests recalibrated; day-quality fixtures rebuilt from the PD optima
-  (Perfect .60 > Great .55 > Ordinary .50 > Bad .41 > Worst .01).
-
-### Reproducibility artifacts (`%TEMP%` = C:\Users\Brad\AppData\Local\Temp)
-May be wiped between sessions. Deterministic re-create (random_state=42):
-- Daily: `fetch_chunk.py` (resumable projected AQL) -> `prep.py` -> `df.pkl`
-  (212,504 rows) -> `ship_train.py` -> `ship_model.pkl/.json` +
-  `ship_expected.json` (200-row float32 parity fixture) +
-  `features.json` ({base:10, imp:15}).
-- Hourly: `fetch_hourly_chunk.py` (loop until 0) -> `hourly_train.py` ->
-  `hourly_df.pkl` -> `hourly_ship.py` -> `ship_hour_model.pkl/.json` +
-  `ship_hour_expected.json` + `hourly_features.json`.
-- Analysis: `pd_sweep.py` (per-feature partial-dependence optima used for the
-  gauges, test fixtures, AND the map shading), `recal.py`/`recal2.py`/
-  `refix.py` (recalibrate test expectations), `calc_expect.py`.
-- The parity tests self-skip when their `%TEMP%/ship_expected.json` /
-  `ship_hour_expected.json` are absent (CI-safe). Copy those two files back
-  into `%TEMP%` before running them.
-
-### Map shading (2026-07-26, lib/view/map.dart)
-The three OWM weather overlays are recoloured via `ColorFilter.matrix` to show
-SUITABILITY per the model's PD distribution: BLUE-GREEN/teal = favourable,
-RED = unfavourable. Per-layer opacity is weighted by each feature's PD span
-(temp 1.00, wind 0.61, cloud 0.19). Temperature is bidirectional. NB the OWM
-temp palette has high red across yellow/orange/red, so favourable green is
-GATED on `R-G-B` (only *pure red*/hottest passes; yellow/orange/green/cyan
-reject) not `R-B` (which lit green almost everywhere); cold => red via `B-R`.
-Favourable green/blue is DAMPED (G=(R-G-B)/2, B=(R-G-B)/5) because green reads
-~3x brighter than red at equal alpha — keep it below the red or it dominates. Clouds are faint teal (overcast is weakly
-favourable); wind is red (calm has no signal to paint).
-
-### DB / security
-- ArangoDB `https://api.bitbot.com.au:8530`, db `nuptialFlight`, user
-  `notebook` (creds in the ipynb). AQL projection is ~30x faster.
-- Defaced collection "u have been pwned bro…" is EMPTY; `notebook` and
-  `nuptialflight` users both get HTTP 403 on drop (needs admin/root; user
-  added server-side auth — deletion still pending admin creds).
-
-### Verify before claiming done
-`dart analyze lib test` (only the 4 pre-existing `deprecated_member_use`
-infos in screenshots_other.dart/widgets_mobile.dart/utils.dart). Run test
-suites individually (full `flutter test` exceeds the 30s shell cap on the
-network tests): `flutter test test/nuptials_test.dart test/hourly_test.dart
-test/model_test.dart test/production_model_parity_test.dart` (all pass; the
-parity test self-skips unless `%TEMP%/ship_expected.json` +
-`ship_hour_expected.json` are present).
+- `assets/.env` is required to build and must never be committed.
+- Never hand-edit `assets/*_model.json` or the `forest_model.dart` maths;
+  regenerate from the notebooks. Model feature ORDER is a contract between
+  `lib/controller/nuptials.dart` and the notebooks — change both + tests
+  together.
+- Keep first-frame startup non-blocking (no new `await`s around `runApp()`).
+- The legacy `flights`/`historical`/`current` document schemas are frozen.
+- Verify with `flutter analyze` (0 errors) + `flutter test` before claiming
+  done; the live-API tests need real credentials.

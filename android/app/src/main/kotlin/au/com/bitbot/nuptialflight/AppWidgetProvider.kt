@@ -28,7 +28,7 @@ class AppWidgetProvider : HomeWidgetProvider() {
     private val bands = mapOf(
         "noFly" to Band(R.drawable.widget_bg_nofly, R.color.widget_fg_nofly, "No-fly", false),
         "quiet" to Band(R.drawable.widget_bg_quiet, R.color.widget_fg_quiet, "Quiet", false),
-        "watchful" to Band(R.drawable.widget_bg_watchful, R.color.widget_fg_watchful, "Watchful", false),
+        "watchful" to Band(R.drawable.widget_bg_watchful, R.color.widget_fg_watchful, "Fair", false),
         "promising" to Band(R.drawable.widget_bg_promising, R.color.widget_fg_promising, "Promising", true),
         "prime" to Band(R.drawable.widget_bg_prime, R.color.widget_fg_prime, "Prime", true),
     )

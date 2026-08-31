@@ -95,7 +95,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get bandQuiet => 'Sakin';
 
   @override
-  String get bandWatchful => 'Dikkatli';
+  String get bandWatchful => 'Orta';
 
   @override
   String get bandPromising => 'Umut verici';
@@ -110,7 +110,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get headlineQuiet => 'Sakin bir gün';
 
   @override
-  String get headlineWatchful => 'İzlemeye değer';
+  String get headlineWatchful => 'Ortalamanın biraz üzerinde';
 
   @override
   String get headlinePromising => 'Umut verici bir gün';

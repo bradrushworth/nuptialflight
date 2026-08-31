@@ -15,6 +15,7 @@ import 'arangodb.dart';
 import 'flight_index.dart';
 import 'geo.dart';
 import 'nuptials.dart';
+import 'scoring.dart';
 import 'weather_fetcher.dart';
 import 'widgets_mobile.dart';
 
@@ -224,17 +225,20 @@ void _onBackgroundFetch(String taskId) async {
   // This is the fetch-event callback.
   print("[BackgroundFetch] Event received: $taskId");
 
-  await _ensureInitialized();
-
-  if (taskId == "flutter_background_fetch" || taskId == "com.transistorsoft.customtask") {
-    await _updatePosition();
-    await getReportedFlightsNearMe();
-    await getServicePercentage();
+  try {
+    await _ensureInitialized();
+    if (taskId == "flutter_background_fetch" || taskId == "com.transistorsoft.customtask") {
+      await _updatePosition();
+      await getReportedFlightsNearMe();
+      await getServicePercentage();
+    }
+  } catch (e) {
+    debugPrint('background fetch failed: $e');
+  } finally {
+    // IMPORTANT:  You must signal completion of your fetch task or the OS can punish your app
+    // for taking too long in the background.
+    BackgroundFetch.finish(taskId);
   }
-
-  // IMPORTANT:  You must signal completion of your fetch task or the OS can punish your app
-  // for taking too long in the background.
-  BackgroundFetch.finish(taskId);
 }
 
 // This event fires shortly before your task is about to timeout.
@@ -259,23 +263,27 @@ void backgroundFetchHeadlessTask(HeadlessEvent task) async {
   }
   print('[BackgroundFetch] Headless event received: $taskId');
 
-  await _ensureInitialized();
+  try {
+    await _ensureInitialized();
+    await _updatePosition();
+    await getReportedFlightsNearMe();
+    await getServicePercentage();
 
-  await _updatePosition();
-  await getReportedFlightsNearMe();
-  await getServicePercentage();
-
-  if (taskId == 'flutter_background_fetch') {
-    BackgroundFetch.scheduleTask(TaskConfig(
-        taskId: "com.transistorsoft.customtask",
-        delay: 5000,
-        periodic: false,
-        forceAlarmManager: false,
-        stopOnTerminate: false,
-        enableHeadless: true,
-    ));
+    if (taskId == 'flutter_background_fetch') {
+      BackgroundFetch.scheduleTask(TaskConfig(
+          taskId: "com.transistorsoft.customtask",
+          delay: 5000,
+          periodic: false,
+          forceAlarmManager: false,
+          stopOnTerminate: false,
+          enableHeadless: true,
+      ));
+    }
+  } catch (e) {
+    debugPrint('background fetch failed: $e');
+  } finally {
+    BackgroundFetch.finish(taskId);
   }
-  BackgroundFetch.finish(taskId);
 }
 
 Future<void> getReportedFlightsNearMe() async {
@@ -401,16 +409,18 @@ Future<void> getServicePercentage() async {
     int percentage = 0;
     double score = 0;
     FlightBand band = FlightBand.quiet;
-    await weatherFetcher.fetchWeather().then((OneCallResponse weather) {
-      final Daily today = weather.daily!.elementAt(0);
-      score = nuptialDailyPercentageModel(weather.lat!, weather.lon!, today,
-          pop1: weather.daily!.length > 1 ? weather.daily!.elementAt(1).pop : null,
-          pop2: weather.daily!.length > 2 ? weather.daily!.elementAt(2).pop : null);
-      percentage = (score * 100.0).toInt();
-      final int month =
-          DateTime.fromMillisecondsSinceEpoch(today.dt! * 1000, isUtc: true).month;
-      band = bandFor(score, FlightIndex().percentile(score, weather.lat!, month));
-    });
+    final weather = await weatherFetcher.fetchDailyWeather();
+    final daily = weather.daily ?? const <Daily>[];
+    if (daily.isEmpty || weather.lat == null || weather.lon == null) {
+      debugPrint('getServicePercentage: empty daily forecast - skipping refresh');
+      return;
+    }
+    // One shared scoring path with the app UI (incl. lead-up features from
+    // the split's past slice) - see scoring.dart.
+    score = computeDailyScores(weather.lat!, weather.lon!, daily, 1,
+        leadUpDaily: weather.leadUpDaily ?? const <Daily>[]).first;
+    percentage = (score * 100.0).toInt();
+    band = bandFor(score);
     debugPrint('getServicePercentage: Percentage for nuptial flights: $percentage');
     updateAppWidget(
       percentage,

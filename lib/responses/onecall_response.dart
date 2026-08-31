@@ -1,12 +1,30 @@
 ///
-/// https://javiercbk.github.io/json_to_dart/
+/// Response models for the OpenWeatherMap **One Call API 4.0**.
 ///
-/// Strongly-typed model of the OpenWeatherMap **One Call 3.0** endpoint
-/// (`/data/3.0/onecall` and `/data/3.0/onecall/timemachine`). This is the main
-/// forecast payload the app scores: `hourly` drives the hourly nuptial model and
-/// `daily` (today + 7-day) drives the daily model. `current`/`minutely` are
-/// requested but mostly unused; `minutely` and `current` are excluded at fetch
-/// time (see WeatherFetcher.fetchWeather).
+/// One Call 4.0 returns a flat `data` array for every timeline endpoint
+/// (current / hourly / daily / historical). The individual record shapes are
+/// unchanged from 3.0, so the [Hourly], [Daily], [Current], [Weather] and
+/// [Rain] classes are reused. The top-level wrapper [OneCallResponse] detects
+/// whether `data` holds hourly or daily records by inspecting the shape of
+/// `temp` (a number for hourly/current, an object for daily).
+///
+/// See https://openweathermap.org/api/one-call-4
+///
+
+/// Parse a precipitation value that may be either a bare number (3.0-style
+/// daily `rain`/`snow`) or an object with a `1h` key (4.0-style).
+num? _precip(dynamic value) {
+  if (value is num) return value;
+  if (value is Map && value['1h'] is num) return value['1h'];
+  return null;
+}
+
+/// One Call 4.0 returns some historically-integer fields (e.g. `pressure`)
+/// as doubles; stored 3.0-era docs hold ints. Accept either.
+int? _asInt(dynamic value) => value is num ? value.round() : null;
+
+enum TimelineKind { hourly, daily }
+
 class OneCallResponse {
   num? lat;
   num? lon;
@@ -16,6 +34,12 @@ class OneCallResponse {
   List<Minutely>? minutely;
   List<Hourly>? hourly;
   List<Daily>? daily;
+  // Antecedent ("lead-up") daily records split out by WeatherFetcher from the
+  // same daily-timeline response that also holds the forecast (days before
+  // today). Transient - never parsed from JSON or serialized; derived in the
+  // fetcher so the ML leadup collection gets the past-day slice without an
+  // extra One Call API call.
+  List<Daily>? leadUpDaily;
 
   OneCallResponse(
       {this.lat,
@@ -25,31 +49,45 @@ class OneCallResponse {
       this.current,
       this.minutely,
       this.hourly,
-      this.daily});
+      this.daily,
+      this.leadUpDaily});
 
   OneCallResponse.fromJson(Map<String, dynamic> json) {
     lat = json['lat'];
     lon = json['lon'];
     timezone = json['timezone'];
     timezoneOffset = json['timezone_offset'];
-    current = json['current'] != null ? new Current.fromJson(json['current']) : null;
-    if (json['minutely'] != null) {
-      minutely = <Minutely>[];
-      json['minutely'].forEach((v) {
-        minutely!.add(new Minutely.fromJson(v));
-      });
+    // One Call API 4.0 wraps every timeline in a flat `data` array. The record
+    // type is detected from the shape of `temp`: daily records carry `temp` as
+    // an object ({day,min,max,...}) while hourly/current records carry `temp`
+    // as a number.
+    final data = json['data'];
+    if (data != null && data is List) {
+      if (data.isNotEmpty) {
+        final first = data[0] as Map<String, dynamic>;
+        if (first['temp'] is Map) {
+          daily = data.map((v) => Daily.fromJson(v as Map<String, dynamic>)).toList();
+        } else {
+          hourly = data.map((v) => Hourly.fromJson(v as Map<String, dynamic>)).toList();
+        }
+      }
     }
-    if (json['hourly'] != null) {
-      hourly = <Hourly>[];
-      json['hourly'].forEach((v) {
-        hourly!.add(new Hourly.fromJson(v));
-      });
-    }
-    if (json['daily'] != null) {
-      daily = <Daily>[];
-      json['daily'].forEach((v) {
-        daily!.add(new Daily.fromJson(v));
-      });
+  }
+
+  /// One Call 4.0 timeline parser where the CALLER states which timeline it
+  /// requested. Empty/missing `data` binds an empty list of that kind, so
+  /// downstream code can distinguish "no records" from "not this kind of
+  /// response". A wrong-shape record fails here, at the parse site.
+  OneCallResponse.fromTimelineJson(Map<String, dynamic> json, TimelineKind kind) {
+    lat = json['lat'];
+    lon = json['lon'];
+    timezone = json['timezone'];
+    timezoneOffset = json['timezone_offset'];
+    final data = (json['data'] as List?) ?? const [];
+    if (kind == TimelineKind.daily) {
+      daily = data.map((v) => Daily.fromJson(v as Map<String, dynamic>)).toList();
+    } else {
+      hourly = data.map((v) => Hourly.fromJson(v as Map<String, dynamic>)).toList();
     }
   }
 
@@ -59,12 +97,6 @@ class OneCallResponse {
     data['lon'] = this.lon;
     data['timezone'] = this.timezone;
     data['timezone_offset'] = this.timezoneOffset;
-    if (this.current != null) {
-      data['current'] = this.current!.toJson();
-    }
-    if (this.minutely != null) {
-      data['minutely'] = this.minutely!.map((v) => v.toJson()).toList();
-    }
     if (this.hourly != null) {
       data['hourly'] = this.hourly!.map((v) => v.toJson()).toList();
     }
@@ -110,19 +142,19 @@ class Current {
       this.weather});
 
   Current.fromJson(Map<String, dynamic> json) {
-    dt = json['dt'];
-    sunrise = json['sunrise'];
-    sunset = json['sunset'];
+    dt = _asInt(json['dt']);
+    sunrise = _asInt(json['sunrise']);
+    sunset = _asInt(json['sunset']);
     temp = json['temp'];
     feelsLike = json['feels_like'];
-    pressure = json['pressure'];
-    humidity = json['humidity'];
+    pressure = _asInt(json['pressure']);
+    humidity = _asInt(json['humidity']);
     dewPoint = json['dew_point'];
     uvi = json['uvi'];
-    clouds = json['clouds'];
-    visibility = json['visibility'];
+    clouds = _asInt(json['clouds']);
+    visibility = _asInt(json['visibility']);
     windSpeed = json['wind_speed'];
-    windDeg = json['wind_deg'];
+    windDeg = _asInt(json['wind_deg']);
     windGust = json['wind_gust'];
     if (json['weather'] != null) {
       weather = <Weather>[];
@@ -187,8 +219,8 @@ class Minutely {
   Minutely({this.dt, this.precipitation});
 
   Minutely.fromJson(Map<String, dynamic> json) {
-    dt = json['dt'];
-    precipitation = json['precipitation'];
+    dt = _asInt(json['dt']);
+    precipitation = _asInt(json['precipitation']);
   }
 
   Map<String, dynamic> toJson() {
@@ -234,17 +266,17 @@ class Hourly {
       this.rain});
 
   Hourly.fromJson(Map<String, dynamic> json) {
-    dt = json['dt'];
+    dt = _asInt(json['dt']);
     temp = json['temp'];
     feelsLike = json['feels_like'];
-    pressure = json['pressure'];
-    humidity = json['humidity'];
+    pressure = _asInt(json['pressure']);
+    humidity = _asInt(json['humidity']);
     dewPoint = json['dew_point'];
     uvi = json['uvi'];
-    clouds = json['clouds'];
-    visibility = json['visibility'];
+    clouds = _asInt(json['clouds']);
+    visibility = _asInt(json['visibility']);
     windSpeed = json['wind_speed'];
-    windDeg = json['wind_deg'];
+    windDeg = _asInt(json['wind_deg']);
     windGust = json['wind_gust'];
     if (json['weather'] != null) {
       weather = <Weather>[];
@@ -253,7 +285,10 @@ class Hourly {
       });
     }
     pop = json['pop'];
-    rain = json['rain'] != null ? new Rain.fromJson(json['rain']) : null;
+    // Rain may be {'1h': n} (4.0-style) or a bare number (3.0-style) - accept
+    // both, mirroring Daily's _precip handling.
+    final rainNum = _precip(json['rain']);
+    rain = rainNum != null ? Rain(d1h: rainNum) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -342,20 +377,20 @@ class Daily {
       this.rain});
 
   Daily.fromJson(Map<String, dynamic> json) {
-    dt = json['dt'];
-    sunrise = json['sunrise'];
-    sunset = json['sunset'];
-    moonrise = json['moonrise'];
-    moonset = json['moonset'];
+    dt = _asInt(json['dt']);
+    sunrise = _asInt(json['sunrise']);
+    sunset = _asInt(json['sunset']);
+    moonrise = _asInt(json['moonrise']);
+    moonset = _asInt(json['moonset']);
     moonPhase = json['moon_phase'];
     summary = json['summary'];
     temp = json['temp'] != null ? new Temp.fromJson(json['temp']) : null;
     feelsLike = json['feels_like'] != null ? new FeelsLike.fromJson(json['feels_like']) : null;
-    pressure = json['pressure'];
-    humidity = json['humidity'];
+    pressure = _asInt(json['pressure']);
+    humidity = _asInt(json['humidity']);
     dewPoint = json['dew_point'];
     windSpeed = json['wind_speed'];
-    windDeg = json['wind_deg'];
+    windDeg = _asInt(json['wind_deg']);
     windGust = json['wind_gust'];
     if (json['weather'] != null) {
       weather = <Weather>[];
@@ -363,10 +398,12 @@ class Daily {
         weather!.add(new Weather.fromJson(v));
       });
     }
-    clouds = json['clouds'];
+    clouds = _asInt(json['clouds']);
     pop = json['pop'];
     uvi = json['uvi'];
-    rain = json['rain'];
+    // One Call 4.0 may return daily precipitation as an object with a `1h`
+    // key; 3.0 returned a bare number. Accept either.
+    rain = _precip(json['rain']);
   }
 
   Map<String, dynamic> toJson() {

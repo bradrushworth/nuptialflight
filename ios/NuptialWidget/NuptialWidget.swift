@@ -49,7 +49,7 @@ private let bands: [String: Band] = [
                   fallbackLabel: "Quiet", winged: false),
     "watchful": Band(bgLight: 0xF3E5C8, bgDark: 0x3A3120,
                      fgLight: 0x8A5B10, fgDark: 0xDCB573,
-                     fallbackLabel: "Watchful", winged: false),
+                     fallbackLabel: "Fair", winged: false),
     "promising": Band(bgLight: 0xE9F0D8, bgDark: 0x2C331F,
                       fgLight: 0x5E7D2E, fgDark: 0xAFC97A,
                       fallbackLabel: "Promising", winged: true),

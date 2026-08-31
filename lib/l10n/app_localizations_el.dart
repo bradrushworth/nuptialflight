@@ -95,7 +95,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get bandQuiet => 'Ήσυχα';
 
   @override
-  String get bandWatchful => 'Επιφυλακή';
+  String get bandWatchful => 'Μέτρια';
 
   @override
   String get bandPromising => 'Ελπιδοφόρα';
@@ -110,7 +110,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get headlineQuiet => 'Ήσυχη μέρα';
 
   @override
-  String get headlineWatchful => 'Αξίζει προσοχή';
+  String get headlineWatchful => 'Λίγο πάνω από τον μέσο όρο';
 
   @override
   String get headlinePromising => 'Ελπιδοφόρα μέρα';

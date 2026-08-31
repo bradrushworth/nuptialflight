@@ -285,7 +285,7 @@ abstract class AppLocalizations {
   /// No description provided for @bandWatchful.
   ///
   /// In en, this message translates to:
-  /// **'Watchful'**
+  /// **'Fair'**
   String get bandWatchful;
 
   /// No description provided for @bandPromising.
@@ -315,7 +315,7 @@ abstract class AppLocalizations {
   /// No description provided for @headlineWatchful.
   ///
   /// In en, this message translates to:
-  /// **'Worth watching'**
+  /// **'Slightly better than average'**
   String get headlineWatchful;
 
   /// No description provided for @headlinePromising.
