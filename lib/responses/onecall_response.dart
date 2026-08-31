@@ -19,6 +19,10 @@ num? _precip(dynamic value) {
   return null;
 }
 
+/// One Call 4.0 returns some historically-integer fields (e.g. `pressure`)
+/// as doubles; stored 3.0-era docs hold ints. Accept either.
+int? _asInt(dynamic value) => value is num ? value.round() : null;
+
 enum TimelineKind { hourly, daily }
 
 class OneCallResponse {
@@ -138,19 +142,19 @@ class Current {
       this.weather});
 
   Current.fromJson(Map<String, dynamic> json) {
-    dt = json['dt'];
-    sunrise = json['sunrise'];
-    sunset = json['sunset'];
+    dt = _asInt(json['dt']);
+    sunrise = _asInt(json['sunrise']);
+    sunset = _asInt(json['sunset']);
     temp = json['temp'];
     feelsLike = json['feels_like'];
-    pressure = json['pressure'];
-    humidity = json['humidity'];
+    pressure = _asInt(json['pressure']);
+    humidity = _asInt(json['humidity']);
     dewPoint = json['dew_point'];
     uvi = json['uvi'];
-    clouds = json['clouds'];
-    visibility = json['visibility'];
+    clouds = _asInt(json['clouds']);
+    visibility = _asInt(json['visibility']);
     windSpeed = json['wind_speed'];
-    windDeg = json['wind_deg'];
+    windDeg = _asInt(json['wind_deg']);
     windGust = json['wind_gust'];
     if (json['weather'] != null) {
       weather = <Weather>[];
@@ -215,8 +219,8 @@ class Minutely {
   Minutely({this.dt, this.precipitation});
 
   Minutely.fromJson(Map<String, dynamic> json) {
-    dt = json['dt'];
-    precipitation = json['precipitation'];
+    dt = _asInt(json['dt']);
+    precipitation = _asInt(json['precipitation']);
   }
 
   Map<String, dynamic> toJson() {
@@ -262,17 +266,17 @@ class Hourly {
       this.rain});
 
   Hourly.fromJson(Map<String, dynamic> json) {
-    dt = json['dt'];
+    dt = _asInt(json['dt']);
     temp = json['temp'];
     feelsLike = json['feels_like'];
-    pressure = json['pressure'];
-    humidity = json['humidity'];
+    pressure = _asInt(json['pressure']);
+    humidity = _asInt(json['humidity']);
     dewPoint = json['dew_point'];
     uvi = json['uvi'];
-    clouds = json['clouds'];
-    visibility = json['visibility'];
+    clouds = _asInt(json['clouds']);
+    visibility = _asInt(json['visibility']);
     windSpeed = json['wind_speed'];
-    windDeg = json['wind_deg'];
+    windDeg = _asInt(json['wind_deg']);
     windGust = json['wind_gust'];
     if (json['weather'] != null) {
       weather = <Weather>[];
@@ -373,20 +377,20 @@ class Daily {
       this.rain});
 
   Daily.fromJson(Map<String, dynamic> json) {
-    dt = json['dt'];
-    sunrise = json['sunrise'];
-    sunset = json['sunset'];
-    moonrise = json['moonrise'];
-    moonset = json['moonset'];
+    dt = _asInt(json['dt']);
+    sunrise = _asInt(json['sunrise']);
+    sunset = _asInt(json['sunset']);
+    moonrise = _asInt(json['moonrise']);
+    moonset = _asInt(json['moonset']);
     moonPhase = json['moon_phase'];
     summary = json['summary'];
     temp = json['temp'] != null ? new Temp.fromJson(json['temp']) : null;
     feelsLike = json['feels_like'] != null ? new FeelsLike.fromJson(json['feels_like']) : null;
-    pressure = json['pressure'];
-    humidity = json['humidity'];
+    pressure = _asInt(json['pressure']);
+    humidity = _asInt(json['humidity']);
     dewPoint = json['dew_point'];
     windSpeed = json['wind_speed'];
-    windDeg = json['wind_deg'];
+    windDeg = _asInt(json['wind_deg']);
     windGust = json['wind_gust'];
     if (json['weather'] != null) {
       weather = <Weather>[];
@@ -394,7 +398,7 @@ class Daily {
         weather!.add(new Weather.fromJson(v));
       });
     }
-    clouds = json['clouds'];
+    clouds = _asInt(json['clouds']);
     pop = json['pop'];
     uvi = json['uvi'];
     // One Call 4.0 may return daily precipitation as an object with a `1h`
