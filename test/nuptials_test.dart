@@ -184,4 +184,41 @@ void main() {
     test('Model does not throw',
         () => expect(nuptialDailyPercentageModel(-35.2, 149.1, daily), greaterThanOrEqualTo(0.0)));
   });
+
+  // The live One Call 4.0 /timeline/1day endpoint never sends `dew_point` at
+  // all (confirmed live 2026-09-01, on today and every forecast day) - unlike
+  // `pop`, which is only missing on today/past. Scoring must estimate a
+  // missing dewPoint from temp/humidity, not crash with a null-check error.
+  group('Missing dewPoint (live 4.0 today record)', () {
+    Daily daily = Daily();
+    daily.dt = 1665190800;
+    daily.temp = Temp(day: 30.0, min: 22.0, max: 32.0, night: 24.0, eve: 29.0, morn: 23.0);
+    daily.humidity = 67;
+    daily.windSpeed = 1.5;
+    daily.windGust = 2.5;
+    daily.pop = 0.0;
+    // no dewPoint - as returned by the live API for today/past days
+    daily.clouds = 95;
+    daily.pressure = 1035;
+    daily.uvi = UVI_STD.round();
+
+    test('Model does not throw',
+        () => expect(nuptialDailyPercentageModel(-35.2, 149.1, daily), greaterThanOrEqualTo(0.0)));
+  });
+
+  group('Missing dewPoint (hourly)', () {
+    Hourly hourly = Hourly();
+    hourly.dt = 1665226800;
+    hourly.temp = 16.4;
+    hourly.windSpeed = 5.7;
+    hourly.windGust = 7.0;
+    hourly.windDeg = 194;
+    hourly.humidity = 77;
+    hourly.pressure = 1015;
+    // no dewPoint
+    hourly.uvi = 1;
+
+    test('Model does not throw',
+        () => expect(nuptialHourlyPercentageModel(-35.2, 149.1, hourly), greaterThanOrEqualTo(0.0)));
+  });
 }
