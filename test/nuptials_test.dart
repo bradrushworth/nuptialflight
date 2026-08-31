@@ -162,4 +162,26 @@ void main() {
       expect(nuptialHourlyPercentageModel(lat, lon, hourly), closeTo(0.43, 0.02));
     });
   });
+
+  // The live One Call 4.0 daily timeline omits `pop` on today's record (and
+  // past records) - the daily[0] the app scores. Scoring must treat a missing
+  // pop as 0.0, not crash with a null-check error (Play build 2.27.0 bug).
+  group('Missing pop (live 4.0 today record)', () {
+    Daily daily = Daily();
+    daily.dt = 1665190800;
+    daily.temp = Temp(day: 30.0, min: 22.0, max: 32.0, night: 24.0, eve: 29.0, morn: 23.0);
+    daily.humidity = 67;
+    daily.windSpeed = 1.5;
+    daily.windGust = 2.5;
+    // no pop, no rain - as returned by the live API for today/past days
+    daily.dewPoint = 22.0;
+    daily.clouds = 95;
+    daily.pressure = 1035;
+    daily.uvi = UVI_STD.round();
+
+    test('Heuristic does not throw',
+        () => expect(nuptialDailyPercentage(daily), greaterThanOrEqualTo(0.0)));
+    test('Model does not throw',
+        () => expect(nuptialDailyPercentageModel(-35.2, 149.1, daily), greaterThanOrEqualTo(0.0)));
+  });
 }

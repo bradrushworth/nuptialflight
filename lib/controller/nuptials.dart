@@ -130,7 +130,7 @@ double nuptialHourlyPercentage(Hourly hourly) {
   double temp = temperatureContribution(hourly.temp!);
   double windSpeed = windContribution(hourly.windSpeed!);
   //double windGust = windContribution(hourly.windGust?.toDouble() ?? hourly.windSpeed!.toDouble());
-  double rain = rainContribution(hourly.pop!);
+  double rain = rainContribution(hourly.pop ?? 0.0);
   double humid = humidityContribution(hourly.humidity!);
   double cloud = cloudinessContribution(hourly.clouds!);
   double press = pressureContribution(hourly.pressure!);
@@ -156,7 +156,8 @@ double nuptialDailyPercentage(Daily daily, {bool nocturnal = false}) {
   double temp = temperatureContribution(daily.temp!.max!);
   double windSpeed = windContribution(daily.windSpeed!);
   //double windGust = windContribution(daily.windGust?.toDouble() ?? daily.windSpeed!.toDouble());
-  double rain = rainContribution(daily.pop!);
+  // Live 4.0 daily timeline omits `pop` on today's/past records - default 0.
+  double rain = rainContribution(daily.pop ?? 0.0);
   double humid = humidityContribution(daily.humidity!);
   double cloud = cloudinessContribution(daily.clouds!);
   double press = pressureContribution(daily.pressure!);
@@ -235,7 +236,9 @@ double nuptialDailyPercentageModel(num lat, num lon, Daily daily,
   double temp = daily.temp!.day!.toDouble();
   double wind = daily.windSpeed!.toDouble();
   double gust = daily.windGust?.toDouble() ?? daily.windSpeed!.toDouble();
-  double rain = daily.pop!.toDouble();
+  // Live 4.0 daily timeline omits `pop` on today's/past records - default 0,
+  // matching the training pipeline's fillna(0) for the pop feature.
+  double rain = daily.pop?.toDouble() ?? 0.0;
   double humid = daily.humidity!.toDouble();
   double cloud = daily.clouds!.toDouble();
   double press = daily.pressure!.toDouble();
