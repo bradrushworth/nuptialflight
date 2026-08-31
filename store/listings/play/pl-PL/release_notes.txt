@@ -1,0 +1,9 @@
+Nowa ikona: królowa australijskiej mrówki Myrmecia, narysowana dla tej aplikacji.
+
+Przebudowany widżet: pasmo Indeksu Lotów Godowych na dany dzień, uczciwe prawdopodobieństwo i mrówka, której wyrastają skrzydła, gdy lot jest prawdopodobny.
+
+Nowy kafelek w Szybkich ustawieniach – prognoza bez odblokowywania.
+
+Poprawka: pierwsze uruchomienie mogło utknąć na ustalaniu lokalizacji.
+
+Poprawka: nowa instalacja nie zgłasza już dawno minionego lotu.

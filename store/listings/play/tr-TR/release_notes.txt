@@ -1,0 +1,9 @@
+Yeni simge: bu uygulama için çizilmiş bir Avustralya buldog karıncası kraliçesi.
+
+Yenilenen widget: günün Çiftleşme Uçuşu Endeksi bandı, gerçek olasılık ve uçuş olası hale geldiğinde kanatlanan bir karınca.
+
+Yeni Hızlı Ayarlar düğmesi – kilidi açmadan tahmini görün.
+
+Düzeltildi: ilk açılış konum beklerken takılabiliyordu.
+
+Düzeltildi: yeni kurulum artık geçmiş bir uçuşu bildirmiyor.

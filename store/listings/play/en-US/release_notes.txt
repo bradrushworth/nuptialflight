@@ -1,0 +1,9 @@
+New app icon: an Australian bull ant queen, drawn for this app.
+
+Rebuilt home-screen widget: the Ant Flight Index band for the day, the honest odds, and an ant that grows wings when a flight is likely.
+
+New Quick Settings tile – check the outlook from the notification shade without unlocking.
+
+Fixed: first launch could hang while waiting for location.
+
+Fixed: a fresh install no longer opens with an alert about a flight that already happened.

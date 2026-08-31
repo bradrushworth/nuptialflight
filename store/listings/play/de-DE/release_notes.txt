@@ -1,0 +1,9 @@
+Neues App-Symbol: eine australische Bulldoggenameisen-Königin, eigens für diese App gezeichnet.
+
+Neues Home-Widget: das Band des Schwarmflug-Index, die ehrliche Wahrscheinlichkeit und eine Ameise, der Flügel wachsen, sobald ein Flug wahrscheinlich wird.
+
+Neue Kachel in den Schnelleinstellungen – Aussichten ohne Entsperren prüfen.
+
+Behoben: Beim ersten Start konnte die Standortsuche hängen bleiben.
+
+Behoben: Eine Neuinstallation meldet keinen längst vergangenen Flug mehr.

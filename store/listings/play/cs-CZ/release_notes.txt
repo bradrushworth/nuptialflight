@@ -1,0 +1,9 @@
+Nová ikona: královna australského mravence Myrmecia, nakreslená přímo pro tuto aplikaci.
+
+Přepracovaný widget: pásmo indexu svatebních letů pro daný den, poctivá pravděpodobnost a mravenec, kterému narostou křídla, když je let pravděpodobný.
+
+Nová dlaždice v Rychlém nastavení – výhled zjistíte bez odemykání.
+
+Opraveno: při prvním spuštění mohlo čekání na polohu zamrznout.
+
+Opraveno: nová instalace už neupozorní na dávno proběhlý let.

@@ -1,0 +1,9 @@
+Nouvelle icône : une reine de fourmi bouledogue australienne, dessinée pour cette app.
+
+Widget repensé : la catégorie de l'indice de vol nuptial du jour, la probabilité réelle et une fourmi qui prend des ailes quand un vol devient probable.
+
+Nouvelle tuile de réglages rapides – la prévision sans déverrouiller.
+
+Corrigé : le premier lancement pouvait rester bloqué sur la localisation.
+
+Corrigé : une nouvelle installation n'annonce plus un vol déjà passé.
