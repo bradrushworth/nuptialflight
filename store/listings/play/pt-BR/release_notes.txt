@@ -1,9 +1,5 @@
-Novo ícone: uma rainha da formiga-touro australiana, desenhada para este app.
+Corrigido: o gráfico das próximas 24 horas mostrava barras cinzas na maioria dos dias em vez das cores do Índice de Voo.
 
-Widget refeito: a faixa do Índice de Revoada do dia, a probabilidade real e uma formiga que ganha asas quando uma revoada é provável.
+Novo: toque em qualquer dia da próxima semana para ver a explicação "Por que esta previsão?" daquele dia.
 
-Novo bloco nas Configurações rápidas – veja a previsão sem desbloquear.
-
-Corrigido: a primeira abertura podia travar esperando a localização.
-
-Corrigido: uma instalação nova não avisa mais sobre uma revoada já passada.
+Melhorado: as avaliações por hora agora usam calibração própria, então a melhor janela do dia é mais precisa.

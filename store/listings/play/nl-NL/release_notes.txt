@@ -1,9 +1,5 @@
-Nieuw app-icoon: een Australische bulldogmier-koningin, voor deze app getekend.
+Opgelost: de grafiek voor de komende 24 uur toonde op de meeste dagen grijze balken in plaats van de kleuren van de Mierenvlucht-index.
 
-Herbouwde widget: de band van de Ant Flight Index van de dag, de eerlijke kans en een mier die vleugels krijgt zodra een vlucht waarschijnlijk is.
+Nieuw: tik op een dag in de komende week voor de eigen uitleg "Waarom deze voorspelling?".
 
-Nieuwe tegel in Snelle instellingen – bekijk de verwachting zonder ontgrendelen.
-
-Opgelost: de eerste start kon blijven hangen op de locatie.
-
-Opgelost: een nieuwe installatie meldt geen allang voorbije vlucht meer.
+Verbeterd: de uurwaarderingen gebruiken nu een eigen kalibratie, waardoor het beste tijdvak van de dag nauwkeuriger is.

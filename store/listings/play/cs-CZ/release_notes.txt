@@ -1,9 +1,5 @@
-Nová ikona: královna australského mravence Myrmecia, nakreslená přímo pro tuto aplikaci.
+Opraveno: graf následujících 24 hodin ukazoval většinu dnů šedé sloupce místo barev Indexu letů.
 
-Přepracovaný widget: pásmo indexu svatebních letů pro daný den, poctivá pravděpodobnost a mravenec, kterému narostou křídla, když je let pravděpodobný.
+Novinka: klepnutím na kterýkoli den v nadcházejícím týdnu zobrazíte jeho vlastní „Proč tato předpověď?".
 
-Nová dlaždice v Rychlém nastavení – výhled zjistíte bez odemykání.
-
-Opraveno: při prvním spuštění mohlo čekání na polohu zamrznout.
-
-Opraveno: nová instalace už neupozorní na dávno proběhlý let.
+Vylepšeno: hodinová hodnocení nyní používají vlastní kalibraci, takže nejlepší okno dne je přesnější.

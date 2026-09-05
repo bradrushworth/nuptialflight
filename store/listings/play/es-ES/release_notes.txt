@@ -1,9 +1,5 @@
-Nuevo icono: una reina de hormiga toro australiana, dibujada para esta app.
+Corregido: el gráfico de las próximas 24 horas mostraba barras grises casi todos los días en lugar de los colores del Índice de Vuelo.
 
-Widget rehecho: la franja del Índice de Vuelo Nupcial del día, la probabilidad real y una hormiga a la que le salen alas cuando un vuelo es probable.
+Nuevo: toca cualquier día de la próxima semana para ver su propio desglose "¿Por qué este pronóstico?".
 
-Nuevo mosaico en Ajustes rápidos – consulta la previsión sin desbloquear.
-
-Corregido: el primer inicio podía quedarse esperando la ubicación.
-
-Corregido: una instalación nueva ya no avisa de un vuelo ya pasado.
+Mejorado: las valoraciones por hora ahora usan su propia calibración, así que la mejor franja del día es más precisa.
