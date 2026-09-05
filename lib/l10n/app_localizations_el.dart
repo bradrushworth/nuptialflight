@@ -168,14 +168,14 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get whyExplainer =>
-      'Κάθε καμπύλη δείχνει τι έμαθε το μοντέλο για μία συνθήκη. Η κουκκίδα σημειώνει το τώρα — ψηλά στην καμπύλη σημαίνει ότι η συνθήκη βοηθά τη σημερινή πρόβλεψη.';
+      'Κάθε καμπύλη δείχνει τι έμαθε το μοντέλο για μία συνθήκη. Η κουκκίδα σημειώνει την τιμή της ημέρας — ψηλά στην καμπύλη σημαίνει ότι η συνθήκη βοηθά την πρόβλεψη.';
 
   @override
   String get whyFooter =>
       'Οι καμπύλες είναι η οριακή απόκριση του εκπαιδευμένου μοντέλου, όχι σταθεροί κανόνες — αλλάζουν όταν το μοντέλο επανεκπαιδεύεται με νέες αναφορές.';
 
   @override
-  String get tagHelps => 'Βοηθά σήμερα';
+  String get tagHelps => 'Βοηθά';
 
   @override
   String get tagSlightlyHelps => 'Βοηθά λίγο';
@@ -187,7 +187,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get tagHurtsALittle => 'Βλάπτει λίγο';
 
   @override
-  String get tagHurts => 'Βλάπτει σήμερα';
+  String get tagHurts => 'Βλάπτει';
 
   @override
   String get featTemperature => 'Θερμοκρασία';
@@ -219,7 +219,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get featRain => 'Πιθανότητα βροχής';
 
   @override
-  String get featRainNote => 'Η σημερινή πιθανότητα βροχόπτωσης';
+  String get featRainNote => 'Πιθανότητα βροχόπτωσης της ημέρας';
 
   @override
   String get featPressure => 'Ατμοσφαιρική πίεση';
@@ -272,7 +272,7 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String honestyBand(String band, int percentile) {
-    return 'Δείκτης Πτήσεων: $band - το σήμερα είναι καλύτερο από το $percentile% των ημερών στο γεωγραφικό σας πλάτος αυτόν τον μήνα.';
+    return 'Δείκτης Πτήσεων: $band - καλύτερα από το $percentile% των ημερών στο γεωγραφικό σας πλάτος αυτόν τον μήνα.';
   }
 
   @override
@@ -290,7 +290,7 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get sizeSeasonExplainer =>
-      'Διαφορετικά μεγέθη βασιλισσών κορυφώνονται σε διαφορετικούς μήνες. Σε σχέση με τη σημερινή συνολική εκτίμηση:';
+      'Διαφορετικά μεγέθη βασιλισσών κορυφώνονται σε διαφορετικούς μήνες. Σε σχέση με τη συνολική εκτίμηση της ημέρας:';
 
   @override
   String get sizeRowSmall => 'Μικρό (~10 mm)';

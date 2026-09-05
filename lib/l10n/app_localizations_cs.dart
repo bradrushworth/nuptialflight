@@ -168,14 +168,14 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get whyExplainer =>
-      'Každá křivka ukazuje, co se model o dané podmínce naučil. Tečka označuje současnost — vysoko na křivce znamená, že podmínka dnešní předpovědi pomáhá.';
+      'Každá křivka ukazuje, co se model o dané podmínce naučil. Tečka označuje hodnotu daného dne — vysoko na křivce znamená, že podmínka předpovědi pomáhá.';
 
   @override
   String get whyFooter =>
       'Křivky jsou marginální odezva natrénovaného modelu, ne pevná pravidla — mění se při přetrénování na nových hlášeních.';
 
   @override
-  String get tagHelps => 'Dnes pomáhá';
+  String get tagHelps => 'Pomáhá';
 
   @override
   String get tagSlightlyHelps => 'Trochu pomáhá';
@@ -187,7 +187,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get tagHurtsALittle => 'Trochu škodí';
 
   @override
-  String get tagHurts => 'Dnes škodí';
+  String get tagHurts => 'Škodí';
 
   @override
   String get featTemperature => 'Teplota';
@@ -217,7 +217,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get featRain => 'Šance deště';
 
   @override
-  String get featRainNote => 'Dnešní pravděpodobnost srážek';
+  String get featRainNote => 'Pravděpodobnost srážek daného dne';
 
   @override
   String get featPressure => 'Tlak vzduchu';
@@ -270,7 +270,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String honestyBand(String band, int percentile) {
-    return 'Index letů mravenců: $band - dnešek je lepší než $percentile% dní na vaší šířce v tomto měsíci.';
+    return 'Index letů mravenců: $band - lepší než $percentile% dní na vaší šířce v tomto měsíci.';
   }
 
   @override
@@ -288,7 +288,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get sizeSeasonExplainer =>
-      'Různé velikosti královen vrcholí v různých měsících. Vzhledem k dnešní celkové důvěře:';
+      'Různé velikosti královen vrcholí v různých měsících. Vzhledem k celkové důvěře pro tento den:';
 
   @override
   String get sizeRowSmall => 'Malé (~10 mm)';

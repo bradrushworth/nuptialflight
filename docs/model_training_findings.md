@@ -248,3 +248,74 @@ solar = (utc_hour + lon/15) mod 24.
 - The `leadup` DB collection backfill (positives-only, idempotent) feeds
   FUTURE retrains with real API antecedents; ~4.1k/10.1k rows done at time
   of shipping (paused at the OWM daily call cap; rerun resumes free).
+
+## Part 6 — hourly calibration table (2026-09-05)
+
+No retrain. `assets/flight_stats.json` gained an `hourly` sibling block, and
+the app stopped banding hourly scores with the daily table.
+
+### The problem
+
+`bandFor()` maps a raw score to a band by comparing its **calibrated
+probability** against multiples of the base rate. Both the isotonic
+calibration and the per-(hemisphere, month) quantiles in `flight_stats.json`
+were fitted on **daily** scores only — but `main.dart` also fed the hourly
+model's scores through `bandFor()`. The two models score different
+distributions, so an hourly 0.55 was being interpreted with thresholds that
+describe a daily 0.55.
+
+Raised by the user while questioning whether `minBand()`'s daily cap was
+sound. It was a real gap, though not the one the cap was covering.
+
+### The fix
+
+`scripts/flight_stats_pipeline.py` now scores the hourly rows with the
+shipped `hour_model.json` — the same 22-feature order as
+`nuptialHourlyPercentageModel`, with the hourly cutoffs (`temp < 5`,
+`h_windSpeed > 15`, `h_windGust > 20`) and the same clamp — and emits:
+
+```
+flight_stats.json
+  base_rate / quantiles / calibration      <- daily (unchanged position)
+  hourly: { rows, base_rate, quantiles, calibration }
+```
+
+`FlightIndex` gained `percentileHourly`, `calibratedProbabilityHourly`,
+`oneInNHourly`, `hourlyBaseRate` and `hasHourlyStats`; `bandForHourly()` uses
+them. **Assets without the `hourly` key fall back to the daily tables**, so
+older builds and hand-written test fixtures keep working.
+
+### Numbers (2026-09-05 run, live DB)
+
+| | rows | base rate | cv Brier (calibrated) | raw-score Brier |
+|---|---|---|---|---|
+| daily | 224,830 | 0.04685 | 0.04225 | 0.18449 |
+| hourly | 219,408 | 0.04651 | 0.04198 | 0.18286 |
+
+Band thresholds in raw score (1× / 2× / 4× base rate):
+
+| | 1× | 2× | 4× |
+|---|---|---|---|
+| daily (2026-08-30) | 0.46 | 0.57 | 0.76 |
+| daily (2026-09-05) | 0.46 | 0.57 | 0.76 |
+| **hourly (2026-09-05)** | **0.45** | **0.57** | **0.70** |
+
+Two things worth noting:
+
+- **The daily ladder did not move** despite 2,066 more rows, so no user's
+  daily band changes as a result of this rebuild.
+- **The hourly ladder is genuinely different at the top**: Prime opens at
+  0.70 rather than 0.76. Hours scoring 0.70–0.76 were previously under-banded
+  as Promising.
+
+### What this does NOT change
+
+`minBand()` still caps each hour at its day's band. That cap survives because
+the **hourly model has no rain or cloud feature at all** — it cannot see a
+downpour, so an uncapped hourly band could show green bars in the rain.
+Giving the hourly model precipitation features is the prerequisite for
+revisiting the cap; the calibration mismatch no longer is.
+
+For the record, the hourly model remains the *stronger* of the two under the
+Part 5 protocol (AUC 0.671/0.666 vs 0.660/0.639) — the cap has never been
+justified by relative accuracy.

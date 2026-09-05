@@ -1,9 +1,5 @@
-Yeni simge: bu uygulama için çizilmiş bir Avustralya buldog karıncası kraliçesi.
+Düzeltildi: sonraki 24 saat grafiği çoğu gün Uçuş Endeksi renkleri yerine gri çubuklar gösteriyordu.
 
-Yenilenen widget: günün Çiftleşme Uçuşu Endeksi bandı, gerçek olasılık ve uçuş olası hale geldiğinde kanatlanan bir karınca.
+Yeni: önümüzdeki haftadaki herhangi bir güne dokunarak o güne ait "Bu tahmin neden?" açıklamasını görün.
 
-Yeni Hızlı Ayarlar düğmesi – kilidi açmadan tahmini görün.
-
-Düzeltildi: ilk açılış konum beklerken takılabiliyordu.
-
-Düzeltildi: yeni kurulum artık geçmiş bir uçuşu bildirmiyor.
+İyileştirildi: saatlik değerlendirmeler artık kendi kalibrasyonunu kullanıyor, böylece gün içindeki en iyi zaman aralığı daha isabetli.

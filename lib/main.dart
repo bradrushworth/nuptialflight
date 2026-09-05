@@ -622,14 +622,26 @@ class _MyHomePageState extends State<MyHomePage> {
         .toList();
   }
 
-  void _openWhySheet() {
+  /// Opens the "Why this forecast?" sheet for daily slot [day] (0 = today,
+  /// 1..7 = the upcoming-week rows). Every figure in the sheet is read at
+  /// [day], so a week row explains ITS day rather than today's.
+  void _openWhySheet([int day = 0]) {
     // Same API-shape defensiveness as _drivers(): the row is always rendered,
-    // so a missing/empty daily list must degrade to a no-op, not a crash.
-    if (_weather?.daily?.isNotEmpty != true) return;
-    final Daily d = _weather!.daily!.first;
+    // so a missing/short daily list must degrade to a no-op, not a crash.
+    final List<Daily> daily = _weather?.daily ?? <Daily>[];
+    if (day < 0 || day >= daily.length || day >= _dailyScore.length) return;
+    final Daily d = daily[day];
     final AppLocalizations t = context.l10n;
     showWhySheet(
       context,
+      // Today's sheet needs no date line - the hero card above already says
+      // so. A future day must name itself or it reads as today's forecast.
+      dayLabel: day == 0 || d.dt == null
+          ? null
+          : DateFormat.MMMEd(_localeTag).format(
+              DateTime.fromMillisecondsSinceEpoch(
+                  (d.dt! + (_weather?.timezoneOffset ?? 0)) * 1000,
+                  isUtc: true)),
       conditions: <String>[
         if (d.temp?.day != null) Units.temp(d.temp!.day!),
         if (d.windSpeed != null) t.condWind(Units.speed(d.windSpeed!)),
@@ -695,13 +707,18 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
       ],
       sizePercentages: _weather?.lat != null
-          ? sizeSeasonalPercentages(_dailyPercentage[0], _weather!.lat!, DateTime.now().toUtc())
+          ? sizeSeasonalPercentages(
+              _dailyPercentage[day],
+              _weather!.lat!,
+              d.dt != null
+                  ? DateTime.fromMillisecondsSinceEpoch(d.dt! * 1000, isUtc: true)
+                  : DateTime.now().toUtc())
           : const <String, int>{},
       honesty: [
         t.honestyBand(
-            bandLabelOf(t, _dailyBandAt(0)), _dailyPercentileAt(0).round()),
-        t.honestyOdds(FlightIndex().oneInN(_dailyScore[0])),
-        t.honestyScore(_dailyScore[0].toStringAsFixed(2)),
+            bandLabelOf(t, _dailyBandAt(day)), _dailyPercentileAt(day).round()),
+        t.honestyOdds(FlightIndex().oneInN(_dailyScore[day])),
+        t.honestyScore(_dailyScore[day].toStringAsFixed(2)),
       ],
     );
   }
@@ -944,16 +961,20 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               const SizedBox(height: 10),
               HourlyChart(
-                // NB hourly bands reuse the daily calibration table (close
-                // enough for colour banding, one stats table) and are CAPPED
-                // at the day's own band: bars show intra-day timing, but an
-                // hour can never out-promise the day it belongs to.
+                // Hourly scores are banded with bandForHourly(), against the
+                // hourly-fitted calibration in flight_stats.json — NOT the
+                // daily one (they describe different distributions; on the
+                // 2026-09-05 fit Prime starts at raw 0.70 hourly vs 0.76
+                // daily). Each hour is still capped at the day's band via
+                // minBand(), because the hourly model has no rain or cloud
+                // feature and so cannot see a downpour. That cap is not
+                // about the daily model being better — it scores lower.
                 points: [
                   for (int i = 0; i < hourlyCount; i++)
                     HourlyPoint(
                       hourly[i].dt!,
                       _hourlyPercentage[i],
-                      minBand(bandFor(_hourlyScore[i]), _dailyBandAt(0)),
+                      minBand(bandForHourly(_hourlyScore[i]), _dailyBandAt(0)),
                     ),
                 ],
                 timezoneOffsetSeconds: weather.timezoneOffset ?? 0,
@@ -967,7 +988,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       .titleMedium
                       ?.copyWith(fontWeight: FontWeight.w700)),
               const SizedBox(height: 4),
-              WeekList(days: _weekDays()),
+              WeekList(
+                days: _weekDays(),
+                onDayTap: (int row) => _openWhySheet(row + _weekFirstDay),
+              ),
               const SizedBox(height: 16),
               Text(
                 (kIsWeb ? 'Web' : toBeginningOfSentenceCase(Platform.operatingSystem)) +
@@ -982,12 +1006,17 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  /// Daily slot of the first upcoming-week row. The week list starts at
+  /// tomorrow (today already has the hero card), so row j is daily slot
+  /// j + [_weekFirstDay] — the mapping [_openWhySheet] is handed.
+  static const int _weekFirstDay = 1;
+
   List<WeekDay> _weekDays() {
     final List<Daily> daily = _weather?.daily ?? <Daily>[];
     final int offset = _weather?.timezoneOffset ?? 0;
     final int n = min(_dailyPercentage.length, daily.length);
     return [
-      for (int i = 1; i < n; i++)
+      for (int i = _weekFirstDay; i < n; i++)
         WeekDay(
           day: DateFormat.E(_localeTag).format(DateTime.fromMillisecondsSinceEpoch(
               (daily[i].dt! + offset) * 1000,

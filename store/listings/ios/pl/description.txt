@@ -19,7 +19,7 @@ Prognoza to model uczenia maszynowego trenowany na ponad 10 000 prawdziwych zgł
 
 POZA TYM
 - Powiadomienia tylko w znakomite dni
-- Widżety ekranu głównego na Androida i iPhone'a
+- Widżety na ekran główny i ekran blokady
 - Mapa na żywo z niedawnymi obserwacjami w okolicy
 - Który rozmiar królowej ma sezon (mały / średni / duży)
 - Tryb ciemny, jednostki C/F i 13 języków

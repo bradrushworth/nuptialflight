@@ -127,15 +127,20 @@ class WhyChipsRow extends StatelessWidget {
   }
 }
 
-/// Opens the full "Why this forecast?" sheet: current conditions, one
-/// partial-dependence sparkline per weather attribute with today's value
+/// Opens the full "Why this forecast?" sheet: that day's conditions, one
+/// partial-dependence sparkline per weather attribute with the day's value
 /// marked, and the per-size seasonal likelihoods.
+///
+/// [dayLabel] names the day the sheet is about (already formatted for the
+/// locale, e.g. "Tue 8 Sep"). It is what tells a reader that a sheet opened
+/// from an upcoming-week row is not about today; omit it for today.
 Future<void> showWhySheet(
   BuildContext context, {
   required List<String> conditions,
   required List<WhyFeature> features,
   required Map<String, int> sizePercentages,
   List<String> honesty = const <String>[],
+  String? dayLabel,
 }) {
   return showModalBottomSheet<void>(
     context: context,
@@ -165,6 +170,17 @@ Future<void> showWhySheet(
                     .titleLarge
                     ?.copyWith(fontWeight: FontWeight.w700),
               ),
+              if (dayLabel != null) ...[
+                const SizedBox(height: 2),
+                Text(
+                  dayLabel,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: scheme.primary,
+                  ),
+                ),
+              ],
               const SizedBox(height: 12),
               Wrap(
                 spacing: 6,

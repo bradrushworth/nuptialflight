@@ -19,7 +19,7 @@ El pronóstico es un modelo de aprendizaje automático entrenado con más de 10.
 
 ADEMÁS
 - Notificaciones solo en días Óptimos
-- Widgets de pantalla de inicio para Android y iPhone
+- Widgets para la pantalla de inicio y la pantalla de bloqueo
 - Mapa en vivo de avistamientos recientes cerca de ti
 - Qué tamaño de reina está en temporada (pequeña / mediana / grande)
 - Modo oscuro, unidades C/F y 13 idiomas

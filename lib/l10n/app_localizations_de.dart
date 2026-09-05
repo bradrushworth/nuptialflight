@@ -168,14 +168,14 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get whyExplainer =>
-      'Jede Kurve zeigt, was das Modell über eine Bedingung gelernt hat. Der Punkt markiert das Jetzt — hoch auf der Kurve heißt, diese Bedingung hilft der heutigen Vorhersage.';
+      'Jede Kurve zeigt, was das Modell über eine Bedingung gelernt hat. Der Punkt markiert den Wert des Tages — hoch auf der Kurve heißt, diese Bedingung hilft der Vorhersage.';
 
   @override
   String get whyFooter =>
       'Die Kurven sind die marginale Antwort des trainierten Modells, keine festen Regeln — sie ändern sich, wenn das Modell mit neuen Meldungen neu trainiert wird.';
 
   @override
-  String get tagHelps => 'Hilft heute';
+  String get tagHelps => 'Hilft';
 
   @override
   String get tagSlightlyHelps => 'Hilft etwas';
@@ -187,7 +187,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get tagHurtsALittle => 'Schadet etwas';
 
   @override
-  String get tagHurts => 'Schadet heute';
+  String get tagHurts => 'Schadet';
 
   @override
   String get featTemperature => 'Temperatur';
@@ -218,7 +218,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get featRain => 'Regenrisiko';
 
   @override
-  String get featRainNote => 'Heutige Niederschlagswahrscheinlichkeit';
+  String get featRainNote => 'Niederschlagswahrscheinlichkeit des Tages';
 
   @override
   String get featPressure => 'Luftdruck';
@@ -272,7 +272,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String honestyBand(String band, int percentile) {
-    return 'Ameisenflug-Index: $band - heute ist besser als $percentile% der Tage auf Ihrem Breitengrad in diesem Monat.';
+    return 'Ameisenflug-Index: $band - besser als $percentile% der Tage auf Ihrem Breitengrad in diesem Monat.';
   }
 
   @override
@@ -290,7 +290,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get sizeSeasonExplainer =>
-      'Verschiedene Königinnengrößen haben ihren Höhepunkt in verschiedenen Monaten. Relativ zur heutigen Gesamteinschätzung:';
+      'Verschiedene Königinnengrößen haben ihren Höhepunkt in verschiedenen Monaten. Relativ zur Gesamteinschätzung dieses Tages:';
 
   @override
   String get sizeRowSmall => 'Klein (~10 mm)';

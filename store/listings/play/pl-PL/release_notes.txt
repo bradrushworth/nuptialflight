@@ -1,9 +1,5 @@
-Nowa ikona: królowa australijskiej mrówki Myrmecia, narysowana dla tej aplikacji.
+Naprawiono: wykres najbliższych 24 godzin pokazywał w większość dni szare słupki zamiast kolorów Indeksu Lotów.
 
-Przebudowany widżet: pasmo Indeksu Lotów Godowych na dany dzień, uczciwe prawdopodobieństwo i mrówka, której wyrastają skrzydła, gdy lot jest prawdopodobny.
+Nowość: dotknij dowolnego dnia w nadchodzącym tygodniu, aby zobaczyć jego własne „Dlaczego taka prognoza?".
 
-Nowy kafelek w Szybkich ustawieniach – prognoza bez odblokowywania.
-
-Poprawka: pierwsze uruchomienie mogło utknąć na ustalaniu lokalizacji.
-
-Poprawka: nowa instalacja nie zgłasza już dawno minionego lotu.
+Ulepszono: oceny godzinowe mają teraz własną kalibrację, więc najlepsze okno w ciągu dnia jest dokładniejsze.

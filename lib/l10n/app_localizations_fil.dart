@@ -169,14 +169,14 @@ class AppLocalizationsFil extends AppLocalizations {
 
   @override
   String get whyExplainer =>
-      'Ipinapakita ng bawat curve ang natutunan ng model sa isang kondisyon. Ang tuldok ang kasalukuyan — kapag mataas sa curve, tumutulong ang kondisyong iyon sa hula ngayon.';
+      'Ipinapakita ng bawat curve ang natutunan ng model sa isang kondisyon. Ang tuldok ang halaga ng araw na iyon — kapag mataas sa curve, tumutulong ang kondisyong iyon sa hula.';
 
   @override
   String get whyFooter =>
       'Ang mga curve ay marginal na tugon ng trained model, hindi pirmihang panuntunan — nagbabago ito kapag ni-retrain ang model sa mga bagong ulat.';
 
   @override
-  String get tagHelps => 'Nakakatulong ngayon';
+  String get tagHelps => 'Nakakatulong';
 
   @override
   String get tagSlightlyHelps => 'Bahagyang nakakatulong';
@@ -188,7 +188,7 @@ class AppLocalizationsFil extends AppLocalizations {
   String get tagHurtsALittle => 'Bahagyang nakakasama';
 
   @override
-  String get tagHurts => 'Nakakasama ngayon';
+  String get tagHurts => 'Nakakasama';
 
   @override
   String get featTemperature => 'Temperatura';
@@ -221,7 +221,7 @@ class AppLocalizationsFil extends AppLocalizations {
   String get featRain => 'Tsansa ng ulan';
 
   @override
-  String get featRainNote => 'Posibilidad ng ulan ngayon';
+  String get featRainNote => 'Posibilidad ng ulan sa araw na iyon';
 
   @override
   String get featPressure => 'Presyon ng hangin';
@@ -274,7 +274,7 @@ class AppLocalizationsFil extends AppLocalizations {
 
   @override
   String honestyBand(String band, int percentile) {
-    return 'Ant Flight Index: $band - mas maganda ang araw na ito kaysa $percentile% ng mga araw sa inyong latitude ngayong buwan.';
+    return 'Ant Flight Index: $band - mas maganda kaysa $percentile% ng mga araw sa inyong latitude ngayong buwan.';
   }
 
   @override
@@ -292,7 +292,7 @@ class AppLocalizationsFil extends AppLocalizations {
 
   @override
   String get sizeSeasonExplainer =>
-      'Iba-ibang buwan ang rurok ng iba\'t ibang laki ng reyna. Kaugnay ng kabuuang kumpiyansa ngayon:';
+      'Iba-ibang buwan ang rurok ng iba\'t ibang laki ng reyna. Kaugnay ng kabuuang kumpiyansa sa araw na iyon:';
 
   @override
   String get sizeRowSmall => 'Maliit (~10 mm)';

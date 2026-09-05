@@ -168,14 +168,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get whyExplainer =>
-      'Chaque courbe montre ce que le modèle a appris d\'une condition. Le point marque l\'instant présent — être haut sur la courbe signifie que cette condition aide la prévision du jour.';
+      'Chaque courbe montre ce que le modèle a appris d\'une condition. Le point marque la valeur de ce jour — être haut sur la courbe signifie que cette condition aide la prévision.';
 
   @override
   String get whyFooter =>
       'Les courbes sont la réponse marginale du modèle entraîné, pas des règles fixes — elles évoluent quand le modèle est réentraîné sur de nouveaux signalements.';
 
   @override
-  String get tagHelps => 'Aide aujourd\'hui';
+  String get tagHelps => 'Aide';
 
   @override
   String get tagSlightlyHelps => 'Aide un peu';
@@ -187,7 +187,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get tagHurtsALittle => 'Nuit un peu';
 
   @override
-  String get tagHurts => 'Nuit aujourd\'hui';
+  String get tagHurts => 'Nuit';
 
   @override
   String get featTemperature => 'Température';
@@ -219,7 +219,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get featRain => 'Risque de pluie';
 
   @override
-  String get featRainNote => 'Probabilité de précipitations aujourd\'hui';
+  String get featRainNote => 'Probabilité de précipitations de ce jour';
 
   @override
   String get featPressure => 'Pression atmosphérique';
@@ -272,7 +272,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String honestyBand(String band, int percentile) {
-    return 'Indice de Vol : $band - aujourd\'hui est meilleur que $percentile% des jours à votre latitude ce mois-ci.';
+    return 'Indice de Vol : $band - meilleur que $percentile% des jours à votre latitude ce mois-ci.';
   }
 
   @override

@@ -19,7 +19,7 @@ Tahmin, dünya çapında kullanıcıların 10.000'den fazla gerçek uçuş bildi
 
 AYRICA
 - Sadece Mükemmel günlerde bildirim
-- Android ve iPhone ana ekran widget'ları
+- Ana ekran ve kilit ekranı widget'ları
 - Yakınınızdaki son gözlemlerin canlı haritası
 - Hangi kraliçe boyunun mevsiminde olduğu (küçük / orta / büyük)
 - Karanlık mod, C/F birimleri ve 13 dil

@@ -1,9 +1,5 @@
-Ikon baru: ratu semut Myrmecia Australia, digambar khusus untuk aplikasi ini.
+Diperbaiki: grafik 24 jam berikutnya menampilkan batang abu-abu di hampir semua hari, bukan warna Indeks Penerbangan.
 
-Widget dibangun ulang: pita Indeks Penerbangan Nuptial hari itu, peluang yang jujur, dan semut yang tumbuh sayap saat penerbangan diperkirakan terjadi.
+Baru: ketuk hari mana pun di minggu mendatang untuk melihat penjelasan "Mengapa prakiraan ini?" khusus hari itu.
 
-Ubin Pengaturan Cepat baru – lihat prakiraan tanpa membuka kunci.
-
-Diperbaiki: pembukaan pertama bisa tertahan saat menunggu lokasi.
-
-Diperbaiki: instalasi baru tidak lagi memberi tahu penerbangan yang sudah lewat.
+Ditingkatkan: penilaian per jam kini memakai kalibrasi sendiri, sehingga waktu terbaik dalam sehari lebih akurat.

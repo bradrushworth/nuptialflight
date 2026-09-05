@@ -1,9 +1,5 @@
-Bagong icon: isang reyna ng Australian bull ant, iginuhit para sa app na ito.
+Naayos: ang tsart para sa susunod na 24 oras ay nagpapakita ng kulay-abong bar sa halos lahat ng araw sa halip na mga kulay ng Flight Index.
 
-Bagong widget: ang banda ng Ant Flight Index para sa araw, ang tapat na tsansa, at isang langgam na tinutubuan ng pakpak kapag malamang ang paglipad.
+Bago: i-tap ang alinmang araw sa paparating na linggo para sa sarili nitong "Bakit ganito ang hula?".
 
-Bagong Quick Settings tile – tingnan ang forecast nang hindi nag-a-unlock.
-
-Naayos: maaaring mag-hang ang unang pagbukas habang naghihintay ng lokasyon.
-
-Naayos: hindi na nag-aalerto ang bagong install tungkol sa lumipas nang paglipad.
+Mas mahusay: ang oras-oras na rating ay may sariling kalibrasyon na ngayon, kaya mas tumpak ang pinakamagandang oras sa isang araw.

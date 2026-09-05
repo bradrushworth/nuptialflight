@@ -1,9 +1,5 @@
-Nouvelle icône : une reine de fourmi bouledogue australienne, dessinée pour cette app.
+Corrigé : le graphique des 24 prochaines heures affichait des barres grises la plupart des jours au lieu des couleurs de l'Indice de Vol.
 
-Widget repensé : la catégorie de l'indice de vol nuptial du jour, la probabilité réelle et une fourmi qui prend des ailes quand un vol devient probable.
+Nouveau : touchez n'importe quel jour de la semaine à venir pour obtenir son propre « Pourquoi cette prévision ? ».
 
-Nouvelle tuile de réglages rapides – la prévision sans déverrouiller.
-
-Corrigé : le premier lancement pouvait rester bloqué sur la localisation.
-
-Corrigé : une nouvelle installation n'annonce plus un vol déjà passé.
+Amélioré : les notes horaires utilisent désormais leur propre calibrage, donc le meilleur créneau de la journée est plus juste.

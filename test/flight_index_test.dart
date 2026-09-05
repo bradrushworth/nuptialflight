@@ -122,4 +122,80 @@ void main() {
       expect(bandFor(0.80), FlightBand.prime); // >4x base (~1-in-5+)
     });
   });
+
+  // bandFor() used to be applied to hourly scores too, against the DAILY
+  // calibration - the two models score different distributions, so that
+  // banded an hourly score with thresholds that do not describe it
+  // (bead nf-k0o).
+  group('hourly calibration', () {
+    test('the shipped asset carries an hourly block', () {
+      FlightIndex.loadFromString(
+          File('assets/flight_stats.json').readAsStringSync());
+      expect(FlightIndex().hasHourlyStats, isTrue);
+      final double hb = FlightIndex().hourlyBaseRate;
+      expect(hb, inInclusiveRange(0.02, 0.10));
+      // Fitted on its own population, so it need not equal the daily rate.
+      expect(hb, isNot(equals(0)));
+    });
+
+    test('hourly bands use the hourly table, not the daily one', () {
+      FlightIndex.loadFromString(
+          File('assets/flight_stats.json').readAsStringSync());
+      // On the 2026-09-05 fit Prime opens at raw 0.70 hourly but 0.76 daily,
+      // so a 0.72 hour is Prime while a 0.72 DAY is only Promising. If this
+      // ever collapses to one value the two tables have been conflated.
+      expect(bandForHourly(0.72), FlightBand.prime);
+      expect(bandFor(0.72), FlightBand.promising);
+    });
+
+    test('hourly ladder is monotone and respects its own base rate', () {
+      FlightIndex.loadFromString(
+          File('assets/flight_stats.json').readAsStringSync());
+      final double base = FlightIndex().hourlyBaseRate;
+      // Below the hourly base rate can never escape quiet.
+      expect(FlightIndex().calibratedProbabilityHourly(0.42), lessThan(base));
+      expect(bandForHourly(0.42), FlightBand.quiet);
+      // Hard weather cutoff still wins.
+      expect(bandForHourly(0.01), FlightBand.noFly);
+      // Monotone: a better hour never bands lower.
+      FlightBand prev = FlightBand.noFly;
+      for (double s = 0.02; s <= 0.99; s += 0.01) {
+        final FlightBand b = bandForHourly(s);
+        expect(b.index, greaterThanOrEqualTo(prev.index),
+            reason: 'band went backwards at score $s');
+        prev = b;
+      }
+      expect(prev, FlightBand.prime);
+    });
+
+    test('hourly percentile and odds are sane', () {
+      FlightIndex.loadFromString(
+          File('assets/flight_stats.json').readAsStringSync());
+      expect(FlightIndex().percentileHourly(0.60, -35, 12), greaterThan(70));
+      expect(FlightIndex().oneInNHourly(0.65), inInclusiveRange(2, 50));
+      // A better hour is never a worse percentile.
+      expect(FlightIndex().percentileHourly(0.70, 45, 6),
+          greaterThanOrEqualTo(FlightIndex().percentileHourly(0.50, 45, 6)));
+    });
+
+    test('falls back to the daily table when no hourly block exists',
+        () {
+      // Stats assets generated before 2026-09-05 have no `hourly` key. The
+      // app must keep working - degrading to exactly the old (wrong but
+      // harmless) behaviour rather than throwing.
+      final Map<String, dynamic> stats = jsonDecode(
+          File('assets/flight_stats.json').readAsStringSync())
+          as Map<String, dynamic>;
+      stats.remove('hourly');
+      FlightIndex.loadFromString(jsonEncode(stats));
+
+      expect(FlightIndex().hasHourlyStats, isFalse);
+      expect(FlightIndex().hourlyBaseRate, FlightIndex().baseRate);
+      for (final double s in <double>[0.2, 0.42, 0.5, 0.6, 0.72, 0.8]) {
+        expect(bandForHourly(s), bandFor(s), reason: 'at score $s');
+      }
+      expect(FlightIndex().percentileHourly(0.6, -35, 12),
+          FlightIndex().percentile(0.6, -35, 12));
+    });
+  });
 }

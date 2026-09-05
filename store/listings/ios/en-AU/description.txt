@@ -19,7 +19,7 @@ The forecast is a machine-learning model trained on 10,000+ real flight reports 
 
 ALSO IN THE BOX
 - Prime-day notifications - only when it matters
-- Home-screen widgets for Android and iPhone
+- Home Screen and Lock Screen widgets
 - Live map of recent sightings near you
 - Which queen size is in season (small / medium / large)
 - Dark mode, C/F units, and 13 languages

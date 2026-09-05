@@ -3,12 +3,22 @@
 Guidance for AI coding agents working in this repo — the canonical project
 context. Human-facing docs live in [README.md](README.md). Deeper references:
 
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — **system shape**: the four
+  layers, the model contract, cross-cutting invariants, and where to start
+  for a given kind of task. Read this first when orienting.
 - [docs/model_training_findings.md](docs/model_training_findings.md) — model &
   training history, metrics, reproducibility artifacts
 - [docs/database_schema.md](docs/database_schema.md) — ArangoDB collections
   (`flights` / `leadup` / `historical` / `current`)
 - [docs/map_shading.md](docs/map_shading.md) — map overlay colour-matrix rationale
 - [.clinerules](.clinerules) — Cline-specific tooling quirks (thin pointer here)
+
+**Per-folder notes:** most source folders carry their own `AGENTS.md` with
+the traps specific to that area — `lib/`, `lib/controller/`, `lib/models/`,
+`lib/responses/`, `lib/view/`, `lib/l10n/`, `test/`, `scripts/`,
+`scripts/store/`, `assets/`, `store/`, `docs/`, `android/`, `ios/`, `web/`.
+Read the one for the folder you are about to change; it is shorter and more
+specific than this file.
 
 ## What this is
 
@@ -81,8 +91,8 @@ lib/
     report_sheet.dart      # report-a-flight bottom sheet
     map.dart               # flutter_map page with suitability-tinted overlays
 assets/
-  final_model.json         # daily RF model (sklite JSON, 21 features)
-  hour_model.json          # hourly RF model (sklite JSON, 14 features)
+  final_model.json         # daily RF model (sklite JSON, 28 features)
+  hour_model.json          # hourly RF model (sklite JSON, 22 features)
   flight_stats.json        # score percentiles + calibration (see scripts/)
 scripts/
   flight_stats_pipeline.py # regenerates flight_stats.json after a retrain
@@ -159,9 +169,13 @@ contract with `lib/controller/leadup_features.dart` AND
   `assets/flight_stats.json`): raw scores are NOT probabilities (tree-vote
   fractions, Brier 0.19 if read as one). The UI therefore presents a
   percentile vs ~219k historical days at the same hemisphere+month, a named
-  band (No-fly/Quiet/Watchful/Promising/Prime; Prime starts at the 90th
-  percentile, roughly the old "green" threshold), and calibrated "1 in N
-  days like this see a reported flight" odds (isotonic fit, cv Brier 0.043).
+  band, and calibrated "1 in N days like this see a reported flight" odds
+  (isotonic fit, cv Brier 0.043). Since the 2026-08-30 recalibration the
+  bands are anchored to CALIBRATED ODDS as multiples of the all-days base
+  rate, NOT to seasonal percentile: quiet < 1x base, Fair >= 1x, Promising
+  >= 2x, Prime >= 4x. Consequence to design around: **quiet is the majority
+  band** (~53-79% of days). Any UI that collapses on a quiet day is broken
+  - test with one.
   Regenerate the stats asset with `python scripts/flight_stats_pipeline.py`
   after every model retrain — it scores the live flights DB with the SHIPPED
   model JSON, so it must run after the new model assets are in place.

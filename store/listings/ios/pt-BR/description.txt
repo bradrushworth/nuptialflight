@@ -19,7 +19,7 @@ A previsão é um modelo de aprendizado de máquina treinado com mais de 10.000 
 
 TAMBÉM VEM COM
 - Notificações só em dias Excelentes
-- Widgets de tela inicial para Android e iPhone
+- Widgets para a Tela de Início e a Tela Bloqueada
 - Mapa ao vivo de relatos recentes perto de você
 - Qual tamanho de rainha está na estação (pequena / média / grande)
 - Modo escuro, unidades C/F e 13 idiomas

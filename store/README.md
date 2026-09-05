@@ -21,8 +21,32 @@ All character limits are asserted by the generator; every file is within them.
 ## Locales
 
 Play (13): en-US, tr-TR, fil, es-ES, fr-FR, de-DE, pl-PL, cs-CZ, el-GR, pt-BR, nl-NL, id, ms
-App Store (12): the same minus `fil` — App Store Connect has no Filipino locale;
-Philippine users see the en-US listing.
+App Store (12): en-AU, tr, es-ES, fr-FR, de-DE, pl, cs, el, pt-BR, nl-NL, id, ms —
+the same languages minus `fil` (App Store Connect has no Filipino locale;
+Philippine users fall back to the English listing).
+
+**English on the App Store is `en-AU`, not `en-US`** — verified against App
+Store Connect on 2026-09-05. That is the only locale whose code differs
+between the two stores, and it is why `LOCALE_MAP` in `gen_listings.py` maps
+`'en' -> ('en-US', 'en-AU')`.
+
+### The App Store description is NOT the Play description
+
+`gen_listings.py` writes one `full` text to Play, but rewrites the widgets
+bullet before writing the App Store copy. The Play text markets
+"…widgets for Android and iPhone"; naming Android got the app **rejected
+twice under Guideline 2.3.10** (Accurate Metadata — no third-party platform
+references), most recently submission `7c559f18-3101-4eaf-a83e-a7066c8048e3`
+on 2026-09-04. The App Store text says "Home Screen and Lock Screen widgets"
+instead — the same shipped feature (`ios/NuptialWidget` provides
+systemSmall/systemMedium Home Screen widgets plus the iOS 16 Lock Screen
+accessories), described in Apple's terms.
+
+The swap lives in `WIDGETS_PLAY` / `WIDGETS_IOS` + `ios_description()`. Both
+are keyed to the exact bullet inside each locale's `full` text, and the
+generator **aborts** if a copy edit breaks the match or if any App Store text
+still contains "android" / "google play" / "play store". If you edit the
+widgets bullet, update those two tables in the same change.
 
 ## Uploading
 

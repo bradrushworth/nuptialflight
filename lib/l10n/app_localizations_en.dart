@@ -168,14 +168,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get whyExplainer =>
-      'Each curve is what the model learned about one condition. The dot marks right now — high on the curve means that condition is helping today\'s forecast.';
+      'Each curve is what the model learned about one condition. The dot marks that day\'s value — high on the curve means that condition is helping the forecast.';
 
   @override
   String get whyFooter =>
       'Curves are the trained model\'s marginal response, not fixed rules — they update when the model is retrained on new sighting reports.';
 
   @override
-  String get tagHelps => 'Helps today';
+  String get tagHelps => 'Helps';
 
   @override
   String get tagSlightlyHelps => 'Slightly helps';
@@ -187,7 +187,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tagHurtsALittle => 'Hurts a little';
 
   @override
-  String get tagHurts => 'Hurts today';
+  String get tagHurts => 'Hurts';
 
   @override
   String get featTemperature => 'Temperature';
@@ -217,7 +217,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get featRain => 'Rain chance';
 
   @override
-  String get featRainNote => 'Today\'s probability of precipitation';
+  String get featRainNote => 'That day\'s probability of precipitation';
 
   @override
   String get featPressure => 'Air pressure';
@@ -270,7 +270,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String honestyBand(String band, int percentile) {
-    return 'Ant Flight Index: $band - today is better than $percentile% of days at your latitude this month.';
+    return 'Ant Flight Index: $band - better than $percentile% of days at your latitude this month.';
   }
 
   @override
@@ -288,7 +288,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sizeSeasonExplainer =>
-      'Different queen sizes peak in different months. Relative to today\'s overall confidence:';
+      'Different queen sizes peak in different months. Relative to this day\'s overall confidence:';
 
   @override
   String get sizeRowSmall => 'Small (~10 mm)';
