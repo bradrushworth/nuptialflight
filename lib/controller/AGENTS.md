@@ -63,20 +63,21 @@ Two facts that surprise people:
 - **`quiet` is the majority band** (~53–79% of days, ~70% typical). That is
   intended honesty, not a bug. Any visual encoding that collapses on a quiet
   day is broken — test with a quiet day.
-- **`bandFor()` is applied to hourly scores using a daily-fitted calibration
-  table.** `flight_stats.json` has only one calibration and one quantile
-  table, both fitted on daily scores. This is a real soundness gap (bead
-  `nf-k0o`), and it is one of the two reasons hourly bars are capped at the
-  day's band via `minBand()`.
+- **Hourly scores must be banded with `bandForHourly()`, not `bandFor()`.**
+  `flight_stats.json` carries a daily block and a sibling `hourly` block
+  (quantiles + isotonic), because the two models score different
+  distributions — on the 2026-09-05 fit Prime opens at raw 0.70 hourly vs
+  0.76 daily. `FlightIndex.hasHourlyStats` is false for assets generated
+  before that, in which case everything hourly degrades to the daily tables
+  rather than throwing.
 
-  The other reason: **the hourly model has no rain or cloud feature.** It
-  cannot see precipitation at all.
-
-  The cap is *not* justified by the daily model being more accurate — it
-  isn't. Honest-protocol AUC is 0.671/0.666 (hourly) vs 0.660/0.639 (daily).
-  See `minBand`'s doc comment and
+- **Hourly bars are still capped at the day's band via `minBand()`**, because
+  **the hourly model has no rain or cloud feature** — it cannot see
+  precipitation at all. The cap is *not* justified by the daily model being
+  more accurate; it isn't. Honest-protocol AUC is 0.671/0.666 (hourly) vs
+  0.660/0.639 (daily). See `minBand`'s doc comment and
   [docs/model_training_findings.md](../../docs/model_training_findings.md)
-  Part 5 before changing it.
+  Parts 5-6 before changing it.
 
 ## Paid API calls
 

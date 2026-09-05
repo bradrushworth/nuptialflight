@@ -961,20 +961,20 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               const SizedBox(height: 10),
               HourlyChart(
-                // Hourly bands reuse the DAILY calibration table — the only
-                // one in flight_stats.json — so an hourly score is banded
-                // against daily-fitted thresholds. That mismatch, plus the
-                // hourly model having no rain/cloud feature at all, is why
-                // each hour is capped at the day's band via minBand(); it is
-                // NOT because the daily model is more accurate (it scores
-                // lower than the hourly one — see minBand's doc comment and
-                // docs/model_training_findings.md Part 5).
+                // Hourly scores are banded with bandForHourly(), against the
+                // hourly-fitted calibration in flight_stats.json — NOT the
+                // daily one (they describe different distributions; on the
+                // 2026-09-05 fit Prime starts at raw 0.70 hourly vs 0.76
+                // daily). Each hour is still capped at the day's band via
+                // minBand(), because the hourly model has no rain or cloud
+                // feature and so cannot see a downpour. That cap is not
+                // about the daily model being better — it scores lower.
                 points: [
                   for (int i = 0; i < hourlyCount; i++)
                     HourlyPoint(
                       hourly[i].dt!,
                       _hourlyPercentage[i],
-                      minBand(bandFor(_hourlyScore[i]), _dailyBandAt(0)),
+                      minBand(bandForHourly(_hourlyScore[i]), _dailyBandAt(0)),
                     ),
                 ],
                 timezoneOffsetSeconds: weather.timezoneOffset ?? 0,

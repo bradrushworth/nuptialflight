@@ -68,9 +68,10 @@ quantiles match the distribution users actually see. If you change scoring in
 Dart, change it here in the same commit or the bands drift out of alignment
 with reality.
 
-Note it currently emits **daily-only** quantiles and calibration, while the
-app also bands hourly scores with that table — the gap tracked as bead
-`nf-k0o`.
+It emits **both** blocks: the daily quantiles/calibration at the top level
+and a sibling `hourly` block fitted the same way on hourly-scored rows (the
+22-feature order, hourly cutoffs on `temp`/`h_windSpeed`/`h_windGust`). The
+app reads them via `bandFor()` and `bandForHourly()` respectively.
 
 ## After a retrain
 

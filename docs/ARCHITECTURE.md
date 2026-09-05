@@ -115,6 +115,12 @@ same grey as `noFly` rendered as one flat grey block ~70% of the time. If a
 visual encoding collapses on quiet days, it is broken — test it with a quiet
 day, not a prime one.
 
+`flight_stats.json` holds **two** fitted tables: the daily one at the top
+level and a sibling `hourly` block. Daily scores go through `bandFor()`,
+hourly scores through `bandForHourly()` — they are not interchangeable (see
+§4). `FlightIndex.hasHourlyStats` is false for assets built before
+2026-09-05, in which case hourly falls back to the daily tables.
+
 ### Layer 4 — Presentation and surfaces
 
 `lib/view/` renders it; `services.dart` pushes the same band to background
@@ -163,19 +169,21 @@ hourly model is the *better* of the two:
 | daily 28f | 0.660 | 0.639 | 0.147 | 0.097 |
 | **hourly 22f** | **0.671** | **0.666** | **0.149** | **0.102** |
 
-The cap earns its place for two different reasons:
+The cap earns its place because of the hourly model's **feature set**, not
+its accuracy: **it has no rain and no cloud feature at all.** It cannot see
+that it is pouring. The daily model carries `pop`, `cloud`, `rainMm` and
+`popNext1/2`. Capping stops a downpour reading as a promising afternoon.
 
-1. **The hourly model has no rain or cloud feature at all.** It cannot see
-   that it is pouring. The daily model carries `pop`, `cloud`, `rainMm` and
-   `popNext1/2`. Capping stops a downpour reading as a promising afternoon.
-2. **`flight_stats.json` contains only a daily-fitted calibration and
-   quantile table**, but `bandFor()` is applied to hourly scores too. A daily
-   0.55 and an hourly 0.55 do not mean the same thing, and nothing
-   distinguishes them.
+A second reason applied until 2026-09-05: `flight_stats.json` held only a
+daily-fitted calibration and quantile table, yet `bandFor()` was applied to
+hourly scores too — so an hourly 0.55 was banded against thresholds that
+describe daily scores. That is now fixed. The stats asset carries a sibling
+`hourly` block and hourly scores go through `bandForHourly()`. On the
+2026-09-05 fit the two ladders genuinely differ: Prime opens at raw **0.70
+hourly vs 0.76 daily**.
 
-Reason 2 is a genuine soundness gap, tracked as bead `nf-k0o`. Fixing it —
-fitting hourly quantiles/isotonic alongside the daily ones — is the
-prerequisite for revisiting the cap. Do not remove the cap before then.
+Giving the hourly model rain/cloud features is what would let the cap itself
+be revisited. Until then, keep it.
 
 ---
 

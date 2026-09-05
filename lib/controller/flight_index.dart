@@ -40,20 +40,48 @@ class FlightIndex {
 
   bool get isLoaded => _stats != null;
 
+  /// The optional `hourly` sibling block: quantiles + isotonic calibration
+  /// fitted on HOURLY scores (see scripts/flight_stats_pipeline.py).
+  ///
+  /// Null on stats assets generated before 2026-09-05. Everything hourly
+  /// falls back to the daily tables in that case, which is what the app did
+  /// unconditionally before the hourly fit existed — wrong, but no worse
+  /// than it used to be, and it keeps old assets and hand-written test
+  /// fixtures working.
+  Map<String, dynamic>? get _hourlyStats =>
+      _stats!['hourly'] as Map<String, dynamic>?;
+
+  bool get hasHourlyStats => _hourlyStats != null;
+
   /// The all-days positive rate from the stats build (P(reported flight) on
   /// a random historical day) — the anchor the band ladder is measured
   /// against.
   double get baseRate => (_stats!['base_rate'] as num).toDouble();
 
+  /// The per-hour equivalent of [baseRate]: P(reported flight) on a random
+  /// historical hour. Falls back to [baseRate] when no hourly block exists.
+  double get hourlyBaseRate =>
+      ((_hourlyStats?['base_rate'] ?? _stats!['base_rate']) as num).toDouble();
+
   /// Percentile (0..100) of [score] among historical days in the same
   /// hemisphere and [month] (1..12). Linear interpolation between the stored
   /// quantile steps.
-  double percentile(double score, num lat, int month) {
-    final Map<String, dynamic> stats = _stats!;
-    final List<dynamic> steps = stats['quantile_steps'] as List<dynamic>;
+  double percentile(double score, num lat, int month) => _percentileIn(
+      _stats!['quantiles'] as Map<String, dynamic>, score, lat, month);
+
+  /// [percentile] against the HOURLY distribution.
+  double percentileHourly(double score, num lat, int month) => _percentileIn(
+      (_hourlyStats?['quantiles'] ?? _stats!['quantiles'])
+          as Map<String, dynamic>,
+      score,
+      lat,
+      month);
+
+  double _percentileIn(
+      Map<String, dynamic> quantiles, double score, num lat, int month) {
+    final List<dynamic> steps = _stats!['quantile_steps'] as List<dynamic>;
     final Map<String, dynamic> hemi =
-        (stats['quantiles'] as Map<String, dynamic>)[lat > 0 ? 'n' : 's']
-            as Map<String, dynamic>;
+        quantiles[lat > 0 ? 'n' : 's'] as Map<String, dynamic>;
     final List<dynamic> qs =
         (hemi['$month'] ?? hemi['all']) as List<dynamic>;
 
@@ -74,9 +102,18 @@ class FlightIndex {
 
   /// Calibrated probability that a day with this [score] gets a flight
   /// reported, from the offline isotonic fit. Piecewise-linear lookup.
-  double calibratedProbability(double score) {
-    final Map<String, dynamic> cal =
-        _stats!['calibration'] as Map<String, dynamic>;
+  double calibratedProbability(double score) => _calibratedIn(
+      _stats!['calibration'] as Map<String, dynamic>, score);
+
+  /// [calibratedProbability] against the HOURLY isotonic fit. A daily 0.55
+  /// and an hourly 0.55 do NOT mean the same thing — the two models score
+  /// different distributions — so hourly scores must use this one.
+  double calibratedProbabilityHourly(double score) => _calibratedIn(
+      (_hourlyStats?['calibration'] ?? _stats!['calibration'])
+          as Map<String, dynamic>,
+      score);
+
+  double _calibratedIn(Map<String, dynamic> cal, double score) {
     final List<dynamic> xs = cal['scores'] as List<dynamic>;
     final List<dynamic> ys = cal['probs'] as List<dynamic>;
     if (score <= (xs.first as num)) return (ys.first as num).toDouble();
@@ -96,8 +133,12 @@ class FlightIndex {
 
   /// "1 in N" denominator for the calibrated probability (N >= 1), the
   /// friendliest honest framing of a small probability.
-  int oneInN(double score) {
-    final double p = calibratedProbability(score);
+  int oneInN(double score) => _oneIn(calibratedProbability(score));
+
+  /// [oneInN] for an hourly score.
+  int oneInNHourly(double score) => _oneIn(calibratedProbabilityHourly(score));
+
+  int _oneIn(double p) {
     if (p <= 0) return 999;
     final int n = (1 / p).round();
     return n < 1 ? 1 : n;
@@ -129,8 +170,25 @@ FlightBand bandFor(double score) {
   // The runtime scoring floors impossible weather (cold/gale) to 0.01.
   if (score <= 0.011) return FlightBand.noFly;
   final FlightIndex fi = FlightIndex();
-  final double p = fi.calibratedProbability(score);
-  final double base = fi.baseRate;
+  return _bandFrom(fi.calibratedProbability(score), fi.baseRate);
+}
+
+/// [bandFor] for a score from the HOURLY model.
+///
+/// The two models score different distributions, so an hourly score must be
+/// interpreted against the hourly calibration and the hourly base rate. Using
+/// [bandFor] here — which is what the app did before 2026-09-05 — bands an
+/// hourly score against daily-fitted thresholds and is simply wrong, though
+/// it degrades to exactly that when the shipped stats asset predates the
+/// hourly fit (see [FlightIndex.hasHourlyStats]).
+FlightBand bandForHourly(double score) {
+  if (score <= 0.011) return FlightBand.noFly;
+  final FlightIndex fi = FlightIndex();
+  return _bandFrom(
+      fi.calibratedProbabilityHourly(score), fi.hourlyBaseRate);
+}
+
+FlightBand _bandFrom(double p, double base) {
   if (p < base) return FlightBand.quiet;
   if (p < 2 * base) return FlightBand.watchful;
   if (p < 4 * base) return FlightBand.promising;
@@ -148,21 +206,18 @@ FlightBand bandFor(double score) {
 ///   daily 28f   AUC 0.660 (holdout 0.639)   AP 0.147 (holdout 0.097)
 ///   hourly 22f  AUC 0.671 (holdout 0.666)   AP 0.149 (holdout 0.102)
 ///
-/// Two real reasons the cap still earns its place:
+/// The reason the cap still earns its place is the hourly model's FEATURE
+/// SET, not its accuracy: it has NO rain and NO cloud feature (see
+/// `nuptialHourlyPercentageModel` — 22 features, none of them precipitation).
+/// It literally cannot see that it is pouring. The daily model carries pop,
+/// cloud, rainMm and popNext1/2, so capping at the day stops a downpour
+/// reading as a promising afternoon.
 ///
-///  1. The hourly model has NO rain or cloud feature (see
-///     `nuptialHourlyPercentageModel` — 22 features, none of them
-///     precipitation). It literally cannot see that it is pouring. The daily
-///     model carries pop, cloud, rainMm and popNext1/2, so capping at the day
-///     stops a downpour reading as a promising afternoon.
-///  2. Band thresholds come from `flight_stats.json`, whose calibration and
-///     quantiles were fitted on DAILY scores only. An hourly score of 0.55
-///     therefore does not mean what a daily 0.55 means, and [bandFor] cannot
-///     tell them apart. Until an hourly calibration table ships, capping
-///     bounds the error from that mismatch.
-///
-/// Fixing (2) — fitting hourly quantiles/isotonic alongside the daily ones —
-/// is what would let the cap be revisited. Do not remove it before then.
+/// A second reason applied until 2026-09-05: `flight_stats.json` held only a
+/// daily-fitted calibration, so [bandFor] banded hourly scores against daily
+/// thresholds. That is fixed — hourly scores now go through [bandForHourly]
+/// against an hourly-fitted table (bead nf-k0o). Giving the hourly model
+/// rain/cloud features is what would let the cap itself be revisited.
 FlightBand minBand(FlightBand a, FlightBand b) =>
     a.index <= b.index ? a : b;
 
