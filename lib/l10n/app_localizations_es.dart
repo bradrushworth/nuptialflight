@@ -168,14 +168,14 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get whyExplainer =>
-      'Cada curva es lo que el modelo aprendió sobre una condición. El punto marca el ahora: estar alto en la curva significa que esa condición ayuda al pronóstico de hoy.';
+      'Cada curva es lo que el modelo aprendió sobre una condición. El punto marca el valor de ese día: estar alto en la curva significa que esa condición ayuda al pronóstico.';
 
   @override
   String get whyFooter =>
       'Las curvas son la respuesta marginal del modelo entrenado, no reglas fijas: se actualizan cuando el modelo se reentrena con nuevos avistamientos.';
 
   @override
-  String get tagHelps => 'Ayuda hoy';
+  String get tagHelps => 'Ayuda';
 
   @override
   String get tagSlightlyHelps => 'Ayuda un poco';
@@ -187,7 +187,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tagHurtsALittle => 'Perjudica un poco';
 
   @override
-  String get tagHurts => 'Perjudica hoy';
+  String get tagHurts => 'Perjudica';
 
   @override
   String get featTemperature => 'Temperatura';
@@ -219,7 +219,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get featRain => 'Prob. de lluvia';
 
   @override
-  String get featRainNote => 'Probabilidad de precipitación hoy';
+  String get featRainNote => 'Probabilidad de precipitación de ese día';
 
   @override
   String get featPressure => 'Presión atmosférica';
@@ -273,7 +273,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String honestyBand(String band, int percentile) {
-    return 'Índice de Vuelo: $band - hoy es mejor que el $percentile% de los días en tu latitud este mes.';
+    return 'Índice de Vuelo: $band - mejor que el $percentile% de los días en tu latitud este mes.';
   }
 
   @override
@@ -291,7 +291,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get sizeSeasonExplainer =>
-      'Cada tamaño de reina alcanza su pico en meses distintos. Respecto a la confianza de hoy:';
+      'Cada tamaño de reina alcanza su pico en meses distintos. Respecto a la confianza de este día:';
 
   @override
   String get sizeRowSmall => 'Pequeña (~10 mm)';

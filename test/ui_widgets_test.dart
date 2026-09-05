@@ -32,6 +32,25 @@ void _phoneSized(WidgetTester tester) {
   addTearDown(tester.view.reset);
 }
 
+/// The hourly chart's bars, in order: the only Containers decorated with the
+/// bar's vertical border radius.
+List<Color> _barColours(WidgetTester tester) {
+  return tester
+      .widgetList<Container>(find.byType(Container))
+      .map((c) => c.decoration)
+      .whereType<BoxDecoration>()
+      .where((d) =>
+          d.borderRadius ==
+          const BorderRadius.vertical(
+            top: Radius.circular(4),
+            bottom: Radius.circular(2),
+          ))
+      .map((d) => d.color!)
+      .toList();
+}
+
+void _noop(int _) {}
+
 void main() {
   group('Verdict', () {
     test('thresholds map to the right labels', () {
@@ -124,6 +143,50 @@ void main() {
     });
   });
 
+  group('HourlyChart colours', () {
+    // Regression: after the 2026-08 recalibration ~70% of days sit in
+    // FlightBand.quiet, and _barColor used to paint quiet the same neutral
+    // grey as noFly. Capped at the day's band, that made every bar on a
+    // quiet day identical grey - the chart carried no colour at all.
+    testWidgets('quiet bars use the quiet band colour, not neutral grey',
+        (tester) async {
+      _phoneSized(tester);
+      await tester.pumpWidget(_wrap(HourlyChart(
+        points: [
+          for (int i = 0; i < 24; i++)
+            HourlyPoint(1700000000 + i * 3600, 40 + i, FlightBand.quiet),
+        ],
+        timezoneOffsetSeconds: 0,
+      )));
+      final BuildContext context = tester.element(find.byType(HourlyChart));
+      final ColorScheme scheme = Theme.of(context).colorScheme;
+      final List<Color> bars = _barColours(tester);
+      expect(bars, hasLength(24));
+      expect(bars.toSet(), <Color>{bandColors(context, FlightBand.quiet).fg});
+      expect(bars, isNot(contains(scheme.surfaceContainerHighest)));
+    });
+
+    testWidgets('every band keeps its own bar colour', (tester) async {
+      _phoneSized(tester);
+      const List<FlightBand> bands = FlightBand.values;
+      await tester.pumpWidget(_wrap(HourlyChart(
+        points: [
+          for (int i = 0; i < bands.length; i++)
+            HourlyPoint(1700000000 + i * 3600, 50, bands[i]),
+        ],
+        timezoneOffsetSeconds: 0,
+      )));
+      final BuildContext context = tester.element(find.byType(HourlyChart));
+      final List<Color> bars = _barColours(tester);
+      expect(
+        bars,
+        [for (final FlightBand b in bands) bandColors(context, b).fg],
+      );
+      // Five distinct bands must read as five distinct colours.
+      expect(bars.toSet(), hasLength(bands.length));
+    });
+  });
+
   group('WeekList', () {
     testWidgets('renders a row per day with labelled verdict pills',
         (tester) async {
@@ -141,6 +204,139 @@ void main() {
       expect(find.text('Prime'), findsNWidgets(2));
       expect(find.text('Promising'), findsOneWidget);
       expect(find.text('No-fly'), findsOneWidget);
+    });
+
+    testWidgets('tapping a row reports that day for the Why sheet',
+        (tester) async {
+      _phoneSized(tester);
+      final List<int> tapped = <int>[];
+      await tester.pumpWidget(_wrap(WeekList(
+        days: const [
+          WeekDay(day: 'Sun', temp: '29\u{00B0}', wind: '5.1\u{00A0}m/s', band: FlightBand.promising, percentile: 78),
+          WeekDay(day: 'Mon', temp: '31\u{00B0}', wind: '9.2\u{00A0}m/s', band: FlightBand.quiet, percentile: 22),
+          WeekDay(day: 'Tue', temp: '28\u{00B0}', wind: '4.4\u{00A0}m/s', band: FlightBand.prime, percentile: 93),
+        ],
+        onDayTap: tapped.add,
+      )));
+      await tester.tap(find.text('Tue'));
+      await tester.tap(find.text('Sun'));
+      expect(tapped, <int>[2, 0]);
+    });
+
+    // The tap affordance costs horizontal room: a chevron plus a narrower
+    // pill slot. Worst case is a 320pt phone rendering German, whose band
+    // names ("Vielversprechend") are the longest of the 13 locales.
+    testWidgets('no overflow at 320pt with the longest localized band names',
+        (tester) async {
+      tester.view.physicalSize = const Size(320 * 3, 568 * 3);
+      tester.view.devicePixelRatio = 3.0;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(MaterialApp(
+        locale: const Locale('de'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF3D6B4F)),
+          useMaterial3: true,
+        ),
+        home: Scaffold(
+          body: Padding(
+            padding: const EdgeInsets.all(16),
+            child: WeekList(
+              days: [
+                for (final FlightBand b in FlightBand.values)
+                  WeekDay(day: 'Mit', temp: '31\u{00B0}', wind: '10.0\u{00A0}m/s', band: b, percentile: 88),
+              ],
+              onDayTap: _noop,
+            ),
+          ),
+        ),
+      ));
+      expect(tester.takeException(), isNull);
+      expect(find.text('Vielversprechend'), findsOneWidget);
+      expect(find.byIcon(Icons.chevron_right), findsNWidgets(FlightBand.values.length));
+    });
+
+    testWidgets('rows stay inert when no tap handler is supplied',
+        (tester) async {
+      _phoneSized(tester);
+      await tester.pumpWidget(_wrap(const WeekList(days: [
+        WeekDay(day: 'Sun', temp: '29\u{00B0}', wind: '5.1\u{00A0}m/s', band: FlightBand.quiet, percentile: 22),
+      ])));
+      expect(find.byType(InkWell), findsNothing);
+    });
+  });
+
+  group('Why sheet', () {
+    // The end-to-end path the user asked for: tap an upcoming-week row, get
+    // the "Why this forecast?" sheet for THAT day, named so it can't be
+    // mistaken for today's.
+    testWidgets('a week row opens the sheet for its own day', (tester) async {
+      _phoneSized(tester);
+      const List<String> labels = ['Sun 6 Sep', 'Mon 7 Sep', 'Tue 8 Sep'];
+      await tester.pumpWidget(MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF3D6B4F)),
+          useMaterial3: true,
+        ),
+        home: Scaffold(
+          body: Builder(
+            builder: (context) => WeekList(
+              days: const [
+                WeekDay(day: 'Sun', temp: '29\u{00B0}', wind: '5.1\u{00A0}m/s', band: FlightBand.promising, percentile: 78),
+                WeekDay(day: 'Mon', temp: '31\u{00B0}', wind: '9.2\u{00A0}m/s', band: FlightBand.quiet, percentile: 22),
+                WeekDay(day: 'Tue', temp: '28\u{00B0}', wind: '4.4\u{00A0}m/s', band: FlightBand.prime, percentile: 93),
+              ],
+              onDayTap: (int row) => showWhySheet(
+                context,
+                dayLabel: labels[row],
+                conditions: <String>['28\u{00B0}C'],
+                features: const <WhyFeature>[],
+                sizePercentages: const <String, int>{'small': 40},
+              ),
+            ),
+          ),
+        ),
+      ));
+
+      await tester.tap(find.text('Tue'));
+      await tester.pumpAndSettle();
+      expect(find.text('Why this forecast?'), findsOneWidget);
+      expect(find.text('Tue 8 Sep'), findsOneWidget);
+      expect(find.text('Sun 6 Sep'), findsNothing);
+    });
+
+    testWidgets("today's sheet carries no day label", (tester) async {
+      _phoneSized(tester);
+      await tester.pumpWidget(MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF3D6B4F)),
+          useMaterial3: true,
+        ),
+        home: Scaffold(
+          body: Builder(
+            builder: (context) => FilledButton(
+              onPressed: () => showWhySheet(
+                context,
+                conditions: <String>['28\u{00B0}C'],
+                features: const <WhyFeature>[],
+                sizePercentages: const <String, int>{'small': 40},
+                honesty: const <String>['Ant Flight Index: Prime'],
+              ),
+              child: const Text('open'),
+            ),
+          ),
+        ),
+      ));
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+      expect(find.text('Why this forecast?'), findsOneWidget);
+      // The honesty line must read for any day, not just "today".
+      expect(find.textContaining('today'), findsNothing);
     });
   });
 

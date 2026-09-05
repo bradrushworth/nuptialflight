@@ -169,14 +169,14 @@ class AppLocalizationsMs extends AppLocalizations {
 
   @override
   String get whyExplainer =>
-      'Setiap lengkung menunjukkan apa yang model pelajari tentang satu keadaan. Titik menandakan sekarang — kedudukan tinggi pada lengkung bermakna keadaan itu membantu ramalan hari ini.';
+      'Setiap lengkung menunjukkan apa yang model pelajari tentang satu keadaan. Titik menandakan nilai hari itu — kedudukan tinggi pada lengkung bermakna keadaan itu membantu ramalan.';
 
   @override
   String get whyFooter =>
       'Lengkung ialah tindak balas marginal model terlatih, bukan peraturan tetap — berubah apabila model dilatih semula dengan laporan baharu.';
 
   @override
-  String get tagHelps => 'Membantu hari ini';
+  String get tagHelps => 'Membantu';
 
   @override
   String get tagSlightlyHelps => 'Sedikit membantu';
@@ -188,7 +188,7 @@ class AppLocalizationsMs extends AppLocalizations {
   String get tagHurtsALittle => 'Sedikit menjejaskan';
 
   @override
-  String get tagHurts => 'Menjejaskan hari ini';
+  String get tagHurts => 'Menjejaskan';
 
   @override
   String get featTemperature => 'Suhu';
@@ -220,7 +220,7 @@ class AppLocalizationsMs extends AppLocalizations {
   String get featRain => 'Kemungkinan hujan';
 
   @override
-  String get featRainNote => 'Kebarangkalian hujan hari ini';
+  String get featRainNote => 'Kebarangkalian hujan hari itu';
 
   @override
   String get featPressure => 'Tekanan udara';
@@ -273,7 +273,7 @@ class AppLocalizationsMs extends AppLocalizations {
 
   @override
   String honestyBand(String band, int percentile) {
-    return 'Indeks Penerbangan Semut: $band - hari ini lebih baik daripada $percentile% hari di latitud anda bulan ini.';
+    return 'Indeks Penerbangan Semut: $band - lebih baik daripada $percentile% hari di latitud anda bulan ini.';
   }
 
   @override
@@ -291,7 +291,7 @@ class AppLocalizationsMs extends AppLocalizations {
 
   @override
   String get sizeSeasonExplainer =>
-      'Saiz permaisuri berbeza memuncak pada bulan berbeza. Relatif kepada keyakinan keseluruhan hari ini:';
+      'Saiz permaisuri berbeza memuncak pada bulan berbeza. Relatif kepada keyakinan keseluruhan hari itu:';
 
   @override
   String get sizeRowSmall => 'Kecil (~10 mm)';

@@ -24,6 +24,12 @@ class HourlyPoint {
 /// The next-24-hours confidence chart: one bar per hour, ticks every six
 /// hours aligned under the bars they label, and a "Now" marker. Bars show the
 /// true value (no artificial floor) — quiet hours are allowed to look quiet.
+///
+/// Bar colour comes straight from [bandColors], the same source the pills and
+/// the week list use, so the three always agree. It must NOT collapse bands
+/// into a shared neutral: hours are capped at the day's band (see main.dart),
+/// and since the 2026-08 recalibration ~70% of days are [FlightBand.quiet] —
+/// folding quiet into the noFly grey left the whole chart one flat grey block.
 class HourlyChart extends StatelessWidget {
   const HourlyChart({
     Key? key,
@@ -67,7 +73,7 @@ class HourlyChart extends StatelessWidget {
                     child: Container(
                       height: max(3.0, shown[i].percentage * 0.92),
                       decoration: BoxDecoration(
-                        color: _barColor(context, shown[i].band),
+                        color: bandColors(context, shown[i].band).fg,
                         borderRadius: const BorderRadius.vertical(
                           top: Radius.circular(4),
                           bottom: Radius.circular(2),
@@ -110,13 +116,5 @@ class HourlyChart extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Color _barColor(BuildContext context, FlightBand band) {
-    if (band == FlightBand.noFly || band == FlightBand.quiet) {
-      // Low hours stay quiet — a muted neutral rather than alarm red.
-      return Theme.of(context).colorScheme.surfaceContainerHighest;
-    }
-    return bandColors(context, band).fg;
   }
 }

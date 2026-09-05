@@ -139,6 +139,30 @@ FlightBand bandFor(double score) {
 
 /// The lower (least promising) of two bands — used to cap an hour's band at
 /// its day's band, so intra-day bars can't out-promise the day they sit in.
+///
+/// IMPORTANT — the cap is NOT justified by the daily model being better.
+/// It isn't. Under the honest protocol (grouped CV by install + dedup +
+/// temporal holdout, docs/model_training_findings.md Part 5) the shipped
+/// hourly model beats the shipped daily one on every metric:
+///
+///   daily 28f   AUC 0.660 (holdout 0.639)   AP 0.147 (holdout 0.097)
+///   hourly 22f  AUC 0.671 (holdout 0.666)   AP 0.149 (holdout 0.102)
+///
+/// Two real reasons the cap still earns its place:
+///
+///  1. The hourly model has NO rain or cloud feature (see
+///     `nuptialHourlyPercentageModel` — 22 features, none of them
+///     precipitation). It literally cannot see that it is pouring. The daily
+///     model carries pop, cloud, rainMm and popNext1/2, so capping at the day
+///     stops a downpour reading as a promising afternoon.
+///  2. Band thresholds come from `flight_stats.json`, whose calibration and
+///     quantiles were fitted on DAILY scores only. An hourly score of 0.55
+///     therefore does not mean what a daily 0.55 means, and [bandFor] cannot
+///     tell them apart. Until an hourly calibration table ships, capping
+///     bounds the error from that mismatch.
+///
+/// Fixing (2) — fitting hourly quantiles/isotonic alongside the daily ones —
+/// is what would let the cap be revisited. Do not remove it before then.
 FlightBand minBand(FlightBand a, FlightBand b) =>
     a.index <= b.index ? a : b;
 

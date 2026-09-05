@@ -13,6 +13,7 @@ import 'package:nuptialflight/responses/onecall_response.dart';
 import 'package:nuptialflight/responses/reverse_geocoding_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:nuptialflight/responses/weather_response.dart';
+import 'package:nuptialflight/utils.dart';
 
 class DailySplit {
   final List<Daily> forecast;
@@ -264,7 +265,7 @@ class WeatherFetcher {
 
     String url =
         'https://api.openweathermap.org/geo/1.0/reverse?lat=${_lat!.toStringAsFixed(4)}&lon=${_lon!.toStringAsFixed(4)}&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&limit=1';
-    print("url=$url");
+    print("url=${redactUrl(url)}");
 
     return _fetchCached<ReverseGeocodingResponse>(
       url: url,
@@ -288,7 +289,7 @@ class WeatherFetcher {
 
     String url =
         'https://api.openweathermap.org/data/2.5/weather?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&mode=json';
-    print("url=$url");
+    print("url=${redactUrl(url)}");
 
     return _fetchCached<CurrentWeatherResponse>(
       url: url,
@@ -364,7 +365,7 @@ class WeatherFetcher {
     final key = dotenv.env['OPENWEATHERMAP_API_KEY'];
     final dailyUrl =
         'https://api.openweathermap.org/data/4.0/onecall/timeline/1day?lat=$_lat&lon=$_lon&appid=$key&units=metric&start=$pastStart&cnt=$cnt';
-    print("dailyUrl=$dailyUrl");
+    print("dailyUrl=${redactUrl(dailyUrl)}");
     final resp = await _fetchCached<OneCallResponse>(
       url: dailyUrl,
       endpoint: 'onecall_daily',
@@ -397,7 +398,7 @@ class WeatherFetcher {
     // lead-up split) lives in fetchDailyWeather() - see its doc comment.
     final hourlyUrl =
         'https://api.openweathermap.org/data/4.0/onecall/timeline/1h?lat=$_lat&lon=$_lon&appid=${dotenv.env['OPENWEATHERMAP_API_KEY']}&units=metric&cnt=48';
-    print("hourlyUrl=$hourlyUrl");
+    print("hourlyUrl=${redactUrl(hourlyUrl)}");
 
     final results = await Future.wait([
       _fetchCached<OneCallResponse>(
@@ -430,7 +431,7 @@ class WeatherFetcher {
     final key = dotenv.env['OPENWEATHERMAP_API_KEY'];
     final url =
         'https://api.openweathermap.org/data/4.0/onecall/timeline/1h?lat=$_lat&lon=$_lon&appid=$key&units=metric&start=$dt&cnt=24';
-    print("url=$url");
+    print("url=${redactUrl(url)}");
 
     return _fetchCached<OneCallResponse>(
       url: url,

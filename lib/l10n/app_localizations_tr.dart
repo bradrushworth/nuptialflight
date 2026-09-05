@@ -168,14 +168,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get whyExplainer =>
-      'Her eğri, modelin bir koşul hakkında öğrendiklerini gösterir. Nokta şu anı işaretler — eğrinin yükseğinde olması o koşulun bugünkü tahmine yardım ettiği anlamına gelir.';
+      'Her eğri, modelin bir koşul hakkında öğrendiklerini gösterir. Nokta o günün değerini işaretler — eğrinin yükseğinde olması o koşulun tahmine yardım ettiği anlamına gelir.';
 
   @override
   String get whyFooter =>
       'Eğriler eğitilmiş modelin marjinal tepkisidir, sabit kurallar değildir — model yeni gözlem raporlarıyla yeniden eğitildiğinde güncellenir.';
 
   @override
-  String get tagHelps => 'Bugün yardımcı';
+  String get tagHelps => 'Yardımcı';
 
   @override
   String get tagSlightlyHelps => 'Biraz yardımcı';
@@ -187,7 +187,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get tagHurtsALittle => 'Biraz olumsuz';
 
   @override
-  String get tagHurts => 'Bugün olumsuz';
+  String get tagHurts => 'Olumsuz';
 
   @override
   String get featTemperature => 'Sıcaklık';
@@ -219,7 +219,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get featRain => 'Yağmur olasılığı';
 
   @override
-  String get featRainNote => 'Bugünkü yağış olasılığı';
+  String get featRainNote => 'O günün yağış olasılığı';
 
   @override
   String get featPressure => 'Hava basıncı';
@@ -272,7 +272,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String honestyBand(String band, int percentile) {
-    return 'Karınca Uçuş Endeksi: $band - bugün, bu ay enleminizdeki günlerin %$percentile\'inden daha iyi.';
+    return 'Karınca Uçuş Endeksi: $band - bu ay enleminizdeki günlerin %$percentile\'inden daha iyi.';
   }
 
   @override
@@ -290,7 +290,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get sizeSeasonExplainer =>
-      'Farklı kraliçe boyları farklı aylarda zirve yapar. Bugünkü genel güvene göre:';
+      'Farklı kraliçe boyları farklı aylarda zirve yapar. O günün genel güvenine göre:';
 
   @override
   String get sizeRowSmall => 'Küçük (~10 mm)';

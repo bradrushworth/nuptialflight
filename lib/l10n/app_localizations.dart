@@ -417,7 +417,7 @@ abstract class AppLocalizations {
   /// No description provided for @whyExplainer.
   ///
   /// In en, this message translates to:
-  /// **'Each curve is what the model learned about one condition. The dot marks right now — high on the curve means that condition is helping today\'s forecast.'**
+  /// **'Each curve is what the model learned about one condition. The dot marks that day\'s value — high on the curve means that condition is helping the forecast.'**
   String get whyExplainer;
 
   /// No description provided for @whyFooter.
@@ -429,7 +429,7 @@ abstract class AppLocalizations {
   /// No description provided for @tagHelps.
   ///
   /// In en, this message translates to:
-  /// **'Helps today'**
+  /// **'Helps'**
   String get tagHelps;
 
   /// No description provided for @tagSlightlyHelps.
@@ -453,7 +453,7 @@ abstract class AppLocalizations {
   /// No description provided for @tagHurts.
   ///
   /// In en, this message translates to:
-  /// **'Hurts today'**
+  /// **'Hurts'**
   String get tagHurts;
 
   /// No description provided for @featTemperature.
@@ -513,7 +513,7 @@ abstract class AppLocalizations {
   /// No description provided for @featRainNote.
   ///
   /// In en, this message translates to:
-  /// **'Today\'s probability of precipitation'**
+  /// **'That day\'s probability of precipitation'**
   String get featRainNote;
 
   /// No description provided for @featPressure.
@@ -585,7 +585,7 @@ abstract class AppLocalizations {
   /// No description provided for @honestyBand.
   ///
   /// In en, this message translates to:
-  /// **'Ant Flight Index: {band} - today is better than {percentile}% of days at your latitude this month.'**
+  /// **'Ant Flight Index: {band} - better than {percentile}% of days at your latitude this month.'**
   String honestyBand(String band, int percentile);
 
   /// No description provided for @honestyOdds.
@@ -609,7 +609,7 @@ abstract class AppLocalizations {
   /// No description provided for @sizeSeasonExplainer.
   ///
   /// In en, this message translates to:
-  /// **'Different queen sizes peak in different months. Relative to today\'s overall confidence:'**
+  /// **'Different queen sizes peak in different months. Relative to this day\'s overall confidence:'**
   String get sizeSeasonExplainer;
 
   /// No description provided for @sizeRowSmall.

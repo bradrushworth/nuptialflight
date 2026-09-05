@@ -168,14 +168,14 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get whyExplainer =>
-      'Każda krzywa pokazuje, czego model nauczył się o danym warunku. Kropka oznacza teraz — wysoko na krzywej znaczy, że ten warunek pomaga dzisiejszej prognozie.';
+      'Każda krzywa pokazuje, czego model nauczył się o danym warunku. Kropka oznacza wartość tego dnia — wysoko na krzywej znaczy, że ten warunek pomaga prognozie.';
 
   @override
   String get whyFooter =>
       'Krzywe to marginalna odpowiedź wytrenowanego modelu, nie sztywne reguły — zmieniają się przy ponownym treningu na nowych zgłoszeniach.';
 
   @override
-  String get tagHelps => 'Dziś pomaga';
+  String get tagHelps => 'Pomaga';
 
   @override
   String get tagSlightlyHelps => 'Trochę pomaga';
@@ -187,7 +187,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get tagHurtsALittle => 'Trochę szkodzi';
 
   @override
-  String get tagHurts => 'Dziś szkodzi';
+  String get tagHurts => 'Szkodzi';
 
   @override
   String get featTemperature => 'Temperatura';
@@ -218,7 +218,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get featRain => 'Szansa deszczu';
 
   @override
-  String get featRainNote => 'Dzisiejsze prawdopodobieństwo opadów';
+  String get featRainNote => 'Prawdopodobieństwo opadów tego dnia';
 
   @override
   String get featPressure => 'Ciśnienie';
@@ -271,7 +271,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String honestyBand(String band, int percentile) {
-    return 'Indeks Lotów Mrówek: $band - dziś jest lepiej niż w $percentile% dni na tej szerokości w tym miesiącu.';
+    return 'Indeks Lotów Mrówek: $band - lepiej niż w $percentile% dni na tej szerokości w tym miesiącu.';
   }
 
   @override
@@ -289,7 +289,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get sizeSeasonExplainer =>
-      'Różne rozmiary królowych szczytują w różnych miesiącach. Względem dzisiejszej ogólnej pewności:';
+      'Różne rozmiary królowych szczytują w różnych miesiącach. Względem ogólnej pewności dla tego dnia:';
 
   @override
   String get sizeRowSmall => 'Małe (~10 mm)';

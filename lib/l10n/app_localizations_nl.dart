@@ -168,14 +168,14 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get whyExplainer =>
-      'Elke curve toont wat het model over één conditie leerde. De stip markeert nu — hoog op de curve betekent dat die conditie de voorspelling van vandaag helpt.';
+      'Elke curve toont wat het model over één conditie leerde. De stip markeert de waarde van die dag — hoog op de curve betekent dat die conditie de voorspelling helpt.';
 
   @override
   String get whyFooter =>
       'De curves zijn de marginale respons van het getrainde model, geen vaste regels — ze veranderen wanneer het model opnieuw wordt getraind met nieuwe meldingen.';
 
   @override
-  String get tagHelps => 'Helpt vandaag';
+  String get tagHelps => 'Helpt';
 
   @override
   String get tagSlightlyHelps => 'Helpt een beetje';
@@ -187,7 +187,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get tagHurtsALittle => 'Hindert een beetje';
 
   @override
-  String get tagHurts => 'Hindert vandaag';
+  String get tagHurts => 'Hindert';
 
   @override
   String get featTemperature => 'Temperatuur';
@@ -219,7 +219,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get featRain => 'Regenkans';
 
   @override
-  String get featRainNote => 'De neerslagkans van vandaag';
+  String get featRainNote => 'De neerslagkans van die dag';
 
   @override
   String get featPressure => 'Luchtdruk';
@@ -273,7 +273,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String honestyBand(String band, int percentile) {
-    return 'Mierenvlucht-index: $band - vandaag is beter dan $percentile% van de dagen op jouw breedtegraad deze maand.';
+    return 'Mierenvlucht-index: $band - beter dan $percentile% van de dagen op jouw breedtegraad deze maand.';
   }
 
   @override
@@ -291,7 +291,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get sizeSeasonExplainer =>
-      'Verschillende koninginnenmaten pieken in verschillende maanden. Ten opzichte van het totaalvertrouwen van vandaag:';
+      'Verschillende koninginnenmaten pieken in verschillende maanden. Ten opzichte van het totaalvertrouwen van die dag:';
 
   @override
   String get sizeRowSmall => 'Klein (~10 mm)';

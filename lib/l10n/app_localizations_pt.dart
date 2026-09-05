@@ -168,14 +168,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get whyExplainer =>
-      'Cada curva mostra o que o modelo aprendeu sobre uma condição. O ponto marca o agora — alto na curva significa que a condição ajuda a previsão de hoje.';
+      'Cada curva mostra o que o modelo aprendeu sobre uma condição. O ponto marca o valor desse dia — alto na curva significa que a condição ajuda a previsão.';
 
   @override
   String get whyFooter =>
       'As curvas são a resposta marginal do modelo treinado, não regras fixas — mudam quando o modelo é retreinado com novos relatos.';
 
   @override
-  String get tagHelps => 'Ajuda hoje';
+  String get tagHelps => 'Ajuda';
 
   @override
   String get tagSlightlyHelps => 'Ajuda um pouco';
@@ -187,7 +187,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get tagHurtsALittle => 'Atrapalha um pouco';
 
   @override
-  String get tagHurts => 'Atrapalha hoje';
+  String get tagHurts => 'Atrapalha';
 
   @override
   String get featTemperature => 'Temperatura';
@@ -218,7 +218,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get featRain => 'Chance de chuva';
 
   @override
-  String get featRainNote => 'Probabilidade de precipitação hoje';
+  String get featRainNote => 'Probabilidade de precipitação desse dia';
 
   @override
   String get featPressure => 'Pressão atmosférica';
@@ -271,7 +271,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String honestyBand(String band, int percentile) {
-    return 'Índice de Voo: $band - hoje é melhor que $percentile% dos dias na sua latitude neste mês.';
+    return 'Índice de Voo: $band - melhor que $percentile% dos dias na sua latitude neste mês.';
   }
 
   @override
@@ -289,7 +289,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get sizeSeasonExplainer =>
-      'Tamanhos diferentes de rainha atingem o pico em meses diferentes. Em relação à confiança geral de hoje:';
+      'Tamanhos diferentes de rainha atingem o pico em meses diferentes. Em relação à confiança geral desse dia:';
 
   @override
   String get sizeRowSmall => 'Pequena (~10 mm)';
