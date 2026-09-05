@@ -19,7 +19,7 @@ Prakiraan ini adalah model machine learning yang dilatih dari 10.000+ laporan pe
 
 SELAIN ITU
 - Notifikasi hanya pada hari Prima
-- Widget layar utama untuk Android dan iPhone
+- Widget layar utama dan layar kunci
 - Peta langsung laporan terbaru di sekitar Anda
 - Ukuran ratu mana yang sedang musim (kecil / sedang / besar)
 - Mode gelap, satuan C/F, dan 13 bahasa

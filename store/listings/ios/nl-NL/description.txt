@@ -19,7 +19,7 @@ De voorspelling is een machine-learning-model, getraind op ruim 10.000 echte vlu
 
 VERDER NOG
 - Meldingen alleen op uitstekende dagen
-- Widgets voor het startscherm van Android en iPhone
+- Widgets voor het beginscherm en het toegangsscherm
 - Live kaart met recente waarnemingen bij jou in de buurt
 - Welke koninginnenmaat in het seizoen is (klein / middel / groot)
 - Donkere modus, C/F-eenheden en 13 talen

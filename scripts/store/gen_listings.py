@@ -8,11 +8,14 @@ Limits enforced: Play 30/80/4000; iOS 30/30/170/4000/100.
 """
 import io, os
 
-REPO = r"C:\Users\Brad\StudioProjects\nuptialflight\.claude\worktrees\app-review-overhaul-dbc88c"
+# Repo root, derived from this file (scripts/store/gen_listings.py) so the
+# generator works from any checkout or worktree. The previous value was a
+# hardcoded absolute path into a worktree that no longer exists.
+REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # (play_locale, ios_locale or None)
 LOCALE_MAP = {
-    'en': ('en-US', 'en-US'), 'tr': ('tr-TR', 'tr'), 'fil': ('fil', None),
+    'en': ('en-US', 'en-AU'), 'tr': ('tr-TR', 'tr'), 'fil': ('fil', None),
     'es': ('es-ES', 'es-ES'), 'fr': ('fr-FR', 'fr-FR'), 'de': ('de-DE', 'de-DE'),
     'pl': ('pl-PL', 'pl'), 'cs': ('cs-CZ', 'cs'), 'el': ('el-GR', 'el'),
     'pt': ('pt-BR', 'pt-BR'), 'nl': ('nl-NL', 'nl-NL'), 'id': ('id', 'id'),
@@ -493,6 +496,76 @@ SELAIN ITU
 Dibuat oleh pemelihara semut, untuk pemelihara semut - dan untuk sesiapa yang pernah tertanya-tanya kenapa langit tiba-tiba dipenuhi semut terbang.""",
 )
 
+# --- App Store Guideline 2.3.10 -------------------------------------------
+# `full` is written for Google Play and names Android. Apple rejected that
+# text twice under Guideline 2.3.10 (Accurate Metadata - no references to
+# third-party platforms), most recently submission
+# 7c559f18-3101-4eaf-a83e-a7066c8048e3 on 2026-09-04. The App Store
+# description therefore swaps the widgets bullet for Apple-appropriate
+# wording. Both lines describe the SAME shipped feature: ios/NuptialWidget
+# provides systemSmall + systemMedium Home Screen widgets and the iOS 16
+# accessoryCircular / accessoryRectangular / accessoryInline Lock Screen
+# widgets.
+#
+# These are keyed to the EXACT line inside each locale's `full` text. If a
+# copy edit breaks the match, ios_description() aborts the run instead of
+# silently shipping an Android reference to Apple again.
+WIDGETS_PLAY = {
+    "en": "- Home-screen widgets for Android and iPhone",
+    "tr": "- Android ve iPhone ana ekran widget'ları",
+    "fil": "- Widget sa home screen para sa Android at iPhone",
+    "es": "- Widgets de pantalla de inicio para Android y iPhone",
+    "fr": "- Widgets d'écran d'accueil pour Android et iPhone",
+    "de": "- Homescreen-Widgets für Android und iPhone",
+    "pl": "- Widżety ekranu głównego na Androida i iPhone'a",
+    "cs": "- Widgety na plochu pro Android i iPhone",
+    "el": "- Widgets αρχικής οθόνης για Android και iPhone",
+    "pt": "- Widgets de tela inicial para Android e iPhone",
+    "nl": "- Widgets voor het startscherm van Android en iPhone",
+    "id": "- Widget layar utama untuk Android dan iPhone",
+    "ms": "- Widget skrin utama untuk Android dan iPhone",
+}
+
+WIDGETS_IOS = {
+    "en": "- Home Screen and Lock Screen widgets",
+    "tr": "- Ana ekran ve kilit ekranı widget'ları",
+    "fil": "- Mga widget sa Home Screen at Lock Screen",
+    "es": "- Widgets para la pantalla de inicio y la pantalla de bloqueo",
+    "fr": "- Widgets pour l'écran d'accueil et l'écran verrouillé",
+    "de": "- Widgets für Home- und Sperrbildschirm",
+    "pl": "- Widżety na ekran główny i ekran blokady",
+    "cs": "- Widgety na plochu a na zamykací obrazovku",
+    "el": "- Widgets αρχικής οθόνης και οθόνης κλειδώματος",
+    "pt": "- Widgets para a Tela de Início e a Tela Bloqueada",
+    "nl": "- Widgets voor het beginscherm en het toegangsscherm",
+    "id": "- Widget layar utama dan layar kunci",
+    "ms": "- Widget skrin utama dan skrin kunci",
+}
+
+# Any of these in an App Store text is an automatic 2.3.10 rejection.
+FORBIDDEN_IOS = ('android', 'google play', 'play store')
+
+
+def ios_description(key, full):
+    """`full` rewritten for the App Store, or abort if it cannot be made safe."""
+    play_line, ios_line = WIDGETS_PLAY[key], WIDGETS_IOS[key]
+    if play_line in full:
+        full = full.replace(play_line, ios_line, 1)
+    elif ios_line not in full:
+        raise SystemExit(
+            "gen_listings: locale %r - neither the Play widgets line nor its "
+            "App Store replacement was found in `full`. The copy was edited "
+            "without updating WIDGETS_PLAY/WIDGETS_IOS; fix those tables "
+            "before generating, or Apple will reject the listing again." % key)
+    low = full.lower()
+    for bad in FORBIDDEN_IOS:
+        if bad in low:
+            raise SystemExit(
+                "gen_listings: locale %r - App Store description still contains "
+                "%r (Guideline 2.3.10). Refusing to write." % (key, bad))
+    return full
+# ---------------------------------------------------------------------------
+
 def write(path, text):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with io.open(path, 'w', encoding='utf-8', newline='\n') as f:
@@ -519,7 +592,7 @@ for key, (play_loc, ios_loc) in LOCALE_MAP.items():
         write(os.path.join(base, 'name.txt'), 'Ant Nuptial Flight Predictor')
         write(os.path.join(base, 'subtitle.txt'), d['subtitle'])
         write(os.path.join(base, 'promotional_text.txt'), d['promo'])
-        write(os.path.join(base, 'description.txt'), d['full'])
+        write(os.path.join(base, 'description.txt'), ios_description(key, d['full']))
         write(os.path.join(base, 'keywords.txt'), d['keywords'])
 
 if problems:

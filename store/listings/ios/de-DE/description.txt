@@ -19,7 +19,7 @@ Die Vorhersage ist ein Machine-Learning-Modell, trainiert mit über 10.000 echte
 
 AUSSERDEM
 - Benachrichtigungen nur an erstklassigen Tagen
-- Homescreen-Widgets für Android und iPhone
+- Widgets für Home- und Sperrbildschirm
 - Live-Karte aktueller Sichtungen in deiner Nähe
 - Welche Königinnengröße Saison hat (klein / mittel / groß)
 - Dunkelmodus, C/F-Einheiten und 13 Sprachen

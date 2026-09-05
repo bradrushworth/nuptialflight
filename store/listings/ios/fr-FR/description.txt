@@ -19,7 +19,7 @@ La prévision est un modèle d'apprentissage automatique entraîné sur plus de 
 
 ET AUSSI
 - Notifications uniquement les jours Idéals
-- Widgets d'écran d'accueil pour Android et iPhone
+- Widgets pour l'écran d'accueil et l'écran verrouillé
 - Carte en direct des observations récentes près de vous
 - Quelle taille de reine est de saison (petite / moyenne / grande)
 - Mode sombre, unités C/F et 13 langues

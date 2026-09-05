@@ -19,7 +19,7 @@ Předpověď je model strojového učení trénovaný na více než 10 000 skute
 
 A NAVÍC
 - Oznámení jen ve vynikající dny
-- Widgety na plochu pro Android i iPhone
+- Widgety na plochu a na zamykací obrazovku
 - Živá mapa nedávných pozorování ve vašem okolí
 - Která velikost královny má sezónu (malá / střední / velká)
 - Tmavý režim, jednotky C/F a 13 jazyků
