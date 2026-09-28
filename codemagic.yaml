@@ -68,14 +68,10 @@ workflows:
     triggering:
       events:
         - push
-        - tag
       branch_patterns:
         - pattern: master
           include: true
           source: true
-      tag_patterns:
-        - pattern: '*'
-          include: true
       cancel_previous_builds: false
 
     scripts:

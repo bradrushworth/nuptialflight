@@ -9,6 +9,15 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
+  String get menuLanguage => 'Langue';
+
+  @override
+  String get languageSystem => 'Langue de l’appareil';
+
+  @override
+  String get languageName => 'Français';
+
+  @override
   String get appTitle => 'Prédicteur de Vol Nuptial des Fourmis';
 
   @override

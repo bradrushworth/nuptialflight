@@ -1,5 +1,8 @@
 {
   "@@locale": "es",
+  "menuLanguage": "Idioma",
+  "languageSystem": "Idioma del dispositivo",
+  "languageName": "Español",
   "appTitle": "Predictor de Vuelo Nupcial de Hormigas",
   "locating": "Localizando…",
   "unknownLocation": "Ubicación desconocida",

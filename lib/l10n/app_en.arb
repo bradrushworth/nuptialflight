@@ -1,5 +1,8 @@
 {
   "@@locale": "en",
+  "menuLanguage": "Language",
+  "languageSystem": "System language",
+  "languageName": "English",
   "appTitle": "Ant Nuptial Flight Predictor",
   "locating": "Locating…",
   "unknownLocation": "Unknown Location",

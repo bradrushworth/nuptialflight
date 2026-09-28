@@ -1,5 +1,8 @@
 {
   "@@locale": "ms",
+  "menuLanguage": "Bahasa",
+  "languageSystem": "Bahasa peranti",
+  "languageName": "Bahasa Melayu",
   "appTitle": "Peramal Penerbangan Kahwin Semut",
   "locating": "Mencari lokasi…",
   "unknownLocation": "Lokasi tidak diketahui",

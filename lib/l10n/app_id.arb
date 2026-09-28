@@ -1,5 +1,8 @@
 {
   "@@locale": "id",
+  "menuLanguage": "Bahasa",
+  "languageSystem": "Bahasa perangkat",
+  "languageName": "Bahasa Indonesia",
   "appTitle": "Prediksi Penerbangan Kawin Semut",
   "locating": "Mencari lokasi…",
   "unknownLocation": "Lokasi tidak dikenal",

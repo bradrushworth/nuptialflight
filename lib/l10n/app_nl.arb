@@ -1,5 +1,8 @@
 {
   "@@locale": "nl",
+  "menuLanguage": "Taal",
+  "languageSystem": "Apparaattaal",
+  "languageName": "Nederlands",
   "appTitle": "Mieren Bruidsvlucht Voorspeller",
   "locating": "Locatie bepalen…",
   "unknownLocation": "Onbekende locatie",

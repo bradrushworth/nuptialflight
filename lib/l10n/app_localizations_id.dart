@@ -9,6 +9,15 @@ class AppLocalizationsId extends AppLocalizations {
   AppLocalizationsId([String locale = 'id']) : super(locale);
 
   @override
+  String get menuLanguage => 'Bahasa';
+
+  @override
+  String get languageSystem => 'Bahasa perangkat';
+
+  @override
+  String get languageName => 'Bahasa Indonesia';
+
+  @override
   String get appTitle => 'Prediksi Penerbangan Kawin Semut';
 
   @override

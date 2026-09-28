@@ -11,6 +11,7 @@ import 'package:home_widget/home_widget.dart';
 import '../l10n/app_localizations.dart';
 import '../responses/onecall_response.dart';
 import '../view/l10n_ext.dart' show bandLabelOf;
+import 'app_language.dart';
 import 'arangodb.dart';
 import 'flight_index.dart';
 import 'geo.dart';
@@ -20,11 +21,11 @@ import 'weather_fetcher.dart';
 import 'widgets_mobile.dart';
 
 /// Localized strings for the background isolate, which has no widget tree:
-/// resolve from the device locale directly, falling back to English when the
-/// device language is not one we ship.
-AppLocalizations backgroundL10n() {
+/// read the saved app choice, then fall back to the device locale or English.
+Future<AppLocalizations> backgroundL10n() async {
   try {
-    return lookupAppLocalizations(PlatformDispatcher.instance.locale);
+    final locale = await AppLanguage.savedLocale() ?? PlatformDispatcher.instance.locale;
+    return lookupAppLocalizations(locale);
   } catch (_) {
     return lookupAppLocalizations(const Locale('en'));
   }
@@ -342,11 +343,11 @@ Future<void> getReportedFlightsNearMe() async {
         'seeding the window, not notifying');
   }
   if (shouldNotifyReports(firstRun: firstRun, numFlights: numFlights)) {
+    final t = await backgroundL10n();
     flutterLocalNotificationsPlugin.show(
       id: notificationIdReport,
-      title: backgroundL10n().notifReportTitle,
-      body: backgroundL10n()
-          .notifReportBody(numFlights, minutes, closestDistance),
+      title: t.notifReportTitle,
+      body: t.notifReportBody(numFlights, minutes, closestDistance),
       notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
           notificationChannelIdReport,
@@ -421,12 +422,13 @@ Future<void> getServicePercentage() async {
         leadUpDaily: weather.leadUpDaily ?? const <Daily>[]).first;
     percentage = (score * 100.0).toInt();
     band = bandFor(score);
+    final t = await backgroundL10n();
     debugPrint('getServicePercentage: Percentage for nuptial flights: $percentage');
     updateAppWidget(
       percentage,
       bandKey: band.name,
-      bandLabel: bandLabelOf(backgroundL10n(), band),
-      oddsText: backgroundL10n().oneInN(FlightIndex().oneInN(score)),
+      bandLabel: bandLabelOf(t, band),
+      oddsText: t.oneInN(FlightIndex().oneInN(score)),
     );
     try {
       await HomeWidget.saveWidgetData<int>(
@@ -443,8 +445,8 @@ Future<void> getServicePercentage() async {
       final int n = FlightIndex().oneInN(score);
       flutterLocalNotificationsPlugin.show(
         id: notificationIdPercentage,
-        title: backgroundL10n().notifPrimeTitle,
-        body: backgroundL10n().notifPrimeBody(n),
+        title: t.notifPrimeTitle,
+        body: t.notifPrimeBody(n),
         notificationDetails: const NotificationDetails(
           android: AndroidNotificationDetails(
             notificationChannelIdPercentage,

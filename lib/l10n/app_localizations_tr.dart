@@ -9,6 +9,15 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
+  String get menuLanguage => 'Dil';
+
+  @override
+  String get languageSystem => 'Cihaz dili';
+
+  @override
+  String get languageName => 'Türkçe';
+
+  @override
   String get appTitle => 'Karınca Çiftleşme Uçuşu Tahmini';
 
   @override

@@ -9,6 +9,15 @@ class AppLocalizationsPl extends AppLocalizations {
   AppLocalizationsPl([String locale = 'pl']) : super(locale);
 
   @override
+  String get menuLanguage => 'Język';
+
+  @override
+  String get languageSystem => 'Język urządzenia';
+
+  @override
+  String get languageName => 'Polski';
+
+  @override
   String get appTitle => 'Prognoza Lotów Godowych Mrówek';
 
   @override

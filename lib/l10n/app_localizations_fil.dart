@@ -9,6 +9,15 @@ class AppLocalizationsFil extends AppLocalizations {
   AppLocalizationsFil([String locale = 'fil']) : super(locale);
 
   @override
+  String get menuLanguage => 'Wika';
+
+  @override
+  String get languageSystem => 'Wika ng device';
+
+  @override
+  String get languageName => 'Filipino';
+
+  @override
   String get appTitle => 'Tagahula ng Nuptial Flight ng mga Langgam';
 
   @override

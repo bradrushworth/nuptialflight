@@ -9,6 +9,15 @@ class AppLocalizationsEl extends AppLocalizations {
   AppLocalizationsEl([String locale = 'el']) : super(locale);
 
   @override
+  String get menuLanguage => 'Γλώσσα';
+
+  @override
+  String get languageSystem => 'Γλώσσα συσκευής';
+
+  @override
+  String get languageName => 'Ελληνικά';
+
+  @override
   String get appTitle => 'Πρόβλεψη Γαμήλιας Πτήσης Μυρμηγκιών';
 
   @override

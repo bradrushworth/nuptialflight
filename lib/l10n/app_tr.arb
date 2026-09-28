@@ -1,5 +1,8 @@
 {
   "@@locale": "tr",
+  "menuLanguage": "Dil",
+  "languageSystem": "Cihaz dili",
+  "languageName": "Türkçe",
   "appTitle": "Karınca Çiftleşme Uçuşu Tahmini",
   "locating": "Konum bulunuyor…",
   "unknownLocation": "Bilinmeyen Konum",

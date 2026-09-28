@@ -9,6 +9,15 @@ class AppLocalizationsMs extends AppLocalizations {
   AppLocalizationsMs([String locale = 'ms']) : super(locale);
 
   @override
+  String get menuLanguage => 'Bahasa';
+
+  @override
+  String get languageSystem => 'Bahasa peranti';
+
+  @override
+  String get languageName => 'Bahasa Melayu';
+
+  @override
   String get appTitle => 'Peramal Penerbangan Kahwin Semut';
 
   @override
