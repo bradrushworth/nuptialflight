@@ -1,5 +1,8 @@
 {
   "@@locale": "cs",
+  "menuLanguage": "Jazyk",
+  "languageSystem": "Jazyk zařízení",
+  "languageName": "Čeština",
   "appTitle": "Predikce svatebních letů mravenců",
   "locating": "Zjišťování polohy…",
   "unknownLocation": "Neznámá poloha",

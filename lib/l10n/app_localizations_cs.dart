@@ -9,6 +9,15 @@ class AppLocalizationsCs extends AppLocalizations {
   AppLocalizationsCs([String locale = 'cs']) : super(locale);
 
   @override
+  String get menuLanguage => 'Jazyk';
+
+  @override
+  String get languageSystem => 'Jazyk zařízení';
+
+  @override
+  String get languageName => 'Čeština';
+
+  @override
   String get appTitle => 'Predikce svatebních letů mravenců';
 
   @override

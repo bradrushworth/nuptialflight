@@ -120,6 +120,24 @@ abstract class AppLocalizations {
     Locale('tr'),
   ];
 
+  /// No description provided for @menuLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get menuLanguage;
+
+  /// No description provided for @languageSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System language'**
+  String get languageSystem;
+
+  /// No description provided for @languageName.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get languageName;
+
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:

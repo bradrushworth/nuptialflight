@@ -9,6 +9,15 @@ class AppLocalizationsDe extends AppLocalizations {
   AppLocalizationsDe([String locale = 'de']) : super(locale);
 
   @override
+  String get menuLanguage => 'Sprache';
+
+  @override
+  String get languageSystem => 'Gerätesprache';
+
+  @override
+  String get languageName => 'Deutsch';
+
+  @override
   String get appTitle => 'Ameisen-Hochzeitsflug-Vorhersage';
 
   @override

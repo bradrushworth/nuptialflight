@@ -9,6 +9,15 @@ class AppLocalizationsNl extends AppLocalizations {
   AppLocalizationsNl([String locale = 'nl']) : super(locale);
 
   @override
+  String get menuLanguage => 'Taal';
+
+  @override
+  String get languageSystem => 'Apparaattaal';
+
+  @override
+  String get languageName => 'Nederlands';
+
+  @override
   String get appTitle => 'Mieren Bruidsvlucht Voorspeller';
 
   @override

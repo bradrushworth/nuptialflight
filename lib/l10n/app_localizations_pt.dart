@@ -9,6 +9,15 @@ class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
 
   @override
+  String get menuLanguage => 'Idioma';
+
+  @override
+  String get languageSystem => 'Idioma do dispositivo';
+
+  @override
+  String get languageName => 'Português';
+
+  @override
   String get appTitle => 'Previsor de Voo Nupcial de Formigas';
 
   @override

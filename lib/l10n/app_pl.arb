@@ -1,5 +1,8 @@
 {
   "@@locale": "pl",
+  "menuLanguage": "Język",
+  "languageSystem": "Język urządzenia",
+  "languageName": "Polski",
   "appTitle": "Prognoza Lotów Godowych Mrówek",
   "locating": "Ustalanie lokalizacji…",
   "unknownLocation": "Nieznana lokalizacja",

@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'controller/arangodb.dart';
+import 'controller/app_language.dart';
 import 'controller/flight_index.dart';
 import 'controller/geo.dart';
 import 'controller/nuptials.dart';
@@ -68,6 +69,7 @@ Future<void> main() async {
   unawaited(FlightIndex.ensureLoaded());
   // Load the metric/imperial display preference.
   unawaited(Units.load());
+  unawaited(AppLanguage.load());
   // Initialise background services without blocking the first frame.
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
     unawaited(initializeService());
@@ -82,23 +84,24 @@ class MyMaterialApp extends StatelessWidget {
     final ColorScheme lightScheme = ColorScheme.fromSeed(seedColor: kSeedColor);
     final ColorScheme darkScheme =
         ColorScheme.fromSeed(seedColor: kSeedColor, brightness: Brightness.dark);
-    return MaterialApp(
-      title: 'Ant Nuptial Flight Predictor',
-      onGenerateTitle: (context) => context.l10n.appTitle,
-      // Ships in the languages of the countries that report the most flights
-      // (from the flights DB): en + tr, fil, es, fr, de, pl, cs, el, pt, nl,
-      // id, ms. Falls back to English for everything else.
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      // Hide the dev banner
-      debugShowCheckedModeBanner: false,
-      // For DevicePreview
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
-      theme: ThemeData(colorScheme: lightScheme, useMaterial3: true),
-      darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
-      themeMode: ThemeMode.system,
-      home: MyHomePage(weatherFetcher: WeatherFetcher()),
+    return ValueListenableBuilder<Locale?>(
+      valueListenable: AppLanguage.selected,
+      builder: (context, selectedLanguage, _) => MaterialApp(
+        title: 'Ant Nuptial Flight Predictor',
+        onGenerateTitle: (context) => context.l10n.appTitle,
+        // Ships in the languages of the countries that report the most flights
+        // (from the flights DB): en + tr, fil, es, fr, de, pl, cs, el, pt, nl,
+        // id, ms. Falls back to English for everything else.
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        debugShowCheckedModeBanner: false,
+        locale: selectedLanguage ?? DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
+        theme: ThemeData(colorScheme: lightScheme, useMaterial3: true),
+        darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
+        themeMode: ThemeMode.system,
+        home: MyHomePage(weatherFetcher: WeatherFetcher()),
+      ),
     );
   }
 }
@@ -484,12 +487,10 @@ class _MyHomePageState extends State<MyHomePage> {
   FlightBand _dailyBandAt(int i) => bandFor(_dailyScore[i]);
 
   /// Sends today's outlook to the home-screen widget: legacy percentage plus
-  /// the localized Ant Flight Index band and odds. Uses the device-locale
-  /// localizations ([backgroundL10n]) so it also matches what the background
-  /// refresh writes.
-  Future<void> _pushAppWidget() {
+  /// the localized Ant Flight Index band and odds.
+  Future<void> _pushAppWidget() async {
     final FlightBand band = _dailyBandAt(0);
-    final AppLocalizations t = backgroundL10n();
+    final AppLocalizations t = await backgroundL10n();
     return updateAppWidget(
       _dailyPercentage[0],
       bandKey: band.name,
@@ -800,6 +801,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 onSelected: (Choice c) {
                   if (c.url == '_units') {
                     Units.toggle();
+                  } else if (c.url == '_language') {
+                    _showLanguageDialog();
                   } else {
                     Utils.launchURL('${c.url}');
                   }
@@ -816,6 +819,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         icon: Icons.thermostat,
                       ),
                       child: _menuRow(Icons.thermostat, unitsTitle),
+                    ),
+                    PopupMenuItem<Choice>(
+                      value: Choice(title: t.menuLanguage, url: '_language', icon: Icons.language),
+                      child: _menuRow(Icons.language, t.menuLanguage),
                     ),
                     const PopupMenuDivider(),
                   ];
@@ -855,10 +862,44 @@ class _MyHomePageState extends State<MyHomePage> {
       children: [
         Icon(icon, size: 20, color: Theme.of(context).colorScheme.primary),
         const SizedBox(width: 14),
-        Text(title),
+        Expanded(child: Text(title, softWrap: true)),
       ],
     );
   }
+
+  Future<void> _showLanguageDialog() async {
+    final t = context.l10n;
+    final chosen = await showDialog<Locale?>(
+      context: context,
+      builder: (dialogContext) => SimpleDialog(
+        title: Text(t.menuLanguage),
+        children: [
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(dialogContext, const Locale('system')),
+            child: _languageOption(t.languageSystem, AppLanguage.selected.value == null),
+          ),
+          for (final locale in AppLocalizations.supportedLocales)
+            SimpleDialogOption(
+              onPressed: () => Navigator.pop(dialogContext, locale),
+              child: _languageOption(
+                lookupAppLocalizations(locale).languageName,
+                AppLanguage.selected.value?.languageCode == locale.languageCode,
+              ),
+            ),
+        ],
+      ),
+    );
+    if (chosen != null) {
+      unawaited(AppLanguage.choose(chosen.languageCode == 'system' ? null : chosen));
+    }
+  }
+
+  Widget _languageOption(String label, bool selected) => Row(
+        children: [
+          Expanded(child: Text(label)),
+          if (selected) const Icon(Icons.check),
+        ],
+      );
 
   Widget _locationChip(ColorScheme scheme) {
     final AppLocalizations t = context.l10n;

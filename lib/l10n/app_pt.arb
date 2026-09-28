@@ -1,5 +1,8 @@
 {
   "@@locale": "pt",
+  "menuLanguage": "Idioma",
+  "languageSystem": "Idioma do dispositivo",
+  "languageName": "Português",
   "appTitle": "Previsor de Voo Nupcial de Formigas",
   "locating": "Localizando…",
   "unknownLocation": "Local desconhecido",

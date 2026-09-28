@@ -1,5 +1,8 @@
 {
   "@@locale": "fil",
+  "menuLanguage": "Wika",
+  "languageSystem": "Wika ng device",
+  "languageName": "Filipino",
   "appTitle": "Tagahula ng Nuptial Flight ng mga Langgam",
   "locating": "Hinahanap ang lokasyon…",
   "unknownLocation": "Hindi kilalang lokasyon",

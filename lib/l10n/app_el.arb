@@ -1,5 +1,8 @@
 {
   "@@locale": "el",
+  "menuLanguage": "Γλώσσα",
+  "languageSystem": "Γλώσσα συσκευής",
+  "languageName": "Ελληνικά",
   "appTitle": "Πρόβλεψη Γαμήλιας Πτήσης Μυρμηγκιών",
   "locating": "Εντοπισμός θέσης…",
   "unknownLocation": "Άγνωστη τοποθεσία",

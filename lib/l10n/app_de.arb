@@ -1,5 +1,8 @@
 {
   "@@locale": "de",
+  "menuLanguage": "Sprache",
+  "languageSystem": "Gerätesprache",
+  "languageName": "Deutsch",
   "appTitle": "Ameisen-Hochzeitsflug-Vorhersage",
   "locating": "Standort wird ermittelt…",
   "unknownLocation": "Unbekannter Ort",
