@@ -316,8 +316,9 @@ class ArangoSingleton {
     Aql aql = _arangoClient!.aql();
     String query = """
 FOR f IN current
+FILTER f.weather.dt >= DATE_TIMESTAMP(DATE_ADD(DATE_NOW(), -48, "hour")) / 1000
+SORT f.weather.dt DESC
 FILTER f.`flight` == 'yes'
-&& DATE_ISO8601(TO_NUMBER(f.weather.dt) * 1000) >= DATE_ADD(DATE_NOW(), -48, "hour")
 RETURN {
     "key": f._key,
     "weather": f.weather.weather[0].description,
@@ -355,8 +356,9 @@ RETURN {
     Aql aql = _arangoClient!.aql();
     String query = """
 FOR f IN current
+FILTER f.weather.dt >= DATE_TIMESTAMP(DATE_ADD(DATE_NOW(), ${minutes}, "minutes")) / 1000
+SORT f.weather.dt DESC
 FILTER f.`flight` == 'yes'
-&& DATE_ISO8601(TO_NUMBER(f.weather.dt) * 1000) >= DATE_ADD(DATE_NOW(), ${minutes}, "minutes")
 && DISTANCE(f.weather.coord.lat, f.weather.coord.lon, ${position.latitude}, ${position.longitude}) < 500 * 1000
 RETURN {
     "key": f._key,
@@ -368,7 +370,6 @@ RETURN {
 }
 """;
 
-    print("getRecentFlightsNearMe: query=${query}");
     Map<String, dynamic> response = await aql.run(query, batchSize: 1000);
     //print("getRecentFlightsNearMe: response=${response}");
     List<dynamic> result = response['result'];
