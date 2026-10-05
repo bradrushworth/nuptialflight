@@ -5,6 +5,23 @@ Layout (fastlane-compatible for Play):
   store/listings/play/<locale>/{title,short_description,full_description}.txt
   store/listings/ios/<locale>/{name,subtitle,promotional_text,description,keywords}.txt
 Limits enforced: Play 30/80/4000; iOS 30/30/170/4000/100.
+
+Release notes are the one hand-written input:
+  store/listings/play/<locale>/release_notes.txt   written per release (<=500)
+  store/listings/ios/<locale>/release_notes.txt    generated from the above
+The iOS file is the App Store "What's New in This Version" text. It is a
+copy of the Play notes for the same language, refused if it names another
+platform (Guideline 2.3.10) and checked against the App Store's 4000 limit.
+
+Getting "What's New" into App Store Connect (app 1603373687):
+  * Write it with PATCH /iris/v1/appStoreVersionLocalizations/{id} and header
+    `X-Csrf-Itc: itc`. The ASC text areas silently save empty when the
+    browser window is short, so do not type these in by hand.
+  * Read back WITHOUT a cache-busting query parameter. `?t=...` makes iris
+    answer 200 with an empty `data` array, and a check written as
+    `.every(...)` then passes on nothing. Assert that 12 rows came back.
+  * A new version starts with the PREVIOUS version's text in the primary
+    locale (en-AU) and nothing in the other eleven. Always write all twelve.
 """
 import io, os
 
@@ -545,6 +562,9 @@ WIDGETS_IOS = {
 # Any of these in an App Store text is an automatic 2.3.10 rejection.
 FORBIDDEN_IOS = ('android', 'google play', 'play store')
 
+PLAY_NOTES_LIMIT = 500
+IOS_NOTES_LIMIT = 4000
+
 
 def ios_description(key, full):
     """`full` rewritten for the App Store, or abort if it cannot be made safe."""
@@ -564,6 +584,49 @@ def ios_description(key, full):
                 "gen_listings: locale %r - App Store description still contains "
                 "%r (Guideline 2.3.10). Refusing to write." % (key, bad))
     return full
+
+
+def ios_release_notes(key, play_loc, repo=REPO):
+    """The App Store "What's New" text for language `key`: the hand-written
+    Play release notes for the same language, or abort if they cannot be used.
+
+    Aborting is deliberate. A language that is skipped quietly ships a version
+    whose "What's New" is blank or still describes the previous release, and a
+    platform name gets the whole submission rejected.
+    """
+    path = os.path.join(repo, 'store', 'listings', 'play', play_loc,
+                        'release_notes.txt')
+    if not os.path.isfile(path):
+        raise SystemExit(
+            "gen_listings: locale %r - no Play release notes at "
+            "store/listings/play/%s/release_notes.txt, so there is nothing to "
+            "generate the App Store \"What's New\" from. Write that file."
+            % (key, play_loc))
+    with io.open(path, encoding='utf-8') as f:
+        text = f.read().replace('\r\n', '\n').strip()
+    if not text:
+        raise SystemExit(
+            "gen_listings: locale %r - store/listings/play/%s/release_notes.txt "
+            "is empty." % (key, play_loc))
+    low = text.lower()
+    for bad in FORBIDDEN_IOS:
+        if bad in low:
+            raise SystemExit(
+                "gen_listings: locale %r - release notes contain %r. They "
+                "become the App Store \"What's New\", where that is a "
+                "Guideline 2.3.10 rejection. Reword "
+                "store/listings/play/%s/release_notes.txt." % (key, bad, play_loc))
+    return text
+
+
+def release_notes_problems(key, text):
+    """Limit violations for one language's release notes, as report lines."""
+    found = []
+    if len(text) > PLAY_NOTES_LIMIT:
+        found.append(f"{key} release notes {len(text)} > {PLAY_NOTES_LIMIT} (Play)")
+    if len(text) > IOS_NOTES_LIMIT:
+        found.append(f"{key} release notes {len(text)} > {IOS_NOTES_LIMIT} (App Store)")
+    return found
 # ---------------------------------------------------------------------------
 
 def write(path, text):
@@ -571,32 +634,41 @@ def write(path, text):
     with io.open(path, 'w', encoding='utf-8', newline='\n') as f:
         f.write(text.strip() + '\n')
 
-problems = []
-for key, (play_loc, ios_loc) in LOCALE_MAP.items():
-    d = L[key]
-    title = d.get('title_native', d['title'])
-    if len(title) > 30: problems.append(f"{key} title {len(title)}")
-    if len(d['short']) > 80: problems.append(f"{key} short {len(d['short'])}")
-    if len(d['full']) > 4000: problems.append(f"{key} full {len(d['full'])}")
-    if len(d['subtitle']) > 30: problems.append(f"{key} subtitle {len(d['subtitle'])}")
-    if len(d['promo']) > 170: problems.append(f"{key} promo {len(d['promo'])}")
-    if len(d['keywords']) > 100: problems.append(f"{key} keywords {len(d['keywords'])}")
 
-    base = os.path.join(REPO, 'store', 'listings', 'play', play_loc)
-    write(os.path.join(base, 'title.txt'), title)
-    write(os.path.join(base, 'short_description.txt'), d['short'])
-    write(os.path.join(base, 'full_description.txt'), d['full'])
+def main():
+    problems = []
+    for key, (play_loc, ios_loc) in LOCALE_MAP.items():
+        d = L[key]
+        title = d.get('title_native', d['title'])
+        if len(title) > 30: problems.append(f"{key} title {len(title)}")
+        if len(d['short']) > 80: problems.append(f"{key} short {len(d['short'])}")
+        if len(d['full']) > 4000: problems.append(f"{key} full {len(d['full'])}")
+        if len(d['subtitle']) > 30: problems.append(f"{key} subtitle {len(d['subtitle'])}")
+        if len(d['promo']) > 170: problems.append(f"{key} promo {len(d['promo'])}")
+        if len(d['keywords']) > 100: problems.append(f"{key} keywords {len(d['keywords'])}")
 
-    if ios_loc:
-        base = os.path.join(REPO, 'store', 'listings', 'ios', ios_loc)
-        write(os.path.join(base, 'name.txt'), 'Ant Nuptial Flight Predictor')
-        write(os.path.join(base, 'subtitle.txt'), d['subtitle'])
-        write(os.path.join(base, 'promotional_text.txt'), d['promo'])
-        write(os.path.join(base, 'description.txt'), ios_description(key, d['full']))
-        write(os.path.join(base, 'keywords.txt'), d['keywords'])
+        base = os.path.join(REPO, 'store', 'listings', 'play', play_loc)
+        write(os.path.join(base, 'title.txt'), title)
+        write(os.path.join(base, 'short_description.txt'), d['short'])
+        write(os.path.join(base, 'full_description.txt'), d['full'])
 
-if problems:
-    print('LIMIT VIOLATIONS:', problems)
-else:
-    print('all limits OK;', len(LOCALE_MAP), 'play locales,',
-          sum(1 for _, i in LOCALE_MAP.values() if i), 'ios locales')
+        if ios_loc:
+            notes = ios_release_notes(key, play_loc)
+            problems.extend(release_notes_problems(key, notes))
+            base = os.path.join(REPO, 'store', 'listings', 'ios', ios_loc)
+            write(os.path.join(base, 'name.txt'), 'Ant Nuptial Flight Predictor')
+            write(os.path.join(base, 'subtitle.txt'), d['subtitle'])
+            write(os.path.join(base, 'promotional_text.txt'), d['promo'])
+            write(os.path.join(base, 'description.txt'), ios_description(key, d['full']))
+            write(os.path.join(base, 'keywords.txt'), d['keywords'])
+            write(os.path.join(base, 'release_notes.txt'), notes)
+
+    if problems:
+        print('LIMIT VIOLATIONS:', problems)
+    else:
+        print('all limits OK;', len(LOCALE_MAP), 'play locales,',
+              sum(1 for _, i in LOCALE_MAP.values() if i), 'ios locales')
+
+
+if __name__ == '__main__':
+    main()
