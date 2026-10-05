@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb, visibleForTesting;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -255,56 +255,71 @@ class ApiClient {
 /// Compatibility facade for existing UI and background service callers.
 /// The signed handle lives only in this isolate, never on disk.
 class ArangoSingleton {
-  static final ArangoSingleton _singleton = ArangoSingleton._internal();
-  final ApiClient? _injected;
-  final Map<String, String>? _testConfig;
-  final http.Client? _testHttpClient;
-  final Future<String> Function()? _testInstallId;
+  static final ArangoSingleton _singleton = ArangoSingleton.withLoader(
+    _clientFromEnv,
+  );
+
+  /// Builds the client on first use. It may throw while the configuration is
+  /// not available; see [_client].
+  final Future<ApiClient> Function() _load;
   Future<ApiClient?>? _clientFuture;
   Future<String?>? _latestSnapshot;
 
   factory ArangoSingleton() => _singleton;
+
   ArangoSingleton.withClient(ApiClient client)
-    : _injected = client,
-      _testConfig = null,
-      _testHttpClient = null,
-      _testInstallId = null;
+    : this.withLoader(() async => client);
 
   /// Exercises lazy config loading in a headless test without a live asset.
   ArangoSingleton.withConfigForTesting(
     Map<String, String> config, {
     required http.Client httpClient,
     required Future<String> Function() installId,
-  }) : _injected = null,
-       _testConfig = config,
-       _testHttpClient = httpClient,
-       _testInstallId = installId;
-  ArangoSingleton._internal()
-    : _injected = null,
-      _testConfig = null,
-      _testHttpClient = null,
-      _testInstallId = null;
+  }) : this.withLoader(
+         () async => _clientFromConfig(
+           config,
+           httpClient: httpClient,
+           installId: installId,
+         ),
+       );
 
-  Future<ApiClient?> _client() => _clientFuture ??= _injected == null
-      ? _loadClient()
-      : Future.value(_injected);
+  @visibleForTesting
+  ArangoSingleton.withLoader(this._load);
 
-  Future<ApiClient?> _loadClient() async {
-    try {
-      if (_testConfig == null && !dotenv.isInitialized) {
-        await dotenv.load(fileName: 'assets/.env');
-      }
-      final config = _testConfig ?? dotenv.env;
-      return ApiClient(
-        baseUrl: config['NF_API_URL'] ?? ApiClient.defaultUrl,
-        apiKey: config['NF_API_KEY'] ?? '',
-        httpClient: _testHttpClient,
-        installId: _testInstallId,
-      );
-    } catch (_) {
-      // Also safe in a headless background isolate without an available asset.
-      return null;
-    }
+  static ApiClient _clientFromConfig(
+    Map<String, String> config, {
+    http.Client? httpClient,
+    Future<String> Function()? installId,
+  }) => ApiClient(
+    baseUrl: config['NF_API_URL'] ?? ApiClient.defaultUrl,
+    apiKey: config['NF_API_KEY'] ?? '',
+    httpClient: httpClient,
+    installId: installId,
+  );
+
+  static Future<ApiClient> _clientFromEnv() async {
+    if (!dotenv.isInitialized) await dotenv.load(fileName: 'assets/.env');
+    return _clientFromConfig(dotenv.env);
+  }
+
+  /// The client, or null while it cannot be built.
+  ///
+  /// Concurrent callers share one load and a built client is kept. A FAILED
+  /// load is not remembered: a cold headless isolate can fail to read the
+  /// bundled config once, and caching that null used to switch reporting,
+  /// the map and nearby alerts off until the app was restarted.
+  Future<ApiClient?> _client() {
+    final pending = _clientFuture;
+    if (pending != null) return pending;
+    late final Future<ApiClient?> attempt;
+    attempt = Future<ApiClient>.sync(_load).then<ApiClient?>(
+      (client) => client,
+      onError: (Object _) {
+        if (identical(_clientFuture, attempt)) _clientFuture = null;
+        return null;
+      },
+    );
+    return _clientFuture = attempt;
   }
 
   Future<void> init() async {

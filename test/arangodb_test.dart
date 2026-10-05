@@ -647,6 +647,44 @@ void main() {
     expect(requests.single.url.queryParameters['lon'], '149.12');
   });
 
+  group('client loading', () {
+    ApiClient recentClient(List<http.Request> requests) => client(
+      MockClient((request) async {
+        requests.add(request);
+        return http.Response(jsonEncode(fixture['expected_recent']), 200);
+      }),
+    );
+
+    test('a failed load is tried again on the next call', () async {
+      // One transient failure (the bundled config not readable yet in a cold
+      // background isolate) used to switch reporting, the map and nearby
+      // alerts off until the app was restarted.
+      var loads = 0;
+      final requests = <http.Request>[];
+      final facade = ArangoSingleton.withLoader(() async {
+        if (++loads == 1) throw StateError('configuration not ready');
+        return recentClient(requests);
+      });
+      expect(await facade.getRecentFlights(), isEmpty);
+      expect(await facade.getRecentFlights(), fixture['expected_recent']);
+      expect(loads, 2);
+    });
+
+    test('a loaded client is kept, and concurrent callers share one load',
+        () async {
+      var loads = 0;
+      final requests = <http.Request>[];
+      final facade = ArangoSingleton.withLoader(() async {
+        loads++;
+        return recentClient(requests);
+      });
+      await Future.wait([facade.getRecentFlights(), facade.getRecentFlights()]);
+      await facade.getRecentFlights();
+      expect(loads, 1);
+      expect(requests, hasLength(3));
+    });
+  });
+
   group('time limits', () {
     ApiClient production(http.Client mock) => ApiClient(
       baseUrl: endpoint,
