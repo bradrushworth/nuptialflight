@@ -1,378 +1,405 @@
-import 'dart:developer' as developer;
-import 'dart:io';
+import 'dart:async';
+import 'dart:convert';
 
-import 'package:darango/darango.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:mobile_device_identifier/mobile_device_identifier.dart';
+import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
 
 import 'install_id.dart';
 import '../responses/onecall_response.dart';
 import '../responses/weather_response.dart';
 
-/// Singleton wrapper around the ArangoDB backend that stores crowd-sourced
-/// weather snapshots and nuptial-flight reports.
-///
-/// Every fetch writes three linked documents — one per collection:
-///   * `current`    — a single present-conditions OWM snapshot
-///   * `historical` — the 24h history of the flight day (timemachine)
-///   * `flights`    — the 8-day One Call forecast
-///
-/// `createWeather` inserts the three, `updateWeather` edits the same three
-/// documents once the user reports whether they saw a flight (flipping
-/// `flight` from 'unknown' to 'yes' and tagging `size`). The `_weather*Key`
-/// fields cache the document handles from `createWeather` so `updateWeather`
-/// can target them.
-class ArangoSingleton {
-  static final ArangoSingleton _singleton = ArangoSingleton._privateConstructor();
+/// Authenticated REST transport for crowd reports. All failures are bounded.
+class ApiClient {
+  static const defaultUrl = 'https://api.bitbot.com.au/nuptialflight/v1';
+  final http.Client _http;
+  final Uri? _base;
+  final String _key;
+  final Future<String> Function() _installId;
+  final Duration timeout;
+  final Duration retryDelay;
 
-  // Create client for Arango database
-  Database? _arangoClient;
-  Future<void>? _connectFuture;
-  // Cached ArangoDB document handles for the three documents created by the
-  // most recent createWeather() call (see class doc). Used by updateWeather().
-  var _weatherCurrentKey;
-  var _weatherHistoricalKey;
-  var _weatherFlightsKey;
-  var _weatherLeadUpKey;
-  // Collections we've already attempted to create this session (best-effort,
-  // once each) so the new ML-training table exists before we write to it.
-  final Set<String> _ensuredCollections = <String>{};
+  ApiClient({
+    required String baseUrl,
+    required String apiKey,
+    http.Client? httpClient,
+    Future<String> Function()? installId,
+    this.timeout = const Duration(seconds: 8),
+    this.retryDelay = const Duration(milliseconds: 250),
+  }) : _http = httpClient ?? http.Client(),
+       _base = _validBase(baseUrl),
+       _key = apiKey.trim(),
+       _installId = installId ?? InstallId.get;
 
-  factory ArangoSingleton() {
-    return _singleton;
+  bool get enabled => _base != null && _key.isNotEmpty;
+
+  static Uri? _validBase(String value) {
+    final uri = Uri.tryParse(value.trim());
+    if (uri == null ||
+        uri.host.isEmpty ||
+        uri.userInfo.isNotEmpty ||
+        uri.query.isNotEmpty ||
+        uri.fragment.isNotEmpty)
+      return null;
+    final loopback =
+        uri.host == 'localhost' ||
+        uri.host == '127.0.0.1' ||
+        uri.host == '[::1]' ||
+        uri.host == '::1';
+    if (uri.scheme != 'https' && !(uri.scheme == 'http' && loopback))
+      return null;
+    if (uri.port == 8530) return null;
+    return uri.replace(path: uri.path.replaceAll(RegExp(r'/+$'), ''));
   }
 
-  ArangoSingleton._privateConstructor() {
-    _connectFuture = init();
+  Uri _url(String path, [Map<String, String>? query]) {
+    final base = _base!;
+    return base.replace(path: '${base.path}$path', queryParameters: query);
+  }
+
+  Future<http.Response?> _send(String method, Uri url, {Object? body}) async {
+    if (!enabled) return null;
+    try {
+      final install = await _installId().timeout(timeout);
+      if (!Uuid.isValidUUID(fromString: install)) return null;
+      final requestId = method == 'GET' ? null : const Uuid().v4();
+      final headers = <String, String>{
+        'X-NF-Key': _key,
+        'X-NF-Install': install,
+        if (requestId != null) 'X-NF-Request': requestId,
+        if (body != null) 'Content-Type': 'application/json',
+      };
+      final payload = body == null ? null : jsonEncode(body);
+      for (var attempt = 0; attempt < 2; attempt++) {
+        try {
+          final request = http.Request(method, url)
+            ..followRedirects = false
+            ..headers.addAll(headers);
+          if (payload != null) request.body = payload;
+          final streamed = await _http.send(request).timeout(timeout);
+          final response = await http.Response.fromStream(
+            streamed,
+          ).timeout(timeout);
+          if (response.statusCode >= 200 && response.statusCode < 300)
+            return response;
+          // 429 and client errors are final. A retry would amplify rate limits.
+          if (response.statusCode == 429 ||
+              (response.statusCode != 408 && response.statusCode < 500))
+            return null;
+        } catch (_) {
+          // Timeout and transport failures are retried at most once.
+        }
+        if (attempt == 0) await Future<void>.delayed(retryDelay);
+      }
+    } catch (_) {
+      // Includes install ID and serialization failures. Never log request data.
+    }
+    return null;
+  }
+
+  Future<String?> createSnapshot(Map<String, dynamic> payload) async {
+    if (!enabled) return null;
+    final response = await _send('POST', _url('/snapshots'), body: payload);
+    return response?.statusCode == 201 ? _handle(response!) : null;
+  }
+
+  Future<bool> confirmSighting(
+    String handle,
+    Map<String, dynamic> payload,
+  ) async {
+    if (!enabled || handle.isEmpty || handle.contains('/')) return false;
+    final response = await _send(
+      'PUT',
+      _url('/snapshots/${Uri.encodeComponent(handle)}/sighting'),
+      body: payload,
+    );
+    return response?.statusCode == 200 && _handle(response!) == handle;
+  }
+
+  String? _handle(http.Response response) {
+    try {
+      final value = jsonDecode(response.body);
+      final handle = value is Map ? value['handle'] : null;
+      return handle is String && handle.isNotEmpty ? handle : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<List> recentFlights() => enabled
+      ? _rows(_url('/flights/recent'), nearby: false)
+      : Future.value([]);
+
+  Future<List> nearbyFlights(num lat, num lon, int minutes) => enabled
+      ? _rows(
+          _url('/flights/nearby', {
+            'lat': '$lat',
+            'lon': '$lon',
+            'minutes': '${normalizeMinutes(minutes)}',
+          }),
+          nearby: true,
+        )
+      : Future.value([]);
+
+  static int normalizeMinutes(int value) =>
+      value == 0 ? 30 : value.abs().clamp(1, 1440);
+
+  Future<List> _rows(Uri url, {required bool nearby}) async {
+    final response = await _send('GET', url);
+    if (response == null) return [];
+    try {
+      final value = jsonDecode(response.body);
+      if (value is! List ||
+          !value.every((row) => _validRow(row, nearby: nearby))) {
+        return [];
+      }
+      return value.map((item) {
+        final row = item as Map<String, dynamic>;
+        return <String, dynamic>{
+          ...row,
+          'lat': (row['lat'] as num).toDouble(),
+          'lon': (row['lon'] as num).toDouble(),
+          if (nearby) 'distance': (row['distance'] as num).toInt(),
+        };
+      }).toList();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  static bool _validRow(Object? value, {required bool nearby}) {
+    if (value is! Map<String, dynamic>) return false;
+    final key = value['key'];
+    final lat = value['lat'];
+    final lon = value['lon'];
+    final weather = value['weather'];
+    final size = value['size'];
+    if (key is! String ||
+        key.isEmpty ||
+        lat is! num ||
+        !lat.isFinite ||
+        lat < -90 ||
+        lat > 90 ||
+        lon is! num ||
+        !lon.isFinite ||
+        lon < -180 ||
+        lon > 180 ||
+        (weather != null && weather is! String) ||
+        (size != null && !const ['small', 'medium', 'large'].contains(size))) {
+      return false;
+    }
+    if (nearby) {
+      final distance = value['distance'];
+      if (distance is! num ||
+          !distance.isFinite ||
+          distance < 0 ||
+          distance != distance.roundToDouble())
+        return false;
+    }
+    return true;
+  }
+}
+
+/// Compatibility facade for existing UI and background service callers.
+/// The signed handle lives only in this isolate, never on disk.
+class ArangoSingleton {
+  static final ArangoSingleton _singleton = ArangoSingleton._internal();
+  final ApiClient? _injected;
+  final Map<String, String>? _testConfig;
+  final http.Client? _testHttpClient;
+  final Future<String> Function()? _testInstallId;
+  Future<ApiClient?>? _clientFuture;
+  Future<String?>? _latestSnapshot;
+
+  factory ArangoSingleton() => _singleton;
+  ArangoSingleton.withClient(ApiClient client)
+    : _injected = client,
+      _testConfig = null,
+      _testHttpClient = null,
+      _testInstallId = null;
+
+  /// Exercises lazy config loading in a headless test without a live asset.
+  ArangoSingleton.withConfigForTesting(
+    Map<String, String> config, {
+    required http.Client httpClient,
+    required Future<String> Function() installId,
+  }) : _injected = null,
+       _testConfig = config,
+       _testHttpClient = httpClient,
+       _testInstallId = installId;
+  ArangoSingleton._internal()
+    : _injected = null,
+      _testConfig = null,
+      _testHttpClient = null,
+      _testInstallId = null;
+
+  Future<ApiClient?> _client() => _clientFuture ??= _injected == null
+      ? _loadClient()
+      : Future.value(_injected);
+
+  Future<ApiClient?> _loadClient() async {
+    try {
+      if (_testConfig == null && !dotenv.isInitialized) {
+        await dotenv.load(fileName: 'assets/.env');
+      }
+      final config = _testConfig ?? dotenv.env;
+      return ApiClient(
+        baseUrl: config['NF_API_URL'] ?? ApiClient.defaultUrl,
+        apiKey: config['NF_API_KEY'] ?? '',
+        httpClient: _testHttpClient,
+        installId: _testInstallId,
+      );
+    } catch (_) {
+      // Also safe in a headless background isolate without an available asset.
+      return null;
+    }
   }
 
   Future<void> init() async {
-    // Ensure dotenv is loaded before accessing env keys
-    if (!dotenv.isInitialized) {
-      try {
-        await dotenv.load(fileName: 'assets/.env');
-      } catch (e) {
-        debugPrint("Failed to load .env in ArangoSingleton: $e");
-      }
-    }
-
-    // Endpoint coordinates are public knowledge (docs, DB schema notes) so
-    // they keep defaults; the credential is deliberately NOT hardcoded — it
-    // must come from assets/.env (locally) or the Codemagic secret that the
-    // "Create assets/.env" build step writes. Without it the app still runs;
-    // reporting and nearby-flights simply stay disabled.
-    final String url = dotenv.env['ARANGO_URL'] ?? 'https://api.bitbot.com.au:8530';
-    final String dbName = dotenv.env['ARANGO_DB_NAME'] ?? 'nuptialFlight';
-    final String user = dotenv.env['ARANGO_USER'] ?? 'nuptialflight_app';
-    final String? password = dotenv.env['ARANGO_PASSWORD'];
-    if (password == null || password.isEmpty) {
-      debugPrint('ArangoSingleton: ARANGO_PASSWORD not set — '
-          'flight reporting and nearby-flight lookups are disabled');
-      return; // _arangoClient stays null; public methods no-op gracefully.
-    }
-
-    _arangoClient = Database(url);
-    await _arangoClient!.connect(dbName, user, password);
+    await _client();
   }
 
-  /// Whether a database connection is configured. False when the build has no
-  /// ARANGO_PASSWORD — every public method below then no-ops instead of
-  /// crashing on a null client.
-  bool get _isEnabled => _arangoClient != null;
-
-  Future<void> _ensureConnected() async {
-    if (_connectFuture != null) {
-      await _connectFuture;
+  Map<String, dynamic>? _payload(
+    String? version,
+    String? buildNumber,
+    OneCallResponse? weather,
+    OneCallResponse? historical,
+    CurrentWeatherResponse? current,
+    OneCallResponse? leadUp,
+    int leadUpDays, {
+    String? size,
+    bool sighting = false,
+  }) {
+    if (version == null ||
+        buildNumber == null ||
+        weather == null ||
+        historical == null ||
+        current == null ||
+        leadUpDays < 0 ||
+        leadUpDays > 7 ||
+        (sighting &&
+            size != null &&
+            !const ['small', 'medium', 'large'].contains(size))) {
+      return null;
     }
+    return {
+      'version': '$version+$buildNumber',
+      // Preserve the legacy web marker. Native uses null instead of a
+      // hardware fingerprint; X-NF-Install carries an anonymous install UUID.
+      'device_id': kIsWeb ? 'web' : null,
+      'forecast': weather.toJson(),
+      'historical': historical.toJson(),
+      'current': current.toJson(),
+      'leadup': leadUp?.toJson(),
+      'lead_up_days': leadUpDays,
+      if (sighting) 'size': size,
+    };
   }
 
-  /// Best-effort creation of a collection (e.g. the ML-training `leadup` table)
-  /// so the app can upload to a fresh table without manual DB provisioning.
-  /// Tolerates an already-existing collection; returns whether the collection
-  /// is verifiably present afterwards, and only caches the name once that is
-  /// confirmed (#24) so a failed create doesn't get remembered as "ensured".
-  Future<bool> _ensureCollection(String name) async {
-    if (_ensuredCollections.contains(name)) return true;
+  Future<void> createWeather(
+    String? version,
+    String? buildNumber,
+    OneCallResponse? weather,
+    OneCallResponse? historical,
+    CurrentWeatherResponse? current, {
+    OneCallResponse? leadUp,
+    required int leadUpDays,
+  }) async {
+    // Assign synchronously before the first await. A report captures exactly
+    // this create, so overlapping loads cannot reuse an older handle.
+    final created = _create(
+      version,
+      buildNumber,
+      weather,
+      historical,
+      current,
+      leadUp,
+      leadUpDays,
+    );
+    _latestSnapshot = created;
+    await created;
+  }
+
+  Future<String?> _create(
+    String? version,
+    String? buildNumber,
+    OneCallResponse? weather,
+    OneCallResponse? historical,
+    CurrentWeatherResponse? current,
+    OneCallResponse? leadUp,
+    int leadUpDays,
+  ) async {
     try {
-      await _arangoClient!.createCollection({'name': name});
+      final client = await _client();
+      final body = _payload(
+        version,
+        buildNumber,
+        weather,
+        historical,
+        current,
+        leadUp,
+        leadUpDays,
+      );
+      return body == null ? null : await client?.createSnapshot(body);
     } catch (_) {
-      // darango generally swallows failures itself; the existence check below
-      // is the real success signal either way.
-    }
-    final exists = await _arangoClient!.collection(name) != null;
-    if (exists) _ensuredCollections.add(name); // only cache success (#24)
-    return exists;
-  }
-
-  /// Builds the enriched ML-training document for the `leadup` collection,
-  /// shared by [createWeather] and [updateWeather] so the schema can't drift
-  /// between the insert and update paths.
-  Map<String, dynamic> _leadUpDoc(
-          String flight,
-          String? size,
-          String? version,
-          String? buildNumber,
-          String? deviceId,
-          String? installId,
-          OneCallResponse weather,
-          CurrentWeatherResponse current,
-          OneCallResponse leadUp,
-          int leadUpDays) =>
-      {
-        'flight': flight,
-        if (size != null) 'size': size,
-        'version': '$version+$buildNumber',
-        'device_id': deviceId,
-        'install_id': installId,
-        'source': 'app',
-        'lat': weather.lat,
-        'lon': weather.lon,
-        'lead_up_days': leadUpDays,
-        'collected_at': DateTime.now().toUtc().millisecondsSinceEpoch,
-        'weather': {
-          'current': current.toJson(),
-          'forecast': weather.toJson(),
-          'leadup': leadUp.toJson(),
-        },
-      };
-
-  /// Persists a fresh weather snapshot as three linked documents (see the class
-  /// doc): `flights` (the 8-day forecast), `historical` (24h history) and
-  /// `current` (present snapshot). Each starts with `flight: 'unknown'`; the
-  /// `_weather*Key` handles are cached so [updateWeather] can later mark the
-  /// report confirmed. Called passively on every first-page load (unless in
-  /// debug mode or a fixed/manual location, see main._recordWeather).
-  void createWeather(String? version, String? buildNumber, OneCallResponse? _weather,
-      OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather,
-      {OneCallResponse? leadUp, required int leadUpDays}) async {
-    await _ensureConnected();
-    if (!_isEnabled) return; // no credential shipped — reporting disabled
-
-    String? deviceId;
-    if (kIsWeb) {
-      deviceId = 'web';
-    } else if (Platform.isAndroid || Platform.isIOS) {
-      deviceId = await MobileDeviceIdentifier().getDeviceId();
-    } else {
-      deviceId = Platform.localHostname;
-    }
-
-    final String installId = await InstallId.get();
-
-    {
-      // Let's create a new database post
-      Collection? collection = await _arangoClient!.collection('flights');
-      Document createResult = await collection!.document().add({
-        'flight': 'unknown',
-        'version': '$version+$buildNumber',
-        'device_id': deviceId,
-        'install_id': installId,
-        'weather': _weather!.toJson()
-      });
-      _weatherFlightsKey = createResult.key;
-    }
-    {
-      // Let's create a new database post
-      Collection? collection = await _arangoClient!.collection('historical');
-      Document createResult = await collection!.document().add({
-        'flight': 'unknown',
-        'version': '$version+$buildNumber',
-        'device_id': deviceId,
-        'install_id': installId,
-        'weather': _historical!.toJson()
-      });
-      _weatherHistoricalKey = createResult.key;
-    }
-    {
-      // Let's create a new database post
-      Collection? collection = await _arangoClient!.collection('current');
-      Document createResult = await collection!.document().add({
-        'flight': 'unknown',
-        'version': '$version+$buildNumber',
-        'device_id': deviceId,
-        'install_id': installId,
-        'weather': _currentWeather!.toJson()
-      });
-      _weatherCurrentKey = createResult.key;
-    }
-    {
-      // New schema (One Call 4.0, lead-up antecedent weather) for ML training.
-      // Stores the full weather context - current + forecast + the N days of
-      // daily weather *before* the report - in one enriched document with
-      // lat/lon at the top level so training can filter by location without
-      // digging into nested weather (see docs/model_training_findings.md
-      // Part 4 #3).
-      // _weather/_currentWeather are already non-null here (promoted by the
-      // `!.toJson()` dereferences in the flights/current blocks above, which
-      // would have thrown first if either were actually null at runtime), so
-      // only leadUp needs an explicit null guard.
-      if (leadUp != null) {
-        try {
-          if (!await _ensureCollection('leadup')) return;
-          final collection = await _arangoClient!.collection('leadup');
-          final createResult = await collection!.document().add(_leadUpDoc(
-              'unknown', null, version, buildNumber, deviceId, installId,
-              _weather, _currentWeather, leadUp, leadUpDays));
-          _weatherLeadUpKey = createResult.key;
-        } catch (e) {
-          developer.log('leadup create failed: $e', name: 'ArangoSingleton');
-        }
-      }
+      return null;
     }
   }
 
-  /// Marks the three documents previously created by [createWeather] as a
-  /// confirmed sighting: `flight` becomes `'yes'` (or stays `'unknown'` when the
-  /// user reports *no* flight, [size] == null) and the chosen queen [size]
-  /// ('small'/'medium'/'large') is tagged on each. Called when the user taps a
-  /// report button on the home page (see main._sawNuptialFlight).
-  void updateWeather(String? version, String? buildNumber, String? size, OneCallResponse? _weather,
-      OneCallResponse? _historical, CurrentWeatherResponse? _currentWeather,
-      {OneCallResponse? leadUp, required int leadUpDays}) async {
-    await _ensureConnected();
-    if (!_isEnabled) return; // no credential shipped — reporting disabled
-
-    String? deviceId;
-    if (kIsWeb) {
-      deviceId = 'web';
-    } else if (Platform.isAndroid || Platform.isIOS) {
-      deviceId = await MobileDeviceIdentifier().getDeviceId();
-    } else {
-      deviceId = Platform.localHostname;
-    }
-
-    final String installId = await InstallId.get();
-
-    {
-      // Let's update the existing database entry
-      Collection? collection = await _arangoClient!.collection('flights');
-      await collection!.document(document_handle: _weatherFlightsKey).update({
-        'flight': size == null ? 'unknown' : 'yes',
-        'size': size,
-        'version': '$version+$buildNumber',
-        'device_id': deviceId,
-        'install_id': installId,
-        'weather': _weather!.toJson()
-      });
-    }
-    {
-      // Let's update the existing database entry
-      Collection? collection = await _arangoClient!.collection('historical');
-      await collection!.document(document_handle: _weatherHistoricalKey).update({
-        'flight': size == null ? 'unknown' : 'yes',
-        'size': size,
-        'version': '$version+$buildNumber',
-        'device_id': deviceId,
-        'install_id': installId,
-        'weather': _historical!.toJson()
-      });
-    }
-    {
-      // Let's update the existing database entry
-      Collection? collection = await _arangoClient!.collection('current');
-      await collection!.document(document_handle: _weatherCurrentKey).update({
-        'flight': size == null ? 'unknown' : 'yes',
-        'size': size,
-        'version': '$version+$buildNumber',
-        'device_id': deviceId,
-        'install_id': installId,
-        'weather': _currentWeather!.toJson()
-      });
-    }
-    {
-      // New schema (One Call 4.0, lead-up antecedent weather) for ML training.
-      // _weather/_currentWeather are already non-null here (promoted by the
-      // `!.toJson()` dereferences in the flights/current blocks above, which
-      // would have thrown first if either were actually null at runtime), so
-      // only leadUp needs an explicit null guard.
-      if (leadUp != null) {
-        try {
-          if (!await _ensureCollection('leadup')) return;
-          final collection = await _arangoClient!.collection('leadup');
-          final doc = _leadUpDoc(size == null ? 'unknown' : 'yes', size, version,
-              buildNumber, deviceId, installId, _weather, _currentWeather, leadUp, leadUpDays);
-          if (_weatherLeadUpKey == null) {
-            final createResult = await collection!.document().add(doc);
-            _weatherLeadUpKey = createResult.key;
-          } else {
-            await collection!.document(document_handle: _weatherLeadUpKey).update(doc);
-          }
-        } catch (e) {
-          developer.log('leadup update failed: $e', name: 'ArangoSingleton');
-        }
-      }
+  Future<void> updateWeather(
+    String? version,
+    String? buildNumber,
+    String? size,
+    OneCallResponse? weather,
+    OneCallResponse? historical,
+    CurrentWeatherResponse? current, {
+    OneCallResponse? leadUp,
+    required int leadUpDays,
+  }) async {
+    final snapshot = _latestSnapshot;
+    if (snapshot == null) return;
+    try {
+      final handle = await snapshot;
+      if (handle == null) return;
+      final client = await _client();
+      final body = _payload(
+        version,
+        buildNumber,
+        weather,
+        historical,
+        current,
+        leadUp,
+        leadUpDays,
+        size: size,
+        sighting: true,
+      );
+      if (body != null) await client?.confirmSighting(handle, body);
+    } catch (_) {
+      // Ignored Future<void> UI calls must never escape as zone errors.
     }
   }
 
-  /// Returns all confirmed flight reports (`flight == 'yes'`) from the last 48
-  /// hours across the whole planet, projected to the fields the map needs
-  /// (location + size + weather description). Used by MapPage to drop markers.
   Future<List> getRecentFlights() async {
-    await _ensureConnected();
-    if (!_isEnabled) return []; // no credential shipped — lookups disabled
-
-    Aql aql = _arangoClient!.aql();
-    String query = """
-FOR f IN current
-FILTER f.weather.dt >= DATE_TIMESTAMP(DATE_ADD(DATE_NOW(), -48, "hour")) / 1000
-SORT f.weather.dt DESC
-FILTER f.`flight` == 'yes'
-RETURN {
-    "key": f._key,
-    "weather": f.weather.weather[0].description,
-    "size": f.size,
-    "lat": f.weather.coord.lat,
-    "lon": f.weather.coord.lon,
-}
-""";
-
-    Map<String, dynamic> response = await aql.run(query, batchSize: 1000);
-    //print("response=${response}");
-    List<dynamic> result = response['result'];
-    return result;
-  }
-
-  /// Returns confirmed flight reports within ~500 km of [position] from the last
-  /// [minutes] minutes (negative or zero normalised to a 30-minute window), with
-  /// each row carrying a rounded `distance` in km. Used by the background fetch
-  /// to raise "flights near you" notifications.
-  Future<List> getRecentFlightsNearMe(Position? position, int minutes) async {
-    if (position == null) {
-      debugPrint("Could not find last known position!");
+    try {
+      return await (await _client())?.recentFlights() ?? [];
+    } catch (_) {
       return [];
     }
-    if (minutes == 0) {
-      minutes = -30;
+  }
+
+  Future<List> getRecentFlightsNearMe(Position? position, int minutes) async {
+    if (position == null) return [];
+    try {
+      return await (await _client())?.nearbyFlights(
+            position.latitude,
+            position.longitude,
+            minutes,
+          ) ??
+          [];
+    } catch (_) {
+      return [];
     }
-    if (minutes > 0) {
-      minutes = -minutes;
-    }
-
-    await _ensureConnected();
-    if (!_isEnabled) return []; // no credential shipped — lookups disabled
-
-    Aql aql = _arangoClient!.aql();
-    String query = """
-FOR f IN current
-FILTER f.weather.dt >= DATE_TIMESTAMP(DATE_ADD(DATE_NOW(), ${minutes}, "minutes")) / 1000
-SORT f.weather.dt DESC
-FILTER f.`flight` == 'yes'
-&& DISTANCE(f.weather.coord.lat, f.weather.coord.lon, ${position.latitude}, ${position.longitude}) < 500 * 1000
-RETURN {
-    "key": f._key,
-    "weather": f.weather.weather[0].description,
-    "size": f.size,
-    "lat": f.weather.coord.lat,
-    "lon": f.weather.coord.lon,
-    "distance": ROUND(DISTANCE(f.weather.coord.lat, f.weather.coord.lon, ${position.latitude}, ${position.longitude}) / 1000),
-}
-""";
-
-    Map<String, dynamic> response = await aql.run(query, batchSize: 1000);
-    //print("getRecentFlightsNearMe: response=${response}");
-    List<dynamic> result = response['result'];
-    return result;
   }
 }

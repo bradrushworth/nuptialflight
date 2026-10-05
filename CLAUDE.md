@@ -63,8 +63,7 @@ This protocol applies when ending a Beads implementation workflow. It is subordi
 ```bash
 flutter pub get
 flutter analyze   # must stay at 0 errors
-flutter test      # ~93 hermetic tests must pass; 7 live-API tests need real
-                  # credentials in assets/.env (see AGENTS.md "Testing")
+flutter test      # see AGENTS.md "Testing" for live OWM/widget exclusions
 ```
 
 `assets/.env` (gitignored) is required even for analyze/tests — a placeholder
@@ -85,6 +84,11 @@ RandomForest models (sklite JSON walked by `lib/models/forest_model.dart`).
 User sighting reports + weather go to ArangoDB and become the next retrain's
 training data; the new `leadup` collection captures the antecedent weather
 before each report.
+
+The 2.29.0 implementation sends app reports through the scoped REST API.
+Client assets contain `NF_API_URL` / `NF_API_KEY`, never database
+credentials. See `docs/api-transition.md` for client behavior. Operator notebooks and
+backfills continue to use private database credentials.
 
 ## Conventions & Patterns
 

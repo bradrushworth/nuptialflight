@@ -44,8 +44,9 @@ flowchart TD
         IDX --> SURF["services.dart<br/>notifications · widgets · tile"]
     end
 
-    UI -->|"user reports a sighting"| ARANGO[(ArangoDB)]
-    SPLIT -->|"lead-up days, 0 extra calls"| ARANGO
+    UI -->|"user reports a sighting"| API["Scoped REST API<br/>app key + signed handle"]
+    SPLIT -->|"lead-up days, 0 extra weather calls"| API
+    API -->|"private service credential"| ARANGO[(ArangoDB)]
     ARANGO -->|"offline retrain"| TRAIN["scripts/<br/>train_leadup_experiment.py"]
     TRAIN -->|"export + stats pipeline"| ASSETS
     TRAIN --> STATS
@@ -189,7 +190,11 @@ be revisited. Until then, keep it.
 
 ## 5. The data loop
 
-`lib/controller/arangodb.dart` writes to ArangoDB. Legacy `flights` /
+`lib/controller/arangodb.dart` keeps its caller-facing facade and uses the
+injectable `ApiClient` to call the public REST endpoint. The service validates requests,
+binds sighting handles to anonymous install UUIDs, and writes the linked records
+in one transaction. New client builds never receive DB credentials or use 8530;
+older builds follow the [compatibility policy](api-transition.md). Legacy `flights` /
 `historical` / `current` schemas are **frozen** (see
 [database_schema.md](database_schema.md)); the newer `leadup` collection
 captures antecedent weather.

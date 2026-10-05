@@ -13,7 +13,7 @@ duplicate what lives here.
 | `flight_index.dart` | Percentiles, calibrated odds, the five bands |
 | `leadup_features.dart` | The 7 antecedent-weather features (shared by both models) |
 | `services.dart` | Background fetch, notifications, widget/tile updates |
-| `arangodb.dart` | ArangoDB singleton — reports, nearby flights, `leadup` writes |
+| `arangodb.dart` | Compatible reporting facade and injectable scoped REST `ApiClient` |
 | `units.dart` | Metric/imperial display preference |
 | `geo.dart` | `syntheticPosition()` helper |
 | `install_id.dart` | Anonymous per-install UUID |
@@ -92,4 +92,6 @@ rounded lat/lon (the daily key is also day-anchored).
   `lib/utils.dart`. These are bare `print` calls that run in **release**
   builds, so a leak reaches real users' device logs.
 - Never commit credentials; `assets/.env` is gitignored.
-- `arangodb.dart` degrades gracefully when `ARANGO_PASSWORD` is unset.
+- `arangodb.dart` degrades gracefully when `NF_API_KEY` is unset. New clients
+  never read `ARANGO_*`, send AQL or fall back to 8530. The server owns DB access;
+  see `docs/api-transition.md`. Keep anonymous install UUIDs on every platform.

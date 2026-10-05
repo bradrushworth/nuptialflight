@@ -1,7 +1,8 @@
 # ArangoDB schema reference
 
-The backend database (`nuptialFlight` on ArangoDB) is written by the app
-(`lib/controller/arangodb.dart`) and by `scripts/backfill_leadup.py`, and read
+The backend database (`nuptialFlight` on ArangoDB) is written by the scoped
+REST service for migrated clients and directly by older
+installed apps and `scripts/backfill_leadup.py`, and read
 by the training notebooks (`lib/models/*.ipynb`) and
 `scripts/flight_stats_pipeline.py`. This file is the reference for what each
 collection holds; keep it in sync with the writers.
@@ -44,8 +45,9 @@ schema:
   } }
 ```
 
-- App path: `_leadUpDoc()` in `arangodb.dart` (single builder for insert and
-  update; update falls back to insert when no doc exists yet).
+- Migrated app path: the service's document builder preserves the legacy
+  `_leadUpDoc()` shape. A signed handle reserves all four server-generated
+  keys; sighting confirmation can insert leadup when the snapshot lacked it.
 - Backfill path: `scripts/backfill_leadup.py` — idempotent upserts keyed by
   the flight's `_key`, daily records normalised to the Dart `Daily.toJson`
   key set (`rain` always a bare number), report day defensively excluded
@@ -73,15 +75,7 @@ schema:
 
 - The training user connects with server-side AQL projection
   (`RETURN {field…}`) — ~30x faster than `RETURN f`.
-- Security: the DB has been defaced once before (planted collection removed
-  2026-08-30); treat traffic as hostile. Credentials live in `assets/.env`
-  / environment variables only — the app, notebooks, and scripts all read
-  `ARANGO_*` env vars, and the app disables reporting gracefully when no
-  password is shipped. Users after the 2026-08-30 staged rotation:
-  **`nuptialflight_app`** (new builds + scripts; rw on the four collections,
-  no admin), legacy `nuptialflight` (kept alive only for pre-rotation field
-  installs — disable once the fleet upgrades), and `notebook` (training;
-  rotated). Old passwords exist in git history — treat as public. Prefer
-  AQL bind variables over string interpolation.
-- The defaced collection is empty; dropping it needs admin credentials
-  (both app users get HTTP 403 on drop).
+- New 2.29.0 clients contain only the scoped NF app key and anonymous install
+  UUID. The REST service and private training tools hold database credentials;
+  client bundles do not. Earlier installed builds continue to use direct
+  access during the [compatibility period](api-transition.md).
