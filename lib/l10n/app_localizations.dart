@@ -750,6 +750,18 @@ abstract class AppLocalizations {
   /// **'Thank you! Your sighting helps train the forecast.'**
   String get snackThanksSighting;
 
+  /// No description provided for @snackReportSending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending your report…'**
+  String get snackReportSending;
+
+  /// No description provided for @snackReportNotSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Your report could not be saved. Please try again later.'**
+  String get snackReportNotSaved;
+
   /// No description provided for @snackNearbyFlights.
   ///
   /// In en, this message translates to:

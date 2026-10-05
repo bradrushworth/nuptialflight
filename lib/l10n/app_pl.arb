@@ -105,6 +105,8 @@
   "snackDebugMode": "Zgłaszanie jest wyłączone w kompilacjach debug.",
   "snackThanksNoFlight": "Dzięki — zgłoszenia braku lotów też ulepszają model.",
   "snackThanksSighting": "Dziękujemy! Twoja obserwacja pomaga trenować prognozę.",
+  "snackReportSending": "Wysyłanie zgłoszenia…",
+  "snackReportNotSaved": "Nie udało się zapisać zgłoszenia. Spróbuj ponownie później.",
   "snackNearbyFlights": "{n, plural, =1{1 lot zgłoszony w promieniu 500 km w ciągu 24 h — zobacz mapę!} few{{n} loty zgłoszone w promieniu 500 km w ciągu 24 h — zobacz mapę!} other{{n} lotów zgłoszonych w promieniu 500 km w ciągu 24 h — zobacz mapę!}}",
   "notifReportTitle": "Zgłoszono lot godowy w pobliżu!",
   "notifReportBody": "{n} zgłoszonych lotów w ciągu ostatnich {minutes} minut, najbliższy {distance} km stąd...",

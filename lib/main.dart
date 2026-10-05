@@ -724,9 +724,10 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  /// Opens the report bottom sheet and submits the result. After a real
-  /// sighting, follows up with how many other flights were reported nearby —
-  /// the reward that closes the crowd-sourcing loop.
+  /// Opens the report bottom sheet, submits the result and tells the user
+  /// whether it was saved. After a saved sighting, follows up with how many
+  /// other flights were reported nearby — the reward that closes the
+  /// crowd-sourcing loop.
   Future<void> _openReportSheet() async {
     final ReportResult? result = await showReportSheet(context,
         locationLabel: _geocoding ?? context.l10n.unknownLocation);
@@ -741,7 +742,18 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    ArangoSingleton().updateWeather(
+    // Say the report is on its way, then replace that with what actually
+    // happened. The thanks used to be shown as soon as the sheet closed,
+    // whether or not the report ever reached the server.
+    final AppLocalizations t = context.l10n;
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    messenger.showSnackBar(SnackBar(
+      content: Text(t.snackReportSending),
+      // Outlasts the slowest possible send; it is hidden as soon as the
+      // outcome is known.
+      duration: const Duration(minutes: 1),
+    ));
+    final bool saved = await ArangoSingleton().updateWeather(
       version,
       buildNumber,
       result.size,
@@ -751,10 +763,10 @@ class _MyHomePageState extends State<MyHomePage> {
       leadUp: _leadUp,
       leadUpDays: WeatherFetcher.leadUpDays,
     );
-    _showSnack(result.sawNothing
-        ? context.l10n.snackThanksNoFlight
-        : context.l10n.snackThanksSighting);
-    if (!result.sawNothing) {
+    messenger.hideCurrentSnackBar();
+    if (!mounted) return;
+    _showSnack(reportOutcomeMessage(t, result, saved: saved));
+    if (saved && !result.sawNothing) {
       unawaited(_showNearbyReports());
     }
   }

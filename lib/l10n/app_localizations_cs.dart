@@ -365,6 +365,13 @@ class AppLocalizationsCs extends AppLocalizations {
       'Děkujeme! Vaše pozorování pomáhá trénovat předpověď.';
 
   @override
+  String get snackReportSending => 'Odesílám vaše hlášení…';
+
+  @override
+  String get snackReportNotSaved =>
+      'Hlášení se nepodařilo uložit. Zkuste to prosím později.';
+
+  @override
   String snackNearbyFlights(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,

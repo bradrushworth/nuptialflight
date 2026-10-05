@@ -369,6 +369,13 @@ class AppLocalizationsNl extends AppLocalizations {
       'Bedankt! Je waarneming helpt de voorspelling te trainen.';
 
   @override
+  String get snackReportSending => 'Je melding wordt verzonden…';
+
+  @override
+  String get snackReportNotSaved =>
+      'Je melding kon niet worden opgeslagen. Probeer het later opnieuw.';
+
+  @override
   String snackNearbyFlights(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,

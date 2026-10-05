@@ -370,6 +370,13 @@ class AppLocalizationsFil extends AppLocalizations {
       'Salamat! Nakakatulong ang iyong ulat sa pagsasanay ng hula.';
 
   @override
+  String get snackReportSending => 'Ipinapadala ang iyong ulat…';
+
+  @override
+  String get snackReportNotSaved =>
+      'Hindi na-save ang iyong ulat. Pakisubukang muli mamaya.';
+
+  @override
   String snackNearbyFlights(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,

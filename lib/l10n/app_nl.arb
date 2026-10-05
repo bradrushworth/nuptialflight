@@ -105,6 +105,8 @@
   "snackDebugMode": "Melden is uitgeschakeld in debug-builds.",
   "snackThanksNoFlight": "Bedankt — meldingen zonder vlucht verbeteren het model ook.",
   "snackThanksSighting": "Bedankt! Je waarneming helpt de voorspelling te trainen.",
+  "snackReportSending": "Je melding wordt verzonden…",
+  "snackReportNotSaved": "Je melding kon niet worden opgeslagen. Probeer het later opnieuw.",
   "snackNearbyFlights": "{n, plural, =1{1 vlucht gemeld binnen 500 km in de laatste 24 u — bekijk de kaart!} other{{n} vluchten gemeld binnen 500 km in de laatste 24 u — bekijk de kaart!}}",
   "notifReportTitle": "Bruidsvlucht in de buurt gemeld!",
   "notifReportBody": "Er zijn {n} vluchten gemeld in de laatste {minutes} minuten, de dichtstbijzijnde op {distance} km...",

@@ -105,6 +105,8 @@
   "snackDebugMode": "Informar está desactivado en compilaciones de depuración.",
   "snackThanksNoFlight": "Gracias — los informes sin vuelo también mejoran el modelo.",
   "snackThanksSighting": "¡Gracias! Tu avistamiento ayuda a entrenar el pronóstico.",
+  "snackReportSending": "Enviando tu informe…",
+  "snackReportNotSaved": "No se pudo guardar tu informe. Inténtalo de nuevo más tarde.",
   "snackNearbyFlights": "{n, plural, =1{1 vuelo reportado a menos de 500 km en las últimas 24 h — ¡mira el mapa!} other{{n} vuelos reportados a menos de 500 km en las últimas 24 h — ¡mira el mapa!}}",
   "notifReportTitle": "¡Vuelo nupcial reportado cerca!",
   "notifReportBody": "Hay {n} vuelos reportados en los últimos {minutes} minutos; el más cercano a {distance} km...",

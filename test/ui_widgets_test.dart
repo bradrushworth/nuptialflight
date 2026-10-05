@@ -442,4 +442,35 @@ void main() {
       expect(result, isNull);
     });
   });
+
+  group('reportOutcomeMessage', () {
+    final AppLocalizations t = lookupAppLocalizations(const Locale('en'));
+
+    test('never thanks the user for a report that was not saved', () {
+      // The regression: the app showed "Thank you!" as soon as the sheet
+      // closed, whether or not the report ever reached the server.
+      for (final result in const [
+        ReportResult.sighting('medium'),
+        ReportResult.noFlight(),
+      ]) {
+        final message = reportOutcomeMessage(t, result, saved: false);
+        expect(message, t.snackReportNotSaved);
+        expect(message, isNot(t.snackThanksSighting));
+        expect(message, isNot(t.snackThanksNoFlight));
+      }
+    });
+
+    test('thanks the user for a saved sighting', () {
+      expect(
+          reportOutcomeMessage(t, const ReportResult.sighting('small'),
+              saved: true),
+          t.snackThanksSighting);
+    });
+
+    test('thanks the user for a saved no-flight report', () {
+      expect(
+          reportOutcomeMessage(t, const ReportResult.noFlight(), saved: true),
+          t.snackThanksNoFlight);
+    });
+  });
 }

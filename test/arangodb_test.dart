@@ -621,4 +621,156 @@ void main() {
     print('Representative REST snapshot UTF-8 bytes: $bytes');
     expect(bytes, lessThan(256 * 1024));
   });
+
+  // A sighting is a training label. The caller must be able to tell whether
+  // it was actually stored, so the UI never thanks someone for a lost report.
+  group('report outcome', () {
+    final forecast = OneCallResponse(
+      lat: -35.3,
+      lon: 149.1,
+      daily: [Daily(dt: 1791158400)],
+    );
+    final historical = OneCallResponse(
+      lat: -35.3,
+      lon: 149.1,
+      hourly: [Hourly(dt: 1791154800)],
+    );
+    final current = CurrentWeatherResponse(
+      coord: Coordinates(lat: -35.3, lon: 149.1),
+      dt: 1791158400,
+    );
+
+    /// A facade over a scripted server: [respond] sees every request in order.
+    ArangoSingleton facadeFor(
+      List<http.Request> requests,
+      http.Response Function(http.Request request) respond,
+    ) => ArangoSingleton.withClient(
+      client(
+        MockClient((request) async {
+          requests.add(request);
+          return respond(request);
+        }),
+      ),
+    );
+
+    Future<void> create(ArangoSingleton facade) => facade.createWeather(
+      '2.29.1',
+      '165',
+      forecast,
+      historical,
+      current,
+      leadUpDays: 0,
+    );
+
+    Future<bool> report(ArangoSingleton facade, {String? size = 'medium'}) =>
+        facade.updateWeather(
+          '2.29.1',
+          '165',
+          size,
+          forecast,
+          historical,
+          current,
+          leadUpDays: 0,
+        );
+
+    http.Response handle(String value, int status) =>
+        http.Response('{"handle":"$value"}', status);
+
+    test('is true once the server has confirmed the sighting', () async {
+      final requests = <http.Request>[];
+      final facade = facadeFor(
+        requests,
+        (request) => handle('h1', request.method == 'POST' ? 201 : 200),
+      );
+      await create(facade);
+      expect(await report(facade), isTrue);
+      expect(requests.map((r) => r.method), ['POST', 'PUT']);
+    });
+
+    test('is false when the server refuses the sighting', () async {
+      final requests = <http.Request>[];
+      final facade = facadeFor(
+        requests,
+        (request) => request.method == 'POST'
+            ? handle('h1', 201)
+            : http.Response('{"detail":"rate limit exceeded"}', 429),
+      );
+      await create(facade);
+      expect(await report(facade), isFalse);
+    });
+
+    test('retries the snapshot when the earlier create failed', () async {
+      // The create at weather load is passive and can fail (offline, rate
+      // limit, a slow link). The report carries the whole weather payload, so
+      // it can still be saved against a snapshot made now.
+      final requests = <http.Request>[];
+      var creates = 0;
+      final facade = facadeFor(requests, (request) {
+        if (request.method == 'POST') {
+          return ++creates == 1
+              ? http.Response('{"detail":"invalid weather"}', 422)
+              : handle('fresh', 201);
+        }
+        return handle('fresh', 200);
+      });
+      await create(facade);
+      expect(await report(facade), isTrue);
+      expect(requests.map((r) => r.method), ['POST', 'POST', 'PUT']);
+      expect(
+        requests.last.url.path,
+        '/nuptialflight/v1/snapshots/fresh/sighting',
+      );
+    });
+
+    test('is false, and sends no sighting, when no snapshot can be made', () async {
+      final requests = <http.Request>[];
+      final facade = facadeFor(
+        requests,
+        (request) => http.Response('{"detail":"rate limit exceeded"}', 429),
+      );
+      await create(facade);
+      expect(await report(facade), isFalse);
+      expect(requests.where((r) => r.method == 'PUT'), isEmpty);
+    });
+
+    test('a refused sighting does not poison the next attempt', () async {
+      // A handle the server no longer accepts (expired after 24 h, or its
+      // snapshot is gone) must not make every retry fail the same way.
+      final requests = <http.Request>[];
+      var creates = 0;
+      final facade = facadeFor(requests, (request) {
+        if (request.method == 'POST') {
+          return handle(++creates == 1 ? 'stale' : 'renewed', 201);
+        }
+        return request.url.path.contains('/stale/')
+            ? http.Response('{"detail":"invalid handle"}', 403)
+            : handle('renewed', 200);
+      });
+      await create(facade);
+      expect(await report(facade), isFalse);
+      expect(await report(facade), isTrue);
+      expect(requests.map((r) => r.method), ['POST', 'PUT', 'POST', 'PUT']);
+      expect(
+        requests.last.url.path,
+        '/nuptialflight/v1/snapshots/renewed/sighting',
+      );
+    });
+
+    test('a no-flight report sends an explicit null size', () async {
+      // The server reads a null size as "looked, saw nothing" and stores
+      // flight: unknown. Dropping the key instead would change its meaning.
+      final requests = <http.Request>[];
+      final facade = facadeFor(
+        requests,
+        (request) => handle('h1', request.method == 'POST' ? 201 : 200),
+      );
+      await create(facade);
+      expect(await report(facade, size: null), isTrue);
+      final sent = jsonDecode(requests.last.body) as Map<String, dynamic>;
+      expect(sent.containsKey('size'), isTrue);
+      expect(sent['size'], isNull);
+      final snapshot = jsonDecode(requests.first.body) as Map<String, dynamic>;
+      expect(snapshot.containsKey('size'), isFalse);
+    });
+  });
 }

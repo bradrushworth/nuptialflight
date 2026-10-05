@@ -105,6 +105,8 @@
   "snackDebugMode": "Le signalement est désactivé en mode débogage.",
   "snackThanksNoFlight": "Merci — les signalements « aucun vol » améliorent aussi le modèle.",
   "snackThanksSighting": "Merci ! Votre observation aide à entraîner la prévision.",
+  "snackReportSending": "Envoi de votre signalement…",
+  "snackReportNotSaved": "Votre signalement n'a pas pu être enregistré. Veuillez réessayer plus tard.",
   "snackNearbyFlights": "{n, plural, =1{1 vol signalé à moins de 500 km ces dernières 24 h — voyez la carte !} other{{n} vols signalés à moins de 500 km ces dernières 24 h — voyez la carte !}}",
   "notifReportTitle": "Vol nuptial signalé près de chez vous !",
   "notifReportBody": "{n} vols signalés au cours des {minutes} dernières minutes, le plus proche à {distance} km...",

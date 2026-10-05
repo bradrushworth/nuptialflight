@@ -369,6 +369,13 @@ class AppLocalizationsEl extends AppLocalizations {
       'Ευχαριστούμε! Η παρατήρησή σας εκπαιδεύει την πρόβλεψη.';
 
   @override
+  String get snackReportSending => 'Αποστολή της αναφοράς σας…';
+
+  @override
+  String get snackReportNotSaved =>
+      'Η αναφορά σας δεν αποθηκεύτηκε. Δοκιμάστε ξανά αργότερα.';
+
+  @override
   String snackNearbyFlights(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,

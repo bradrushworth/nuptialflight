@@ -348,7 +348,13 @@ class ArangoSingleton {
     }
   }
 
-  Future<void> updateWeather(
+  /// Sends the user's report and returns whether the server stored it.
+  ///
+  /// A sighting is a training label, so the caller must only thank the user
+  /// when this is true. It is false for every way a report can be lost: no
+  /// API configured, weather not loaded, no snapshot could be made, or the
+  /// server refused the sighting (rate limit, expired handle, validation).
+  Future<bool> updateWeather(
     String? version,
     String? buildNumber,
     String? size,
@@ -358,11 +364,11 @@ class ArangoSingleton {
     OneCallResponse? leadUp,
     required int leadUpDays,
   }) async {
-    final snapshot = _latestSnapshot;
-    if (snapshot == null) return;
+    // Captured before the first await: a report belongs to the snapshot that
+    // was current when the user sent it, even if a refresh replaces it while
+    // this call is in flight.
+    final captured = _latestSnapshot;
     try {
-      final handle = await snapshot;
-      if (handle == null) return;
       final client = await _client();
       final body = _payload(
         version,
@@ -375,9 +381,35 @@ class ArangoSingleton {
         size: size,
         sighting: true,
       );
-      if (body != null) await client?.confirmSighting(handle, body);
+      if (client == null || body == null) return false;
+      var snapshot = captured;
+      var handle = snapshot == null ? null : await snapshot;
+      if (handle == null) {
+        // The passive create at weather load failed or never ran (offline, a
+        // slow link, a rate limit). The report carries the whole weather
+        // payload, so make the snapshot now rather than drop the report.
+        snapshot = _create(
+          version,
+          buildNumber,
+          weather,
+          historical,
+          current,
+          leadUp,
+          leadUpDays,
+        );
+        if (identical(_latestSnapshot, captured)) _latestSnapshot = snapshot;
+        handle = await snapshot;
+        if (handle == null) return false;
+      }
+      if (await client.confirmSighting(handle, body)) return true;
+      // Refused or lost. Forget this snapshot so that trying again starts
+      // from a fresh one instead of failing the same way: a handle the server
+      // has expired (24 h) would otherwise be offered on every retry.
+      if (identical(_latestSnapshot, snapshot)) _latestSnapshot = null;
+      return false;
     } catch (_) {
-      // Ignored Future<void> UI calls must never escape as zone errors.
+      // UI callers do not guard this; nothing may escape as a zone error.
+      return false;
     }
   }
 

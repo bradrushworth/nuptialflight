@@ -369,6 +369,13 @@ class AppLocalizationsTr extends AppLocalizations {
       'Teşekkürler! Gözleminiz tahmini eğitmeye yardımcı oluyor.';
 
   @override
+  String get snackReportSending => 'Bildiriminiz gönderiliyor…';
+
+  @override
+  String get snackReportNotSaved =>
+      'Bildiriminiz kaydedilemedi. Lütfen daha sonra tekrar deneyin.';
+
+  @override
   String snackNearbyFlights(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
