@@ -8,7 +8,7 @@ Declared in `pubspec.yaml`.
 | `final_model.json` | Daily RandomForest, **28 features**, RF 48×256, ~1.59 MB | `scripts/export_leadup_models.py` |
 | `hour_model.json` | Hourly RandomForest, **22 features**, same shape | `scripts/export_leadup_models.py` |
 | `flight_stats.json` | Score quantiles + isotonic calibration + base rate | `scripts/flight_stats_pipeline.py` |
-| `.env` | **Gitignored.** API keys + DB password | you, by hand |
+| `.env` | **Gitignored.** Weather/maps keys and scoped NF app key; no DB credential | Codemagic / local setup |
 | `*.png`, `*.jpg`, `*.svg` | Imagery, app icon sources | `scripts/icon/` |
 | `icon/` | Icon source art | |
 
@@ -33,10 +33,12 @@ root [AGENTS.md](../AGENTS.md). Keys used:
 OPENWEATHERMAP_API_KEY=   # paid One Call by Call subscription
 OPENWEATHERMAP_MAP_KEY=
 MAPTILER_MAP_KEY=
-ARANGO_PASSWORD=
+NF_API_URL=https://api.bitbot.com.au/nuptialflight/v1
+NF_API_KEY=
 ```
 
-Never commit it, never paste a real key into a comment, commit message or
+Never include `ARANGO_*` keys in this public client asset. Server/operator
+credentials stay outside the Flutter asset tree. Never commit it, never paste a real key into a comment, commit message or
 log. `redactUrl()` in `lib/utils.dart` exists because these keys were
 previously reaching release-build device logs through `print`.
 

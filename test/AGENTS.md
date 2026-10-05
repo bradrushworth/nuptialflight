@@ -29,13 +29,14 @@ placeholder template is in the root [AGENTS.md](../AGENTS.md).
 | `report_notification_test.dart` | Notification/report plumbing |
 | `redact_url_test.dart` | API-key redaction in logs (a security control) |
 | `*_parity_test.dart` | Dart↔Python `predict_proba` agreement |
-| `weather_test.dart`, `arangodb_test.dart`, `widget_test.dart` | **Hit live services** |
+| `arangodb_test.dart` | Hermetic REST client/facade tests; shared API contract fixture |
+| `weather_test.dart`, `widget_test.dart` | Some tests **hit live services** |
 
 ## Two categories of "passing" that aren't
 
 Both of these make a green run misleading. Know which you are looking at.
 
-1. **Live-service tests.** `arangodb_test.dart`, the "Download Fetch" group
+1. **Live-service tests.** The "Download Fetch" group
    in `weather_test.dart` (paid OWM subscription) and the widget smoke test
    need real credentials and network. They fail without them. **Don't chase
    those failures with a placeholder `.env`** — you will just mask them.

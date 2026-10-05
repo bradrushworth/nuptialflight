@@ -143,33 +143,25 @@ workflows:
           #!/bin/sh
           set -e
           # Fail fast rather than build (and deploy!) a keyless app.
-          for var in OPENWEATHERMAP_API_KEY OPENWEATHERMAP_MAP_KEY MAPTILER_MAP_KEY; do
-            eval "val=\$$var"
+          for var in OPENWEATHERMAP_API_KEY OPENWEATHERMAP_MAP_KEY MAPTILER_MAP_KEY NF_API_KEY; do
+            val=$(printenv "$var")
             if [ -z "$val" ]; then
               echo "ERROR: $var is empty. Add it to the app-level 'nuptialflight'"
               echo "environment variable group (see header of codemagic.yaml)."
               exit 1
             fi
           done
-          echo "OPENWEATHERMAP_API_KEY=$OPENWEATHERMAP_API_KEY" >> assets/.env
-          echo "OPENWEATHERMAP_MAP_KEY=$OPENWEATHERMAP_MAP_KEY" >> assets/.env
-          echo "MAPTILER_MAP_KEY=$MAPTILER_MAP_KEY" >> assets/.env
-          # DB reporting credential. The hardcoded in-app fallback was removed
-          # (see AGENTS.md security notes), so releases MUST get this from the
-          # 'nuptialflight' variable group or shipped builds run with flight
-          # reporting / nearby-flight lookups disabled. Warn loudly but do not
-          # fail: the app degrades gracefully by design.
-          if [ -n "${ARANGO_PASSWORD:-}" ]; then
-            echo "ARANGO_PASSWORD=$ARANGO_PASSWORD" >> assets/.env
-            # NB explicit if-blocks, not `[ ... ] && ...` one-liners: under
-            # `set -e` a false test as a block's final statement fails the
-            # whole step when the optional var is (legitimately) unset.
-            if [ -n "${ARANGO_URL:-}" ]; then echo "ARANGO_URL=$ARANGO_URL" >> assets/.env; fi
-            if [ -n "${ARANGO_USER:-}" ]; then echo "ARANGO_USER=$ARANGO_USER" >> assets/.env; fi
-            if [ -n "${ARANGO_DB_NAME:-}" ]; then echo "ARANGO_DB_NAME=$ARANGO_DB_NAME" >> assets/.env; fi
-          else
-            echo "WARNING: ARANGO_PASSWORD is not set in the environment group —"
-            echo "WARNING: this build will ship with flight reporting DISABLED."
+          # Truncate any checkout copy first. Only client API and weather keys
+          # may enter the public Flutter asset; never print their values.
+          : > assets/.env
+          printf 'OPENWEATHERMAP_API_KEY=%s\n' "$OPENWEATHERMAP_API_KEY" >> assets/.env
+          printf 'OPENWEATHERMAP_MAP_KEY=%s\n' "$OPENWEATHERMAP_MAP_KEY" >> assets/.env
+          printf 'MAPTILER_MAP_KEY=%s\n' "$MAPTILER_MAP_KEY" >> assets/.env
+          printf 'NF_API_URL=%s\n' "${NF_API_URL:-https://api.bitbot.com.au/nuptialflight/v1}" >> assets/.env
+          printf 'NF_API_KEY=%s\n' "$NF_API_KEY" >> assets/.env
+          if grep -q '^ARANGO_' assets/.env; then
+            echo "ERROR: database configuration entered the public client asset."
+            exit 1
           fi
       - name: Get Flutter packages
         script: flutter packages pub get

@@ -203,7 +203,7 @@ Future<void> _updatePosition() async {
       final double? lon = await HomeWidget.getWidgetData<double>('last_longitude');
       if (lat != null && lon != null) {
         _lastKnownPosition = syntheticPosition(lat, lon);
-        debugPrint("Restored last known location from cache: $_lastKnownPosition");
+        debugPrint("Restored last known location from cache");
       }
     } catch (e) {
       debugPrint("Failed to read location cache: $e");
@@ -329,7 +329,6 @@ Future<void> getReportedFlightsNearMe() async {
   int numFlights = 0;
   int closestDistance = 0;
   await ArangoSingleton().getRecentFlightsNearMe(_lastKnownPosition, -minutes).then((values) {
-    debugPrint('getRecentFlightsNearMe: values=$values');
     numFlights = values.length;
     if (numFlights > 0) {
       closestDistance = values.reduce(
@@ -402,7 +401,7 @@ Future<void> getServicePercentage() async {
   if (_lastKnownPosition == null) {
     debugPrint('getServicePercentage: Last known position is null');
   } else {
-    debugPrint('getServicePercentage: Last known position is ' + _lastKnownPosition.toString());
+    debugPrint('getServicePercentage: Last known position is available');
     WeatherFetcher weatherFetcher = WeatherFetcher();
     weatherFetcher.setPosition(_lastKnownPosition!);
     await Nuptials.ensureLoaded();
