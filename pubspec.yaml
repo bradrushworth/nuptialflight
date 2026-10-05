@@ -71,6 +71,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   test: any
+  fake_async: any
   #flutter_automation: any
   flutter_launcher_icons: ^0.14.3 # Causes some dependency conflicts
 #  device_preview: ^1.1.0

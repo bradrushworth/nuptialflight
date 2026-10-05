@@ -18,8 +18,18 @@ class ApiClient {
   final Uri? _base;
   final String _key;
   final Future<String> Function() _installId;
+
+  /// The limit for one attempt, covering both sending the request and
+  /// reading the response body.
   final Duration timeout;
   final Duration retryDelay;
+
+  /// The budget for a whole read, its retry included. Reads run inside the
+  /// background task ahead of the widget refresh, so they must be short.
+  final Duration readDeadline;
+
+  /// The budget for a whole write, its retry included: two full attempts.
+  final Duration writeDeadline;
 
   ApiClient({
     required String baseUrl,
@@ -28,6 +38,8 @@ class ApiClient {
     Future<String> Function()? installId,
     this.timeout = const Duration(seconds: 8),
     this.retryDelay = const Duration(milliseconds: 250),
+    this.readDeadline = const Duration(seconds: 10),
+    this.writeDeadline = const Duration(seconds: 20),
   }) : _http = httpClient ?? http.Client(),
        _base = _validBase(baseUrl),
        _key = apiKey.trim(),
@@ -61,6 +73,13 @@ class ApiClient {
 
   Future<http.Response?> _send(String method, Uri url, {Object? body}) async {
     if (!enabled) return null;
+    // One budget for the whole call. Without it the worst case was the sum of
+    // every individual wait: about 40 s for something a background task runs.
+    final expired = Completer<void>();
+    final budget = Timer(
+      method == 'GET' ? readDeadline : writeDeadline,
+      expired.complete,
+    );
     try {
       final install = await _installId().timeout(timeout);
       if (!Uuid.isValidUUID(fromString: install)) return null;
@@ -72,16 +91,28 @@ class ApiClient {
         if (body != null) 'Content-Type': 'application/json',
       };
       final payload = body == null ? null : jsonEncode(body);
-      for (var attempt = 0; attempt < 2; attempt++) {
+      for (var attempt = 0; attempt < 2 && !expired.isCompleted; attempt++) {
+        // Completing this aborts the request on the wire, so an attempt we
+        // have given up on is not still uploading behind its own retry.
+        final abort = Completer<void>();
+        void stop([void _]) {
+          if (!abort.isCompleted) abort.complete();
+        }
+
+        final limit = Timer(timeout, stop);
+        unawaited(expired.future.then(stop));
         try {
-          final request = http.Request(method, url)
-            ..followRedirects = false
-            ..headers.addAll(headers);
+          final request =
+              http.AbortableRequest(method, url, abortTrigger: abort.future)
+                ..followRedirects = false
+                ..headers.addAll(headers);
           if (payload != null) request.body = payload;
-          final streamed = await _http.send(request).timeout(timeout);
-          final response = await http.Response.fromStream(
-            streamed,
-          ).timeout(timeout);
+          final response = await Future.any([
+            _exchange(request),
+            abort.future.then<http.Response>(
+              (_) => throw TimeoutException('request abandoned'),
+            ),
+          ]);
           if (response.statusCode >= 200 && response.statusCode < 300)
             return response;
           // 429 and client errors are final. A retry would amplify rate limits.
@@ -90,14 +121,27 @@ class ApiClient {
             return null;
         } catch (_) {
           // Timeout and transport failures are retried at most once.
+        } finally {
+          limit.cancel();
         }
-        if (attempt == 0) await Future<void>.delayed(retryDelay);
+        if (attempt == 0) {
+          await Future.any([
+            Future<void>.delayed(retryDelay),
+            expired.future,
+          ]);
+        }
       }
     } catch (_) {
       // Includes install ID and serialization failures. Never log request data.
+    } finally {
+      budget.cancel();
     }
     return null;
   }
+
+  /// Sends [request] and reads the whole response body.
+  Future<http.Response> _exchange(http.BaseRequest request) async =>
+      http.Response.fromStream(await _http.send(request));
 
   Future<String?> createSnapshot(Map<String, dynamic> payload) async {
     if (!enabled) return null;
@@ -132,11 +176,16 @@ class ApiClient {
       ? _rows(_url('/flights/recent'), nearby: false)
       : Future.value([]);
 
+  /// Flights reported within 500 km of ([lat], [lon]).
+  ///
+  /// The coordinates are rounded to two decimals (about a kilometre) before
+  /// they go into the URL. The server buckets to 0.1 degree and answers in
+  /// whole kilometres, so more precision would only expose a location.
   Future<List> nearbyFlights(num lat, num lon, int minutes) => enabled
       ? _rows(
           _url('/flights/nearby', {
-            'lat': '$lat',
-            'lon': '$lon',
+            'lat': lat.toStringAsFixed(2),
+            'lon': lon.toStringAsFixed(2),
             'minutes': '${normalizeMinutes(minutes)}',
           }),
           nearby: true,
@@ -151,19 +200,20 @@ class ApiClient {
     if (response == null) return [];
     try {
       final value = jsonDecode(response.body);
-      if (value is! List ||
-          !value.every((row) => _validRow(row, nearby: nearby))) {
-        return [];
-      }
-      return value.map((item) {
-        final row = item as Map<String, dynamic>;
-        return <String, dynamic>{
-          ...row,
-          'lat': (row['lat'] as num).toDouble(),
-          'lon': (row['lon'] as num).toDouble(),
-          if (nearby) 'distance': (row['distance'] as num).toInt(),
-        };
-      }).toList();
+      if (value is! List) return [];
+      // Row by row: the server returns documents as stored, and older clients
+      // still write to the database directly. One odd document must cost one
+      // marker, not every marker on every map.
+      return [
+        for (final item in value)
+          if (_validRow(item, nearby: nearby))
+            <String, dynamic>{
+              ...(item as Map<String, dynamic>),
+              'lat': (item['lat'] as num).toDouble(),
+              'lon': (item['lon'] as num).toDouble(),
+              if (nearby) 'distance': (item['distance'] as num).toInt(),
+            },
+      ];
     } catch (_) {
       return [];
     }

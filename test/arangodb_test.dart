@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -103,8 +104,8 @@ void main() {
         fixture['expected_nearby'],
       );
       expect(requests[1].url.queryParameters, {
-        'lat': '-35.3',
-        'lon': '149.1',
+        'lat': '-35.30',
+        'lon': '149.10',
         'minutes': '1440',
       });
       expect(requests[0].headers['X-NF-Install'], install);
@@ -218,7 +219,7 @@ void main() {
     },
   );
 
-  test('successful rows must satisfy the map and nearby projections', () async {
+  test('a row that fails the map or nearby projection is dropped on its own', () async {
     final good = <String, dynamic>{
       'key': 'report-1',
       'weather': null,
@@ -241,10 +242,19 @@ void main() {
       {...good, 'distance': -1},
       {...good, 'distance': 1.5},
     ]) {
+      // One odd document must not blank the map for everyone: the rows
+      // around it are still good.
       final api = client(
-        MockClient((_) async => http.Response(jsonEncode([good, bad]), 200)),
+        MockClient(
+          (_) async => http.Response(jsonEncode([good, bad, 'junk']), 200),
+        ),
       );
-      expect(await api.nearbyFlights(-35.3, 149.1, 30), isEmpty);
+      final rows = await api.nearbyFlights(-35.3, 149.1, 30);
+      expect(
+        rows.map((row) => row['key']),
+        ['report-1'],
+        reason: 'the valid row must survive next to $bad',
+      );
     }
     final api = client(
       MockClient((_) async => http.Response(jsonEncode([good]), 200)),
@@ -620,6 +630,109 @@ void main() {
     final bytes = utf8.encode(body).length;
     print('Representative REST snapshot UTF-8 bytes: $bytes');
     expect(bytes, lessThan(256 * 1024));
+  });
+
+  test('nearby sends coordinates rounded to about a kilometre', () async {
+    // The server only needs a 0.1 degree bucket and answers in whole
+    // kilometres, so full GPS precision in a URL is exposure for nothing.
+    final requests = <http.Request>[];
+    final api = client(
+      MockClient((request) async {
+        requests.add(request);
+        return http.Response('[]', 200);
+      }),
+    );
+    await api.nearbyFlights(-35.30812345, 149.12498765, 30);
+    expect(requests.single.url.queryParameters['lat'], '-35.31');
+    expect(requests.single.url.queryParameters['lon'], '149.12');
+  });
+
+  group('time limits', () {
+    ApiClient production(http.Client mock) => ApiClient(
+      baseUrl: endpoint,
+      apiKey: 'test-key',
+      httpClient: mock,
+      installId: () async => install,
+    );
+
+    test('a stalled read is abandoned within ten seconds', () {
+      // The background task runs this before it refreshes the widget, inside
+      // a window of roughly 30 s. Two full 8 s attempts used to be allowed.
+      fakeAsync((async) {
+        var calls = 0;
+        final api = production(
+          MockClient((_) {
+            calls++;
+            return Completer<http.Response>().future;
+          }),
+        );
+        List<dynamic>? rows;
+        api.recentFlights().then((value) => rows = value);
+        async.elapse(const Duration(seconds: 10, milliseconds: 50));
+        expect(rows, isEmpty);
+        expect(calls, 2);
+      });
+    });
+
+    test('one time limit covers both sending and reading the body', () {
+      // Headers after 5 s, then a body that never finishes. Sending and
+      // reading used to get 8 s each, so one attempt could take 13 s.
+      fakeAsync((async) {
+        final api = production(
+          MockClient.streaming((request, body) async {
+            await body.drain<void>();
+            await Future<void>.delayed(const Duration(seconds: 5));
+            return http.StreamedResponse(
+              StreamController<List<int>>().stream,
+              201,
+            );
+          }),
+        );
+        var finished = false;
+        api.createSnapshot(fixture['request']).then((_) => finished = true);
+        // Two 8 s attempts and the 250 ms pause between them.
+        async.elapse(const Duration(seconds: 17));
+        expect(finished, isTrue);
+      });
+    });
+
+    test('a timed-out request is closed, not left running', () async {
+      // A raw socket server that reads each request and never answers. An
+      // HttpServer would not do: it stops reading a connection while a
+      // request is in progress, so it never notices the client hanging up.
+      final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
+      final opened = <Socket>[];
+      final hungUp = <Socket>{};
+      server.listen((socket) {
+        opened.add(socket);
+        socket.listen(
+          (_) {},
+          onDone: () => hungUp.add(socket),
+          onError: (Object _) => hungUp.add(socket),
+        );
+      });
+      final api = ApiClient(
+        baseUrl: 'http://127.0.0.1:${server.port}/nuptialflight/v1',
+        apiKey: 'test-key',
+        installId: () async => install,
+        retryDelay: Duration.zero,
+        timeout: const Duration(milliseconds: 200),
+      );
+      try {
+        expect(await api.recentFlights(), isEmpty);
+        expect(opened, hasLength(2));
+        // The client must have hung up on both attempts.
+        for (var i = 0; i < 30 && hungUp.length < 2; i++) {
+          await Future<void>.delayed(const Duration(milliseconds: 100));
+        }
+        expect(hungUp, hasLength(2));
+      } finally {
+        for (final socket in opened) {
+          socket.destroy();
+        }
+        await server.close();
+      }
+    });
   });
 
   // A sighting is a training label. The caller must be able to tell whether
