@@ -67,4 +67,33 @@ void main() {
           defaultReportWindowMinutes);
     });
   });
+
+  group('closestReportDistanceKm', () {
+    test('is the smallest distance, whatever order the rows arrive in', () {
+      // The regression: the alert says "with the nearest N km away" but was
+      // given the largest distance in range, so flights at 3 km and 480 km
+      // were announced as "nearest 480 km".
+      expect(
+          closestReportDistanceKm([
+            {'distance': 480},
+            {'distance': 3},
+            {'distance': 120},
+          ]),
+          3);
+      expect(
+          closestReportDistanceKm([
+            {'distance': 3},
+            {'distance': 480},
+          ]),
+          3);
+    });
+
+    test('is the single distance when only one flight was reported', () {
+      expect(closestReportDistanceKm([{'distance': 42}]), 42);
+    });
+
+    test('is zero when nothing was reported', () {
+      expect(closestReportDistanceKm([]), 0);
+    });
+  });
 }

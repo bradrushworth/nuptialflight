@@ -78,6 +78,20 @@ int reportWindowMinutes({required DateTime now, required DateTime? lastCheck}) {
   return elapsed > maxReportWindowMinutes ? maxReportWindowMinutes : elapsed;
 }
 
+/// Distance in km to the closest of [flights], the rows returned by
+/// `getRecentFlightsNearMe` (each carries a whole-km `distance`). Zero when
+/// nothing was reported.
+///
+/// The alert reads "with the nearest N km away", so this must be the minimum.
+/// It used to keep the row with the LARGER distance, which announced the
+/// farthest flight in range as the nearest.
+int closestReportDistanceKm(List<dynamic> flights) {
+  if (flights.isEmpty) return 0;
+  return flights
+      .map<int>((flight) => (flight['distance'] as num).toInt())
+      .reduce((a, b) => a < b ? a : b);
+}
+
 // Background fetch runs without a UI context, so we stash the last known position
 // here (geolocator forbids a fresh GPS fix in the background) and reuse it for
 // the proximity and percentage checks.
@@ -330,10 +344,7 @@ Future<void> getReportedFlightsNearMe() async {
   int closestDistance = 0;
   await ArangoSingleton().getRecentFlightsNearMe(_lastKnownPosition, -minutes).then((values) {
     numFlights = values.length;
-    if (numFlights > 0) {
-      closestDistance = values.reduce(
-          (current, next) => current['distance'] > next['distance'] ? current : next)['distance'];
-    }
+    closestDistance = closestReportDistanceKm(values);
   });
   debugPrint('getRecentFlightsNearMe: Reported local nuptial flights: $numFlights in $minutes mins');
 
