@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nuptialflight/controller/services.dart';
 
@@ -94,6 +96,34 @@ void main() {
 
     test('is zero when nothing was reported', () {
       expect(closestReportDistanceKm([]), 0);
+    });
+  });
+
+  group('runBackgroundSteps', () {
+    test('a stalled step does not hold up the others', () async {
+      // The regression: the forecast refresh waited behind the nearby-reports
+      // lookup, so a stalled reporting API used up the background window and
+      // the widget was never updated.
+      final stalled = Completer<void>();
+      var forecastRan = false;
+      final all = runBackgroundSteps([
+        () => stalled.future,
+        () async => forecastRan = true,
+      ]);
+      await Future<void>.delayed(Duration.zero);
+      expect(forecastRan, isTrue);
+      stalled.complete();
+      await all;
+    });
+
+    test('a failing step does not stop the others or escape', () async {
+      var forecastRan = false;
+      await runBackgroundSteps([
+        () async => throw StateError('reporting lookup failed'),
+        () => throw StateError('failed before its first await'),
+        () async => forecastRan = true,
+      ]);
+      expect(forecastRan, isTrue);
     });
   });
 }
