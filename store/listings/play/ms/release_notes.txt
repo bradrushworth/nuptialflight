@@ -1,5 +1,5 @@
-Dibaiki: carta 24 jam seterusnya memaparkan bar kelabu pada kebanyakan hari dan bukan warna Indeks Penerbangan.
+Dibaiki: jika laporan tidak dapat disimpan, aplikasi kini memaklumkan anda dan bukannya mengucapkan terima kasih. Laporan yang dahulu hilang selepas sambungan gagal kini dihantar semula.
 
-Baharu: ketik mana-mana hari pada minggu akan datang untuk penjelasan "Mengapa ramalan ini?" bagi hari tersebut.
+Dibaiki: amaran penerbangan berdekatan kini memaparkan jarak ke penerbangan dilaporkan yang paling dekat, bukan yang paling jauh.
 
-Ditambah baik: penilaian setiap jam kini menggunakan penentukuran sendiri, jadi tempoh terbaik dalam sehari lebih tepat.
+Diubah: laporan kini dihantar melalui perkhidmatan khusus, dan aplikasi tidak lagi membaca pengecam peranti.

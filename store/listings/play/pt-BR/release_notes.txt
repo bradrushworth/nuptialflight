@@ -1,5 +1,5 @@
-Corrigido: o gráfico das próximas 24 horas mostrava barras cinzas na maioria dos dias em vez das cores do Índice de Voo.
+Corrigido: se um relato não puder ser salvo, o app agora avisa em vez de agradecer. Relatos que antes se perdiam após uma falha de conexão são reenviados.
 
-Novo: toque em qualquer dia da próxima semana para ver a explicação "Por que esta previsão?" daquele dia.
+Corrigido: os alertas de voos próximos agora mostram a distância até o voo relatado mais próximo, não o mais distante.
 
-Melhorado: as avaliações por hora agora usam calibração própria, então a melhor janela do dia é mais precisa.
+Alterado: os relatos agora passam por um serviço dedicado, e o app não lê mais um identificador do dispositivo.

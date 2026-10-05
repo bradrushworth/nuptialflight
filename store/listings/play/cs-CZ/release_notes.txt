@@ -1,5 +1,5 @@
-Opraveno: graf následujících 24 hodin ukazoval většinu dnů šedé sloupce místo barev Indexu letů.
+Opraveno: pokud se hlášení nepodaří uložit, aplikace to nyní oznámí místo poděkování. Hlášení, která se dříve po výpadku spojení ztrácela, zkusí odeslat znovu.
 
-Novinka: klepnutím na kterýkoli den v nadcházejícím týdnu zobrazíte jeho vlastní „Proč tato předpověď?".
+Opraveno: upozornění na lety v okolí nyní uvádějí vzdálenost k nejbližšímu nahlášenému letu, ne k nejvzdálenějšímu.
 
-Vylepšeno: hodinová hodnocení nyní používají vlastní kalibraci, takže nejlepší okno dne je přesnější.
+Změna: hlášení se nyní odesílají přes vyhrazenou službu a aplikace už nečte identifikátor zařízení.

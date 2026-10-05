@@ -1,5 +1,5 @@
-Corrigé : le graphique des 24 prochaines heures affichait des barres grises la plupart des jours au lieu des couleurs de l'Indice de Vol.
+Corrigé : si un signalement ne peut pas être enregistré, l'app vous le dit au lieu de vous remercier. Les signalements auparavant perdus après un échec de connexion sont renvoyés.
 
-Nouveau : touchez n'importe quel jour de la semaine à venir pour obtenir son propre « Pourquoi cette prévision ? ».
+Corrigé : les alertes de vols à proximité indiquent désormais la distance du vol signalé le plus proche, et non du plus éloigné.
 
-Amélioré : les notes horaires utilisent désormais leur propre calibrage, donc le meilleur créneau de la journée est plus juste.
+Modifié : les signalements passent désormais par un service dédié, et l'app ne lit plus d'identifiant de l'appareil.

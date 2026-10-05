@@ -1,5 +1,5 @@
-Diperbaiki: grafik 24 jam berikutnya menampilkan batang abu-abu di hampir semua hari, bukan warna Indeks Penerbangan.
+Diperbaiki: jika laporan tidak dapat disimpan, aplikasi kini memberi tahu Anda alih-alih mengucapkan terima kasih. Laporan yang dulu hilang setelah koneksi gagal kini dikirim ulang.
 
-Baru: ketuk hari mana pun di minggu mendatang untuk melihat penjelasan "Mengapa prakiraan ini?" khusus hari itu.
+Diperbaiki: peringatan penerbangan terdekat kini menampilkan jarak ke penerbangan terlapor yang paling dekat, bukan yang paling jauh.
 
-Ditingkatkan: penilaian per jam kini memakai kalibrasi sendiri, sehingga waktu terbaik dalam sehari lebih akurat.
+Diubah: laporan kini dikirim melalui layanan khusus, dan aplikasi tidak lagi membaca pengenal perangkat.

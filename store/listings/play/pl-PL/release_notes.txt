@@ -1,5 +1,5 @@
-Naprawiono: wykres najbliższych 24 godzin pokazywał w większość dni szare słupki zamiast kolorów Indeksu Lotów.
+Naprawiono: jeśli zgłoszenia nie uda się zapisać, aplikacja teraz o tym informuje, zamiast dziękować. Zgłoszenia, które wcześniej przepadały po błędzie połączenia, są wysyłane ponownie.
 
-Nowość: dotknij dowolnego dnia w nadchodzącym tygodniu, aby zobaczyć jego własne „Dlaczego taka prognoza?".
+Naprawiono: powiadomienia o lotach w pobliżu podają teraz odległość do najbliższego zgłoszonego lotu, a nie do najdalszego.
 
-Ulepszono: oceny godzinowe mają teraz własną kalibrację, więc najlepsze okno w ciągu dnia jest dokładniejsze.
+Zmiana: zgłoszenia są teraz wysyłane przez dedykowaną usługę, a aplikacja nie odczytuje już identyfikatora urządzenia.
