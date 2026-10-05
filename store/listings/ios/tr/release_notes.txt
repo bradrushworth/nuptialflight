@@ -1,0 +1,5 @@
+Düzeltildi: bir bildirim kaydedilemezse uygulama artık teşekkür etmek yerine bunu söylüyor. Eskiden bağlantı hatasından sonra kaybolan bildirimler yeniden gönderiliyor.
+
+Düzeltildi: yakındaki uçuş uyarıları artık en uzaktaki değil, bildirilen en yakın uçuşa olan mesafeyi gösteriyor.
+
+Değişti: bildirimler artık özel bir hizmet üzerinden gönderiliyor ve uygulama artık cihaz kimliğini okumuyor.

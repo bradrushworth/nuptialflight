@@ -1,0 +1,5 @@
+Dibaiki: jika laporan tidak dapat disimpan, aplikasi kini memaklumkan anda dan bukannya mengucapkan terima kasih. Laporan yang dahulu hilang selepas sambungan gagal kini dihantar semula.
+
+Dibaiki: amaran penerbangan berdekatan kini memaparkan jarak ke penerbangan dilaporkan yang paling dekat, bukan yang paling jauh.
+
+Diubah: laporan kini dihantar melalui perkhidmatan khusus, dan aplikasi tidak lagi membaca pengecam peranti.
