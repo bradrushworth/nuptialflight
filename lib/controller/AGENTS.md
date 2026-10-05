@@ -79,6 +79,32 @@ Two facts that surprise people:
   [docs/model_training_findings.md](../../docs/model_training_findings.md)
   Parts 5-6 before changing it.
 
+## Reporting client (`arangodb.dart`)
+
+`ArangoSingleton` is the facade the UI and the background task call;
+`ApiClient` is the REST transport underneath. Despite the names, the app has
+had no database access since 2.29.0.
+
+- **`updateWeather` returns whether the server stored the report.** Only
+  thank the user when it is true (`reportOutcomeMessage()` in
+  `view/report_sheet.dart`). It makes a snapshot itself when the passive one
+  at weather load failed, and forgets a snapshot the server refused, so
+  calling it again is the right recovery. A sighting is a training label:
+  never drop one quietly.
+- **Server limits, per install:** 12 snapshots an hour, 5 sightings a day
+  (no-flight reports count too), 30 nearby lookups an hour, and a snapshot
+  handle lasts 24 h. The client treats 4xx and 429 as final and does not
+  retry them.
+- **Time budgets:** 8 s for one attempt (send and body read together), 10 s
+  for a whole read, 20 s for a whole write. An attempt that is given up on is
+  aborted on the wire. Reads run inside the background task, alongside the
+  forecast refresh (`runBackgroundSteps` in `services.dart`), never in front
+  of it.
+- **Rows are validated one by one.** The server returns documents as stored,
+  so a document that fails `_validRow` costs one marker, not the whole list.
+- **Nearby lookups send coordinates rounded to two decimals.** Do not put
+  full GPS precision into a URL.
+
 ## Paid API calls
 
 Only the One Call 4.0 timeline requests are billed. The budget table is in

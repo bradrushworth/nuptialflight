@@ -223,6 +223,7 @@ Two properties worth knowing:
 | App Store text mentions no third-party platform | `ios_description()` guard in `gen_listings.py` | Guideline 2.3.10 rejection |
 | First frame stays non-blocking | review only | slow cold start |
 | Colour is never the only encoding | review + widget tests | inaccessible UI |
+| A report is acknowledged only once the server has stored it | `updateWeather` result + `reportOutcomeMessage()` | "Thank you" shown for a lost training label |
 
 ---
 

@@ -284,8 +284,9 @@ contract with `lib/controller/leadup_features.dart` AND
 ## Security notes
 
 - `assets/.env` must never be committed. Be aware that anything shipped in
-  the client (OWM key, Google key, Arango credentials) is extractable —
-  treat those keys as semi-public and never widen their permissions.
+  the client (OWM key, Google key, the NF app key) is extractable —
+  treat those keys as semi-public and never widen their permissions. Builds
+  before 2.29.0 also shipped a database credential; current builds do not.
 - The 2.29.0 implementation routes app database operations through the scoped
   REST API.
   The client asset contains `NF_API_URL` / `NF_API_KEY` plus weather keys,
