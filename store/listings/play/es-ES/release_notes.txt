@@ -1,5 +1,5 @@
-Corregido: el gráfico de las próximas 24 horas mostraba barras grises casi todos los días en lugar de los colores del Índice de Vuelo.
+Corregido: si un informe no se puede guardar, la app ahora te avisa en lugar de darte las gracias. Los informes que antes se perdían tras un fallo de conexión se reintentan.
 
-Nuevo: toca cualquier día de la próxima semana para ver su propio desglose "¿Por qué este pronóstico?".
+Corregido: los avisos de vuelos cercanos ahora indican la distancia al vuelo comunicado más cercano, no al más lejano.
 
-Mejorado: las valoraciones por hora ahora usan su propia calibración, así que la mejor franja del día es más precisa.
+Cambio: los informes se envían ahora a través de un servicio dedicado y la app ya no lee ningún identificador del dispositivo.

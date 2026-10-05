@@ -17,10 +17,18 @@
 #   nuptialflight      (app level, Team settings > the app > Environment
 #                       variables): OPENWEATHERMAP_API_KEY,
 #                       OPENWEATHERMAP_MAP_KEY, MAPTILER_MAP_KEY,
+#                       NF_API_KEY (required from 2.29.0: the scoped app key
+#                       for the reporting REST API; must equal one of the
+#                       server's NF_APP_KEYS or every call returns 401 and
+#                       the app silently loses reporting, map markers and
+#                       nearby alerts), NF_API_URL (optional override),
 #                       CODEMAGIC_API_TOKEN (Account settings > Integrations >
 #                       Codemagic API; powers the build guard below)
-# The Create assets/.env step fails fast when the OpenWeatherMap keys are
-# missing so a keyless web build can never reach production.
+# The Create assets/.env step fails fast when any required key is missing so
+# a keyless web build can never reach production, and names the missing
+# variable. (The `|| true` in that step matters: without it an UNSET
+# variable makes `printenv` fail under `set -e`, and the step dies with a
+# bare "exited with status code 1" before the message can print.)
 # Android signing references the team keystore `nuptialflight_upload`
 # (Team settings > Code signing identities > Android keystores; the app's
 # Play upload key - Google rejected android_bitbot.jks as the wrong key in
@@ -144,7 +152,7 @@ workflows:
           set -e
           # Fail fast rather than build (and deploy!) a keyless app.
           for var in OPENWEATHERMAP_API_KEY OPENWEATHERMAP_MAP_KEY MAPTILER_MAP_KEY NF_API_KEY; do
-            val=$(printenv "$var")
+            val=$(printenv "$var" || true)
             if [ -z "$val" ]; then
               echo "ERROR: $var is empty. Add it to the app-level 'nuptialflight'"
               echo "environment variable group (see header of codemagic.yaml)."
@@ -159,8 +167,18 @@ workflows:
           printf 'MAPTILER_MAP_KEY=%s\n' "$MAPTILER_MAP_KEY" >> assets/.env
           printf 'NF_API_URL=%s\n' "${NF_API_URL:-https://api.bitbot.com.au/nuptialflight/v1}" >> assets/.env
           printf 'NF_API_KEY=%s\n' "$NF_API_KEY" >> assets/.env
-          if grep -q '^ARANGO_' assets/.env; then
-            echo "ERROR: database configuration entered the public client asset."
+          # The asset must hold exactly these five keys, one per line. What
+          # can actually break that is a secret pasted with a line break: it
+          # splits one key across two lines and ships an app whose every
+          # reporting call is a silent 401. (The check this replaces grepped
+          # for ARANGO_ in a file just rewritten from fixed names, so it could
+          # never match.) Report the count only: a stray line is a fragment
+          # of a secret and must not reach the build log.
+          keys=$(grep -v '^$' assets/.env | cut -d= -f1 | LC_ALL=C sort | tr '\n' ' ')
+          if [ "$keys" != "MAPTILER_MAP_KEY NF_API_KEY NF_API_URL OPENWEATHERMAP_API_KEY OPENWEATHERMAP_MAP_KEY " ]; then
+            echo "ERROR: assets/.env must hold exactly 5 keys, one per line, but has"
+            echo "$(grep -c . assets/.env) non-empty lines or an unexpected key name."
+            echo "Check the 'nuptialflight' variable group for a value with a line break."
             exit 1
           fi
       - name: Get Flutter packages

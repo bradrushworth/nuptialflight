@@ -105,6 +105,8 @@
   "snackDebugMode": "Naka-disable ang pag-uulat sa mga debug build.",
   "snackThanksNoFlight": "Salamat — nakakatulong din sa model ang mga ulat na walang lipad.",
   "snackThanksSighting": "Salamat! Nakakatulong ang iyong ulat sa pagsasanay ng hula.",
+  "snackReportSending": "Ipinapadala ang iyong ulat…",
+  "snackReportNotSaved": "Hindi na-save ang iyong ulat. Pakisubukang muli mamaya.",
   "snackNearbyFlights": "{n, plural, =1{1 lipad ang naiulat sa loob ng 500 km sa nakaraang 24 oras — tingnan ang mapa!} other{{n} lipad ang naiulat sa loob ng 500 km sa nakaraang 24 oras — tingnan ang mapa!}}",
   "notifReportTitle": "May naiulat na nuptial flight malapit sa iyo!",
   "notifReportBody": "May {n} lipad na naiulat sa nakaraang {minutes} minuto, ang pinakamalapit ay {distance} km ang layo...",

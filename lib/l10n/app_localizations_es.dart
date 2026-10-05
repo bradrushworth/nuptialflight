@@ -370,6 +370,13 @@ class AppLocalizationsEs extends AppLocalizations {
       '¡Gracias! Tu avistamiento ayuda a entrenar el pronóstico.';
 
   @override
+  String get snackReportSending => 'Enviando tu informe…';
+
+  @override
+  String get snackReportNotSaved =>
+      'No se pudo guardar tu informe. Inténtalo de nuevo más tarde.';
+
+  @override
   String snackNearbyFlights(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,

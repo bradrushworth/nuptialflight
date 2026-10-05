@@ -368,6 +368,13 @@ class AppLocalizationsFr extends AppLocalizations {
       'Merci ! Votre observation aide à entraîner la prévision.';
 
   @override
+  String get snackReportSending => 'Envoi de votre signalement…';
+
+  @override
+  String get snackReportNotSaved =>
+      'Votre signalement n\'a pas pu être enregistré. Veuillez réessayer plus tard.';
+
+  @override
   String snackNearbyFlights(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,

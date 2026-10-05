@@ -105,6 +105,8 @@
   "snackDebugMode": "Hata ayıklama sürümlerinde bildirim devre dışıdır.",
   "snackThanksNoFlight": "Teşekkürler — uçuş yok bildirimleri de modeli geliştirir.",
   "snackThanksSighting": "Teşekkürler! Gözleminiz tahmini eğitmeye yardımcı oluyor.",
+  "snackReportSending": "Bildiriminiz gönderiliyor…",
+  "snackReportNotSaved": "Bildiriminiz kaydedilemedi. Lütfen daha sonra tekrar deneyin.",
   "snackNearbyFlights": "{n, plural, =1{Son 24 saatte 500 km içinde 1 uçuş bildirildi — haritaya bakın!} other{Son 24 saatte 500 km içinde {n} uçuş bildirildi — haritaya bakın!}}",
   "notifReportTitle": "Yakınınızda çiftleşme uçuşu bildirildi!",
   "notifReportBody": "Son {minutes} dakikada {n} uçuş bildirildi; en yakını {distance} km uzakta...",

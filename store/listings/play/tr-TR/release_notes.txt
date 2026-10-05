@@ -1,5 +1,5 @@
-Düzeltildi: sonraki 24 saat grafiği çoğu gün Uçuş Endeksi renkleri yerine gri çubuklar gösteriyordu.
+Düzeltildi: bir bildirim kaydedilemezse uygulama artık teşekkür etmek yerine bunu söylüyor. Eskiden bağlantı hatasından sonra kaybolan bildirimler yeniden gönderiliyor.
 
-Yeni: önümüzdeki haftadaki herhangi bir güne dokunarak o güne ait "Bu tahmin neden?" açıklamasını görün.
+Düzeltildi: yakındaki uçuş uyarıları artık en uzaktaki değil, bildirilen en yakın uçuşa olan mesafeyi gösteriyor.
 
-İyileştirildi: saatlik değerlendirmeler artık kendi kalibrasyonunu kullanıyor, böylece gün içindeki en iyi zaman aralığı daha isabetli.
+Değişti: bildirimler artık özel bir hizmet üzerinden gönderiliyor ve uygulama artık cihaz kimliğini okumuyor.

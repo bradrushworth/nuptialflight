@@ -105,6 +105,8 @@
   "snackDebugMode": "Pelaporan dinonaktifkan pada build debug.",
   "snackThanksNoFlight": "Terima kasih — laporan tanpa penerbangan juga memperbaiki model.",
   "snackThanksSighting": "Terima kasih! Laporan Anda membantu melatih prakiraan.",
+  "snackReportSending": "Mengirim laporan Anda…",
+  "snackReportNotSaved": "Laporan Anda tidak dapat disimpan. Coba lagi nanti.",
   "snackNearbyFlights": "{n, plural, other{{n} penerbangan dilaporkan dalam 500 km selama 24 jam terakhir — lihat peta!}}",
   "notifReportTitle": "Penerbangan kawin dilaporkan di dekat Anda!",
   "notifReportBody": "Ada {n} penerbangan dilaporkan dalam {minutes} menit terakhir, terdekat {distance} km...",

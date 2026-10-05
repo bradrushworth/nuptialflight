@@ -1,5 +1,5 @@
-Opgelost: de grafiek voor de komende 24 uur toonde op de meeste dagen grijze balken in plaats van de kleuren van de Mierenvlucht-index.
+Opgelost: als een melding niet kan worden opgeslagen, zegt de app dat nu in plaats van je te bedanken. Meldingen die vroeger verloren gingen na een mislukte verbinding worden opnieuw verzonden.
 
-Nieuw: tik op een dag in de komende week voor de eigen uitleg "Waarom deze voorspelling?".
+Opgelost: meldingen over vluchten in de buurt tonen nu de afstand tot de dichtstbijzijnde gemelde vlucht, niet tot de verste.
 
-Verbeterd: de uurwaarderingen gebruiken nu een eigen kalibratie, waardoor het beste tijdvak van de dag nauwkeuriger is.
+Gewijzigd: meldingen lopen nu via een eigen dienst en de app leest geen apparaat-ID meer uit.

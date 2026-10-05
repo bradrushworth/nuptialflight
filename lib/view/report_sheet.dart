@@ -16,6 +16,14 @@ class ReportResult {
   final bool sawNothing;
 }
 
+/// What to tell the user once their report has been sent. [saved] is whether
+/// the server stored it: a report that was lost must never be thanked for.
+String reportOutcomeMessage(AppLocalizations t, ReportResult result,
+    {required bool saved}) {
+  if (!saved) return t.snackReportNotSaved;
+  return result.sawNothing ? t.snackThanksNoFlight : t.snackThanksSighting;
+}
+
 /// Opens the report bottom sheet. Cancel is a plain dismissal (returns null),
 /// clearly separated from the explicit "I looked — no flights" observation —
 /// the old dialog conflated the two.

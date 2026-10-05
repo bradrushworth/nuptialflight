@@ -105,6 +105,8 @@
   "snackDebugMode": "Pelaporan dimatikan dalam binaan nyahpepijat.",
   "snackThanksNoFlight": "Terima kasih — laporan tiada penerbangan juga menambah baik model.",
   "snackThanksSighting": "Terima kasih! Laporan anda membantu melatih ramalan.",
+  "snackReportSending": "Menghantar laporan anda…",
+  "snackReportNotSaved": "Laporan anda tidak dapat disimpan. Sila cuba lagi nanti.",
   "snackNearbyFlights": "{n, plural, other{{n} penerbangan dilaporkan dalam lingkungan 500 km sejak 24 jam lalu — lihat peta!}}",
   "notifReportTitle": "Penerbangan kahwin dilaporkan berdekatan!",
   "notifReportBody": "Terdapat {n} penerbangan dilaporkan dalam {minutes} minit lalu, yang terdekat {distance} km...",

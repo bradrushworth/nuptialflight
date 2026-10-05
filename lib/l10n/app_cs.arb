@@ -105,6 +105,8 @@
   "snackDebugMode": "V ladicích sestaveních je hlášení vypnuto.",
   "snackThanksNoFlight": "Díky — i hlášení bez letu zlepšují model.",
   "snackThanksSighting": "Děkujeme! Vaše pozorování pomáhá trénovat předpověď.",
+  "snackReportSending": "Odesílám vaše hlášení…",
+  "snackReportNotSaved": "Hlášení se nepodařilo uložit. Zkuste to prosím později.",
   "snackNearbyFlights": "{n, plural, =1{1 let nahlášen do 500 km za posledních 24 h — mrkněte na mapu!} few{{n} lety nahlášeny do 500 km za posledních 24 h — mrkněte na mapu!} other{{n} letů nahlášeno do 500 km za posledních 24 h — mrkněte na mapu!}}",
   "notifReportTitle": "Poblíž nahlášen svatební let!",
   "notifReportBody": "Za posledních {minutes} minut bylo nahlášeno {n} letů, nejbližší {distance} km daleko...",

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb, visibleForTesting;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -18,8 +18,18 @@ class ApiClient {
   final Uri? _base;
   final String _key;
   final Future<String> Function() _installId;
+
+  /// The limit for one attempt, covering both sending the request and
+  /// reading the response body.
   final Duration timeout;
   final Duration retryDelay;
+
+  /// The budget for a whole read, its retry included. Reads run inside the
+  /// background task ahead of the widget refresh, so they must be short.
+  final Duration readDeadline;
+
+  /// The budget for a whole write, its retry included: two full attempts.
+  final Duration writeDeadline;
 
   ApiClient({
     required String baseUrl,
@@ -28,6 +38,8 @@ class ApiClient {
     Future<String> Function()? installId,
     this.timeout = const Duration(seconds: 8),
     this.retryDelay = const Duration(milliseconds: 250),
+    this.readDeadline = const Duration(seconds: 10),
+    this.writeDeadline = const Duration(seconds: 20),
   }) : _http = httpClient ?? http.Client(),
        _base = _validBase(baseUrl),
        _key = apiKey.trim(),
@@ -61,6 +73,13 @@ class ApiClient {
 
   Future<http.Response?> _send(String method, Uri url, {Object? body}) async {
     if (!enabled) return null;
+    // One budget for the whole call. Without it the worst case was the sum of
+    // every individual wait: about 40 s for something a background task runs.
+    final expired = Completer<void>();
+    final budget = Timer(
+      method == 'GET' ? readDeadline : writeDeadline,
+      expired.complete,
+    );
     try {
       final install = await _installId().timeout(timeout);
       if (!Uuid.isValidUUID(fromString: install)) return null;
@@ -72,16 +91,28 @@ class ApiClient {
         if (body != null) 'Content-Type': 'application/json',
       };
       final payload = body == null ? null : jsonEncode(body);
-      for (var attempt = 0; attempt < 2; attempt++) {
+      for (var attempt = 0; attempt < 2 && !expired.isCompleted; attempt++) {
+        // Completing this aborts the request on the wire, so an attempt we
+        // have given up on is not still uploading behind its own retry.
+        final abort = Completer<void>();
+        void stop([void _]) {
+          if (!abort.isCompleted) abort.complete();
+        }
+
+        final limit = Timer(timeout, stop);
+        unawaited(expired.future.then(stop));
         try {
-          final request = http.Request(method, url)
-            ..followRedirects = false
-            ..headers.addAll(headers);
+          final request =
+              http.AbortableRequest(method, url, abortTrigger: abort.future)
+                ..followRedirects = false
+                ..headers.addAll(headers);
           if (payload != null) request.body = payload;
-          final streamed = await _http.send(request).timeout(timeout);
-          final response = await http.Response.fromStream(
-            streamed,
-          ).timeout(timeout);
+          final response = await Future.any([
+            _exchange(request),
+            abort.future.then<http.Response>(
+              (_) => throw TimeoutException('request abandoned'),
+            ),
+          ]);
           if (response.statusCode >= 200 && response.statusCode < 300)
             return response;
           // 429 and client errors are final. A retry would amplify rate limits.
@@ -90,14 +121,27 @@ class ApiClient {
             return null;
         } catch (_) {
           // Timeout and transport failures are retried at most once.
+        } finally {
+          limit.cancel();
         }
-        if (attempt == 0) await Future<void>.delayed(retryDelay);
+        if (attempt == 0) {
+          await Future.any([
+            Future<void>.delayed(retryDelay),
+            expired.future,
+          ]);
+        }
       }
     } catch (_) {
       // Includes install ID and serialization failures. Never log request data.
+    } finally {
+      budget.cancel();
     }
     return null;
   }
+
+  /// Sends [request] and reads the whole response body.
+  Future<http.Response> _exchange(http.BaseRequest request) async =>
+      http.Response.fromStream(await _http.send(request));
 
   Future<String?> createSnapshot(Map<String, dynamic> payload) async {
     if (!enabled) return null;
@@ -132,11 +176,16 @@ class ApiClient {
       ? _rows(_url('/flights/recent'), nearby: false)
       : Future.value([]);
 
+  /// Flights reported within 500 km of ([lat], [lon]).
+  ///
+  /// The coordinates are rounded to two decimals (about a kilometre) before
+  /// they go into the URL. The server buckets to 0.1 degree and answers in
+  /// whole kilometres, so more precision would only expose a location.
   Future<List> nearbyFlights(num lat, num lon, int minutes) => enabled
       ? _rows(
           _url('/flights/nearby', {
-            'lat': '$lat',
-            'lon': '$lon',
+            'lat': lat.toStringAsFixed(2),
+            'lon': lon.toStringAsFixed(2),
             'minutes': '${normalizeMinutes(minutes)}',
           }),
           nearby: true,
@@ -151,19 +200,20 @@ class ApiClient {
     if (response == null) return [];
     try {
       final value = jsonDecode(response.body);
-      if (value is! List ||
-          !value.every((row) => _validRow(row, nearby: nearby))) {
-        return [];
-      }
-      return value.map((item) {
-        final row = item as Map<String, dynamic>;
-        return <String, dynamic>{
-          ...row,
-          'lat': (row['lat'] as num).toDouble(),
-          'lon': (row['lon'] as num).toDouble(),
-          if (nearby) 'distance': (row['distance'] as num).toInt(),
-        };
-      }).toList();
+      if (value is! List) return [];
+      // Row by row: the server returns documents as stored, and older clients
+      // still write to the database directly. One odd document must cost one
+      // marker, not every marker on every map.
+      return [
+        for (final item in value)
+          if (_validRow(item, nearby: nearby))
+            <String, dynamic>{
+              ...(item as Map<String, dynamic>),
+              'lat': (item['lat'] as num).toDouble(),
+              'lon': (item['lon'] as num).toDouble(),
+              if (nearby) 'distance': (item['distance'] as num).toInt(),
+            },
+      ];
     } catch (_) {
       return [];
     }
@@ -205,56 +255,71 @@ class ApiClient {
 /// Compatibility facade for existing UI and background service callers.
 /// The signed handle lives only in this isolate, never on disk.
 class ArangoSingleton {
-  static final ArangoSingleton _singleton = ArangoSingleton._internal();
-  final ApiClient? _injected;
-  final Map<String, String>? _testConfig;
-  final http.Client? _testHttpClient;
-  final Future<String> Function()? _testInstallId;
+  static final ArangoSingleton _singleton = ArangoSingleton.withLoader(
+    _clientFromEnv,
+  );
+
+  /// Builds the client on first use. It may throw while the configuration is
+  /// not available; see [_client].
+  final Future<ApiClient> Function() _load;
   Future<ApiClient?>? _clientFuture;
   Future<String?>? _latestSnapshot;
 
   factory ArangoSingleton() => _singleton;
+
   ArangoSingleton.withClient(ApiClient client)
-    : _injected = client,
-      _testConfig = null,
-      _testHttpClient = null,
-      _testInstallId = null;
+    : this.withLoader(() async => client);
 
   /// Exercises lazy config loading in a headless test without a live asset.
   ArangoSingleton.withConfigForTesting(
     Map<String, String> config, {
     required http.Client httpClient,
     required Future<String> Function() installId,
-  }) : _injected = null,
-       _testConfig = config,
-       _testHttpClient = httpClient,
-       _testInstallId = installId;
-  ArangoSingleton._internal()
-    : _injected = null,
-      _testConfig = null,
-      _testHttpClient = null,
-      _testInstallId = null;
+  }) : this.withLoader(
+         () async => _clientFromConfig(
+           config,
+           httpClient: httpClient,
+           installId: installId,
+         ),
+       );
 
-  Future<ApiClient?> _client() => _clientFuture ??= _injected == null
-      ? _loadClient()
-      : Future.value(_injected);
+  @visibleForTesting
+  ArangoSingleton.withLoader(this._load);
 
-  Future<ApiClient?> _loadClient() async {
-    try {
-      if (_testConfig == null && !dotenv.isInitialized) {
-        await dotenv.load(fileName: 'assets/.env');
-      }
-      final config = _testConfig ?? dotenv.env;
-      return ApiClient(
-        baseUrl: config['NF_API_URL'] ?? ApiClient.defaultUrl,
-        apiKey: config['NF_API_KEY'] ?? '',
-        httpClient: _testHttpClient,
-        installId: _testInstallId,
-      );
-    } catch (_) {
-      // Also safe in a headless background isolate without an available asset.
-      return null;
-    }
+  static ApiClient _clientFromConfig(
+    Map<String, String> config, {
+    http.Client? httpClient,
+    Future<String> Function()? installId,
+  }) => ApiClient(
+    baseUrl: config['NF_API_URL'] ?? ApiClient.defaultUrl,
+    apiKey: config['NF_API_KEY'] ?? '',
+    httpClient: httpClient,
+    installId: installId,
+  );
+
+  static Future<ApiClient> _clientFromEnv() async {
+    if (!dotenv.isInitialized) await dotenv.load(fileName: 'assets/.env');
+    return _clientFromConfig(dotenv.env);
+  }
+
+  /// The client, or null while it cannot be built.
+  ///
+  /// Concurrent callers share one load and a built client is kept. A FAILED
+  /// load is not remembered: a cold headless isolate can fail to read the
+  /// bundled config once, and caching that null used to switch reporting,
+  /// the map and nearby alerts off until the app was restarted.
+  Future<ApiClient?> _client() {
+    final pending = _clientFuture;
+    if (pending != null) return pending;
+    late final Future<ApiClient?> attempt;
+    attempt = Future<ApiClient>.sync(_load).then<ApiClient?>(
+      (client) => client,
+      onError: (Object _) {
+        if (identical(_clientFuture, attempt)) _clientFuture = null;
+        return null;
+      },
+    );
+    return _clientFuture = attempt;
   }
 
   Future<void> init() async {
@@ -348,7 +413,13 @@ class ArangoSingleton {
     }
   }
 
-  Future<void> updateWeather(
+  /// Sends the user's report and returns whether the server stored it.
+  ///
+  /// A sighting is a training label, so the caller must only thank the user
+  /// when this is true. It is false for every way a report can be lost: no
+  /// API configured, weather not loaded, no snapshot could be made, or the
+  /// server refused the sighting (rate limit, expired handle, validation).
+  Future<bool> updateWeather(
     String? version,
     String? buildNumber,
     String? size,
@@ -358,11 +429,11 @@ class ArangoSingleton {
     OneCallResponse? leadUp,
     required int leadUpDays,
   }) async {
-    final snapshot = _latestSnapshot;
-    if (snapshot == null) return;
+    // Captured before the first await: a report belongs to the snapshot that
+    // was current when the user sent it, even if a refresh replaces it while
+    // this call is in flight.
+    final captured = _latestSnapshot;
     try {
-      final handle = await snapshot;
-      if (handle == null) return;
       final client = await _client();
       final body = _payload(
         version,
@@ -375,9 +446,35 @@ class ArangoSingleton {
         size: size,
         sighting: true,
       );
-      if (body != null) await client?.confirmSighting(handle, body);
+      if (client == null || body == null) return false;
+      var snapshot = captured;
+      var handle = snapshot == null ? null : await snapshot;
+      if (handle == null) {
+        // The passive create at weather load failed or never ran (offline, a
+        // slow link, a rate limit). The report carries the whole weather
+        // payload, so make the snapshot now rather than drop the report.
+        snapshot = _create(
+          version,
+          buildNumber,
+          weather,
+          historical,
+          current,
+          leadUp,
+          leadUpDays,
+        );
+        if (identical(_latestSnapshot, captured)) _latestSnapshot = snapshot;
+        handle = await snapshot;
+        if (handle == null) return false;
+      }
+      if (await client.confirmSighting(handle, body)) return true;
+      // Refused or lost. Forget this snapshot so that trying again starts
+      // from a fresh one instead of failing the same way: a handle the server
+      // has expired (24 h) would otherwise be offered on every retry.
+      if (identical(_latestSnapshot, snapshot)) _latestSnapshot = null;
+      return false;
     } catch (_) {
-      // Ignored Future<void> UI calls must never escape as zone errors.
+      // UI callers do not guard this; nothing may escape as a zone error.
+      return false;
     }
   }
 

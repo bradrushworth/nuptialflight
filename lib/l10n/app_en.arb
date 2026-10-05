@@ -121,6 +121,8 @@
   "snackDebugMode": "Reporting is disabled in debug builds.",
   "snackThanksNoFlight": "Thanks — no-flight reports improve the model too.",
   "snackThanksSighting": "Thank you! Your sighting helps train the forecast.",
+  "snackReportSending": "Sending your report…",
+  "snackReportNotSaved": "Your report could not be saved. Please try again later.",
   "snackNearbyFlights": "{n, plural, =1{1 flight reported within 500 km in the last 24 h — see the map!} other{{n} flights reported within 500 km in the last 24 h — see the map!}}",
   "@snackNearbyFlights": {"placeholders": {"n": {"type": "int"}}},
   "notifReportTitle": "Current reported local nuptial flight!",

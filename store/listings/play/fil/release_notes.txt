@@ -1,5 +1,5 @@
-Naayos: ang tsart para sa susunod na 24 oras ay nagpapakita ng kulay-abong bar sa halos lahat ng araw sa halip na mga kulay ng Flight Index.
+Naayos: kapag hindi na-save ang isang ulat, sinasabi na ito ng app sa halip na magpasalamat. Ipinapadala muli ang mga ulat na dati ay nawawala kapag pumalya ang koneksyon.
 
-Bago: i-tap ang alinmang araw sa paparating na linggo para sa sarili nitong "Bakit ganito ang hula?".
+Naayos: ipinapakita na ng mga alerto sa kalapit na lipad ang layo ng pinakamalapit na naiulat na lipad, hindi ng pinakamalayo.
 
-Mas mahusay: ang oras-oras na rating ay may sariling kalibrasyon na ngayon, kaya mas tumpak ang pinakamagandang oras sa isang araw.
+Binago: dumadaan na ang mga ulat sa sariling serbisyo, at hindi na binabasa ng app ang identifier ng device.

@@ -1,5 +1,5 @@
-Fixed: the next-24-hours chart showed grey bars on most days instead of its Flight Index colours.
+Fixed: if a report can't be saved, the app now says so instead of thanking you. Reports that used to be lost after a failed connection are retried.
 
-New: tap any day in the upcoming week for its own "Why this forecast?" breakdown.
+Fixed: nearby-flight alerts now give the distance to the nearest reported flight, not the farthest.
 
-Improved: hour-by-hour ratings now use their own calibration, so the best window in a day is more accurate.
+Changed: reports now go through a dedicated service, and the app no longer reads a device identifier.

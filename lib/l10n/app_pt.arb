@@ -105,6 +105,8 @@
   "snackDebugMode": "Relatar está desativado em builds de depuração.",
   "snackThanksNoFlight": "Obrigado — relatos sem voo também melhoram o modelo.",
   "snackThanksSighting": "Obrigado! Seu avistamento ajuda a treinar a previsão.",
+  "snackReportSending": "Enviando seu relato…",
+  "snackReportNotSaved": "Não foi possível salvar seu relato. Tente novamente mais tarde.",
   "snackNearbyFlights": "{n, plural, =1{1 voo relatado num raio de 500 km nas últimas 24 h — veja o mapa!} other{{n} voos relatados num raio de 500 km nas últimas 24 h — veja o mapa!}}",
   "notifReportTitle": "Voo nupcial relatado por perto!",
   "notifReportBody": "Há {n} voos relatados nos últimos {minutes} minutos, o mais próximo a {distance} km...",

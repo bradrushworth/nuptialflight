@@ -105,6 +105,8 @@
   "snackDebugMode": "Melden ist in Debug-Builds deaktiviert.",
   "snackThanksNoFlight": "Danke — auch Meldungen ohne Flug verbessern das Modell.",
   "snackThanksSighting": "Danke! Ihre Sichtung hilft, die Vorhersage zu trainieren.",
+  "snackReportSending": "Ihre Meldung wird gesendet…",
+  "snackReportNotSaved": "Ihre Meldung konnte nicht gespeichert werden. Bitte versuchen Sie es später erneut.",
   "snackNearbyFlights": "{n, plural, =1{1 Flug in den letzten 24 h im Umkreis von 500 km gemeldet — zur Karte!} other{{n} Flüge in den letzten 24 h im Umkreis von 500 km gemeldet — zur Karte!}}",
   "notifReportTitle": "Hochzeitsflug in Ihrer Nähe gemeldet!",
   "notifReportBody": "{n} gemeldete Flüge in den letzten {minutes} Minuten, der nächste {distance} km entfernt...",

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -103,8 +104,8 @@ void main() {
         fixture['expected_nearby'],
       );
       expect(requests[1].url.queryParameters, {
-        'lat': '-35.3',
-        'lon': '149.1',
+        'lat': '-35.30',
+        'lon': '149.10',
         'minutes': '1440',
       });
       expect(requests[0].headers['X-NF-Install'], install);
@@ -218,7 +219,7 @@ void main() {
     },
   );
 
-  test('successful rows must satisfy the map and nearby projections', () async {
+  test('a row that fails the map or nearby projection is dropped on its own', () async {
     final good = <String, dynamic>{
       'key': 'report-1',
       'weather': null,
@@ -241,10 +242,19 @@ void main() {
       {...good, 'distance': -1},
       {...good, 'distance': 1.5},
     ]) {
+      // One odd document must not blank the map for everyone: the rows
+      // around it are still good.
       final api = client(
-        MockClient((_) async => http.Response(jsonEncode([good, bad]), 200)),
+        MockClient(
+          (_) async => http.Response(jsonEncode([good, bad, 'junk']), 200),
+        ),
       );
-      expect(await api.nearbyFlights(-35.3, 149.1, 30), isEmpty);
+      final rows = await api.nearbyFlights(-35.3, 149.1, 30);
+      expect(
+        rows.map((row) => row['key']),
+        ['report-1'],
+        reason: 'the valid row must survive next to $bad',
+      );
     }
     final api = client(
       MockClient((_) async => http.Response(jsonEncode([good]), 200)),
@@ -620,5 +630,298 @@ void main() {
     final bytes = utf8.encode(body).length;
     print('Representative REST snapshot UTF-8 bytes: $bytes');
     expect(bytes, lessThan(256 * 1024));
+  });
+
+  test('nearby sends coordinates rounded to about a kilometre', () async {
+    // The server only needs a 0.1 degree bucket and answers in whole
+    // kilometres, so full GPS precision in a URL is exposure for nothing.
+    final requests = <http.Request>[];
+    final api = client(
+      MockClient((request) async {
+        requests.add(request);
+        return http.Response('[]', 200);
+      }),
+    );
+    await api.nearbyFlights(-35.30812345, 149.12498765, 30);
+    expect(requests.single.url.queryParameters['lat'], '-35.31');
+    expect(requests.single.url.queryParameters['lon'], '149.12');
+  });
+
+  group('client loading', () {
+    ApiClient recentClient(List<http.Request> requests) => client(
+      MockClient((request) async {
+        requests.add(request);
+        return http.Response(jsonEncode(fixture['expected_recent']), 200);
+      }),
+    );
+
+    test('a failed load is tried again on the next call', () async {
+      // One transient failure (the bundled config not readable yet in a cold
+      // background isolate) used to switch reporting, the map and nearby
+      // alerts off until the app was restarted.
+      var loads = 0;
+      final requests = <http.Request>[];
+      final facade = ArangoSingleton.withLoader(() async {
+        if (++loads == 1) throw StateError('configuration not ready');
+        return recentClient(requests);
+      });
+      expect(await facade.getRecentFlights(), isEmpty);
+      expect(await facade.getRecentFlights(), fixture['expected_recent']);
+      expect(loads, 2);
+    });
+
+    test('a loaded client is kept, and concurrent callers share one load',
+        () async {
+      var loads = 0;
+      final requests = <http.Request>[];
+      final facade = ArangoSingleton.withLoader(() async {
+        loads++;
+        return recentClient(requests);
+      });
+      await Future.wait([facade.getRecentFlights(), facade.getRecentFlights()]);
+      await facade.getRecentFlights();
+      expect(loads, 1);
+      expect(requests, hasLength(3));
+    });
+  });
+
+  group('time limits', () {
+    ApiClient production(http.Client mock) => ApiClient(
+      baseUrl: endpoint,
+      apiKey: 'test-key',
+      httpClient: mock,
+      installId: () async => install,
+    );
+
+    test('a stalled read is abandoned within ten seconds', () {
+      // The background task runs this before it refreshes the widget, inside
+      // a window of roughly 30 s. Two full 8 s attempts used to be allowed.
+      fakeAsync((async) {
+        var calls = 0;
+        final api = production(
+          MockClient((_) {
+            calls++;
+            return Completer<http.Response>().future;
+          }),
+        );
+        List<dynamic>? rows;
+        api.recentFlights().then((value) => rows = value);
+        async.elapse(const Duration(seconds: 10, milliseconds: 50));
+        expect(rows, isEmpty);
+        expect(calls, 2);
+      });
+    });
+
+    test('one time limit covers both sending and reading the body', () {
+      // Headers after 5 s, then a body that never finishes. Sending and
+      // reading used to get 8 s each, so one attempt could take 13 s.
+      fakeAsync((async) {
+        final api = production(
+          MockClient.streaming((request, body) async {
+            await body.drain<void>();
+            await Future<void>.delayed(const Duration(seconds: 5));
+            return http.StreamedResponse(
+              StreamController<List<int>>().stream,
+              201,
+            );
+          }),
+        );
+        var finished = false;
+        api.createSnapshot(fixture['request']).then((_) => finished = true);
+        // Two 8 s attempts and the 250 ms pause between them.
+        async.elapse(const Duration(seconds: 17));
+        expect(finished, isTrue);
+      });
+    });
+
+    test('a timed-out request is closed, not left running', () async {
+      // A raw socket server that reads each request and never answers. An
+      // HttpServer would not do: it stops reading a connection while a
+      // request is in progress, so it never notices the client hanging up.
+      final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
+      final opened = <Socket>[];
+      final hungUp = <Socket>{};
+      server.listen((socket) {
+        opened.add(socket);
+        socket.listen(
+          (_) {},
+          onDone: () => hungUp.add(socket),
+          onError: (Object _) => hungUp.add(socket),
+        );
+      });
+      final api = ApiClient(
+        baseUrl: 'http://127.0.0.1:${server.port}/nuptialflight/v1',
+        apiKey: 'test-key',
+        installId: () async => install,
+        retryDelay: Duration.zero,
+        timeout: const Duration(milliseconds: 200),
+      );
+      try {
+        expect(await api.recentFlights(), isEmpty);
+        expect(opened, hasLength(2));
+        // The client must have hung up on both attempts.
+        for (var i = 0; i < 30 && hungUp.length < 2; i++) {
+          await Future<void>.delayed(const Duration(milliseconds: 100));
+        }
+        expect(hungUp, hasLength(2));
+      } finally {
+        for (final socket in opened) {
+          socket.destroy();
+        }
+        await server.close();
+      }
+    });
+  });
+
+  // A sighting is a training label. The caller must be able to tell whether
+  // it was actually stored, so the UI never thanks someone for a lost report.
+  group('report outcome', () {
+    final forecast = OneCallResponse(
+      lat: -35.3,
+      lon: 149.1,
+      daily: [Daily(dt: 1791158400)],
+    );
+    final historical = OneCallResponse(
+      lat: -35.3,
+      lon: 149.1,
+      hourly: [Hourly(dt: 1791154800)],
+    );
+    final current = CurrentWeatherResponse(
+      coord: Coordinates(lat: -35.3, lon: 149.1),
+      dt: 1791158400,
+    );
+
+    /// A facade over a scripted server: [respond] sees every request in order.
+    ArangoSingleton facadeFor(
+      List<http.Request> requests,
+      http.Response Function(http.Request request) respond,
+    ) => ArangoSingleton.withClient(
+      client(
+        MockClient((request) async {
+          requests.add(request);
+          return respond(request);
+        }),
+      ),
+    );
+
+    Future<void> create(ArangoSingleton facade) => facade.createWeather(
+      '2.29.1',
+      '165',
+      forecast,
+      historical,
+      current,
+      leadUpDays: 0,
+    );
+
+    Future<bool> report(ArangoSingleton facade, {String? size = 'medium'}) =>
+        facade.updateWeather(
+          '2.29.1',
+          '165',
+          size,
+          forecast,
+          historical,
+          current,
+          leadUpDays: 0,
+        );
+
+    http.Response handle(String value, int status) =>
+        http.Response('{"handle":"$value"}', status);
+
+    test('is true once the server has confirmed the sighting', () async {
+      final requests = <http.Request>[];
+      final facade = facadeFor(
+        requests,
+        (request) => handle('h1', request.method == 'POST' ? 201 : 200),
+      );
+      await create(facade);
+      expect(await report(facade), isTrue);
+      expect(requests.map((r) => r.method), ['POST', 'PUT']);
+    });
+
+    test('is false when the server refuses the sighting', () async {
+      final requests = <http.Request>[];
+      final facade = facadeFor(
+        requests,
+        (request) => request.method == 'POST'
+            ? handle('h1', 201)
+            : http.Response('{"detail":"rate limit exceeded"}', 429),
+      );
+      await create(facade);
+      expect(await report(facade), isFalse);
+    });
+
+    test('retries the snapshot when the earlier create failed', () async {
+      // The create at weather load is passive and can fail (offline, rate
+      // limit, a slow link). The report carries the whole weather payload, so
+      // it can still be saved against a snapshot made now.
+      final requests = <http.Request>[];
+      var creates = 0;
+      final facade = facadeFor(requests, (request) {
+        if (request.method == 'POST') {
+          return ++creates == 1
+              ? http.Response('{"detail":"invalid weather"}', 422)
+              : handle('fresh', 201);
+        }
+        return handle('fresh', 200);
+      });
+      await create(facade);
+      expect(await report(facade), isTrue);
+      expect(requests.map((r) => r.method), ['POST', 'POST', 'PUT']);
+      expect(
+        requests.last.url.path,
+        '/nuptialflight/v1/snapshots/fresh/sighting',
+      );
+    });
+
+    test('is false, and sends no sighting, when no snapshot can be made', () async {
+      final requests = <http.Request>[];
+      final facade = facadeFor(
+        requests,
+        (request) => http.Response('{"detail":"rate limit exceeded"}', 429),
+      );
+      await create(facade);
+      expect(await report(facade), isFalse);
+      expect(requests.where((r) => r.method == 'PUT'), isEmpty);
+    });
+
+    test('a refused sighting does not poison the next attempt', () async {
+      // A handle the server no longer accepts (expired after 24 h, or its
+      // snapshot is gone) must not make every retry fail the same way.
+      final requests = <http.Request>[];
+      var creates = 0;
+      final facade = facadeFor(requests, (request) {
+        if (request.method == 'POST') {
+          return handle(++creates == 1 ? 'stale' : 'renewed', 201);
+        }
+        return request.url.path.contains('/stale/')
+            ? http.Response('{"detail":"invalid handle"}', 403)
+            : handle('renewed', 200);
+      });
+      await create(facade);
+      expect(await report(facade), isFalse);
+      expect(await report(facade), isTrue);
+      expect(requests.map((r) => r.method), ['POST', 'PUT', 'POST', 'PUT']);
+      expect(
+        requests.last.url.path,
+        '/nuptialflight/v1/snapshots/renewed/sighting',
+      );
+    });
+
+    test('a no-flight report sends an explicit null size', () async {
+      // The server reads a null size as "looked, saw nothing" and stores
+      // flight: unknown. Dropping the key instead would change its meaning.
+      final requests = <http.Request>[];
+      final facade = facadeFor(
+        requests,
+        (request) => handle('h1', request.method == 'POST' ? 201 : 200),
+      );
+      await create(facade);
+      expect(await report(facade, size: null), isTrue);
+      final sent = jsonDecode(requests.last.body) as Map<String, dynamic>;
+      expect(sent.containsKey('size'), isTrue);
+      expect(sent['size'], isNull);
+      final snapshot = jsonDecode(requests.first.body) as Map<String, dynamic>;
+      expect(snapshot.containsKey('size'), isFalse);
+    });
   });
 }

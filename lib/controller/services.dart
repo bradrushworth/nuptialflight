@@ -78,6 +78,35 @@ int reportWindowMinutes({required DateTime now, required DateTime? lastCheck}) {
   return elapsed > maxReportWindowMinutes ? maxReportWindowMinutes : elapsed;
 }
 
+/// Distance in km to the closest of [flights], the rows returned by
+/// `getRecentFlightsNearMe` (each carries a whole-km `distance`). Zero when
+/// nothing was reported.
+///
+/// The alert reads "with the nearest N km away", so this must be the minimum.
+/// It used to keep the row with the LARGER distance, which announced the
+/// farthest flight in range as the nearest.
+int closestReportDistanceKm(List<dynamic> flights) {
+  if (flights.isEmpty) return 0;
+  return flights
+      .map<int>((flight) => (flight['distance'] as num).toInt())
+      .reduce((a, b) => a < b ? a : b);
+}
+
+/// Runs the background [steps] side by side, each isolated from the others.
+///
+/// The forecast refresh (widget, Prime-day alert) does not use the reporting
+/// API, so it must neither wait behind the nearby-reports lookup nor be
+/// skipped because that lookup threw. Run one after the other, a stalled
+/// reporting API used up the OS background window before the widget was
+/// touched. Failures are logged and never escape.
+Future<void> runBackgroundSteps(List<Future<void> Function()> steps) =>
+    Future.wait<void>([
+      for (final step in steps)
+        Future<void>.sync(step).catchError((Object e) {
+          debugPrint('background step failed: $e');
+        }),
+    ]);
+
 // Background fetch runs without a UI context, so we stash the last known position
 // here (geolocator forbids a fresh GPS fix in the background) and reuse it for
 // the proximity and percentage checks.
@@ -230,8 +259,7 @@ void _onBackgroundFetch(String taskId) async {
     await _ensureInitialized();
     if (taskId == "flutter_background_fetch" || taskId == "com.transistorsoft.customtask") {
       await _updatePosition();
-      await getReportedFlightsNearMe();
-      await getServicePercentage();
+      await runBackgroundSteps([getReportedFlightsNearMe, getServicePercentage]);
     }
   } catch (e) {
     debugPrint('background fetch failed: $e');
@@ -267,8 +295,7 @@ void backgroundFetchHeadlessTask(HeadlessEvent task) async {
   try {
     await _ensureInitialized();
     await _updatePosition();
-    await getReportedFlightsNearMe();
-    await getServicePercentage();
+    await runBackgroundSteps([getReportedFlightsNearMe, getServicePercentage]);
 
     if (taskId == 'flutter_background_fetch') {
       BackgroundFetch.scheduleTask(TaskConfig(
@@ -330,10 +357,7 @@ Future<void> getReportedFlightsNearMe() async {
   int closestDistance = 0;
   await ArangoSingleton().getRecentFlightsNearMe(_lastKnownPosition, -minutes).then((values) {
     numFlights = values.length;
-    if (numFlights > 0) {
-      closestDistance = values.reduce(
-          (current, next) => current['distance'] > next['distance'] ? current : next)['distance'];
-    }
+    closestDistance = closestReportDistanceKm(values);
   });
   debugPrint('getRecentFlightsNearMe: Reported local nuptial flights: $numFlights in $minutes mins');
 
