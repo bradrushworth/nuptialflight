@@ -10,8 +10,10 @@ onto captioned marketing frames.
 
 ```
 listings/play/<locale>/   title.txt (<=30) - short_description.txt (<=80) - full_description.txt (<=4000)
+                          release_notes.txt (<=500) - WRITTEN BY HAND each release
 listings/ios/<locale>/    name.txt (<=30) - subtitle.txt (<=30) - promotional_text.txt (<=170)
                           description.txt (<=4000) - keywords.txt (<=100)
+                          release_notes.txt (<=4000) - "What's New", generated from the Play notes
 screenshots/play/<locale>/ 01_home 02_why 03_report 04_dark (1080x1920) + feature_graphic.png (1024x500)
 screenshots/ios/<locale>/  01..04 (1290x2796, iPhone 6.7") + ipad_01_home.png (2048x2732, iPad 12.9")
 ```

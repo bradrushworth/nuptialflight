@@ -16,6 +16,13 @@ icon/
 source of truth and overwrites them on the next run. Copy changes go in the
 `L['<lang>']` dicts in that script.
 
+**The one exception is `listings/play/<locale>/release_notes.txt`.** Those 13
+files are written by hand for each release and are an *input* to the
+generator: it copies each one to `listings/ios/<locale>/release_notes.txt`,
+the App Store "What's New in This Version" text. So for a release: write the
+13 Play notes, run the generator, and upload the 12 iOS files it produced.
+Never edit the iOS copies.
+
 ## Three facts that have each cost a review cycle
 
 1. **App Store English is `en-AU`, not `en-US`.** It is the only locale whose

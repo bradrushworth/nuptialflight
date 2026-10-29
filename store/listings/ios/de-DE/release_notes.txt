@@ -1,0 +1,5 @@
+Behoben: Kann eine Meldung nicht gespeichert werden, sagt die App das jetzt, statt sich zu bedanken. Meldungen, die früher nach einem Verbindungsfehler verloren gingen, werden erneut gesendet.
+
+Behoben: Hinweise auf Flüge in der Nähe nennen jetzt die Entfernung zum nächstgelegenen gemeldeten Flug, nicht zum entferntesten.
+
+Geändert: Meldungen laufen jetzt über einen eigenen Dienst, und die App liest keine Gerätekennung mehr aus.
