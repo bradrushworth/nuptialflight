@@ -28,10 +28,10 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.9
+  cupertino_icons: ^2.0.0
 
   # All app dependencies
-  home_widget: ^0.9.3
+  home_widget: ^0.10.0
     #path: ../home_widget
     #git: https://github.com/ABausG/home_widget.git
     #git: https://github.com/bradrushworth/home_widget.git
