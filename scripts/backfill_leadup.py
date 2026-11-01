@@ -73,7 +73,12 @@ def env(name, default=None):
 def connect_arango():
     url = env("ARANGO_URL", "https://api.bitbot.com.au:8530")
     db_name = env("ARANGO_DB_NAME", "nuptialFlight")
-    user = env("ARANGO_USER", "nuptialflight_app")
+    # No default user: this script WRITES to `leadup`, and the read-only
+    # `notebook` user cannot. The legacy app user it used to default to is
+    # being retired with the direct-DB clients (nf-l0i.4).
+    user = env("ARANGO_USER")
+    if not user:
+        sys.exit("ARANGO_USER env var is required (a user with rw on leadup)")
     password = env("ARANGO_PASSWORD", "")
     if not password:
         sys.exit("ARANGO_PASSWORD env var is required")

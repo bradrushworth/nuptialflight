@@ -17,13 +17,24 @@ ship, and they talk to the live database and paid APIs. Read before running.
 
 Environment only — never inline, never committed:
 
+Training and stats read as `notebook`, a read-only user (grant `ro` on
+`nuptialFlight`; password reset 2026-11-01). Its password lives in
+`/root/nuptialflight-notebook-arango-password.txt` on the host and in the
+owner's `~/.nuptialflight/training.env`, which also holds the tunnel command.
+Reach ArangoDB through an SSH tunnel to the container's internal 8529; the
+public 8530 listener is being retired with the legacy users:
+
 ```bash
-export ARANGO_PASSWORD=...     # required
-export ARANGO_USER=notebook    # optional
-export ARANGO_URL=https://api.bitbot.com.au:8530
+IP=$(ssh ubuntu@host.bitbot.net.au "docker inspect arangodb --format '{{range .NetworkSettings.Networks}}{{.IPAddress}} {{end}}'" | awk '{print $1}')
+ssh -N -o IdentitiesOnly=yes -i ~/.ssh/id_rsa_aussidex -L 18529:$IP:8529 ubuntu@host.bitbot.net.au &
+set -a; . ~/.nuptialflight/training.env; set +a   # ARANGO_URL=http://localhost:18529, ARANGO_USER=notebook
 ```
 
-The password previously committed to this repo must be treated as **rotated**.
+`train_leadup_experiment.py`, `export_leadup_models.py` and
+`flight_stats_pipeline.py` default to `notebook`. `backfill_leadup.py` has no
+default user, because it writes to `leadup`; set `ARANGO_USER` to a user with
+rw there. Every password previously committed to this repo must be treated
+as **rotated**.
 
 ## The evaluation protocol is the point
 

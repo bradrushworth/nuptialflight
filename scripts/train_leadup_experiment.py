@@ -59,7 +59,9 @@ HOURLY_BASE = ['lat', 'lon', 'hemisphere', 'sin_doy', 'cos_doy', 'hour',
 def connect():
     url = os.environ.get('ARANGO_URL', 'https://api.bitbot.com.au:8530')
     dbname = os.environ.get('ARANGO_DB_NAME', 'nuptialFlight')
-    user = os.environ.get('ARANGO_USER', 'nuptialflight_app')
+    # The read-only training user. The legacy app user this used to default
+    # to is being retired with the direct-DB clients (nf-l0i.4).
+    user = os.environ.get('ARANGO_USER', 'notebook')
     password = os.environ.get('ARANGO_PASSWORD')
     if not password:
         sys.exit('ARANGO_PASSWORD env var is required')
