@@ -86,7 +86,7 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get next24Hours => 'Prochaines 24 heures';
+  String get hourlyHeading => 'Prochaines heures';
 
   @override
   String get chartCaption => 'confiance de vol par heure';

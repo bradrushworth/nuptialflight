@@ -86,7 +86,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get next24Hours => 'Komende 24 uur';
+  String get hourlyHeading => 'Komende uren';
 
   @override
   String get chartCaption => 'vluchtvertrouwen per uur';

@@ -86,7 +86,7 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get next24Hours => 'Příštích 24 hodin';
+  String get hourlyHeading => 'Nadcházející hodiny';
 
   @override
   String get chartCaption => 'důvěra v let po hodinách';

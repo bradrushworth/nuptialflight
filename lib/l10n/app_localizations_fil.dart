@@ -86,7 +86,7 @@ class AppLocalizationsFil extends AppLocalizations {
   }
 
   @override
-  String get next24Hours => 'Susunod na 24 oras';
+  String get hourlyHeading => 'Mga susunod na oras';
 
   @override
   String get chartCaption => 'kumpiyansa ng paglipad kada oras';

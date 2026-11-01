@@ -24,7 +24,7 @@
   "tooltipMoreOptions": "Więcej opcji",
   "tooltipReportFlight": "Zgłoś zaobserwowany lot godowy",
   "todayDate": "Dziś · {date}",
-  "next24Hours": "Najbliższe 24 godziny",
+  "hourlyHeading": "Najbliższe godziny",
   "chartCaption": "pewność lotu wg godzin",
   "nowTick": "Teraz",
   "upcomingWeek": "Nadchodzący tydzień",

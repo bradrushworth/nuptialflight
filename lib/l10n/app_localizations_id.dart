@@ -87,7 +87,7 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get next24Hours => '24 jam ke depan';
+  String get hourlyHeading => 'Jam-jam ke depan';
 
   @override
   String get chartCaption => 'keyakinan penerbangan per jam';

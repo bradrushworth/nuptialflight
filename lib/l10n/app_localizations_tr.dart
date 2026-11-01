@@ -86,7 +86,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get next24Hours => 'Önümüzdeki 24 saat';
+  String get hourlyHeading => 'Önümüzdeki saatler';
 
   @override
   String get chartCaption => 'saatlik uçuş güveni';

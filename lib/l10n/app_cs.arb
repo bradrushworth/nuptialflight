@@ -24,7 +24,7 @@
   "tooltipMoreOptions": "Další možnosti",
   "tooltipReportFlight": "Nahlásit pozorovaný svatební let",
   "todayDate": "Dnes · {date}",
-  "next24Hours": "Příštích 24 hodin",
+  "hourlyHeading": "Nadcházející hodiny",
   "chartCaption": "důvěra v let po hodinách",
   "nowTick": "Teď",
   "upcomingWeek": "Nadcházející týden",
