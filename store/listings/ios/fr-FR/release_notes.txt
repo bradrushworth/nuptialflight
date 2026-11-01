@@ -1,3 +1,5 @@
 Corrigé : un plantage qui pouvait survenir lorsque l'app demandait l'autorisation de localisation.
 
 Amélioré : l'app ne se fige plus un instant au démarrage pendant le chargement de ses modèles de prévision.
+
+Amélioré : si le service météo est indisponible, l'app vous affiche la dernière prévision au lieu d'une erreur.

@@ -1,3 +1,5 @@
 Fixed: a crash that could happen when the app asked for location permission.
 
 Improved: the app no longer freezes for a moment at start-up while it loads its forecast models.
+
+Improved: if the weather service is unavailable, the app shows your last forecast instead of an error.

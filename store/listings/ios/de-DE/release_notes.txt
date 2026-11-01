@@ -1,3 +1,5 @@
 Behoben: ein Absturz, der auftreten konnte, wenn die App nach der Standortberechtigung fragte.
 
 Verbessert: Die App friert beim Start nicht mehr kurz ein, während sie ihre Vorhersagemodelle lädt.
+
+Verbessert: Ist der Wetterdienst nicht erreichbar, zeigt die App die zuletzt geladene Vorhersage statt eines Fehlers.

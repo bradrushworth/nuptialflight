@@ -1,3 +1,5 @@
 Corrigido: o app podia fechar sozinho ao pedir permissão de localização.
 
 Melhorado: o app não congela mais por um instante ao abrir enquanto carrega os modelos de previsão.
+
+Melhorado: se o serviço de previsão do tempo estiver fora do ar, o app mostra a última previsão em vez de um erro.

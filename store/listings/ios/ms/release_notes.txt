@@ -1,3 +1,5 @@
 Dibaiki: ranap yang boleh berlaku apabila aplikasi meminta kebenaran lokasi.
 
 Ditambah baik: aplikasi tidak lagi membeku seketika semasa dibuka ketika memuatkan model ramalannya.
+
+Ditambah baik: jika perkhidmatan cuaca tidak tersedia, aplikasi memaparkan ramalan terakhir dan bukannya ralat.

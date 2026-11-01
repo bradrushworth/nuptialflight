@@ -1,3 +1,5 @@
 Diperbaiki: aplikasi bisa tertutup sendiri saat meminta izin lokasi.
 
 Ditingkatkan: aplikasi tidak lagi membeku sesaat saat dibuka ketika memuat model prakiraannya.
+
+Ditingkatkan: jika layanan cuaca tidak tersedia, aplikasi menampilkan prakiraan terakhir, bukan pesan galat.
