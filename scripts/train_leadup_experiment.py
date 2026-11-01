@@ -41,6 +41,8 @@ ONE_DAY = 86400
 RAIN_WET_MM = 0.2  # daily rain-amount above this counts as "a wet day"
 HOLDOUT_FROM = int(pd.Timestamp('2025-09-01', tz='UTC').timestamp())
 
+DEDUP_SEED = 42  # tie-break for which negative row dedup() keeps
+
 RF = dict(n_estimators=48, max_features='sqrt', min_samples_leaf=5,
           max_leaf_nodes=256, class_weight='balanced_subsample',
           random_state=42, n_jobs=-1)
@@ -194,8 +196,19 @@ def add_leadup(df):
 
 
 def dedup(df):
+    """One row per (install, location, day), a positive if there is one.
+
+    Which NEGATIVE survives is a fixed-seed random draw. This used to be
+    `sort_values('target', ascending=False)`, whose default quicksort is
+    unstable, so the survivor depended on the numpy build and CPU. That is not
+    harmless for the hourly model: keeping the first session of the day (DB
+    order) lets `hour` separate the classes, and moved hourly grouped-CV AUC
+    from ~0.673 (random survivor) to 0.690 (2026-11-01 re-run on numpy 2.5).
+    The daily model is insensitive. See docs/model_training_findings.md Part 7.
+    """
     before = len(df)
-    df = (df.sort_values('target', ascending=False)
+    df = (df.sample(frac=1, random_state=DEDUP_SEED)
+            .sort_values('target', ascending=False, kind='stable')
             .drop_duplicates(subset=['group', 'loc', 'dayb'], keep='first'))
     print(f'dedup: {before} -> {len(df)} rows '
           f'({df.target.mean():.4f} positive rate)', flush=True)

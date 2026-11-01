@@ -48,6 +48,13 @@ leak. The honest protocol is:
   rate 4.8% → 6.9%), plus
 - a **temporal holdout** (≥ 2025-09).
 
+`dedup()` keeps a positive if the day has one, otherwise a **fixed-seed random**
+negative (`DEDUP_SEED`). It used to keep whichever row an unstable sort put
+first, which depended on the numpy build and, for the hourly model, inflated
+grouped-CV AUC from 0.672 to 0.690 (a DB-order survivor is the day's first
+session, so `hour` leaks the class). Compare candidates only under the same
+dedup; see `docs/model_training_findings.md` Part 7.
+
 Under it, the part-4 models re-baselined from a claimed 0.654/0.670 AUC down
 to 0.627/0.640. **Any new accuracy claim must use this protocol**, or it is
 not comparable to anything in `docs/model_training_findings.md`.
