@@ -1,3 +1,5 @@
 Opraveno: pád aplikace, ke kterému mohlo dojít při žádosti o oprávnění k poloze.
 
 Vylepšeno: aplikace se při spuštění už na chvíli nezasekne, zatímco načítá své předpovědní modely.
+
+Vylepšeno: když služba počasí nefunguje, aplikace místo chyby ukáže poslední načtenou předpověď.

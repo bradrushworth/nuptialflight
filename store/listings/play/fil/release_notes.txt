@@ -1,3 +1,5 @@
 Naayos: isang pag-crash na maaaring mangyari kapag humihingi ang app ng pahintulot sa lokasyon.
 
 Pinahusay: hindi na saglit na nagyeyelo ang app sa pagbukas habang nilo-load nito ang mga forecast model.
+
+Pinahusay: kapag hindi available ang serbisyo ng panahon, ipinapakita ng app ang huling forecast sa halip na error.

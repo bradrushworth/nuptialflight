@@ -140,7 +140,10 @@ geocoding calls are free-tier. Per cache-miss:
 
 Caching (30-min TTL, keys include rounded lat/lon; the daily key is also
 day-anchored) bounds all of the above. When touching this area, never add a
-paid call to a hot path without updating this table.
+paid call to a hot path without updating this table. If a refresh fails (an
+exception or any non-200, 429 included), `_fetchCached` serves the expired
+entry for up to 12 h past its TTL instead of an error screen. Error messages
+carry the HTTP status, never the response body.
 
 ## The model contract (do not break this)
 

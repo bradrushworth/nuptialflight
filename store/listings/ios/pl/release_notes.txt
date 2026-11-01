@@ -1,3 +1,5 @@
 Naprawiono: awarię, która mogła wystąpić, gdy aplikacja prosiła o dostęp do lokalizacji.
 
 Ulepszono: aplikacja nie zawiesza się już na chwilę przy uruchamianiu podczas wczytywania modeli prognozy.
+
+Ulepszono: gdy serwis pogodowy jest niedostępny, aplikacja pokazuje ostatnią prognozę zamiast błędu.

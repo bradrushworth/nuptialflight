@@ -1,3 +1,5 @@
 Düzeltildi: uygulama konum izni isterken çökebiliyordu.
 
 İyileştirildi: uygulama açılışta tahmin modellerini yüklerken artık bir anlığına donmuyor.
+
+İyileştirildi: hava durumu hizmetine ulaşılamadığında uygulama hata yerine son tahmini gösteriyor.

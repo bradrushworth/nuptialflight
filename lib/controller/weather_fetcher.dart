@@ -233,6 +233,11 @@ class WeatherFetcher {
   static const Duration _ttlForecast = Duration(minutes: 30);
   static const Duration _ttlReverseGeocode = Duration(hours: 24);
   static const Duration _ttlHistorical = Duration(days: 30);
+  // How long past its TTL an entry may still stand in when a refresh fails.
+  // On 1 Nov 2026 OpenWeatherMap's daily timeline returned 504s for hours,
+  // and every user without a fresh entry got an error screen instead of the
+  // forecast they had loaded that morning.
+  static const Duration _staleGrace = Duration(hours: 12);
 
   String _cacheKey(String endpoint, {int? dt}) {
     final lat = (_lat ?? 0).toStringAsFixed(2);
@@ -271,23 +276,46 @@ class WeatherFetcher {
     }
     final key = _cacheKey(endpoint, dt: dt);
     final raw = prefs?.getString(key);
+    // An expired entry still young enough to show if the refresh fails.
+    String? staleBody;
     if (raw != null) {
       try {
         final map = jsonDecode(raw) as Map<String, dynamic>;
         final ts = (map['ts'] as int?) ?? 0;
-        if (DateTime.now().millisecondsSinceEpoch - ts < ttl.inMilliseconds) {
+        final age = DateTime.now().millisecondsSinceEpoch - ts;
+        if (age < ttl.inMilliseconds) {
           return parse(map['body'] as String);
+        }
+        if (age < (ttl + _staleGrace).inMilliseconds) {
+          staleBody = map['body'] as String;
         }
       } catch (_) {
         // Corrupt entry - fall through to a fresh network fetch.
       }
     }
-    final response = await (_httpClient?.get(Uri.parse(url)) ?? http.get(Uri.parse(url)));
+    final http.Response response;
+    try {
+      response = await (_httpClient?.get(Uri.parse(url)) ?? http.get(Uri.parse(url)));
+    } catch (e) {
+      if (staleBody != null) {
+        developer.log('$endpoint: $e; showing the cached response',
+            name: 'WeatherFetcher');
+        return parse(staleBody);
+      }
+      rethrow;
+    }
+    if (response.statusCode != 200 && staleBody != null) {
+      developer.log(
+          '$endpoint: HTTP ${response.statusCode}; showing the cached response',
+          name: 'WeatherFetcher');
+      return parse(staleBody);
+    }
     if (response.statusCode == 429 && rateLimitMessage != null) {
       throw Exception(rateLimitMessage);
     }
     if (response.statusCode != 200) {
-      throw Exception(errorPrefix + '!\n\n' + response.body);
+      // Never the body: an outage returns the provider's HTML error page.
+      throw Exception('$errorPrefix!\n\nHTTP ${response.statusCode}');
     }
     final body = response.body;
     try {
