@@ -7,6 +7,9 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
 void main() {
+  // These call the live, paid OpenWeatherMap API. The app sets no client
+  // timeout, and on 1 Nov 2026 the daily timeline took 30-40 s to answer, so
+  // the test runner's 30 s default failed three release builds in a row.
   group('Download', () {
     dotenv.load(fileName: 'assets/.env');
     WeatherFetcher weatherFetcher = WeatherFetcher(mockLocation: true);
@@ -68,5 +71,5 @@ void main() {
           reason: 'daily[0] must be the location-local today');
       expect(response.daily!.first.uvi, greaterThanOrEqualTo(0));
     });
-  });
+  }, timeout: const Timeout(Duration(minutes: 2)));
 }
