@@ -24,7 +24,7 @@
   "tooltipMoreOptions": "Opsi lainnya",
   "tooltipReportFlight": "Laporkan penerbangan kawin yang Anda lihat",
   "todayDate": "Hari ini · {date}",
-  "next24Hours": "24 jam ke depan",
+  "hourlyHeading": "Jam-jam ke depan",
   "chartCaption": "keyakinan penerbangan per jam",
   "nowTick": "Sekarang",
   "upcomingWeek": "Pekan mendatang",

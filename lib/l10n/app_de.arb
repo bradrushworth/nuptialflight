@@ -24,7 +24,7 @@
   "tooltipMoreOptions": "Weitere Optionen",
   "tooltipReportFlight": "Beobachteten Hochzeitsflug melden",
   "todayDate": "Heute · {date}",
-  "next24Hours": "Nächste 24 Stunden",
+  "hourlyHeading": "Nächste Stunden",
   "chartCaption": "Flugwahrscheinlichkeit je Stunde",
   "nowTick": "Jetzt",
   "upcomingWeek": "Kommende Woche",

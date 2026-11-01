@@ -24,7 +24,7 @@
   "tooltipMoreOptions": "Diğer seçenekler",
   "tooltipReportFlight": "Gördüğünüz çiftleşme uçuşunu bildirin",
   "todayDate": "Bugün · {date}",
-  "next24Hours": "Önümüzdeki 24 saat",
+  "hourlyHeading": "Önümüzdeki saatler",
   "chartCaption": "saatlik uçuş güveni",
   "nowTick": "Şimdi",
   "upcomingWeek": "Önümüzdeki hafta",

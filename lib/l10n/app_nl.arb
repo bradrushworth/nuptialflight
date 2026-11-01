@@ -24,7 +24,7 @@
   "tooltipMoreOptions": "Meer opties",
   "tooltipReportFlight": "Meld een geziene bruidsvlucht",
   "todayDate": "Vandaag · {date}",
-  "next24Hours": "Komende 24 uur",
+  "hourlyHeading": "Komende uren",
   "chartCaption": "vluchtvertrouwen per uur",
   "nowTick": "Nu",
   "upcomingWeek": "Komende week",

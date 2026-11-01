@@ -24,7 +24,7 @@
   "tooltipMoreOptions": "Más opciones",
   "tooltipReportFlight": "Informa de un vuelo nupcial que viste",
   "todayDate": "Hoy · {date}",
-  "next24Hours": "Próximas 24 horas",
+  "hourlyHeading": "Próximas horas",
   "chartCaption": "confianza de vuelo por hora",
   "nowTick": "Ahora",
   "upcomingWeek": "Próxima semana",

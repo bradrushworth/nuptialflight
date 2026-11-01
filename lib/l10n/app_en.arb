@@ -25,7 +25,7 @@
   "tooltipReportFlight": "Report a nuptial flight you saw",
   "todayDate": "Today · {date}",
   "@todayDate": {"placeholders": {"date": {"type": "String"}}},
-  "next24Hours": "Next 24 hours",
+  "hourlyHeading": "Coming hours",
   "chartCaption": "flight confidence by hour",
   "nowTick": "Now",
   "upcomingWeek": "Upcoming week",

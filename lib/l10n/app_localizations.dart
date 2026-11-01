@@ -264,11 +264,11 @@ abstract class AppLocalizations {
   /// **'Today · {date}'**
   String todayDate(String date);
 
-  /// No description provided for @next24Hours.
+  /// No description provided for @hourlyHeading.
   ///
   /// In en, this message translates to:
-  /// **'Next 24 hours'**
-  String get next24Hours;
+  /// **'Coming hours'**
+  String get hourlyHeading;
 
   /// No description provided for @chartCaption.
   ///

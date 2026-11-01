@@ -1001,7 +1001,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(t.next24Hours,
+                  Text(t.hourlyHeading,
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium
