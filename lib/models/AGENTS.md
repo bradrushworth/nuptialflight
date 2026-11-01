@@ -30,7 +30,11 @@ majority-vote `predict()`, not probabilities.
   places that must change together.
 - `Nuptials.ensureLoaded()` parses the assets once, kicked off after the
   first frame and awaited in the weather pipeline before scoring. Don't move
-  it in front of `runApp()`.
+  it in front of `runApp()`. The parse runs on a background isolate
+  (`compute`), and `DecisionTree` keeps its arrays as typed data. Both are
+  there because Play vitals on 2.29.1 showed ANRs with the main thread in
+  Dart garbage collection: the UI isolate shares Android's main thread. Keep
+  new per-node data in typed arrays too.
 
 ## Current models
 

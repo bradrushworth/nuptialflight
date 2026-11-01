@@ -1,5 +1,3 @@
-Opraveno: pokud se hlášení nepodaří uložit, aplikace to nyní oznámí místo poděkování. Hlášení, která se dříve po výpadku spojení ztrácela, zkusí odeslat znovu.
+Opraveno: pád aplikace, ke kterému mohlo dojít při žádosti o oprávnění k poloze.
 
-Opraveno: upozornění na lety v okolí nyní uvádějí vzdálenost k nejbližšímu nahlášenému letu, ne k nejvzdálenějšímu.
-
-Změna: hlášení se nyní odesílají přes vyhrazenou službu a aplikace už nečte identifikátor zařízení.
+Vylepšeno: aplikace se při spuštění už na chvíli nezasekne, zatímco načítá své předpovědní modely.

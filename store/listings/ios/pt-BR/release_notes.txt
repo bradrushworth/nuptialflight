@@ -1,5 +1,3 @@
-Corrigido: se um relato não puder ser salvo, o app agora avisa em vez de agradecer. Relatos que antes se perdiam após uma falha de conexão são reenviados.
+Corrigido: o app podia fechar sozinho ao pedir permissão de localização.
 
-Corrigido: os alertas de voos próximos agora mostram a distância até o voo relatado mais próximo, não o mais distante.
-
-Alterado: os relatos agora passam por um serviço dedicado, e o app não lê mais um identificador do dispositivo.
+Melhorado: o app não congela mais por um instante ao abrir enquanto carrega os modelos de previsão.

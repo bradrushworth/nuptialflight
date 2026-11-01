@@ -1,5 +1,3 @@
-Naprawiono: jeśli zgłoszenia nie uda się zapisać, aplikacja teraz o tym informuje, zamiast dziękować. Zgłoszenia, które wcześniej przepadały po błędzie połączenia, są wysyłane ponownie.
+Naprawiono: awarię, która mogła wystąpić, gdy aplikacja prosiła o dostęp do lokalizacji.
 
-Naprawiono: powiadomienia o lotach w pobliżu podają teraz odległość do najbliższego zgłoszonego lotu, a nie do najdalszego.
-
-Zmiana: zgłoszenia są teraz wysyłane przez dedykowaną usługę, a aplikacja nie odczytuje już identyfikatora urządzenia.
+Ulepszono: aplikacja nie zawiesza się już na chwilę przy uruchamianiu podczas wczytywania modeli prognozy.

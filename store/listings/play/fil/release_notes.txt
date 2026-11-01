@@ -1,5 +1,3 @@
-Naayos: kapag hindi na-save ang isang ulat, sinasabi na ito ng app sa halip na magpasalamat. Ipinapadala muli ang mga ulat na dati ay nawawala kapag pumalya ang koneksyon.
+Naayos: isang pag-crash na maaaring mangyari kapag humihingi ang app ng pahintulot sa lokasyon.
 
-Naayos: ipinapakita na ng mga alerto sa kalapit na lipad ang layo ng pinakamalapit na naiulat na lipad, hindi ng pinakamalayo.
-
-Binago: dumadaan na ang mga ulat sa sariling serbisyo, at hindi na binabasa ng app ang identifier ng device.
+Pinahusay: hindi na saglit na nagyeyelo ang app sa pagbukas habang nilo-load nito ang mga forecast model.

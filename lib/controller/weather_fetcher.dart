@@ -21,6 +21,40 @@ class DailySplit {
   DailySplit(this.forecast, this.leadUp);
 }
 
+/// Hands out the location permission with at most one request in flight.
+///
+/// geolocator's Android plugin keeps a single result callback. A request made
+/// while another was pending replaced it, so when both results arrived the
+/// same reply was sent twice: "Reply already submitted", a crash in Play
+/// vitals on 2.29.1. Overlapping callers now share the pending request.
+/// [checkFirst] skips the request when the permission is already granted,
+/// which also stops the hourly refresh from starting a permission request
+/// every time; the web build turns it off because there the request is
+/// what raises the browser prompt.
+class LocationPermissionGate {
+  LocationPermissionGate({
+    required this.check,
+    required this.request,
+    this.checkFirst = true,
+  });
+
+  final Future<LocationPermission> Function() check;
+  final Future<LocationPermission> Function() request;
+  final bool checkFirst;
+  Future<LocationPermission>? _pending;
+
+  Future<LocationPermission> permission() async {
+    if (checkFirst) {
+      final status = await check();
+      if (status == LocationPermission.whileInUse ||
+          status == LocationPermission.always) {
+        return status;
+      }
+    }
+    return _pending ??= request().whenComplete(() => _pending = null);
+  }
+}
+
 class WeatherFetcher {
   late bool _mockLocation;
   // True only when mock mode was auto-enabled for a debug web launch (as opposed
@@ -40,10 +74,18 @@ class WeatherFetcher {
     _mockLocation = mockLocation || _debugWebLocation;
   }
 
+  // Shared by every WeatherFetcher: the home page, its hourly refresh and the
+  // map each create their own.
+  static final LocationPermissionGate _permissionGate = LocationPermissionGate(
+    check: Geolocator.checkPermission,
+    request: Geolocator.requestPermission,
+    checkFirst: !kIsWeb,
+  );
+
   Future<bool> findLocation(bool waitForPosition) async {
     print("findLocation: _mockLocation=$_mockLocation waitForPosition=$waitForPosition ");
     if (!_mockLocation) {
-      LocationPermission permission = await Geolocator.requestPermission();
+      LocationPermission permission = await _permissionGate.permission();
       if (permission == LocationPermission.whileInUse ||
           permission == LocationPermission.always) {
         Position? position;

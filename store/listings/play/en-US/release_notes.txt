@@ -1,5 +1,3 @@
-Fixed: if a report can't be saved, the app now says so instead of thanking you. Reports that used to be lost after a failed connection are retried.
+Fixed: a crash that could happen when the app asked for location permission.
 
-Fixed: nearby-flight alerts now give the distance to the nearest reported flight, not the farthest.
-
-Changed: reports now go through a dedicated service, and the app no longer reads a device identifier.
+Improved: the app no longer freezes for a moment at start-up while it loads its forecast models.

@@ -1,5 +1,3 @@
-Opgelost: als een melding niet kan worden opgeslagen, zegt de app dat nu in plaats van je te bedanken. Meldingen die vroeger verloren gingen na een mislukte verbinding worden opnieuw verzonden.
+Opgelost: een crash die kon optreden wanneer de app om locatietoestemming vroeg.
 
-Opgelost: meldingen over vluchten in de buurt tonen nu de afstand tot de dichtstbijzijnde gemelde vlucht, niet tot de verste.
-
-Gewijzigd: meldingen lopen nu via een eigen dienst en de app leest geen apparaat-ID meer uit.
+Verbeterd: de app bevriest bij het opstarten niet meer even terwijl de voorspellingsmodellen worden geladen.

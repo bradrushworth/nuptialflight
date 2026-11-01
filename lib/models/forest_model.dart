@@ -10,24 +10,52 @@
 // This file is pure Dart (no Flutter imports) so plain `package:test` tests
 // can use it by reading the JSON straight from the file system.
 import 'dart:convert';
+import 'dart:typed_data';
 
 class DecisionTree {
-  final List<int> childrenLeft;
-  final List<int> childrenRight;
-  final List<double> threshold;
-  final List<int> feature;
-  final List<List<double>> value;
+  // Typed arrays, not List<int>/List<double>: a growable list holds one boxed
+  // object per number, so the two forests kept that many small objects alive
+  // for the whole session and every full garbage collection had to walk them.
+  // The UI isolate shares Android's main thread, and those collections showed
+  // up in Play vitals as ANRs. A typed array is a single object.
+  final Int32List childrenLeft;
+  final Int32List childrenRight;
+  final Float64List threshold;
+  final Int32List feature;
 
-  DecisionTree.fromMap(Map<String, dynamic> m)
-      : childrenLeft = List<int>.from(m['children_left']),
-        childrenRight = List<int>.from(m['children_right']),
-        threshold =
-            (m['threshold'] as List).map((e) => (e as num).toDouble()).toList(),
-        feature = List<int>.from(m['feature']),
-        value = (m['value'] as List)
-            .map((row) =>
-                (row as List).map((e) => (e as num).toDouble()).toList())
-            .toList();
+  /// Leaf class counts, row-major: node i's counts are
+  /// `value[i * classCount]` up to `value[(i + 1) * classCount - 1]`.
+  final Float64List value;
+  final int classCount;
+
+  DecisionTree._(this.childrenLeft, this.childrenRight, this.threshold,
+      this.feature, this.value, this.classCount);
+
+  factory DecisionTree.fromMap(Map<String, dynamic> m) {
+    final rows = m['value'] as List;
+    final classCount = rows.isEmpty ? 0 : (rows.first as List).length;
+    final value = Float64List(rows.length * classCount);
+    for (int i = 0; i < rows.length; i++) {
+      final row = rows[i] as List;
+      if (row.length != classCount) {
+        throw FormatException(
+            'Tree value rows differ in length: ${row.length} != $classCount');
+      }
+      for (int c = 0; c < classCount; c++) {
+        value[i * classCount + c] = (row[c] as num).toDouble();
+      }
+    }
+    return DecisionTree._(
+      Int32List.fromList(List<int>.from(m['children_left'])),
+      Int32List.fromList(List<int>.from(m['children_right'])),
+      Float64List.fromList([
+        for (final e in m['threshold'] as List) (e as num).toDouble(),
+      ]),
+      Int32List.fromList(List<int>.from(m['feature'])),
+      value,
+      classCount,
+    );
+  }
 
   /// Per-tree class probabilities (normalised leaf value), matching
   /// sklearn's DecisionTreeClassifier.predict_proba.
@@ -38,12 +66,12 @@ class DecisionTree {
           ? childrenLeft[node]
           : childrenRight[node];
     }
-    final v = value[node];
+    final start = node * classCount;
     double s = 0;
-    for (final e in v) {
-      s += e;
+    for (int c = 0; c < classCount; c++) {
+      s += value[start + c];
     }
-    return [for (final e in v) e / s];
+    return [for (int c = 0; c < classCount; c++) value[start + c] / s];
   }
 }
 
