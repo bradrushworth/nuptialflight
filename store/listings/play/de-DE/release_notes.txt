@@ -1,5 +1,3 @@
-Behoben: Kann eine Meldung nicht gespeichert werden, sagt die App das jetzt, statt sich zu bedanken. Meldungen, die früher nach einem Verbindungsfehler verloren gingen, werden erneut gesendet.
+Behoben: ein Absturz, der auftreten konnte, wenn die App nach der Standortberechtigung fragte.
 
-Behoben: Hinweise auf Flüge in der Nähe nennen jetzt die Entfernung zum nächstgelegenen gemeldeten Flug, nicht zum entferntesten.
-
-Geändert: Meldungen laufen jetzt über einen eigenen Dienst, und die App liest keine Gerätekennung mehr aus.
+Verbessert: Die App friert beim Start nicht mehr kurz ein, während sie ihre Vorhersagemodelle lädt.

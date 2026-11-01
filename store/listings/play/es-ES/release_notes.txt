@@ -1,5 +1,3 @@
-Corregido: si un informe no se puede guardar, la app ahora te avisa en lugar de darte las gracias. Los informes que antes se perdían tras un fallo de conexión se reintentan.
+Corregido: un cierre inesperado que podía ocurrir cuando la app pedía permiso de ubicación.
 
-Corregido: los avisos de vuelos cercanos ahora indican la distancia al vuelo comunicado más cercano, no al más lejano.
-
-Cambio: los informes se envían ahora a través de un servicio dedicado y la app ya no lee ningún identificador del dispositivo.
+Mejorado: la app ya no se queda congelada un momento al iniciarse mientras carga sus modelos de predicción.

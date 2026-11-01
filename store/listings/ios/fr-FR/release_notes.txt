@@ -1,5 +1,3 @@
-Corrigé : si un signalement ne peut pas être enregistré, l'app vous le dit au lieu de vous remercier. Les signalements auparavant perdus après un échec de connexion sont renvoyés.
+Corrigé : un plantage qui pouvait survenir lorsque l'app demandait l'autorisation de localisation.
 
-Corrigé : les alertes de vols à proximité indiquent désormais la distance du vol signalé le plus proche, et non du plus éloigné.
-
-Modifié : les signalements passent désormais par un service dédié, et l'app ne lit plus d'identifiant de l'appareil.
+Amélioré : l'app ne se fige plus un instant au démarrage pendant le chargement de ses modèles de prévision.
