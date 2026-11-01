@@ -319,3 +319,187 @@ revisiting the cap; the calibration mismatch no longer is.
 For the record, the hourly model remains the *stronger* of the two under the
 Part 5 protocol (AUC 0.671/0.666 vs 0.660/0.639) — the cap has never been
 justified by relative accuracy.
+
+## Part 7 — November 2026 retrain: NOT shipped (2026-11-01)
+
+The owner approved a retrain on the data collected since the 2026-08-30 ship
+(Sept-Oct 2026 is the Australian spring flight season). Both models were
+retrained with the shipped recipe unchanged (daily 28 features, hourly 22,
+same order; RF 48 trees, 256 max leaves, `random_state=42`) and compared with
+the shipped assets under the Part 5 protocol. **The candidates are no better
+than the shipped models on any honest holdout, so nothing shipped and
+`assets/*.json` are untouched.**
+
+### Data (live DB, read-only `notebook` user, 2026-11-01)
+
+| | rows | positives | rate |
+|---|---|---|---|
+| raw `flights` rows with daily weather | 241,629 | 11,149 | 4.61% |
+| after required-field `dropna` | 240,321 | 11,097 | 4.62% |
+| **after (install, location, day) dedup** | **149,949** | **10,196** | **6.80%** |
+| hourly subset (rows with `hourly[0]`) | 146,570 | 9,889 | 6.75% |
+| shipped window (deduped, `dt` < 2026-08-30) | 139,145 | 9,610 | 6.91% |
+| **new since the ship (>= 2026-08-30)** | **10,804** | **586** | 5.42% |
+| fresh season (>= 2026-09-01) | 10,293 | 547 | 5.31% |
+| late season (>= 2026-10-01) | 4,382 | 252 | 5.75% |
+
+The shipped window re-counts at 139,145 against Part 5's 139,193, so there is
+no meaningful late-arriving or back-dated data. The new season added only
+**+7.8% rows and +6.1% positives** (Sept 5,911 rows / 295 positives, Oct
+4,304 / 250), far less than the season's reputation suggested, which is why a
+retrain cannot move the models much. Lead-up `prev1` coverage is 60.0% of raw
+rows but only **36.3% of raw positives** (see Finding 2). Three rows carry a
+`dt` after 2026-11-02 (latest 2026-11-05), presumably device clock skew; they
+are harmless but unfiltered.
+
+### How the comparison had to be built
+
+The new data is the only thing a retrain changes, and the shipped assets were
+fit on everything up to 2026-08-30. So:
+
+- **Documented holdout (>= 2025-09)** is *not* a fair test of the frozen asset:
+  it trained on 2025-09..2026-08-29 and scores 0.76 / 0.13 daily there, which is
+  memorisation. Under the protocol the candidate for this holdout is the same
+  recipe trained on `dt` < 2025-09, i.e. the shipped recipe itself, so it can
+  only show that the recipe still reproduces. It does (tables below).
+- **Forward holdouts (the real test).** For a cutoff C, the candidate is
+  retrained on every deduped row before C and tested on rows >= C, which the
+  frozen shipped asset has also never seen (C >= 2026-09-01). A single cutoff
+  of 2026-09-01 is nearly degenerate, because the candidate then has almost
+  exactly the shipped training set; so 2026-09-15, 2026-10-01 and 2026-10-15
+  were added, where the candidate *has* seen weeks of new-season data the
+  shipped model has not. A third arm, the **shipped recipe rebuilt in this
+  pipeline on `dt` < 2026-08-30**, separates the effect of the extra data from
+  any pipeline difference.
+- Candidate and rebuilt metrics are means over 3 forest seeds. Differences
+  against the frozen asset carry a paired cluster bootstrap (resampling
+  installs, 300 draws), and the whole run was repeated with a second dedup
+  seed (7).
+
+### Results (grouped CV by install, dedup; AUC / AP)
+
+Base rates: documented-holdout window 5.1%, fresh season 5.3%, late season
+5.75%. AP is only comparable at equal base rate.
+
+| Daily 28f | CV, `dt`<2025-09 pool | CV, all rows | holdout 2025-09..2026-08-29 | fresh >= 2026-09-01 | late >= 2026-10-01 |
+|---|---|---|---|---|---|
+| Part 5 as documented | 0.660 +-0.015 / 0.147 | n/a | 0.639 / 0.097 | n/a | n/a |
+| **Shipped asset, frozen** | n/a | n/a | leaked, not comparable | **0.586 / 0.079** | **0.615 / 0.091** |
+| Shipped recipe re-run today (rebuilt) | 0.661 +-0.018 / 0.146 | n/a | 0.640 / 0.097 | 0.584 / 0.081 | 0.611 / 0.096 |
+| **Candidate** (all rows before the cutoff) | same recipe | 0.655 +-0.009 / 0.130 | same fit | 0.580 / 0.081 | 0.616 / 0.094 |
+
+| Hourly 22f | CV, `dt`<2025-09 pool | CV, all rows | holdout 2025-09..2026-08-29 | fresh >= 2026-09-01 | late >= 2026-10-01 |
+|---|---|---|---|---|---|
+| Part 5 as documented | 0.671 +-0.012 / 0.149 | n/a | 0.666 / 0.102 | n/a | n/a |
+| **Shipped asset, frozen** | n/a | n/a | leaked, not comparable | **0.635 / 0.088** | **0.670 / 0.111** |
+| Shipped recipe re-run today (rebuilt) | 0.672 +-0.016 / 0.148 | n/a | 0.662 / 0.101 | 0.628 / 0.089 | 0.666 / 0.111 |
+| **Candidate** (all rows before the cutoff) | same recipe | 0.672 +-0.008 / 0.135 | same fit | 0.629 / 0.088 | 0.674 / 0.106 |
+
+(CV AP on "all rows" is lower than on the pre-2025-09 pool only because that
+pool's positive rate is higher, 7.7% vs 6.8%; CV on `dt` < 2026-08-30 is
+0.657 / 0.133 daily and 0.672 / 0.136 hourly.)
+
+Candidate minus frozen shipped, paired bootstrap (95% interval), seed-42
+candidate, primary dedup seed:
+
+| cutoff (rows / positives) | daily dAUC | daily dAP | hourly dAUC | hourly dAP |
+|---|---|---|---|---|
+| >= 2026-09-01 (10,293 / 547) | -0.005 [-0.013, +0.002] | +0.002 [-0.002, +0.006] | -0.002 [-0.009, +0.005] | +0.003 [-0.001, +0.009] |
+| >= 2026-09-15 (7,521 / 435) | -0.002 [-0.011, +0.006] | +0.002 [-0.004, +0.010] | -0.007 [-0.015, +0.001] | -0.001 [-0.006, +0.003] |
+| >= 2026-10-01 (4,382 / 252) | +0.002 [-0.009, +0.014] | +0.006 [-0.002, +0.016] | +0.005 [-0.005, +0.016] | -0.007 [-0.017, +0.002] |
+| >= 2026-10-15 (2,205 / 118) | -0.000 [-0.019, +0.020] | +0.008 [-0.005, +0.024] | -0.000 [-0.017, +0.017] | +0.005 [-0.002, +0.014] |
+
+Every interval spans zero and the signs flip between cutoffs. The replicate
+dedup seed (7) agrees, with one exception: hourly fresh-season dAUC -0.012
+[-0.020, -0.004], which favours the *shipped* model. Candidate minus rebuilt
+arm also spans zero almost everywhere; the two hourly-AUC exceptions (one per
+dedup seed, at different cutoffs) have opposite signs. CV on the whole
+refreshed dataset (0.655 daily / 0.672 hourly) is within one fold-sd of the
+documented pool, so CV is not worse.
+
+### Decision: do not ship
+
+The rule was candidate >= shipped on both AUC and AP on the honest holdouts and
+not worse in CV. It fails for the daily model (fresh-season AUC 0.580 vs 0.586)
+and the hourly model (fresh-season AUC 0.629 vs 0.635; late-season AP 0.106 vs
+0.111), and where it does not fail the differences are noise. Two more months of
+data (+6% positives) cannot move a 48-tree forest by more than seed noise
+(forest-seed sd is 0.001-0.006 AUC here). The shipped models remain current;
+the parity fixtures and `flight_stats.json` were not regenerated and
+`scripts/export_leadup_models.py` was not run.
+
+What would change this: a materially larger label set, cleaner negatives
+(nf-nw6 Tier 2), or the lead-up fix in Finding 2 (bead nf-ofs, owner decision).
+
+### Finding 1 — `dedup()` was non-deterministic, and it moved the hourly metric
+
+`dedup()` kept the survivor with `sort_values('target', ascending=False)`, an
+unstable quicksort, so *which negative row survives* depended on the numpy build
+and CPU. On numpy 2.5.2 it kept 12,283 different rows from a stable sort, and
+the hourly result moved:
+
+| dedup survivor | hourly CV AUC / AP | hourly holdout AUC / AP | daily CV AUC |
+|---|---|---|---|
+| old `dedup()`, numpy 2.5.2 | 0.690 / 0.158 | 0.681 / 0.107 | 0.660 |
+| first row in DB order (stable) | 0.686 / 0.155 | 0.678 / 0.105 | 0.661 |
+| **random, fixed seed** (new `dedup()`; 4 seeds) | **0.672-0.673 / 0.148-0.150** | 0.654-0.659 / 0.098-0.100 | 0.660-0.662 |
+
+A DB-order survivor is the *first session of the day*, which lets `hour` tell
+negatives from the (usually later) reporting session; at serving time the app is
+opened at any hour. The random survivor reproduces the documented 0.671 / 0.666
+(Part 5's own run was therefore consistent with a quasi-random survivor). With
+the unpatched script this retrain showed a spurious hourly win (fresh-season
++0.013 AUC, interval [+0.003, +0.023]) purely because the candidate was trained
+and tested under a different tie-break regime than the frozen asset.
+**Fixed** in `scripts/train_leadup_experiment.py` (`DEDUP_SEED`, shuffle then
+stable sort); the export script inherits it. The daily model is insensitive.
+
+### Finding 2 — the lead-up gain is partly a coverage artefact
+
+`has_prev1` (the lead-up coverage flag) is correlated with the label for a
+reason that is not weather: positives are far less likely to have a prior-day
+record (34.1% of positives vs 50.5% of negatives before 2025-09). The flag alone
+scores AUC 0.582 (positive when `has_prev1` = 0). That correlation is decaying:
+since 2026-08-30 it is 46.8% vs 52.0% (flag-alone AUC 0.526).
+
+Stratified, train < 2025-09, test 2025-09..2026-08-29, daily:
+
+| stratum | n / positives | with lead-up AUC / AP | base features only (21f) |
+|---|---|---|---|
+| all | 41,921 / 2,157 | 0.640 / 0.097 | 0.621 / 0.082 |
+| `has_prev1` = 0 | 20,213 / 1,293 | 0.645 / 0.117 | 0.644 / 0.112 |
+| `has_prev1` = 1 | 21,708 / 864 | 0.606 / 0.059 | 0.592 / 0.054 |
+
+The headline +0.019 is mostly the flag separating strata with different base
+rates (6.4% vs 4.0%); within `has_prev1` = 1, the stratum the app normally
+serves (it supplies `leadUpDaily`; not measured here), the gain is about +0.014
+AUC. In the fresh season the base-only recipe scores 0.602 daily / 0.652 hourly
+against 0.580 / 0.629 with lead-up (dAUC +0.024 [-0.007, +0.054] daily, +0.020
+[-0.003, +0.042] hourly), but the sign reverses on the late-season window
+(-0.014 / -0.019, both spanning zero). So this is **not** evidence to drop the
+features: it says their value is unproven and that the ~40% no-coverage training
+rows, which scarcely occur at runtime, are teaching a label-correlated shortcut.
+Diagnostic only; no feature set changed.
+
+### Finding 3 — the shipped models are weaker on the new season than Part 5 said
+
+On rows the frozen assets have never seen (>= 2026-09-01): **daily 0.586 AUC /
+0.079 AP, hourly 0.635 / 0.088**, against a 5.3% base rate (AP lift about 1.5x),
+versus 0.639 / 0.666 on the Part 5 holdout. The later window (>= 2026-10-01)
+looks better (0.615 / 0.670) but holds only 252 positives (AUC standard error
+about 0.02). The hourly model is still the stronger of the two. The dip is
+concentrated in returning installs: 294 of the 547 fresh-season positives sit on
+installs absent from the training window, where daily AUC is 0.627 (shipped) /
+0.616 (candidate) and hourly 0.662 / 0.655, against 0.537 / 0.537 daily and
+0.604 / 0.608 hourly on installs the models have already seen (shipped /
+candidate in each pair).
+
+### Reproduction
+
+Environment: Python 3.13.15, numpy 2.5.2, pandas 3.1.0, scikit-learn 1.9.1.
+Pipeline: `train_leadup_experiment.fetch/engineer/add_leadup/dedup` as in the
+repo (with the Finding 1 fix). `tle.evaluate()` reproduces Part 5's CV and
+holdout within 0.004 (daily 0.661 / 0.640 vs 0.660 / 0.639; hourly 0.672 / 0.662
+vs 0.671 / 0.666). The forward-holdout, rebuilt-arm and bootstrap code was
+throwaway analysis in a scratch directory and is described above rather than
+committed.
