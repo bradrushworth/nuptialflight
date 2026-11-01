@@ -3,6 +3,7 @@ import 'dart:math';
 //import 'dart:developer' as developer;
 import 'package:intl/intl.dart';
 
+import 'package:flutter/foundation.dart' show compute;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:nuptialflight/controller/leadup_features.dart';
 import 'package:nuptialflight/models/forest_model.dart';
@@ -54,10 +55,22 @@ class Nuptials {
   static Future<void> ensureLoaded() => _loading ??= _load();
 
   static Future<void> _load() async {
-    _instance._dailyModel = ForestModel.fromJsonString(
-        await rootBundle.loadString('assets/final_model.json'));
-    _instance._hourlyModel = ForestModel.fromJsonString(
-        await rootBundle.loadString('assets/hour_model.json'));
+    // Each model is about 1.5 MB of JSON. Parse both on a background isolate:
+    // the UI isolate shares Android's main thread, and parsing them there
+    // during startup blocked input (ANRs in Play vitals). The parsed model
+    // comes back without being copied. The strings are not cached because
+    // they are only parsed once.
+    final models = await Future.wait([
+      for (final asset in const [
+        'assets/final_model.json',
+        'assets/hour_model.json',
+      ])
+        rootBundle
+            .loadString(asset, cache: false)
+            .then((json) => compute(ForestModel.fromJsonString, json)),
+    ]);
+    _instance._dailyModel = models[0];
+    _instance._hourlyModel = models[1];
   }
 
   /// Test hook: inject models parsed from raw JSON strings (used by plain
