@@ -117,7 +117,10 @@ workflows:
             "https://api.codemagic.io/builds?appId=$APP_ID&limit=50")
           HTTP_CODE=${RESP##*HTTPCODE:}
           BUILDS_JSON=${RESP%HTTPCODE:*}
-          PREV=$(echo "$BUILDS_JSON" | BUILD_ID="$BUILD_ID" BRANCH="$BRANCH" python3 -c '
+          # printf, not echo: macOS /bin/sh (bash in POSIX mode, xpg_echo on)
+          # turns the backslash-n escapes inside the JSON into raw newlines,
+          # json.load then fails, and the guard saw no builds: every push built.
+          PREV=$(printf '%s' "$BUILDS_JSON" | BUILD_ID="$BUILD_ID" BRANCH="$BRANCH" python3 -c '
           import json, sys, os
           me, branch = os.environ.get("BUILD_ID", ""), os.environ.get("BRANCH", "")
           try:
@@ -135,7 +138,7 @@ workflows:
           PREV_COMMIT=$(echo "$PREV" | cut -d" " -f2)
           if [ -z "$PREV_COMMIT" ]; then
             echo "Build guard: no successful build on '$BRANCH' in the last 50 (HTTP $HTTP_CODE, appId $APP_ID, buildId $BUILD_ID) - building."
-            echo "Build guard: body head: $(echo "$BUILDS_JSON" | cut -c1-300)"
+            echo "Build guard: body head: $(printf '%s' "$BUILDS_JSON" | head -c 300)"
             exit 0
           fi
           # The clone may be shallow; fetch the commit before reading it.
