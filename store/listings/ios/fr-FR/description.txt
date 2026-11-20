@@ -3,13 +3,13 @@ Voleront-elles aujourd'hui ?
 Chaque colonie de fourmis attend le jour parfait - puis remplit le ciel de reines ailées pour leur vol nuptial. Les éleveurs de fourmis attendent le même jour. Cette appli vous dit quand il arrive.
 
 L'INDICE DE VOL
-Au lieu d'un pourcentage sans signification, chaque jour reçoit une note claire : Aucun vol, Calme, À surveiller, Prometteur ou Idéal, selon la comparaison de la météo du jour avec des années de journées historiques à votre latitude et à cette période de l'année. Idéal signifie le top ~10 % des jours de votre saison : laissez tout et sortez.
+Au lieu d'un pourcentage sans signification, chaque jour reçoit une note claire : Aucun vol, Calme, Moyen, Prometteur ou Idéal, selon la comparaison de la météo du jour avec des années de journées historiques à votre latitude et à cette période de l'année. Les notes reposent sur des probabilités calibrées : Idéal signifie une probabilité au moins 4 fois supérieure au taux de base habituel - laissez tout et sortez. La plupart des jours sont Calmes, donc Idéal est rare.
 
 DES PROBABILITÉS HONNÊTES
 « Environ 1 jour sur 7 comme celui-ci donne lieu à un vol signalé. » Calibré sur des milliers d'observations réelles - jamais une probabilité inventée.
 
 HEURE PAR HEURE
-La confiance de vol des prochaines 24 heures, le meilleur créneau de trois heures pour aller observer, et la semaine en un coup d'œil.
+Les 24 prochaines heures en barres colorées selon les mêmes notes, le meilleur créneau de trois heures pour aller observer, et la semaine en un coup d'œil.
 
 POURQUOI CETTE PRÉVISION ?
 Transparence totale : voyez exactement comment température, vent, humidité, nuages, pluie et pression ont influencé la note du jour - directement depuis le modèle.

@@ -3,13 +3,13 @@ Vliegen ze vandaag?
 Elke mierenkolonie wacht op de perfecte dag - en vult dan de lucht met gevleugelde koninginnen tijdens hun bruidsvlucht. Mierenhouders wachten op diezelfde dag. Deze app vertelt je wanneer die komt.
 
 DE MIERENVLUCHT-INDEX
-In plaats van een betekenisloos percentage krijgt elke dag een heldere score: Geen vlucht, Rustig, Opletten, Veelbelovend of Uitstekend - op basis van hoe het weer van vandaag zich verhoudt tot jaren aan historische dagen op jouw breedtegraad en in dit seizoen. Uitstekend betekent de beste ~10% van de dagen in jouw seizoen: laat alles vallen en ga naar buiten.
+In plaats van een betekenisloos percentage krijgt elke dag een heldere score: Geen vlucht, Rustig, Redelijk, Veelbelovend of Uitstekend - op basis van hoe het weer van vandaag zich verhoudt tot jaren aan historische dagen op jouw breedtegraad en in dit seizoen. De scores zijn gebaseerd op gekalibreerde kansen: Uitstekend betekent een kans van minstens 4 keer het gebruikelijke basisniveau - laat alles vallen en ga naar buiten. De meeste dagen zijn Rustig, dus Uitstekend is zeldzaam.
 
 EERLIJKE KANSEN
 "Ongeveer 1 op de 7 dagen zoals deze levert een gemelde vlucht op." Gekalibreerd op duizenden echte waarnemingen - nooit een verzonnen kans.
 
 UUR VOOR UUR
-Het vluchtvertrouwen voor de komende 24 uur, het beste venster van drie uur om te gaan kijken en de hele week in één oogopslag.
+De komende 24 uur als balken, gekleurd volgens dezelfde scores, het beste venster van drie uur om te gaan kijken en de hele week in één oogopslag.
 
 WAAROM DEZE VOORSPELLING?
 Volledige transparantie: zie precies hoe temperatuur, wind, luchtvochtigheid, bewolking, regen en luchtdruk de score van vandaag hebben bepaald - rechtstreeks uit het model.

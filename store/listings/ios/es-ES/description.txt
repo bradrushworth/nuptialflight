@@ -3,13 +3,13 @@
 Cada colonia de hormigas espera el día perfecto - y entonces llena el cielo de reinas aladas en su vuelo nupcial. Los criadores de hormigas esperan el mismo día. Esta app te dice cuándo llega.
 
 EL ÍNDICE DE VUELO
-En lugar de un porcentaje sin sentido, cada día recibe una valoración clara: Sin vuelo, Tranquilo, Atento, Prometedor u Óptimo, según cómo se compara el tiempo de hoy con años de días históricos en tu latitud y época del año. Óptimo significa el ~10% mejor de los días de tu temporada: déjalo todo y sal.
+En lugar de un porcentaje sin sentido, cada día recibe una valoración clara: Sin vuelo, Tranquilo, Regular, Prometedor u Óptimo, según cómo se compara el tiempo de hoy con años de días históricos en tu latitud y época del año. Las valoraciones se basan en probabilidades calibradas: Óptimo significa una probabilidad al menos 4 veces superior a la tasa base habitual: déjalo todo y sal. La mayoría de los días son Tranquilos, así que Óptimo es poco frecuente.
 
 PROBABILIDADES HONESTAS
 "Aproximadamente 1 de cada 7 días como este registra un vuelo." Calibrado con miles de avistamientos reales - nunca una probabilidad inventada.
 
 HORA A HORA
-La confianza de vuelo de las próximas 24 horas, la mejor franja de tres horas para salir a mirar y la semana de un vistazo.
+Las próximas 24 horas en barras coloreadas según las mismas valoraciones, la mejor franja de tres horas para salir a mirar y la semana de un vistazo.
 
 ¿POR QUÉ ESTE PRONÓSTICO?
 Transparencia total: ve exactamente cómo la temperatura, el viento, la humedad, las nubes, la lluvia y la presión movieron la valoración de hoy - directo del modelo.

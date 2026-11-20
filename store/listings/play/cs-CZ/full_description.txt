@@ -3,13 +3,13 @@ Poletí dnes?
 Každá mravenčí kolonie čeká na dokonalý den - a pak naplní oblohu okřídlenými královnami při svatebním letu. Chovatelé mravenců čekají na tentýž den. Tahle aplikace vám řekne, kdy přijde.
 
 INDEX LETŮ MRAVENCŮ
-Místo bezvýznamného procenta dostane každý den jasné hodnocení: Bez letů, Klid, Pozor, Nadějné nebo Vynikající - podle toho, jak si dnešní počasí stojí ve srovnání s lety historických dní na vaší zeměpisné šířce a v tomto ročním období. Vynikající znamená nejlepších ~10 % dní sezóny: nechte všeho a jděte ven.
+Místo bezvýznamného procenta dostane každý den jasné hodnocení: Bez letů, Klid, Průměrný, Nadějné nebo Vynikající - podle toho, jak si dnešní počasí stojí ve srovnání s lety historických dní na vaší zeměpisné šířce a v tomto ročním období. Hodnocení vychází z kalibrovaných šancí: Vynikající znamená šanci alespoň 4krát vyšší, než je obvyklá základní úroveň - nechte všeho a jděte ven. Většina dní je Klid, takže Vynikající je vzácné.
 
 POCTIVÉ ŠANCE
 "Zhruba v 1 ze 7 takových dní někdo nahlásí let." Kalibrováno na tisících skutečných pozorování - nikdy vymyšlená pravděpodobnost.
 
 HODINU PO HODINĚ
-Důvěra v let na příštích 24 hodin, nejlepší tříhodinové okno na pozorování a celý týden v přehledu.
+Příštích 24 hodin jako sloupce zbarvené podle stejného hodnocení, nejlepší tříhodinové okno na pozorování a celý týden v přehledu.
 
 PROČ TATO PŘEDPOVĚĎ?
 Plná transparentnost: podívejte se přesně, jak teplota, vítr, vlhkost, oblačnost, déšť a tlak ovlivnily dnešní hodnocení - přímo z modelu.

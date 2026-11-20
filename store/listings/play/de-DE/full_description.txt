@@ -3,13 +3,13 @@ Fliegen sie heute?
 Jede Ameisenkolonie wartet auf den perfekten Tag - dann füllt sie den Himmel mit geflügelten Königinnen auf ihrem Hochzeitsflug. Ameisenhalter warten auf denselben Tag. Diese App sagt dir, wann er kommt.
 
 DER AMEISENFLUG-INDEX
-Statt einer bedeutungslosen Prozentzahl bekommt jeder Tag eine klare Bewertung: Kein Flug, Ruhig, Wachsam, Vielversprechend oder Erstklassig - je nachdem, wie das heutige Wetter im Vergleich zu Jahren historischer Tage auf deinem Breitengrad und zu dieser Jahreszeit abschneidet. Erstklassig heißt: die besten ~10 % der Tage deiner Saison - alles stehen lassen und raus.
+Statt einer bedeutungslosen Prozentzahl bekommt jeder Tag eine klare Bewertung: Kein Flug, Ruhig, Mäßig, Vielversprechend oder Erstklassig - je nachdem, wie das heutige Wetter im Vergleich zu Jahren historischer Tage auf deinem Breitengrad und zu dieser Jahreszeit abschneidet. Die Bewertungen beruhen auf kalibrierten Chancen: Erstklassig heißt, die Chance liegt mindestens beim 4-Fachen der üblichen Grundrate - alles stehen lassen und raus. Die meisten Tage sind Ruhig, deshalb ist Erstklassig selten.
 
 EHRLICHE CHANCEN
 "Etwa an 1 von 7 Tagen wie diesem wird ein Flug gemeldet." Kalibriert an Tausenden echter Sichtungen - nie eine erfundene Wahrscheinlichkeit.
 
 STUNDE FÜR STUNDE
-Die Flugzuversicht der nächsten 24 Stunden, das beste Drei-Stunden-Fenster zum Suchen und die Woche auf einen Blick.
+Die nächsten 24 Stunden als Balken, nach denselben Bewertungen eingefärbt, das beste Drei-Stunden-Fenster zum Suchen und die Woche auf einen Blick.
 
 WARUM DIESE VORHERSAGE?
 Volle Transparenz: Sieh genau, wie Temperatur, Wind, Luftfeuchte, Wolken, Regen und Luftdruck die heutige Bewertung beeinflusst haben - direkt aus dem Modell.
