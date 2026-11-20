@@ -384,8 +384,8 @@ Future<void> getReportedFlightsNearMe() async {
 }
 
 /// Recomputes today's nuptial-flight percentage at the cached location, pushes it
-/// to the home-screen widget, and — on Prime Ant Flight Index days (top ~10%
-/// for the hemisphere+month) — raises the "Prime conditions" notification. Runs from the background
+/// to the home-screen widget, and — on Prime Ant Flight Index days (calibrated
+/// odds at least 4x the base rate) — raises the "Prime conditions" notification. Runs from the background
 /// fetch (and from the headless task) to keep the widget/notification fresh.
 Future<void> getServicePercentage() async {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -462,8 +462,8 @@ Future<void> getServicePercentage() async {
       debugPrint('getServicePercentage: failed to save last_onecall_check: $e');
     }
 
-    // Notify only on Prime days: the top ~10% of days for this
-    // hemisphere+month, per the Ant Flight Index (assets/flight_stats.json).
+    // Notify only on Prime days: calibrated odds at least 4x the base rate,
+    // per the Ant Flight Index bands (lib/controller/flight_index.dart).
     if (band == FlightBand.prime) {
       final int n = FlightIndex().oneInN(score);
       flutterLocalNotificationsPlugin.show(
