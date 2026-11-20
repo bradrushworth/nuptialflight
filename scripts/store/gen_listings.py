@@ -52,13 +52,13 @@ L['en'] = dict(
 Every ant colony waits for the perfect day - then fills the sky with winged queens on their nuptial flight. Ant keepers wait for the same day. This app tells you when it's coming.
 
 THE ANT FLIGHT INDEX
-Instead of a meaningless percentage, every day gets a clear rating - No-fly, Quiet, Watchful, Promising or Prime - based on how today's weather compares with years of historical days at your latitude and time of year. Prime means the top ~10% of days in your season: drop everything and get outside.
+Instead of a meaningless percentage, every day gets a clear rating - No-fly, Quiet, Fair, Promising or Prime - based on how today's weather compares with years of historical days at your latitude and time of year. The ratings are anchored to calibrated odds: Prime means odds at least 4 times the everyday base rate - drop everything and get outside. Most days rate Quiet, so Prime is rare.
 
 HONEST ODDS
 "About 1 in 7 days like this see a reported flight." Calibrated against thousands of real sightings - never a made-up probability.
 
 HOUR BY HOUR
-Flight confidence for the next 24 hours, the best three-hour window to go looking, and the week ahead at a glance.
+The next 24 hours as bars shaded by the same ratings, the best three-hour window to go looking, and the week ahead at a glance.
 
 WHY THIS FORECAST?
 Full transparency: see exactly how temperature, wind, humidity, cloud, rain and pressure moved today's rating - straight from the model, no hand-waving.
@@ -89,13 +89,13 @@ L['tr'] = dict(
 Her karınca kolonisi mükemmel günü bekler - sonra gökyüzü çiftleşme uçuşuna çıkan kanatlı kraliçelerle dolar. Karınca besleyenler de aynı günü bekler. Bu uygulama o günün ne zaman geleceğini söyler.
 
 KARINCA UÇUŞ ENDEKSİ
-Anlamsız bir yüzde yerine her gün net bir derece alır: Uçuş yok, Sakin, Dikkatli, Umut verici veya Mükemmel. Derece, bugünkü havanın enleminizde ve mevsiminizde yıllardır görülen günlerle karşılaştırılmasına dayanır. Mükemmel, sezonunuzun en iyi ~%10'luk günleri demektir: her şeyi bırakıp dışarı çıkın.
+Anlamsız bir yüzde yerine her gün net bir derece alır: Uçuş yok, Sakin, Orta, Umut verici veya Mükemmel. Derece, bugünkü havanın enleminizde ve mevsiminizde yıllardır görülen günlerle karşılaştırılmasına ve kalibre edilmiş olasılıklara dayanır: Mükemmel, olasılığın olağan temel oranın en az 4 katı olduğu anlamına gelir - her şeyi bırakıp dışarı çıkın. Günlerin çoğu Sakin'dir, bu yüzden Mükemmel nadirdir.
 
 DÜRÜST OLASILIKLAR
 "Böyle günlerin yaklaşık 7'sinden 1'inde uçuş bildirilir." Binlerce gerçek gözlemle kalibre edilmiştir - asla uydurma bir olasılık değildir.
 
 SAAT SAAT
-Önümüzdeki 24 saatin uçuş güveni, bakmak için en iyi üç saatlik aralık ve haftanın görünümü.
+Önümüzdeki 24 saat aynı derecelere göre renklendirilmiş çubuklar halinde, bakmak için en iyi üç saatlik aralık ve haftanın görünümü.
 
 BU TAHMİN NEDEN?
 Tam şeffaflık: sıcaklık, rüzgar, nem, bulut, yağmur ve basıncın bugünkü dereceyi nasıl etkilediğini doğrudan modelden görün.
@@ -125,13 +125,13 @@ L['fil'] = dict(
 Naghihintay ang bawat kolonya ng langgam ng perpektong araw - saka pupunuin ang langit ng mga may pakpak na reyna sa kanilang nuptial flight. Ganoon din ang mga nag-aalaga ng langgam. Sasabihin ng app na ito kung kailan darating ang araw na iyon.
 
 ANG ANT FLIGHT INDEX
-Sa halip na walang kwentang porsyento, bawat araw ay may malinaw na rating - Walang lipad, Tahimik, Bantayan, Promising o Prime - batay sa paghahambing ng panahon ngayon sa mga nakaraang taon sa inyong latitude at panahon ng taon. Ang Prime ay nasa nangungunang ~10% ng mga araw sa inyong season: iwanan ang lahat at lumabas.
+Sa halip na walang kwentang porsyento, bawat araw ay may malinaw na rating - Walang lipad, Tahimik, Katamtaman, Promising o Prime - batay sa paghahambing ng panahon ngayon sa mga nakaraang taon sa inyong latitude at panahon ng taon. Nakabatay ang mga rating sa na-calibrate na tsansa: ang Prime ay nangangahulugang tsansang hindi bababa sa 4 na beses ng karaniwang batayang antas - iwanan ang lahat at lumabas. Karamihan ng mga araw ay Tahimik, kaya bihira ang Prime.
 
 TAPAT NA TSANSA
 "Humigit-kumulang 1 sa 7 araw na ganito ang may naiulat na lipad." Na-calibrate sa libu-libong totoong ulat - hindi kailanman imbentong probabilidad.
 
 BAWAT ORAS
-Kumpiyansa ng paglipad sa susunod na 24 oras, ang pinakamagandang tatlong-oras na pagkakataon, at ang buong linggo sa isang tingin.
+Ang susunod na 24 oras bilang mga bar na may kulay ayon sa parehong rating, ang pinakamagandang tatlong-oras na pagkakataon, at ang buong linggo sa isang tingin.
 
 BAKIT GANITO ANG HULA?
 Buong transparency: makikita mo mismo kung paano ginalaw ng temperatura, hangin, halumigmig, ulap, ulan at presyon ang rating ngayon - direkta mula sa model.
@@ -161,13 +161,13 @@ L['es'] = dict(
 Cada colonia de hormigas espera el día perfecto - y entonces llena el cielo de reinas aladas en su vuelo nupcial. Los criadores de hormigas esperan el mismo día. Esta app te dice cuándo llega.
 
 EL ÍNDICE DE VUELO
-En lugar de un porcentaje sin sentido, cada día recibe una valoración clara: Sin vuelo, Tranquilo, Atento, Prometedor u Óptimo, según cómo se compara el tiempo de hoy con años de días históricos en tu latitud y época del año. Óptimo significa el ~10% mejor de los días de tu temporada: déjalo todo y sal.
+En lugar de un porcentaje sin sentido, cada día recibe una valoración clara: Sin vuelo, Tranquilo, Regular, Prometedor u Óptimo, según cómo se compara el tiempo de hoy con años de días históricos en tu latitud y época del año. Las valoraciones se basan en probabilidades calibradas: Óptimo significa una probabilidad al menos 4 veces superior a la tasa base habitual: déjalo todo y sal. La mayoría de los días son Tranquilos, así que Óptimo es poco frecuente.
 
 PROBABILIDADES HONESTAS
 "Aproximadamente 1 de cada 7 días como este registra un vuelo." Calibrado con miles de avistamientos reales - nunca una probabilidad inventada.
 
 HORA A HORA
-La confianza de vuelo de las próximas 24 horas, la mejor franja de tres horas para salir a mirar y la semana de un vistazo.
+Las próximas 24 horas en barras coloreadas según las mismas valoraciones, la mejor franja de tres horas para salir a mirar y la semana de un vistazo.
 
 ¿POR QUÉ ESTE PRONÓSTICO?
 Transparencia total: ve exactamente cómo la temperatura, el viento, la humedad, las nubes, la lluvia y la presión movieron la valoración de hoy - directo del modelo.
@@ -197,13 +197,13 @@ L['fr'] = dict(
 Chaque colonie de fourmis attend le jour parfait - puis remplit le ciel de reines ailées pour leur vol nuptial. Les éleveurs de fourmis attendent le même jour. Cette appli vous dit quand il arrive.
 
 L'INDICE DE VOL
-Au lieu d'un pourcentage sans signification, chaque jour reçoit une note claire : Aucun vol, Calme, À surveiller, Prometteur ou Idéal, selon la comparaison de la météo du jour avec des années de journées historiques à votre latitude et à cette période de l'année. Idéal signifie le top ~10 % des jours de votre saison : laissez tout et sortez.
+Au lieu d'un pourcentage sans signification, chaque jour reçoit une note claire : Aucun vol, Calme, Moyen, Prometteur ou Idéal, selon la comparaison de la météo du jour avec des années de journées historiques à votre latitude et à cette période de l'année. Les notes reposent sur des probabilités calibrées : Idéal signifie une probabilité au moins 4 fois supérieure au taux de base habituel - laissez tout et sortez. La plupart des jours sont Calmes, donc Idéal est rare.
 
 DES PROBABILITÉS HONNÊTES
 « Environ 1 jour sur 7 comme celui-ci donne lieu à un vol signalé. » Calibré sur des milliers d'observations réelles - jamais une probabilité inventée.
 
 HEURE PAR HEURE
-La confiance de vol des prochaines 24 heures, le meilleur créneau de trois heures pour aller observer, et la semaine en un coup d'œil.
+Les 24 prochaines heures en barres colorées selon les mêmes notes, le meilleur créneau de trois heures pour aller observer, et la semaine en un coup d'œil.
 
 POURQUOI CETTE PRÉVISION ?
 Transparence totale : voyez exactement comment température, vent, humidité, nuages, pluie et pression ont influencé la note du jour - directement depuis le modèle.
@@ -233,13 +233,13 @@ L['de'] = dict(
 Jede Ameisenkolonie wartet auf den perfekten Tag - dann füllt sie den Himmel mit geflügelten Königinnen auf ihrem Hochzeitsflug. Ameisenhalter warten auf denselben Tag. Diese App sagt dir, wann er kommt.
 
 DER AMEISENFLUG-INDEX
-Statt einer bedeutungslosen Prozentzahl bekommt jeder Tag eine klare Bewertung: Kein Flug, Ruhig, Wachsam, Vielversprechend oder Erstklassig - je nachdem, wie das heutige Wetter im Vergleich zu Jahren historischer Tage auf deinem Breitengrad und zu dieser Jahreszeit abschneidet. Erstklassig heißt: die besten ~10 % der Tage deiner Saison - alles stehen lassen und raus.
+Statt einer bedeutungslosen Prozentzahl bekommt jeder Tag eine klare Bewertung: Kein Flug, Ruhig, Mäßig, Vielversprechend oder Erstklassig - je nachdem, wie das heutige Wetter im Vergleich zu Jahren historischer Tage auf deinem Breitengrad und zu dieser Jahreszeit abschneidet. Die Bewertungen beruhen auf kalibrierten Chancen: Erstklassig heißt, die Chance liegt mindestens beim 4-Fachen der üblichen Grundrate - alles stehen lassen und raus. Die meisten Tage sind Ruhig, deshalb ist Erstklassig selten.
 
 EHRLICHE CHANCEN
 "Etwa an 1 von 7 Tagen wie diesem wird ein Flug gemeldet." Kalibriert an Tausenden echter Sichtungen - nie eine erfundene Wahrscheinlichkeit.
 
 STUNDE FÜR STUNDE
-Die Flugzuversicht der nächsten 24 Stunden, das beste Drei-Stunden-Fenster zum Suchen und die Woche auf einen Blick.
+Die nächsten 24 Stunden als Balken, nach denselben Bewertungen eingefärbt, das beste Drei-Stunden-Fenster zum Suchen und die Woche auf einen Blick.
 
 WARUM DIESE VORHERSAGE?
 Volle Transparenz: Sieh genau, wie Temperatur, Wind, Luftfeuchte, Wolken, Regen und Luftdruck die heutige Bewertung beeinflusst haben - direkt aus dem Modell.
@@ -270,13 +270,13 @@ L['pl'] = dict(
 Każda kolonia mrówek czeka na idealny dzień - a potem wypełnia niebo uskrzydlonymi królowymi w locie godowym. Hodowcy mrówek czekają na ten sam dzień. Ta aplikacja mówi, kiedy nadejdzie.
 
 INDEKS LOTÓW MRÓWEK
-Zamiast bezsensownego procentu każdy dzień dostaje czytelną ocenę: Brak lotów, Spokojnie, Czujnie, Obiecująco albo Znakomicie - na podstawie porównania dzisiejszej pogody z latami historycznych dni na Twojej szerokości geograficznej i o tej porze roku. Znakomicie oznacza najlepsze ~10% dni sezonu: rzuć wszystko i wyjdź na zewnątrz.
+Zamiast bezsensownego procentu każdy dzień dostaje czytelną ocenę: Brak lotów, Spokojnie, Przeciętny, Obiecująco albo Znakomicie - na podstawie porównania dzisiejszej pogody z latami historycznych dni na Twojej szerokości geograficznej i o tej porze roku. Oceny opierają się na skalibrowanych szansach: Znakomicie oznacza szansę co najmniej 4 razy większą od zwykłego poziomu bazowego - rzuć wszystko i wyjdź na zewnątrz. Większość dni to Spokojnie, więc Znakomicie zdarza się rzadko.
 
 UCZCIWE SZANSE
 "Mniej więcej w 1 na 7 takich dni ktoś zgłasza lot." Skalibrowane na tysiącach prawdziwych obserwacji - nigdy wymyślone prawdopodobieństwo.
 
 GODZINA PO GODZINIE
-Pewność lotu na najbliższe 24 godziny, najlepsze trzygodzinne okno na obserwacje i cały tydzień w skrócie.
+Najbliższe 24 godziny jako słupki w kolorach tych samych ocen, najlepsze trzygodzinne okno na obserwacje i cały tydzień w skrócie.
 
 SKĄD TA PROGNOZA?
 Pełna przejrzystość: zobacz dokładnie, jak temperatura, wiatr, wilgotność, chmury, deszcz i ciśnienie wpłynęły na dzisiejszą ocenę - prosto z modelu.
@@ -307,13 +307,13 @@ L['cs'] = dict(
 Každá mravenčí kolonie čeká na dokonalý den - a pak naplní oblohu okřídlenými královnami při svatebním letu. Chovatelé mravenců čekají na tentýž den. Tahle aplikace vám řekne, kdy přijde.
 
 INDEX LETŮ MRAVENCŮ
-Místo bezvýznamného procenta dostane každý den jasné hodnocení: Bez letů, Klid, Pozor, Nadějné nebo Vynikající - podle toho, jak si dnešní počasí stojí ve srovnání s lety historických dní na vaší zeměpisné šířce a v tomto ročním období. Vynikající znamená nejlepších ~10 % dní sezóny: nechte všeho a jděte ven.
+Místo bezvýznamného procenta dostane každý den jasné hodnocení: Bez letů, Klid, Průměrný, Nadějné nebo Vynikající - podle toho, jak si dnešní počasí stojí ve srovnání s lety historických dní na vaší zeměpisné šířce a v tomto ročním období. Hodnocení vychází z kalibrovaných šancí: Vynikající znamená šanci alespoň 4krát vyšší, než je obvyklá základní úroveň - nechte všeho a jděte ven. Většina dní je Klid, takže Vynikající je vzácné.
 
 POCTIVÉ ŠANCE
 "Zhruba v 1 ze 7 takových dní někdo nahlásí let." Kalibrováno na tisících skutečných pozorování - nikdy vymyšlená pravděpodobnost.
 
 HODINU PO HODINĚ
-Důvěra v let na příštích 24 hodin, nejlepší tříhodinové okno na pozorování a celý týden v přehledu.
+Příštích 24 hodin jako sloupce zbarvené podle stejného hodnocení, nejlepší tříhodinové okno na pozorování a celý týden v přehledu.
 
 PROČ TATO PŘEDPOVĚĎ?
 Plná transparentnost: podívejte se přesně, jak teplota, vítr, vlhkost, oblačnost, déšť a tlak ovlivnily dnešní hodnocení - přímo z modelu.
@@ -344,13 +344,13 @@ L['el'] = dict(
 Κάθε αποικία μυρμηγκιών περιμένει την τέλεια μέρα - και μετά γεμίζει τον ουρανό με φτερωτές βασίλισσες στη γαμήλια πτήση τους. Οι εκτροφείς μυρμηγκιών περιμένουν την ίδια μέρα. Αυτή η εφαρμογή σάς λέει πότε έρχεται.
 
 Ο ΔΕΙΚΤΗΣ ΠΤΗΣΕΩΝ
-Αντί για ένα ποσοστό χωρίς νόημα, κάθε μέρα παίρνει μια καθαρή βαθμολογία: Καμία πτήση, Ήσυχα, Επιφυλακή, Ελπιδοφόρα ή Κορυφαία - ανάλογα με το πώς συγκρίνεται ο σημερινός καιρός με χρόνια ιστορικών ημερών στο γεωγραφικό σας πλάτος και αυτή την εποχή. Κορυφαία σημαίνει το καλύτερο ~10% των ημερών της σεζόν σας: αφήστε τα όλα και βγείτε έξω.
+Αντί για ένα ποσοστό χωρίς νόημα, κάθε μέρα παίρνει μια καθαρή βαθμολογία: Καμία πτήση, Ήσυχα, Μέτρια, Ελπιδοφόρα ή Κορυφαία - ανάλογα με το πώς συγκρίνεται ο σημερινός καιρός με χρόνια ιστορικών ημερών στο γεωγραφικό σας πλάτος και αυτή την εποχή. Οι βαθμολογίες βασίζονται σε βαθμονομημένες πιθανότητες: Κορυφαία σημαίνει πιθανότητα τουλάχιστον 4 φορές μεγαλύτερη από το συνηθισμένο βασικό ποσοστό - αφήστε τα όλα και βγείτε έξω. Οι περισσότερες μέρες είναι Ήσυχες, γι' αυτό η Κορυφαία είναι σπάνια.
 
 ΕΙΛΙΚΡΙΝΕΙΣ ΠΙΘΑΝΟΤΗΤΕΣ
 «Περίπου 1 στις 7 τέτοιες μέρες αναφέρεται πτήση.» Βαθμονομημένο σε χιλιάδες αληθινές παρατηρήσεις - ποτέ μια επινοημένη πιθανότητα.
 
 ΩΡΑ ΜΕ ΤΗΝ ΩΡΑ
-Η εμπιστοσύνη πτήσης για τις επόμενες 24 ώρες, το καλύτερο τρίωρο για ψάξιμο και όλη η εβδομάδα με μια ματιά.
+Οι επόμενες 24 ώρες ως μπάρες χρωματισμένες με τις ίδιες βαθμολογίες, το καλύτερο τρίωρο για ψάξιμο και όλη η εβδομάδα με μια ματιά.
 
 ΓΙΑΤΙ ΑΥΤΗ Η ΠΡΟΒΛΕΨΗ;
 Πλήρης διαφάνεια: δείτε ακριβώς πώς θερμοκρασία, άνεμος, υγρασία, σύννεφα, βροχή και πίεση επηρέασαν τη σημερινή βαθμολογία - κατευθείαν από το μοντέλο.
@@ -380,13 +380,13 @@ L['pt'] = dict(
 Toda colônia de formigas espera o dia perfeito - e então enche o céu de rainhas aladas no seu voo nupcial. Criadores de formigas esperam o mesmo dia. Este app diz quando ele vem.
 
 O ÍNDICE DE VOO
-Em vez de uma porcentagem sem sentido, cada dia recebe uma nota clara: Sem voo, Calmo, Atento, Promissor ou Excelente - conforme o tempo de hoje se compara a anos de dias históricos na sua latitude e época do ano. Excelente significa os ~10% melhores dias da sua estação: largue tudo e vá para fora.
+Em vez de uma porcentagem sem sentido, cada dia recebe uma nota clara: Sem voo, Calmo, Razoável, Promissor ou Excelente - conforme o tempo de hoje se compara a anos de dias históricos na sua latitude e época do ano. As notas se baseiam em chances calibradas: Excelente significa uma chance pelo menos 4 vezes maior que a taxa de base habitual - largue tudo e vá para fora. A maioria dos dias é Calmo, então Excelente é raro.
 
 CHANCES HONESTAS
 "Cerca de 1 em cada 7 dias como este tem um voo relatado." Calibrado com milhares de relatos reais - nunca uma probabilidade inventada.
 
 HORA A HORA
-A confiança de voo das próximas 24 horas, a melhor janela de três horas para procurar e a semana inteira de relance.
+As próximas 24 horas em barras coloridas pelas mesmas notas, a melhor janela de três horas para procurar e a semana inteira de relance.
 
 POR QUE ESTA PREVISÃO?
 Transparência total: veja exatamente como temperatura, vento, umidade, nuvens, chuva e pressão moveram a nota de hoje - direto do modelo.
@@ -416,13 +416,13 @@ L['nl'] = dict(
 Elke mierenkolonie wacht op de perfecte dag - en vult dan de lucht met gevleugelde koninginnen tijdens hun bruidsvlucht. Mierenhouders wachten op diezelfde dag. Deze app vertelt je wanneer die komt.
 
 DE MIERENVLUCHT-INDEX
-In plaats van een betekenisloos percentage krijgt elke dag een heldere score: Geen vlucht, Rustig, Opletten, Veelbelovend of Uitstekend - op basis van hoe het weer van vandaag zich verhoudt tot jaren aan historische dagen op jouw breedtegraad en in dit seizoen. Uitstekend betekent de beste ~10% van de dagen in jouw seizoen: laat alles vallen en ga naar buiten.
+In plaats van een betekenisloos percentage krijgt elke dag een heldere score: Geen vlucht, Rustig, Redelijk, Veelbelovend of Uitstekend - op basis van hoe het weer van vandaag zich verhoudt tot jaren aan historische dagen op jouw breedtegraad en in dit seizoen. De scores zijn gebaseerd op gekalibreerde kansen: Uitstekend betekent een kans van minstens 4 keer het gebruikelijke basisniveau - laat alles vallen en ga naar buiten. De meeste dagen zijn Rustig, dus Uitstekend is zeldzaam.
 
 EERLIJKE KANSEN
 "Ongeveer 1 op de 7 dagen zoals deze levert een gemelde vlucht op." Gekalibreerd op duizenden echte waarnemingen - nooit een verzonnen kans.
 
 UUR VOOR UUR
-Het vluchtvertrouwen voor de komende 24 uur, het beste venster van drie uur om te gaan kijken en de hele week in één oogopslag.
+De komende 24 uur als balken, gekleurd volgens dezelfde scores, het beste venster van drie uur om te gaan kijken en de hele week in één oogopslag.
 
 WAAROM DEZE VOORSPELLING?
 Volledige transparantie: zie precies hoe temperatuur, wind, luchtvochtigheid, bewolking, regen en luchtdruk de score van vandaag hebben bepaald - rechtstreeks uit het model.
@@ -452,13 +452,13 @@ L['id'] = dict(
 Setiap koloni semut menunggu hari yang sempurna - lalu memenuhi langit dengan ratu bersayap dalam penerbangan kawin mereka. Pemelihara semut menunggu hari yang sama. Aplikasi ini memberi tahu kapan hari itu tiba.
 
 INDEKS PENERBANGAN SEMUT
-Alih-alih persentase tanpa makna, setiap hari mendapat peringkat yang jelas: Tidak terbang, Tenang, Waspada, Menjanjikan, atau Prima - berdasarkan perbandingan cuaca hari ini dengan bertahun-tahun data historis di lintang dan musim Anda. Prima berarti ~10% hari terbaik di musim Anda: tinggalkan semuanya dan keluarlah.
+Alih-alih persentase tanpa makna, setiap hari mendapat peringkat yang jelas: Tidak terbang, Tenang, Cukup, Menjanjikan, atau Prima - berdasarkan perbandingan cuaca hari ini dengan bertahun-tahun data historis di lintang dan musim Anda. Peringkat berpatokan pada peluang terkalibrasi: Prima berarti peluang setidaknya 4 kali lipat dari laju dasar yang biasa - tinggalkan semuanya dan keluarlah. Sebagian besar hari berstatus Tenang, jadi Prima jarang terjadi.
 
 PELUANG YANG JUJUR
 "Sekitar 1 dari 7 hari seperti ini ada penerbangan yang dilaporkan." Dikalibrasi dengan ribuan laporan nyata - bukan probabilitas karangan.
 
 JAM DEMI JAM
-Keyakinan penerbangan 24 jam ke depan, jendela tiga jam terbaik untuk mencari, dan sepekan dalam sekali pandang.
+24 jam ke depan sebagai batang berwarna menurut peringkat yang sama, jendela tiga jam terbaik untuk mencari, dan sepekan dalam sekali pandang.
 
 KENAPA PRAKIRAAN INI?
 Transparansi penuh: lihat persis bagaimana suhu, angin, kelembapan, awan, hujan, dan tekanan menggerakkan peringkat hari ini - langsung dari model.
@@ -488,13 +488,13 @@ L['ms'] = dict(
 Setiap koloni semut menunggu hari yang sempurna - lalu memenuhi langit dengan permaisuri bersayap dalam penerbangan kahwin mereka. Pemelihara semut menunggu hari yang sama. Aplikasi ini memberitahu bila hari itu tiba.
 
 INDEKS PENERBANGAN SEMUT
-Bukan peratusan tanpa makna, setiap hari mendapat penarafan jelas: Tiada penerbangan, Tenang, Berjaga-jaga, Menjanjikan atau Terbaik - berdasarkan perbandingan cuaca hari ini dengan bertahun-tahun data lampau di latitud dan musim anda. Terbaik bermakna ~10% hari terbaik musim anda: tinggalkan semuanya dan keluarlah.
+Bukan peratusan tanpa makna, setiap hari mendapat penarafan jelas: Tiada penerbangan, Tenang, Sederhana, Menjanjikan atau Terbaik - berdasarkan perbandingan cuaca hari ini dengan bertahun-tahun data lampau di latitud dan musim anda. Penarafan berpandukan peluang terkalibrasi: Terbaik bermakna peluang sekurang-kurangnya 4 kali ganda kadar asas biasa - tinggalkan semuanya dan keluarlah. Kebanyakan hari bertaraf Tenang, jadi Terbaik jarang berlaku.
 
 PELUANG YANG JUJUR
 "Kira-kira 1 daripada 7 hari seperti ini ada penerbangan dilaporkan." Ditentukur dengan ribuan laporan sebenar - bukan kebarangkalian rekaan.
 
 JAM DEMI JAM
-Keyakinan penerbangan 24 jam akan datang, tetingkap tiga jam terbaik untuk mencari, dan seminggu dalam satu pandangan.
+24 jam akan datang sebagai bar berwarna mengikut penarafan yang sama, tetingkap tiga jam terbaik untuk mencari, dan seminggu dalam satu pandangan.
 
 KENAPA RAMALAN INI?
 Ketelusan penuh: lihat dengan tepat bagaimana suhu, angin, kelembapan, awan, hujan dan tekanan menggerakkan penarafan hari ini - terus daripada model.

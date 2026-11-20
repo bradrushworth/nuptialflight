@@ -3,13 +3,13 @@ Will they fly today?
 Every ant colony waits for the perfect day - then fills the sky with winged queens on their nuptial flight. Ant keepers wait for the same day. This app tells you when it's coming.
 
 THE ANT FLIGHT INDEX
-Instead of a meaningless percentage, every day gets a clear rating - No-fly, Quiet, Watchful, Promising or Prime - based on how today's weather compares with years of historical days at your latitude and time of year. Prime means the top ~10% of days in your season: drop everything and get outside.
+Instead of a meaningless percentage, every day gets a clear rating - No-fly, Quiet, Fair, Promising or Prime - based on how today's weather compares with years of historical days at your latitude and time of year. The ratings are anchored to calibrated odds: Prime means odds at least 4 times the everyday base rate - drop everything and get outside. Most days rate Quiet, so Prime is rare.
 
 HONEST ODDS
 "About 1 in 7 days like this see a reported flight." Calibrated against thousands of real sightings - never a made-up probability.
 
 HOUR BY HOUR
-Flight confidence for the next 24 hours, the best three-hour window to go looking, and the week ahead at a glance.
+The next 24 hours as bars shaded by the same ratings, the best three-hour window to go looking, and the week ahead at a glance.
 
 WHY THIS FORECAST?
 Full transparency: see exactly how temperature, wind, humidity, cloud, rain and pressure moved today's rating - straight from the model, no hand-waving.

@@ -3,13 +3,13 @@ Czy dziś polecą?
 Każda kolonia mrówek czeka na idealny dzień - a potem wypełnia niebo uskrzydlonymi królowymi w locie godowym. Hodowcy mrówek czekają na ten sam dzień. Ta aplikacja mówi, kiedy nadejdzie.
 
 INDEKS LOTÓW MRÓWEK
-Zamiast bezsensownego procentu każdy dzień dostaje czytelną ocenę: Brak lotów, Spokojnie, Czujnie, Obiecująco albo Znakomicie - na podstawie porównania dzisiejszej pogody z latami historycznych dni na Twojej szerokości geograficznej i o tej porze roku. Znakomicie oznacza najlepsze ~10% dni sezonu: rzuć wszystko i wyjdź na zewnątrz.
+Zamiast bezsensownego procentu każdy dzień dostaje czytelną ocenę: Brak lotów, Spokojnie, Przeciętny, Obiecująco albo Znakomicie - na podstawie porównania dzisiejszej pogody z latami historycznych dni na Twojej szerokości geograficznej i o tej porze roku. Oceny opierają się na skalibrowanych szansach: Znakomicie oznacza szansę co najmniej 4 razy większą od zwykłego poziomu bazowego - rzuć wszystko i wyjdź na zewnątrz. Większość dni to Spokojnie, więc Znakomicie zdarza się rzadko.
 
 UCZCIWE SZANSE
 "Mniej więcej w 1 na 7 takich dni ktoś zgłasza lot." Skalibrowane na tysiącach prawdziwych obserwacji - nigdy wymyślone prawdopodobieństwo.
 
 GODZINA PO GODZINIE
-Pewność lotu na najbliższe 24 godziny, najlepsze trzygodzinne okno na obserwacje i cały tydzień w skrócie.
+Najbliższe 24 godziny jako słupki w kolorach tych samych ocen, najlepsze trzygodzinne okno na obserwacje i cały tydzień w skrócie.
 
 SKĄD TA PROGNOZA?
 Pełna przejrzystość: zobacz dokładnie, jak temperatura, wiatr, wilgotność, chmury, deszcz i ciśnienie wpłynęły na dzisiejszą ocenę - prosto z modelu.

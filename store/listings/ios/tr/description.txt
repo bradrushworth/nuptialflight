@@ -3,13 +3,13 @@ Bugün uçacaklar mı?
 Her karınca kolonisi mükemmel günü bekler - sonra gökyüzü çiftleşme uçuşuna çıkan kanatlı kraliçelerle dolar. Karınca besleyenler de aynı günü bekler. Bu uygulama o günün ne zaman geleceğini söyler.
 
 KARINCA UÇUŞ ENDEKSİ
-Anlamsız bir yüzde yerine her gün net bir derece alır: Uçuş yok, Sakin, Dikkatli, Umut verici veya Mükemmel. Derece, bugünkü havanın enleminizde ve mevsiminizde yıllardır görülen günlerle karşılaştırılmasına dayanır. Mükemmel, sezonunuzun en iyi ~%10'luk günleri demektir: her şeyi bırakıp dışarı çıkın.
+Anlamsız bir yüzde yerine her gün net bir derece alır: Uçuş yok, Sakin, Orta, Umut verici veya Mükemmel. Derece, bugünkü havanın enleminizde ve mevsiminizde yıllardır görülen günlerle karşılaştırılmasına ve kalibre edilmiş olasılıklara dayanır: Mükemmel, olasılığın olağan temel oranın en az 4 katı olduğu anlamına gelir - her şeyi bırakıp dışarı çıkın. Günlerin çoğu Sakin'dir, bu yüzden Mükemmel nadirdir.
 
 DÜRÜST OLASILIKLAR
 "Böyle günlerin yaklaşık 7'sinden 1'inde uçuş bildirilir." Binlerce gerçek gözlemle kalibre edilmiştir - asla uydurma bir olasılık değildir.
 
 SAAT SAAT
-Önümüzdeki 24 saatin uçuş güveni, bakmak için en iyi üç saatlik aralık ve haftanın görünümü.
+Önümüzdeki 24 saat aynı derecelere göre renklendirilmiş çubuklar halinde, bakmak için en iyi üç saatlik aralık ve haftanın görünümü.
 
 BU TAHMİN NEDEN?
 Tam şeffaflık: sıcaklık, rüzgar, nem, bulut, yağmur ve basıncın bugünkü dereceyi nasıl etkilediğini doğrudan modelden görün.

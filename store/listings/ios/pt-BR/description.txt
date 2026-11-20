@@ -3,13 +3,13 @@ Será que voam hoje?
 Toda colônia de formigas espera o dia perfeito - e então enche o céu de rainhas aladas no seu voo nupcial. Criadores de formigas esperam o mesmo dia. Este app diz quando ele vem.
 
 O ÍNDICE DE VOO
-Em vez de uma porcentagem sem sentido, cada dia recebe uma nota clara: Sem voo, Calmo, Atento, Promissor ou Excelente - conforme o tempo de hoje se compara a anos de dias históricos na sua latitude e época do ano. Excelente significa os ~10% melhores dias da sua estação: largue tudo e vá para fora.
+Em vez de uma porcentagem sem sentido, cada dia recebe uma nota clara: Sem voo, Calmo, Razoável, Promissor ou Excelente - conforme o tempo de hoje se compara a anos de dias históricos na sua latitude e época do ano. As notas se baseiam em chances calibradas: Excelente significa uma chance pelo menos 4 vezes maior que a taxa de base habitual - largue tudo e vá para fora. A maioria dos dias é Calmo, então Excelente é raro.
 
 CHANCES HONESTAS
 "Cerca de 1 em cada 7 dias como este tem um voo relatado." Calibrado com milhares de relatos reais - nunca uma probabilidade inventada.
 
 HORA A HORA
-A confiança de voo das próximas 24 horas, a melhor janela de três horas para procurar e a semana inteira de relance.
+As próximas 24 horas em barras coloridas pelas mesmas notas, a melhor janela de três horas para procurar e a semana inteira de relance.
 
 POR QUE ESTA PREVISÃO?
 Transparência total: veja exatamente como temperatura, vento, umidade, nuvens, chuva e pressão moveram a nota de hoje - direto do modelo.

@@ -3,13 +3,13 @@ Lilipad ba sila ngayon?
 Naghihintay ang bawat kolonya ng langgam ng perpektong araw - saka pupunuin ang langit ng mga may pakpak na reyna sa kanilang nuptial flight. Ganoon din ang mga nag-aalaga ng langgam. Sasabihin ng app na ito kung kailan darating ang araw na iyon.
 
 ANG ANT FLIGHT INDEX
-Sa halip na walang kwentang porsyento, bawat araw ay may malinaw na rating - Walang lipad, Tahimik, Bantayan, Promising o Prime - batay sa paghahambing ng panahon ngayon sa mga nakaraang taon sa inyong latitude at panahon ng taon. Ang Prime ay nasa nangungunang ~10% ng mga araw sa inyong season: iwanan ang lahat at lumabas.
+Sa halip na walang kwentang porsyento, bawat araw ay may malinaw na rating - Walang lipad, Tahimik, Katamtaman, Promising o Prime - batay sa paghahambing ng panahon ngayon sa mga nakaraang taon sa inyong latitude at panahon ng taon. Nakabatay ang mga rating sa na-calibrate na tsansa: ang Prime ay nangangahulugang tsansang hindi bababa sa 4 na beses ng karaniwang batayang antas - iwanan ang lahat at lumabas. Karamihan ng mga araw ay Tahimik, kaya bihira ang Prime.
 
 TAPAT NA TSANSA
 "Humigit-kumulang 1 sa 7 araw na ganito ang may naiulat na lipad." Na-calibrate sa libu-libong totoong ulat - hindi kailanman imbentong probabilidad.
 
 BAWAT ORAS
-Kumpiyansa ng paglipad sa susunod na 24 oras, ang pinakamagandang tatlong-oras na pagkakataon, at ang buong linggo sa isang tingin.
+Ang susunod na 24 oras bilang mga bar na may kulay ayon sa parehong rating, ang pinakamagandang tatlong-oras na pagkakataon, at ang buong linggo sa isang tingin.
 
 BAKIT GANITO ANG HULA?
 Buong transparency: makikita mo mismo kung paano ginalaw ng temperatura, hangin, halumigmig, ulap, ulan at presyon ang rating ngayon - direkta mula sa model.

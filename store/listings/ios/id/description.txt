@@ -3,13 +3,13 @@ Apakah hari ini mereka terbang?
 Setiap koloni semut menunggu hari yang sempurna - lalu memenuhi langit dengan ratu bersayap dalam penerbangan kawin mereka. Pemelihara semut menunggu hari yang sama. Aplikasi ini memberi tahu kapan hari itu tiba.
 
 INDEKS PENERBANGAN SEMUT
-Alih-alih persentase tanpa makna, setiap hari mendapat peringkat yang jelas: Tidak terbang, Tenang, Waspada, Menjanjikan, atau Prima - berdasarkan perbandingan cuaca hari ini dengan bertahun-tahun data historis di lintang dan musim Anda. Prima berarti ~10% hari terbaik di musim Anda: tinggalkan semuanya dan keluarlah.
+Alih-alih persentase tanpa makna, setiap hari mendapat peringkat yang jelas: Tidak terbang, Tenang, Cukup, Menjanjikan, atau Prima - berdasarkan perbandingan cuaca hari ini dengan bertahun-tahun data historis di lintang dan musim Anda. Peringkat berpatokan pada peluang terkalibrasi: Prima berarti peluang setidaknya 4 kali lipat dari laju dasar yang biasa - tinggalkan semuanya dan keluarlah. Sebagian besar hari berstatus Tenang, jadi Prima jarang terjadi.
 
 PELUANG YANG JUJUR
 "Sekitar 1 dari 7 hari seperti ini ada penerbangan yang dilaporkan." Dikalibrasi dengan ribuan laporan nyata - bukan probabilitas karangan.
 
 JAM DEMI JAM
-Keyakinan penerbangan 24 jam ke depan, jendela tiga jam terbaik untuk mencari, dan sepekan dalam sekali pandang.
+24 jam ke depan sebagai batang berwarna menurut peringkat yang sama, jendela tiga jam terbaik untuk mencari, dan sepekan dalam sekali pandang.
 
 KENAPA PRAKIRAAN INI?
 Transparansi penuh: lihat persis bagaimana suhu, angin, kelembapan, awan, hujan, dan tekanan menggerakkan peringkat hari ini - langsung dari model.
