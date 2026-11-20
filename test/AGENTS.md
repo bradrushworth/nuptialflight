@@ -29,7 +29,7 @@ placeholder template is in the root [AGENTS.md](../AGENTS.md).
 | `report_notification_test.dart` | Notification/report plumbing |
 | `redact_url_test.dart` | API-key redaction in logs (a security control) |
 | `*_parity_test.dart` | Dart↔Python `predict_proba` agreement |
-| `arangodb_test.dart` | Hermetic REST client/facade tests; shared API contract fixture |
+| `report_api_test.dart` | Hermetic REST client/facade tests; shared API contract fixture |
 | `weather_test.dart`, `widget_test.dart` | Some tests **hit live services** |
 
 ## Two categories of "passing" that aren't

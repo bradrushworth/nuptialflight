@@ -6,7 +6,7 @@ import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:nuptialflight/controller/arangodb.dart';
+import 'package:nuptialflight/controller/report_api.dart';
 import 'package:nuptialflight/controller/geo.dart';
 import 'package:nuptialflight/controller/install_id.dart';
 import 'package:nuptialflight/responses/onecall_response.dart';
@@ -300,7 +300,7 @@ void main() {
     expect(Uuid.isValidUUID(fromString: id), isTrue);
     expect(await InstallId.get(), id);
     final requests = <http.Request>[];
-    final facade = ArangoSingleton.withConfigForTesting(
+    final facade = ReportApi.withConfigForTesting(
       {'NF_API_URL': endpoint, 'NF_API_KEY': 'test-key'},
       httpClient: MockClient((request) async {
         requests.add(request);
@@ -328,7 +328,7 @@ void main() {
       final first = Completer<http.Response>();
       final requests = <http.Request>[];
       var creates = 0;
-      final facade = ArangoSingleton.withClient(
+      final facade = ReportApi.withClient(
         client(
           MockClient((request) async {
             requests.add(request);
@@ -418,7 +418,7 @@ void main() {
     final second = Completer<http.Response>();
     final requests = <http.Request>[];
     var creates = 0;
-    final facade = ArangoSingleton.withClient(
+    final facade = ReportApi.withClient(
       client(
         MockClient((request) async {
           requests.add(request);
@@ -498,7 +498,7 @@ void main() {
       List.generate(24, (index) => startUtc + index * 3600),
     );
     http.Request? sent;
-    final facade = ArangoSingleton.withClient(
+    final facade = ReportApi.withClient(
       client(
         MockClient((request) async {
           sent = request;
@@ -661,7 +661,7 @@ void main() {
       // alerts off until the app was restarted.
       var loads = 0;
       final requests = <http.Request>[];
-      final facade = ArangoSingleton.withLoader(() async {
+      final facade = ReportApi.withLoader(() async {
         if (++loads == 1) throw StateError('configuration not ready');
         return recentClient(requests);
       });
@@ -674,7 +674,7 @@ void main() {
         () async {
       var loads = 0;
       final requests = <http.Request>[];
-      final facade = ArangoSingleton.withLoader(() async {
+      final facade = ReportApi.withLoader(() async {
         loads++;
         return recentClient(requests);
       });
@@ -792,10 +792,10 @@ void main() {
     );
 
     /// A facade over a scripted server: [respond] sees every request in order.
-    ArangoSingleton facadeFor(
+    ReportApi facadeFor(
       List<http.Request> requests,
       http.Response Function(http.Request request) respond,
-    ) => ArangoSingleton.withClient(
+    ) => ReportApi.withClient(
       client(
         MockClient((request) async {
           requests.add(request);
@@ -804,7 +804,7 @@ void main() {
       ),
     );
 
-    Future<void> create(ArangoSingleton facade) => facade.createWeather(
+    Future<void> create(ReportApi facade) => facade.createWeather(
       '2.29.1',
       '165',
       forecast,
@@ -813,7 +813,7 @@ void main() {
       leadUpDays: 0,
     );
 
-    Future<bool> report(ArangoSingleton facade, {String? size = 'medium'}) =>
+    Future<bool> report(ReportApi facade, {String? size = 'medium'}) =>
         facade.updateWeather(
           '2.29.1',
           '165',

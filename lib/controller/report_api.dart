@@ -252,10 +252,11 @@ class ApiClient {
   }
 }
 
-/// Compatibility facade for existing UI and background service callers.
+/// Reporting facade for UI and background service callers (renamed from
+/// ArangoSingleton in nf-c83).
 /// The signed handle lives only in this isolate, never on disk.
-class ArangoSingleton {
-  static final ArangoSingleton _singleton = ArangoSingleton.withLoader(
+class ReportApi {
+  static final ReportApi _instance = ReportApi.withLoader(
     _clientFromEnv,
   );
 
@@ -265,13 +266,13 @@ class ArangoSingleton {
   Future<ApiClient?>? _clientFuture;
   Future<String?>? _latestSnapshot;
 
-  factory ArangoSingleton() => _singleton;
+  factory ReportApi() => _instance;
 
-  ArangoSingleton.withClient(ApiClient client)
+  ReportApi.withClient(ApiClient client)
     : this.withLoader(() async => client);
 
   /// Exercises lazy config loading in a headless test without a live asset.
-  ArangoSingleton.withConfigForTesting(
+  ReportApi.withConfigForTesting(
     Map<String, String> config, {
     required http.Client httpClient,
     required Future<String> Function() installId,
@@ -284,7 +285,7 @@ class ArangoSingleton {
        );
 
   @visibleForTesting
-  ArangoSingleton.withLoader(this._load);
+  ReportApi.withLoader(this._load);
 
   static ApiClient _clientFromConfig(
     Map<String, String> config, {

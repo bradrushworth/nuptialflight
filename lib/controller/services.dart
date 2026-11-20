@@ -12,7 +12,7 @@ import '../l10n/app_localizations.dart';
 import '../responses/onecall_response.dart';
 import '../view/l10n_ext.dart' show bandLabelOf;
 import 'app_language.dart';
-import 'arangodb.dart';
+import 'report_api.dart';
 import 'flight_index.dart';
 import 'geo.dart';
 import 'nuptials.dart';
@@ -355,7 +355,7 @@ Future<void> getReportedFlightsNearMe() async {
 
   int numFlights = 0;
   int closestDistance = 0;
-  await ArangoSingleton().getRecentFlightsNearMe(_lastKnownPosition, -minutes).then((values) {
+  await ReportApi().getRecentFlightsNearMe(_lastKnownPosition, -minutes).then((values) {
     numFlights = values.length;
     closestDistance = closestReportDistanceKm(values);
   });

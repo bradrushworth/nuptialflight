@@ -13,7 +13,7 @@ duplicate what lives here.
 | `flight_index.dart` | Percentiles, calibrated odds, the five bands |
 | `leadup_features.dart` | The 7 antecedent-weather features (shared by both models) |
 | `services.dart` | Background fetch, notifications, widget/tile updates |
-| `arangodb.dart` | Compatible reporting facade and injectable scoped REST `ApiClient` |
+| `report_api.dart` | Reporting facade (`ReportApi`, renamed from `ArangoSingleton` in nf-c83) and injectable scoped REST `ApiClient` |
 | `units.dart` | Metric/imperial display preference |
 | `geo.dart` | `syntheticPosition()` helper |
 | `install_id.dart` | Anonymous per-install UUID |
@@ -79,9 +79,9 @@ Two facts that surprise people:
   [docs/model_training_findings.md](../../docs/model_training_findings.md)
   Parts 5-6 before changing it.
 
-## Reporting client (`arangodb.dart`)
+## Reporting client (`report_api.dart`)
 
-`ArangoSingleton` is the facade the UI and the background task call;
+`ReportApi` is the facade the UI and the background task call;
 `ApiClient` is the REST transport underneath. Despite the names, the app has
 had no database access since 2.29.0.
 
@@ -118,6 +118,6 @@ rounded lat/lon (the daily key is also day-anchored).
   `lib/utils.dart`. These are bare `print` calls that run in **release**
   builds, so a leak reaches real users' device logs.
 - Never commit credentials; `assets/.env` is gitignored.
-- `arangodb.dart` degrades gracefully when `NF_API_KEY` is unset. New clients
+- `report_api.dart` degrades gracefully when `NF_API_KEY` is unset. New clients
   never read `ARANGO_*`, send AQL or fall back to 8530. The server owns DB access;
   see `docs/api-transition.md`. Keep anonymous install UUIDs on every platform.
