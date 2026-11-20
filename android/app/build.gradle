@@ -68,8 +68,8 @@ android {
 
     defaultConfig {
         applicationId "au.com.bitbot.nuptialflight"
-        minSdkVersion rootProject.ext.targetSdkVersion
-        targetSdkVersion rootProject.ext.compileSdkVersion
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         manifestPlaceholders['foregroundServiceType'] = 'location'
