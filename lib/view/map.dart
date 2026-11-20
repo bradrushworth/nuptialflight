@@ -8,7 +8,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:memory_info/memory_info.dart';
 
-import '../controller/arangodb.dart';
+import '../controller/report_api.dart';
 import '../controller/weather_fetcher.dart';
 import '../main.dart';
 import '../utils.dart';
@@ -128,7 +128,7 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _loadData() async {
-    ArangoSingleton().getRecentFlights().then((value) {
+    ReportApi().getRecentFlights().then((value) {
       if (!mounted) return;
       setState(() {
         _markers = value

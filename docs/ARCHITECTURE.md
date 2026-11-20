@@ -190,7 +190,7 @@ be revisited. Until then, keep it.
 
 ## 5. The data loop
 
-`lib/controller/arangodb.dart` keeps its caller-facing facade and uses the
+`lib/controller/report_api.dart` provides the caller-facing facade, `ReportApi` (renamed from `ArangoSingleton` in nf-c83), and uses the
 injectable `ApiClient` to call the public REST endpoint. The service validates requests,
 binds sighting handles to anonymous install UUIDs, and writes the linked records
 in one transaction. New client builds never receive DB credentials or use 8530;

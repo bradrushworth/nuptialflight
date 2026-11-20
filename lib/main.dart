@@ -14,7 +14,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-import 'controller/arangodb.dart';
+import 'controller/report_api.dart';
 import 'controller/app_language.dart';
 import 'controller/flight_index.dart';
 import 'controller/geo.dart';
@@ -468,7 +468,7 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    ArangoSingleton().createWeather(version, buildNumber, _weather, _historical, _currentWeather,
+    ReportApi().createWeather(version, buildNumber, _weather, _historical, _currentWeather,
         leadUp: _leadUp, leadUpDays: WeatherFetcher.leadUpDays);
   }
 
@@ -753,7 +753,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // outcome is known.
       duration: const Duration(minutes: 1),
     ));
-    final bool saved = await ArangoSingleton().updateWeather(
+    final bool saved = await ReportApi().updateWeather(
       version,
       buildNumber,
       result.size,
@@ -778,7 +778,7 @@ class _MyHomePageState extends State<MyHomePage> {
       final latLng = weatherFetcher.getLocation();
       final Position position = syntheticPosition(latLng.latitude, latLng.longitude);
       final List flights =
-          await ArangoSingleton().getRecentFlightsNearMe(position, -24 * 60);
+          await ReportApi().getRecentFlightsNearMe(position, -24 * 60);
       if (!mounted || flights.isEmpty) return;
       _showSnack(context.l10n.snackNearbyFlights(flights.length));
     } catch (e) {

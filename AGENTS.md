@@ -71,7 +71,7 @@ lib/
                            #   size seasonal prior
     flight_index.dart      # Ant Flight Index (percentiles, bands, odds)
     services.dart          # background fetch, notifications, widget updates
-    arangodb.dart          # Reporting facade + injectable REST ApiClient
+    report_api.dart          # Reporting facade + injectable REST ApiClient
                            #   (no client database credentials)
     units.dart             # metric/imperial display preference
     geo.dart               # syntheticPosition() helper
@@ -249,7 +249,7 @@ contract with `lib/controller/leadup_features.dart` AND
 - `flutter test` runs everything. **The hermetic tests must pass**
   (includes the parser/split/scoring/cache-key suites added with the One
   Call 4.0 migration; `scripts/test_backfill_leadup.py` covers the backfill
-  script via `python -m unittest`). `test/arangodb_test.dart` now uses mock
+  script via `python -m unittest`). `test/report_api_test.dart` now uses mock
   HTTP and the shared `test/fixtures/api_contract.json`; never point it at
   production. The "Download Fetch" group in `test/weather_test.dart` still
   calls live OWM (a paid subscription), and the widget smoke test needs a

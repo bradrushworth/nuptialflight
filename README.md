@@ -72,7 +72,7 @@ time to get outside and look for ants in your local area!
 4. `Nuptials` scores the weather with two Random-Forest models
    (`nuptialDailyPercentageModel`, `nuptialHourlyPercentageModel`) to produce
    the daily and hourly flight percentages.
-5. `ArangoSingleton` loads nearby user-reported flights and persists reports
+5. `ReportApi` loads nearby user-reported flights and persists reports
    through the scoped REST service, which owns database access.
 6. The UI renders the percentages, a 7-day list, an hourly breakdown, and
    the map.
@@ -163,7 +163,7 @@ can use features like days-since-rain and pressure trend
    NF_API_KEY=<scoped app key>
    ```
    (The exact variable names live in `lib/controller/weather_fetcher.dart` and
-   `lib/controller/arangodb.dart` — keep them in sync with the code. Missing
+   `lib/controller/report_api.dart` — keep them in sync with the code. Missing
    `NF_API_KEY` disables reporting and flight lookups gracefully. Never put an
    `ARANGO_*` credential into this bundled client asset. The API app key is
    extractable; database credentials belong only on the server. `assets/.env`
@@ -237,7 +237,7 @@ lib/
     nuptials.dart          # Random-Forest scoring of weather -> percentages
     flight_index.dart      # Ant Flight Index (percentiles, bands, odds)
     services.dart          # Background-fetch + notifications + widget updates
-    arangodb.dart          # Reporting facade + injectable REST ApiClient
+    report_api.dart          # Reporting facade + injectable REST ApiClient
     screenshots_*.dart     # Screenshot/device-preview plumbing (mobile vs web)
     widgets_*.dart         # Platform widget glue (mobile vs web)
   models/

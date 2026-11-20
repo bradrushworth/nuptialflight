@@ -29,7 +29,7 @@ Usage:
   export OPENWEATHERMAP_API_KEY=...
   python scripts/backfill_leadup.py --positives-only --days 2 --rps 1
 
-Requires these env vars (same defaults the app uses in arangodb.dart):
+Requires these env vars (same defaults the app uses in report_api.dart):
   ARANGO_URL, ARANGO_DB_NAME, ARANGO_USER, ARANGO_PASSWORD, OPENWEATHERMAP_API_KEY
 """
 import argparse
@@ -87,7 +87,7 @@ def connect_arango():
 
 
 def ensure_leadup_collection(db):
-    """Best-effort create of the `leadup` collection (mirrors arangodb.dart)."""
+    """Best-effort create of the `leadup` collection (mirrors report_api.dart)."""
     existing = {c["name"] for c in db.collections()}
     if "leadup" not in existing:
         db.create_collection("leadup")

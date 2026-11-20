@@ -7,7 +7,7 @@ agent context; these are the deeper dives it points at.
 |---|---|---|
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | System shape, the four layers, invariants | Orienting, or changing anything cross-cutting |
 | [`model_training_findings.md`](model_training_findings.md) | Every retrain, its metrics, and what shipped | Touching models, features or accuracy claims |
-| [`database_schema.md`](database_schema.md) | ArangoDB collections | Touching `arangodb.dart` or training data |
+| [`database_schema.md`](database_schema.md) | ArangoDB collections | Touching `report_api.dart` or training data |
 | [`map_shading.md`](map_shading.md) | Map overlay tinting from PD optima | Touching `view/map.dart` |
 
 Per-folder notes live in `AGENTS.md` inside each source folder
