@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:nuptialflight/controller/arangodb.dart';
+import 'package:nuptialflight/controller/report_api.dart';
 
 const install = '123e4567-e89b-42d3-a456-426614174000';
 
