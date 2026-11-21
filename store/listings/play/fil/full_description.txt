@@ -9,7 +9,7 @@ TAPAT NA TSANSA
 "Humigit-kumulang 1 sa 7 araw na ganito ang may naiulat na lipad." Na-calibrate sa libu-libong totoong ulat - hindi kailanman imbentong probabilidad.
 
 BAWAT ORAS
-Ang susunod na 24 oras bilang mga bar na may kulay ayon sa parehong rating, ang pinakamagandang tatlong-oras na pagkakataon, at ang buong linggo sa isang tingin.
+Ang mga susunod na oras bilang mga bar na may kulay ayon sa parehong rating, ang pinakamagandang tatlong-oras na pagkakataon, at ang buong linggo sa isang tingin.
 
 BAKIT GANITO ANG HULA?
 Buong transparency: makikita mo mismo kung paano ginalaw ng temperatura, hangin, halumigmig, ulap, ulan at presyon ang rating ngayon - direkta mula sa model.

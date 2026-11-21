@@ -9,7 +9,7 @@ PROBABILIDADES HONESTAS
 "Aproximadamente 1 de cada 7 días como este registra un vuelo." Calibrado con miles de avistamientos reales - nunca una probabilidad inventada.
 
 HORA A HORA
-Las próximas 24 horas en barras coloreadas según las mismas valoraciones, la mejor franja de tres horas para salir a mirar y la semana de un vistazo.
+Las próximas horas en barras coloreadas según las mismas valoraciones, la mejor franja de tres horas para salir a mirar y la semana de un vistazo.
 
 ¿POR QUÉ ESTE PRONÓSTICO?
 Transparencia total: ve exactamente cómo la temperatura, el viento, la humedad, las nubes, la lluvia y la presión movieron la valoración de hoy - directo del modelo.
