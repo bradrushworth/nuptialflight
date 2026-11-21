@@ -270,8 +270,11 @@ contract with `lib/controller/leadup_features.dart` AND
 2. Merge to `master` (repo convention: merge commits, via PR).
 3. Tag `vX.Y.Z` on the merge commit, push the tag, and create a GitHub
    release with user-facing notes (convention started at `v2.17.0`).
-4. **Codemagic** (configured outside the repo; mirrored in
-   `codemagic.yaml`) builds the store artefacts and deploys the web app.
+4. **Codemagic** (YAML mode: `codemagic.yaml` on the built branch is the
+   live configuration) builds the store artefacts and deploys the web app.
+   It uses `flutter: stable`, whose Android toolchain minimums move
+   (Gradle, AGP, Kotlin, Java): read flutter_tools'
+   `DependencyVersionChecker.kt` on `stable` before a release.
    Deployment can be verified externally:
    `curl https://nuptialflight.app/version.json` reports the live version.
 5. **Build guard:** pushes to `master` only produce a full build when the

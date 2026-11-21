@@ -1,10 +1,8 @@
 # Codemagic CI configuration — faithful translation of the "Default Workflow"
 # from the Codemagic Workflow Editor (read from the UI on 2026-08-21).
 #
-# NOTE: this file is NOT active until the app is switched to YAML mode in the
-# Codemagic UI ("Switch to YAML configuration" on the app's settings page).
-# Until then the Workflow Editor remains the source of truth and this file is
-# documentation + a migration path.
+# This file IS the active configuration: the app runs in YAML mode (the
+# app's settings page offers "Switch to Workflow Editor"; checked 2026-11-21).
 #
 # Secrets are deliberately NOT in this file. They come from environment
 # variable groups (checked in the Codemagic UI on 2026-08-23):
@@ -53,9 +51,11 @@ workflows:
         - google_credentials
         - nuptialflight
       vars:
-        JAVA_HOME: /Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
         PACKAGE_NAME: au.com.bitbot.nuptialflight
       flutter: stable
+      # Java 21: AGP 9.3's lint calls List.removeLast() (Java 21 API) and
+      # crashed lintVitalAnalyzeRelease on Java 17 (build 6b011db2799fbd143cf9ca19).
+      java: 21
       xcode: latest
       cocoapods: default
       android_signing:
