@@ -1,5 +1,1 @@
-Opgelost: een crash die kon optreden wanneer de app om locatietoestemming vroeg.
-
-Verbeterd: de app bevriest bij het opstarten niet meer even terwijl de voorspellingsmodellen worden geladen.
-
-Verbeterd: als de weerdienst niet bereikbaar is, toont de app je laatste voorspelling in plaats van een foutmelding.
+Verbeterd: de kop van de uurvoorspelling luidt nu “Komende uren”, zodat die past bij de uren die de grafiek toont.

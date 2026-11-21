@@ -1,5 +1,1 @@
-Corregido: un cierre inesperado que podía ocurrir cuando la app pedía permiso de ubicación.
-
-Mejorado: la app ya no se queda congelada un momento al iniciarse mientras carga sus modelos de predicción.
-
-Mejorado: si el servicio meteorológico no está disponible, la app te muestra el último pronóstico en lugar de un error.
+Mejorado: el título del pronóstico por horas ahora dice «Próximas horas» para coincidir con las horas que muestra el gráfico.
