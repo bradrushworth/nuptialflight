@@ -19,8 +19,8 @@
 
 allprojects {
     ext {
-        kotlin_version = "2.3.0"
-        agpVersion = "9.0.0"
+        kotlin_version = "2.4.20"
+        agpVersion = "9.3.1"
         compileSdkVersion = 36
         // Names match values (nf-ozf): app minSdk 24, targetSdk 36. Only
         // background_fetch reads root ext (compileSdkVersion, unchanged).
