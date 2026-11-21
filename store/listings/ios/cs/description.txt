@@ -9,7 +9,7 @@ POCTIVÉ ŠANCE
 "Zhruba v 1 ze 7 takových dní někdo nahlásí let." Kalibrováno na tisících skutečných pozorování - nikdy vymyšlená pravděpodobnost.
 
 HODINU PO HODINĚ
-Příštích 24 hodin jako sloupce zbarvené podle stejného hodnocení, nejlepší tříhodinové okno na pozorování a celý týden v přehledu.
+Nadcházející hodiny jako sloupce zbarvené podle stejného hodnocení, nejlepší tříhodinové okno na pozorování a celý týden v přehledu.
 
 PROČ TATO PŘEDPOVĚĎ?
 Plná transparentnost: podívejte se přesně, jak teplota, vítr, vlhkost, oblačnost, déšť a tlak ovlivnily dnešní hodnocení - přímo z modelu.

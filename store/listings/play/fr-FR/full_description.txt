@@ -9,7 +9,7 @@ DES PROBABILITÉS HONNÊTES
 « Environ 1 jour sur 7 comme celui-ci donne lieu à un vol signalé. » Calibré sur des milliers d'observations réelles - jamais une probabilité inventée.
 
 HEURE PAR HEURE
-Les 24 prochaines heures en barres colorées selon les mêmes notes, le meilleur créneau de trois heures pour aller observer, et la semaine en un coup d'œil.
+Les prochaines heures en barres colorées selon les mêmes notes, le meilleur créneau de trois heures pour aller observer, et la semaine en un coup d'œil.
 
 POURQUOI CETTE PRÉVISION ?
 Transparence totale : voyez exactement comment température, vent, humidité, nuages, pluie et pression ont influencé la note du jour - directement depuis le modèle.

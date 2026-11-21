@@ -58,7 +58,7 @@ HONEST ODDS
 "About 1 in 7 days like this see a reported flight." Calibrated against thousands of real sightings - never a made-up probability.
 
 HOUR BY HOUR
-The next 24 hours as bars shaded by the same ratings, the best three-hour window to go looking, and the week ahead at a glance.
+The coming hours as bars shaded by the same ratings, the best three-hour window to go looking, and the week ahead at a glance.
 
 WHY THIS FORECAST?
 Full transparency: see exactly how temperature, wind, humidity, cloud, rain and pressure moved today's rating - straight from the model, no hand-waving.
@@ -95,7 +95,7 @@ DÜRÜST OLASILIKLAR
 "Böyle günlerin yaklaşık 7'sinden 1'inde uçuş bildirilir." Binlerce gerçek gözlemle kalibre edilmiştir - asla uydurma bir olasılık değildir.
 
 SAAT SAAT
-Önümüzdeki 24 saat aynı derecelere göre renklendirilmiş çubuklar halinde, bakmak için en iyi üç saatlik aralık ve haftanın görünümü.
+Önümüzdeki saatler aynı derecelere göre renklendirilmiş çubuklar halinde, bakmak için en iyi üç saatlik aralık ve haftanın görünümü.
 
 BU TAHMİN NEDEN?
 Tam şeffaflık: sıcaklık, rüzgar, nem, bulut, yağmur ve basıncın bugünkü dereceyi nasıl etkilediğini doğrudan modelden görün.
@@ -131,7 +131,7 @@ TAPAT NA TSANSA
 "Humigit-kumulang 1 sa 7 araw na ganito ang may naiulat na lipad." Na-calibrate sa libu-libong totoong ulat - hindi kailanman imbentong probabilidad.
 
 BAWAT ORAS
-Ang susunod na 24 oras bilang mga bar na may kulay ayon sa parehong rating, ang pinakamagandang tatlong-oras na pagkakataon, at ang buong linggo sa isang tingin.
+Ang mga susunod na oras bilang mga bar na may kulay ayon sa parehong rating, ang pinakamagandang tatlong-oras na pagkakataon, at ang buong linggo sa isang tingin.
 
 BAKIT GANITO ANG HULA?
 Buong transparency: makikita mo mismo kung paano ginalaw ng temperatura, hangin, halumigmig, ulap, ulan at presyon ang rating ngayon - direkta mula sa model.
@@ -167,7 +167,7 @@ PROBABILIDADES HONESTAS
 "Aproximadamente 1 de cada 7 días como este registra un vuelo." Calibrado con miles de avistamientos reales - nunca una probabilidad inventada.
 
 HORA A HORA
-Las próximas 24 horas en barras coloreadas según las mismas valoraciones, la mejor franja de tres horas para salir a mirar y la semana de un vistazo.
+Las próximas horas en barras coloreadas según las mismas valoraciones, la mejor franja de tres horas para salir a mirar y la semana de un vistazo.
 
 ¿POR QUÉ ESTE PRONÓSTICO?
 Transparencia total: ve exactamente cómo la temperatura, el viento, la humedad, las nubes, la lluvia y la presión movieron la valoración de hoy - directo del modelo.
@@ -203,7 +203,7 @@ DES PROBABILITÉS HONNÊTES
 « Environ 1 jour sur 7 comme celui-ci donne lieu à un vol signalé. » Calibré sur des milliers d'observations réelles - jamais une probabilité inventée.
 
 HEURE PAR HEURE
-Les 24 prochaines heures en barres colorées selon les mêmes notes, le meilleur créneau de trois heures pour aller observer, et la semaine en un coup d'œil.
+Les prochaines heures en barres colorées selon les mêmes notes, le meilleur créneau de trois heures pour aller observer, et la semaine en un coup d'œil.
 
 POURQUOI CETTE PRÉVISION ?
 Transparence totale : voyez exactement comment température, vent, humidité, nuages, pluie et pression ont influencé la note du jour - directement depuis le modèle.
@@ -239,7 +239,7 @@ EHRLICHE CHANCEN
 "Etwa an 1 von 7 Tagen wie diesem wird ein Flug gemeldet." Kalibriert an Tausenden echter Sichtungen - nie eine erfundene Wahrscheinlichkeit.
 
 STUNDE FÜR STUNDE
-Die nächsten 24 Stunden als Balken, nach denselben Bewertungen eingefärbt, das beste Drei-Stunden-Fenster zum Suchen und die Woche auf einen Blick.
+Die nächsten Stunden als Balken, nach denselben Bewertungen eingefärbt, das beste Drei-Stunden-Fenster zum Suchen und die Woche auf einen Blick.
 
 WARUM DIESE VORHERSAGE?
 Volle Transparenz: Sieh genau, wie Temperatur, Wind, Luftfeuchte, Wolken, Regen und Luftdruck die heutige Bewertung beeinflusst haben - direkt aus dem Modell.
@@ -276,7 +276,7 @@ UCZCIWE SZANSE
 "Mniej więcej w 1 na 7 takich dni ktoś zgłasza lot." Skalibrowane na tysiącach prawdziwych obserwacji - nigdy wymyślone prawdopodobieństwo.
 
 GODZINA PO GODZINIE
-Najbliższe 24 godziny jako słupki w kolorach tych samych ocen, najlepsze trzygodzinne okno na obserwacje i cały tydzień w skrócie.
+Najbliższe godziny jako słupki w kolorach tych samych ocen, najlepsze trzygodzinne okno na obserwacje i cały tydzień w skrócie.
 
 SKĄD TA PROGNOZA?
 Pełna przejrzystość: zobacz dokładnie, jak temperatura, wiatr, wilgotność, chmury, deszcz i ciśnienie wpłynęły na dzisiejszą ocenę - prosto z modelu.
@@ -313,7 +313,7 @@ POCTIVÉ ŠANCE
 "Zhruba v 1 ze 7 takových dní někdo nahlásí let." Kalibrováno na tisících skutečných pozorování - nikdy vymyšlená pravděpodobnost.
 
 HODINU PO HODINĚ
-Příštích 24 hodin jako sloupce zbarvené podle stejného hodnocení, nejlepší tříhodinové okno na pozorování a celý týden v přehledu.
+Nadcházející hodiny jako sloupce zbarvené podle stejného hodnocení, nejlepší tříhodinové okno na pozorování a celý týden v přehledu.
 
 PROČ TATO PŘEDPOVĚĎ?
 Plná transparentnost: podívejte se přesně, jak teplota, vítr, vlhkost, oblačnost, déšť a tlak ovlivnily dnešní hodnocení - přímo z modelu.
@@ -350,7 +350,7 @@ L['el'] = dict(
 «Περίπου 1 στις 7 τέτοιες μέρες αναφέρεται πτήση.» Βαθμονομημένο σε χιλιάδες αληθινές παρατηρήσεις - ποτέ μια επινοημένη πιθανότητα.
 
 ΩΡΑ ΜΕ ΤΗΝ ΩΡΑ
-Οι επόμενες 24 ώρες ως μπάρες χρωματισμένες με τις ίδιες βαθμολογίες, το καλύτερο τρίωρο για ψάξιμο και όλη η εβδομάδα με μια ματιά.
+Οι επόμενες ώρες ως μπάρες χρωματισμένες με τις ίδιες βαθμολογίες, το καλύτερο τρίωρο για ψάξιμο και όλη η εβδομάδα με μια ματιά.
 
 ΓΙΑΤΙ ΑΥΤΗ Η ΠΡΟΒΛΕΨΗ;
 Πλήρης διαφάνεια: δείτε ακριβώς πώς θερμοκρασία, άνεμος, υγρασία, σύννεφα, βροχή και πίεση επηρέασαν τη σημερινή βαθμολογία - κατευθείαν από το μοντέλο.
@@ -386,7 +386,7 @@ CHANCES HONESTAS
 "Cerca de 1 em cada 7 dias como este tem um voo relatado." Calibrado com milhares de relatos reais - nunca uma probabilidade inventada.
 
 HORA A HORA
-As próximas 24 horas em barras coloridas pelas mesmas notas, a melhor janela de três horas para procurar e a semana inteira de relance.
+As próximas horas em barras coloridas pelas mesmas notas, a melhor janela de três horas para procurar e a semana inteira de relance.
 
 POR QUE ESTA PREVISÃO?
 Transparência total: veja exatamente como temperatura, vento, umidade, nuvens, chuva e pressão moveram a nota de hoje - direto do modelo.
@@ -422,7 +422,7 @@ EERLIJKE KANSEN
 "Ongeveer 1 op de 7 dagen zoals deze levert een gemelde vlucht op." Gekalibreerd op duizenden echte waarnemingen - nooit een verzonnen kans.
 
 UUR VOOR UUR
-De komende 24 uur als balken, gekleurd volgens dezelfde scores, het beste venster van drie uur om te gaan kijken en de hele week in één oogopslag.
+De komende uren als balken, gekleurd volgens dezelfde scores, het beste venster van drie uur om te gaan kijken en de hele week in één oogopslag.
 
 WAAROM DEZE VOORSPELLING?
 Volledige transparantie: zie precies hoe temperatuur, wind, luchtvochtigheid, bewolking, regen en luchtdruk de score van vandaag hebben bepaald - rechtstreeks uit het model.
@@ -458,7 +458,7 @@ PELUANG YANG JUJUR
 "Sekitar 1 dari 7 hari seperti ini ada penerbangan yang dilaporkan." Dikalibrasi dengan ribuan laporan nyata - bukan probabilitas karangan.
 
 JAM DEMI JAM
-24 jam ke depan sebagai batang berwarna menurut peringkat yang sama, jendela tiga jam terbaik untuk mencari, dan sepekan dalam sekali pandang.
+Jam-jam ke depan sebagai batang berwarna menurut peringkat yang sama, jendela tiga jam terbaik untuk mencari, dan sepekan dalam sekali pandang.
 
 KENAPA PRAKIRAAN INI?
 Transparansi penuh: lihat persis bagaimana suhu, angin, kelembapan, awan, hujan, dan tekanan menggerakkan peringkat hari ini - langsung dari model.
@@ -494,7 +494,7 @@ PELUANG YANG JUJUR
 "Kira-kira 1 daripada 7 hari seperti ini ada penerbangan dilaporkan." Ditentukur dengan ribuan laporan sebenar - bukan kebarangkalian rekaan.
 
 JAM DEMI JAM
-24 jam akan datang sebagai bar berwarna mengikut penarafan yang sama, tetingkap tiga jam terbaik untuk mencari, dan seminggu dalam satu pandangan.
+Jam-jam akan datang sebagai bar berwarna mengikut penarafan yang sama, tetingkap tiga jam terbaik untuk mencari, dan seminggu dalam satu pandangan.
 
 KENAPA RAMALAN INI?
 Ketelusan penuh: lihat dengan tepat bagaimana suhu, angin, kelembapan, awan, hujan dan tekanan menggerakkan penarafan hari ini - terus daripada model.
