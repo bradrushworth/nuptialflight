@@ -9,7 +9,7 @@ HONEST ODDS
 "About 1 in 7 days like this see a reported flight." Calibrated against thousands of real sightings - never a made-up probability.
 
 HOUR BY HOUR
-The next 24 hours as bars shaded by the same ratings, the best three-hour window to go looking, and the week ahead at a glance.
+The coming hours as bars shaded by the same ratings, the best three-hour window to go looking, and the week ahead at a glance.
 
 WHY THIS FORECAST?
 Full transparency: see exactly how temperature, wind, humidity, cloud, rain and pressure moved today's rating - straight from the model, no hand-waving.

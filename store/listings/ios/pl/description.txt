@@ -9,7 +9,7 @@ UCZCIWE SZANSE
 "Mniej więcej w 1 na 7 takich dni ktoś zgłasza lot." Skalibrowane na tysiącach prawdziwych obserwacji - nigdy wymyślone prawdopodobieństwo.
 
 GODZINA PO GODZINIE
-Najbliższe 24 godziny jako słupki w kolorach tych samych ocen, najlepsze trzygodzinne okno na obserwacje i cały tydzień w skrócie.
+Najbliższe godziny jako słupki w kolorach tych samych ocen, najlepsze trzygodzinne okno na obserwacje i cały tydzień w skrócie.
 
 SKĄD TA PROGNOZA?
 Pełna przejrzystość: zobacz dokładnie, jak temperatura, wiatr, wilgotność, chmury, deszcz i ciśnienie wpłynęły na dzisiejszą ocenę - prosto z modelu.
