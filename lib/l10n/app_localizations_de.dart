@@ -89,7 +89,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get hourlyHeading => 'Nächste Stunden';
 
   @override
-  String get chartCaption => 'Flugwahrscheinlichkeit je Stunde';
+  String get chartCaption => 'Flugbewertung je Stunde';
 
   @override
   String get nowTick => 'Jetzt';

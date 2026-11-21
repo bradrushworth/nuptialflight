@@ -273,7 +273,7 @@ abstract class AppLocalizations {
   /// No description provided for @chartCaption.
   ///
   /// In en, this message translates to:
-  /// **'flight confidence by hour'**
+  /// **'flight rating by hour'**
   String get chartCaption;
 
   /// No description provided for @nowTick.

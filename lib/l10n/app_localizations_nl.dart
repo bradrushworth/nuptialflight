@@ -89,7 +89,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get hourlyHeading => 'Komende uren';
 
   @override
-  String get chartCaption => 'vluchtvertrouwen per uur';
+  String get chartCaption => 'vluchtscore per uur';
 
   @override
   String get nowTick => 'Nu';

@@ -90,7 +90,7 @@ class AppLocalizationsMs extends AppLocalizations {
   String get hourlyHeading => 'Jam-jam akan datang';
 
   @override
-  String get chartCaption => 'keyakinan penerbangan mengikut jam';
+  String get chartCaption => 'penarafan penerbangan mengikut jam';
 
   @override
   String get nowTick => 'Sekarang';

@@ -25,7 +25,7 @@
   "tooltipReportFlight": "Signaler un vol nuptial observé",
   "todayDate": "Aujourd'hui · {date}",
   "hourlyHeading": "Prochaines heures",
-  "chartCaption": "confiance de vol par heure",
+  "chartCaption": "note de vol par heure",
   "nowTick": "Maintenant",
   "upcomingWeek": "Semaine à venir",
   "bandNoFly": "Aucun vol",
