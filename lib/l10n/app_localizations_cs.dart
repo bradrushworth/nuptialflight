@@ -89,7 +89,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get hourlyHeading => 'Nadcházející hodiny';
 
   @override
-  String get chartCaption => 'důvěra v let po hodinách';
+  String get chartCaption => 'hodnocení letu po hodinách';
 
   @override
   String get nowTick => 'Teď';

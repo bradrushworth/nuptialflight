@@ -89,7 +89,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get hourlyHeading => 'Najbliższe godziny';
 
   @override
-  String get chartCaption => 'pewność lotu wg godzin';
+  String get chartCaption => 'ocena lotu wg godzin';
 
   @override
   String get nowTick => 'Teraz';

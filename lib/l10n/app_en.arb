@@ -26,7 +26,7 @@
   "todayDate": "Today · {date}",
   "@todayDate": {"placeholders": {"date": {"type": "String"}}},
   "hourlyHeading": "Coming hours",
-  "chartCaption": "flight confidence by hour",
+  "chartCaption": "flight rating by hour",
   "nowTick": "Now",
   "upcomingWeek": "Upcoming week",
   "bandNoFly": "No-fly",

@@ -89,7 +89,7 @@ class AppLocalizationsFil extends AppLocalizations {
   String get hourlyHeading => 'Mga susunod na oras';
 
   @override
-  String get chartCaption => 'kumpiyansa ng paglipad kada oras';
+  String get chartCaption => 'rating ng paglipad kada oras';
 
   @override
   String get nowTick => 'Ngayon';

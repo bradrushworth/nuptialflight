@@ -25,7 +25,7 @@
   "tooltipReportFlight": "Meld een geziene bruidsvlucht",
   "todayDate": "Vandaag · {date}",
   "hourlyHeading": "Komende uren",
-  "chartCaption": "vluchtvertrouwen per uur",
+  "chartCaption": "vluchtscore per uur",
   "nowTick": "Nu",
   "upcomingWeek": "Komende week",
   "bandNoFly": "Geen vlucht",

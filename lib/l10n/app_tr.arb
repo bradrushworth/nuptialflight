@@ -25,7 +25,7 @@
   "tooltipReportFlight": "Gördüğünüz çiftleşme uçuşunu bildirin",
   "todayDate": "Bugün · {date}",
   "hourlyHeading": "Önümüzdeki saatler",
-  "chartCaption": "saatlik uçuş güveni",
+  "chartCaption": "saatlik uçuş derecesi",
   "nowTick": "Şimdi",
   "upcomingWeek": "Önümüzdeki hafta",
   "bandNoFly": "Uçuş yok",

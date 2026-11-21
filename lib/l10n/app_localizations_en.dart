@@ -89,7 +89,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hourlyHeading => 'Coming hours';
 
   @override
-  String get chartCaption => 'flight confidence by hour';
+  String get chartCaption => 'flight rating by hour';
 
   @override
   String get nowTick => 'Now';

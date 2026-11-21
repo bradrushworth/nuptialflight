@@ -90,7 +90,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hourlyHeading => 'Jam-jam ke depan';
 
   @override
-  String get chartCaption => 'keyakinan penerbangan per jam';
+  String get chartCaption => 'peringkat penerbangan per jam';
 
   @override
   String get nowTick => 'Sekarang';

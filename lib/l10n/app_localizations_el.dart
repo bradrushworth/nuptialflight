@@ -89,7 +89,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get hourlyHeading => 'Επόμενες ώρες';
 
   @override
-  String get chartCaption => 'εμπιστοσύνη πτήσης ανά ώρα';
+  String get chartCaption => 'βαθμολογία πτήσης ανά ώρα';
 
   @override
   String get nowTick => 'Τώρα';

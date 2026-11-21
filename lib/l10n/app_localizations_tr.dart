@@ -89,7 +89,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get hourlyHeading => 'Önümüzdeki saatler';
 
   @override
-  String get chartCaption => 'saatlik uçuş güveni';
+  String get chartCaption => 'saatlik uçuş derecesi';
 
   @override
   String get nowTick => 'Şimdi';
